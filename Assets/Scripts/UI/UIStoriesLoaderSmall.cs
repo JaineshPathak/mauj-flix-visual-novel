@@ -52,6 +52,9 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
     public void OnStoryDBLoaded(StoriesDB storyDB)
     {
+        if (GameController.instance == null)
+            return;
+
         if (categoryIndex >= storyDB.storiesCategories.Length)
             return;
 

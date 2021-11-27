@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Fungus;
-using underDOGS.SDKEvents;
 
 public class GameController : MonoBehaviour
 {
@@ -75,7 +74,7 @@ public class GameController : MonoBehaviour
                 if (storiesDB != null)
                 {                    
                     OnStoryDBLoaded?.Invoke(storiesDB);
-                    Debug.Log("Stories Database successfully loaded!");
+                    Debug.Log("GAMECONTROLLER: Stories Database successfully loaded!");
 
                     detailsPanel?.SetStoryBufferingImageStatus(false);
                 }
@@ -83,7 +82,7 @@ public class GameController : MonoBehaviour
 
             case AsyncOperationStatus.Failed:
                 detailsPanel?.SetStoryBufferingImageStatus(false);
-                Debug.LogError("Failed to load Stories Database. Please make sure that Json file exists and it is set as Addressables and it is stored in Cloud Server (CDN).");
+                Debug.LogError("GAMECONTROLLER: Failed to load Stories Database. Please make sure that Json file exists and it is set as Addressables and it is stored in Cloud Server (CDN).");
                 break;
         }
     }

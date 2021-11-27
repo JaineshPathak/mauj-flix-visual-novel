@@ -35,9 +35,14 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     public Transform moreLikeThisSection;
 
     [Header("Like Story Section")]
+    public GameObject likeButtonParent;
     public Image likeOutlineImage;
     public Image likeImage;
     public TextMeshProUGUI likesCountText;
+
+    [Header("Views Section")]
+    public GameObject viewsCountParent;
+    public TextMeshProUGUI viewsCountText;
 
     [Header("Story Loading Screen")]
     public CanvasGroup loadingBufferScreen;
@@ -95,7 +100,24 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             }
 
             if (FirebaseDBHandler.instance != null)
+            {
+                if(!likeButtonParent.activeSelf)
+                    likeButtonParent.SetActive(true);
+
+                if (!viewsCountParent.activeSelf)
+                    viewsCountParent.SetActive(true);
+
                 FirebaseDBHandler.instance.GetCountFromFirebaseDB(FirebaseDBHandler.instance.GetReferenceFromStoryTitle(storyItem.storyTitleEnglish, FirebaseDBHandler.likeCountKeyEnd), val => likesCountText.text = val);
+                FirebaseDBHandler.instance.GetCountFromFirebaseDB(FirebaseDBHandler.instance.GetReferenceFromStoryTitle(storyItem.storyTitleEnglish, FirebaseDBHandler.viewCountKeyEnd), val => viewsCountText.text = val);
+            }
+            else
+            {
+                if (likeButtonParent.activeSelf)
+                    likeButtonParent.SetActive(false);
+
+                if (viewsCountParent.activeSelf)
+                    viewsCountParent.SetActive(false);
+            }
 
             ShowPanel();
         }
@@ -185,8 +207,25 @@ public class UIStoriesDetailsPanel : MonoBehaviour
                 likeOutlineImage.gameObject.SetActive(true);
             }
 
-            if(FirebaseDBHandler.instance != null)
+            if (FirebaseDBHandler.instance != null)
+            {
+                if (!likeButtonParent.activeSelf)
+                    likeButtonParent.SetActive(true);
+
+                if (!viewsCountParent.activeSelf)
+                    viewsCountParent.SetActive(true);
+
                 FirebaseDBHandler.instance.GetCountFromFirebaseDB(FirebaseDBHandler.instance.GetReferenceFromStoryTitle(_storyTitleEng, FirebaseDBHandler.likeCountKeyEnd), val => likesCountText.text = val);
+                FirebaseDBHandler.instance.GetCountFromFirebaseDB(FirebaseDBHandler.instance.GetReferenceFromStoryTitle(_storyTitleEng, FirebaseDBHandler.viewCountKeyEnd), val => viewsCountText.text = val);
+            }
+            else
+            {
+                if (likeButtonParent.activeSelf)
+                    likeButtonParent.SetActive(false);
+
+                if (viewsCountParent.activeSelf)
+                    viewsCountParent.SetActive(false);
+            }
 
             startNowButton.onClick.AddListener(LoadStoryEpisodeStartNow);
         }

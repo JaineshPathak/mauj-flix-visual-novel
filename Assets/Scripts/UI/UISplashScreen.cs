@@ -42,7 +42,7 @@ public class UISplashScreen : MonoBehaviour
         {
             return thumbnailsList[Random.Range(0, thumbnailsList.Length)];
         }
-    }
+    }    
 
     private void Awake()
     {
@@ -63,9 +63,49 @@ public class UISplashScreen : MonoBehaviour
             thumbnailImagesLoadedList.Add(thumbnailLoading);
         }
         
-        StartSequence();
+        //StartSequence();
     }
-    
+
+    private void Start()
+    {
+        if (!FirebaseRemoteConfigHandler.instance.doVersionCheck)
+            StartSequence();
+    }
+
+    private void OnEnable()
+    {
+        FirebaseRemoteConfigHandler.OnAppVersionCorrect += OnAppVersionCorrect;
+        FirebaseRemoteConfigHandler.OnAppVersionIncorrect += OnAppVersionIncorrect;
+    }
+
+    private void OnDisable()
+    {
+        FirebaseRemoteConfigHandler.OnAppVersionCorrect -= OnAppVersionCorrect;
+        FirebaseRemoteConfigHandler.OnAppVersionIncorrect -= OnAppVersionIncorrect;
+    }
+
+    private void OnDestroy()
+    {
+        FirebaseRemoteConfigHandler.OnAppVersionCorrect -= OnAppVersionCorrect;
+        FirebaseRemoteConfigHandler.OnAppVersionIncorrect -= OnAppVersionIncorrect;
+    }
+
+    private void OnAppVersionCorrect()
+    {
+        LeanTween.alphaCanvas(updateGameCanvas, 0, 0.3f);
+        updateGameCanvas.interactable = false;
+        updateGameCanvas.blocksRaycasts = false;
+
+        StartSequence();        
+    }
+
+    private void OnAppVersionIncorrect()
+    {
+        LeanTween.alphaCanvas(updateGameCanvas, 1f, 0.3f);
+        updateGameCanvas.interactable = true;
+        updateGameCanvas.blocksRaycasts = true;
+    }
+
     private IEnumerator UpdateFadeRoutine()
     {
         while(true)
@@ -153,7 +193,16 @@ public class UISplashScreen : MonoBehaviour
     //Call from UI Update Button
     public void OnUpdateButtonClicked()
     {
+        if (FirebaseRemoteConfigHandler.instance != null)
+            FirebaseRemoteConfigHandler.instance.isUpdateBtnClicked = true;
 
+        updateGameCanvas.alpha = 0;
+        updateGameCanvas.interactable = false;
+        updateGameCanvas.blocksRaycasts = false;
+
+#if UNITY_ANDROID
+        Application.OpenURL("market://details?id=com.culttales.maujflix");
+#endif
     }
 
     /*private IEnumerator EndSequenceRoutine()

@@ -183,7 +183,7 @@ public class EpisodesHandler : MonoBehaviour
             blockToExecute = episodeFlowchart.FindBlockFromItemId(0);
             episodeFlowchart.ExecuteBlock(blockToExecute, 0);
         }
-        else        //Else Get the block from BlocID and execute than block
+        else        //Else Get the block from BlockID and execute that block
         {
             blockToExecute = episodeFlowchart.FindBlockFromItemId(episodeData.currentBlockID);
             episodeFlowchart.ExecuteBlock(blockToExecute, episodeData.currentCommandID);
