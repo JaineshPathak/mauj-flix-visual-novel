@@ -39,9 +39,44 @@ public class UIBottomPanel : MonoBehaviour
 
     private bool playSoundFirst = false;
 
+    private void OnEnable()
+    {
+        EpisodesSpawner.OnRateUsWindowClosed += OnRateUsWindowClosed;
+    }
+
+    private void OnDisable()
+    {
+        EpisodesSpawner.OnRateUsWindowClosed -= OnRateUsWindowClosed;
+    }
+
+    private void OnDestroy()
+    {
+        EpisodesSpawner.OnRateUsWindowClosed -= OnRateUsWindowClosed;
+    }
+
     private void Start()
     {
         SelectPanel(0);     //Home Panel
+
+        if (EpisodesSpawner.instance != null && EpisodesSpawner.instance.playerData != null)
+        {
+            if (EpisodesSpawner.instance.playerData.hasRatedGame && bottomButtons[2].buttonMain != null)
+                if (bottomButtons[2].buttonMain.gameObject.activeSelf)
+                    bottomButtons[2].buttonMain.gameObject.SetActive(false);
+        }
+    }
+
+    private void OnApplicationPause(bool pause)
+    {
+        if(!pause)
+        {
+            if(EpisodesSpawner.instance != null && EpisodesSpawner.instance.playerData != null)
+            {
+                if(EpisodesSpawner.instance.playerData.hasRatedGame && bottomButtons[2].buttonMain != null)
+                    if(bottomButtons[2].buttonMain.gameObject.activeSelf)
+                        bottomButtons[2].buttonMain.gameObject.SetActive(false);                
+            }
+        }
     }
 
     public void SelectPanel(int index)
@@ -92,5 +127,24 @@ public class UIBottomPanel : MonoBehaviour
         }
 
         detailsPanel.PlayButtonClickSound();
+    }
+
+    public void OnStarRateUsClicked()
+    {
+        if (EpisodesSpawner.instance == null)
+            return;
+
+        if(bottomButtons[2].buttonMain != null)
+            bottomButtons[2].SetButtonOn();
+
+        EpisodesSpawner.instance.OpenRateUsWindow();
+    }
+
+    private void OnRateUsWindowClosed()
+    {
+        if (bottomButtons[2].buttonMain == null)
+            return;
+
+        bottomButtons[2].SetButtonOff();
     }
 }
