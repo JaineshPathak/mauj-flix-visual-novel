@@ -326,7 +326,7 @@ public class EpisodesHandler : MonoBehaviour
             eventEpisodeData.episodeNum = storyData.GetIndexFromEpisodeData(episodeData) + 1;
             
             SDKManager.instance.SendEvent(eventEpisodeData);
-        }
+        }        
 
         //Episode was finished. Save the data and copy this Data to next Episode Data if any
         episodeData.isFinished = true;
@@ -378,7 +378,17 @@ public class EpisodesHandler : MonoBehaviour
         {
             if(endPanel.nextEpisodeBarTimer.gameObject.activeSelf)
                 endPanel.nextEpisodeBarTimer.gameObject.SetActive(false);
-            
+
+            //For UIPersonalProfile Section
+            if (episodesSpawner.playerData.ContainsStoryStarted(episodesSpawner.storiesDBItem.storyTitleEnglish) && 
+                !episodesSpawner.playerData.ContainsStoryCompleted(episodesSpawner.storiesDBItem.storyTitleEnglish))
+            {
+                episodesSpawner.playerData.RemoveStoryStarted(episodesSpawner.storiesDBItem.storyTitleEnglish);
+                episodesSpawner.playerData.AddStoryCompleted(episodesSpawner.storiesDBItem.storyTitleEnglish);
+
+                SaveLoadGame.SavePlayerData(episodesSpawner.playerData);
+            }
+
             if (SDKManager.instance != null)
             {
                 //Send "story_completed" Event
@@ -798,8 +808,8 @@ public class EpisodesHandler : MonoBehaviour
                 foreach (var portraitCommand in episodeFlowchart.GetComponentsInChildren<Portrait>())
                 {
                     //print(portraitCommand._Character.ToString() + portraitCommand.ItemId.ToString());
-                    if (portraitCommand._Character.NameMatch(selectedCharacterDataAsset.fungusCharacter.NameText /*"{$MalePlayerName}"*/))
-                    {
+                    if ( portraitCommand.enabled && portraitCommand._Character != null && portraitCommand._Character.NameMatch(selectedCharacterDataAsset.fungusCharacter.NameText /*"{$MalePlayerName}"*/))
+                    {                        
                         //portrait._Character = maleCharacter;
                         //portraitCommand._Character = selectedCharacterDataAsset.fungusCharacter;
                         if (portraitCommand.Display == DisplayType.Show)
@@ -847,7 +857,7 @@ public class EpisodesHandler : MonoBehaviour
 
                 foreach (var portraitCommand in episodeFlowchart.GetComponentsInChildren<Portrait>())
                 {
-                    if (portraitCommand._Character.NameMatch(selectedCharacterDataAsset.fungusCharacter.NameText /*"{$FemalePlayerName}"*/))
+                    if (portraitCommand.enabled && portraitCommand._Character != null && portraitCommand._Character.NameMatch(selectedCharacterDataAsset.fungusCharacter.NameText /*"{$FemalePlayerName}"*/))
                     {
                         #region OLD HARD CODED CODES
                         //portrait._Character = maleCharacter;

@@ -409,5 +409,5 @@ public class GameController : MonoBehaviour
         SerializationManager.SaveAsTextFile(_storyDBItem.storyProgressFileName, saveString);
 
         return storyData;
-    }
+    }    
 }

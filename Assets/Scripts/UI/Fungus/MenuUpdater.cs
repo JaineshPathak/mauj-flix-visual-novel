@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fungus;
+using TMPro;
 
 public class MenuUpdater : MonoBehaviour
 {
@@ -40,6 +41,7 @@ public class MenuUpdater : MonoBehaviour
             if (menuTextsReplacer[i] != null)
             {
                 menuTextsReplacer[i].UpdateMe();
+                //menuTextsReplacer[i].GetComponent<TextMeshProUGUI>().alignment = TextAlignmentOptions.Center;
             }
         }
     }

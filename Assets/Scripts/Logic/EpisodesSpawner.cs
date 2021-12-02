@@ -51,6 +51,8 @@ public class EpisodesSpawner : MonoBehaviour
     public static event Action OnRateUsWindowOpened;
     public static event Action OnRateUsWindowClosed;
 
+    private StoriesDB storiesDB;
+
     private void Awake()
     {
         if (instance == null)
@@ -59,6 +61,45 @@ public class EpisodesSpawner : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+    }
+
+    private void OnEnable()
+    {
+        GameController.OnStoryDBLoaded += OnStoryDBLoaded;
+    }
+
+    private void OnDisable()
+    {
+        GameController.OnStoryDBLoaded -= OnStoryDBLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        GameController.OnStoryDBLoaded -= OnStoryDBLoaded;
+    }
+
+    private void OnStoryDBLoaded(StoriesDB _storiesDB)
+    {
+        storiesDB = _storiesDB;
+    }
+
+    public StoriesDBItem GetStoriesDBItemFromTitle(string _storyTitleEng)
+    {
+        StoriesDBItem storiesDBItem = null;
+
+        if (storiesDB == null)
+            return null;
+
+        for (int i = 0; i < storiesDB.storiesCategories[storiesDB.storiesCategories.Length - 1].storiesDBItems.Length; i++)
+        {
+            if (storiesDB.storiesCategories[storiesDB.storiesCategories.Length - 1].storiesDBItems[i].storyTitleEnglish.Equals(_storyTitleEng))
+            {
+                storiesDBItem = storiesDB.storiesCategories[storiesDB.storiesCategories.Length - 1].storiesDBItems[i];
+                return storiesDBItem;
+            }
+        }
+
+        return storiesDBItem;
     }
 
     private void Start()
@@ -109,6 +150,9 @@ public class EpisodesSpawner : MonoBehaviour
     {
         percentCanvasGroup.interactable = true;
         percentCanvasGroup.blocksRaycasts = true;
+
+        storyPercentBar.fillAmount = 0;
+
         LeanTween.alphaCanvas(percentCanvasGroup, 1f, 1f).setOnComplete( () => 
         {
             StartCoroutine(StartLoadingStorySceneAsync());

@@ -21,11 +21,12 @@ public class UIEpisodeItem : MonoBehaviour
 
     private UIStoriesDetailsPanel detailsPanel;
     private StoryData storyData;
+    private StoriesDBItem storyItem;
     private EpisodeData episodeData;
 
     private int episodeNumber;
 
-    public void Setup(int num, string _episodeKey, string _episodeFileName, StoryData _storyData, UIStoriesDetailsPanel _detailsPanel)
+    public void Setup(int num, StoriesDBItem _storyItem, string _episodeKey, string _episodeFileName, StoryData _storyData, UIStoriesDetailsPanel _detailsPanel)
     {
         //episodeNumberText.text = episodeString + " " + num;
         episodeNumber = num;
@@ -36,6 +37,7 @@ public class UIEpisodeItem : MonoBehaviour
 
         storyData = null;
         storyData = _storyData;
+        storyItem = _storyItem;
 
         detailsPanel = _detailsPanel;
 
@@ -64,6 +66,16 @@ public class UIEpisodeItem : MonoBehaviour
     {
         if (detailsPanel == null)
             return;
+
+        if (episodeNumber == 1 && EpisodesSpawner.instance != null)
+        {
+            if(!EpisodesSpawner.instance.playerData.ContainsStoryStarted(storyItem.storyTitleEnglish) && 
+                !EpisodesSpawner.instance.playerData.ContainsStoryCompleted(storyItem.storyTitleEnglish))
+            {
+                EpisodesSpawner.instance.playerData.AddStoryStarted(storyItem.storyTitleEnglish);
+                SaveLoadGame.SavePlayerData(EpisodesSpawner.instance.playerData);
+            }
+        }
 
         if (detailsPanel.episodesSpawner != null)
             detailsPanel.episodesSpawner.currentEpisodeNumber = episodeNumber;

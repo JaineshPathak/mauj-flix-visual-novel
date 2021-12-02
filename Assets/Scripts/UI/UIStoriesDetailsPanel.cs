@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -56,6 +57,9 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     private LTSeq moveSeq;
 
     private RectTransform episodesContainerRect;
+
+    public static event Action<string> OnStoryLiked;
+    public static event Action<string> OnStoryUnliked;
 
     private void Start()
     {
@@ -117,7 +121,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
                 if (viewsCountParent.activeSelf)
                     viewsCountParent.SetActive(false);
-            }
+            }            
 
             ShowPanel();
         }
@@ -296,7 +300,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             for (int i = 0; i < storyItem.storyEpisodesKeys.Length; i++)
             {
                 UIEpisodeItem episodeItemInstance = Instantiate(episodeItemPrefab, episodeContainer);
-                episodeItemInstance.Setup(i + 1, storyItem.storyEpisodesKeys[i], storyItem.storyProgressFileName, storyData, this);
+                episodeItemInstance.Setup(i + 1, storyItem, storyItem.storyEpisodesKeys[i], storyItem.storyProgressFileName, storyData, this);
             }
 
             float totalEpisodesItems = episodeContainer.childCount - 1;            
@@ -312,10 +316,10 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             newHeight += 1000f;
             storyEpisodesContainer.sizeDelta = new Vector2(storyEpisodesContainer.sizeDelta.x, newHeight);
 
-            moreLikeThisSection.SetAsLastSibling();
-
-            mainScrollRect.normalizedPosition = new Vector2(0, 1f);
+            moreLikeThisSection.SetAsLastSibling();            
         }
+
+        mainScrollRect.normalizedPosition = new Vector2(0, 1f);
     }
 
     private void OnPanelHidden()
@@ -467,6 +471,8 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
             episodesSpawner.playerData.RemoveStoryLiked(storyItem.storyTitleEnglish);
             SaveLoadGame.SavePlayerData(episodesSpawner.playerData);
+
+            OnStoryUnliked?.Invoke(storyItem.storyTitleEnglish);
         }
         else    //Like the story, Increment Likes counter.
         {
@@ -480,6 +486,8 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
             episodesSpawner.playerData.AddStoryLiked(storyItem.storyTitleEnglish);
             SaveLoadGame.SavePlayerData(episodesSpawner.playerData);
+
+            OnStoryLiked?.Invoke(storyItem.storyTitleEnglish);
         }
     }
 }

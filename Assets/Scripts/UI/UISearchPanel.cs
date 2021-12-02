@@ -13,6 +13,7 @@ public class UISearchPanel : MonoBehaviour
     public float searchMatchPercent = 0.75f;
     public ScrollRect searchScrollRect;
     public ContentSizeFitter searchContentFitter;
+    public CharReplacerHindi searchTextReplacer;
     public GridLayoutGroup searchGridLayout;
     public Transform searchContentParent;
     public UIStoriesItemSmall storyItemSmallPrefab;
@@ -68,9 +69,12 @@ public class UISearchPanel : MonoBehaviour
         {
             for (int j = 0; j < storiesDB.storiesCategories[i].storiesDBItems.Length; j++)
             {
-                if(!storiesDBHash.ContainsKey(storiesDB.storiesCategories[i].storiesDBItems[j].storyTitleEnglish + storiesDB.storiesCategories[i].storiesDBItems[j].storyTitle))
-                {
-                    storiesDBHash.Add(storiesDB.storiesCategories[i].storiesDBItems[j].storyTitleEnglish + storiesDB.storiesCategories[i].storiesDBItems[j].storyTitle, storiesDB.storiesCategories[i].storiesDBItems[j]);                
+                string hindiFix = searchTextReplacer.GetFixedText(storiesDB.storiesCategories[i].storiesDBItems[j].storyTitle);
+                if (!storiesDBHash.ContainsKey(storiesDB.storiesCategories[i].storiesDBItems[j].storyTitleEnglish + hindiFix))
+                {                    
+                    storiesDBHash.Add(storiesDB.storiesCategories[i].storiesDBItems[j].storyTitleEnglish + hindiFix, storiesDB.storiesCategories[i].storiesDBItems[j]);                
+                    
+                    //storiesDBHash.Add(storiesDB.storiesCategories[i].storiesDBItems[j].storyTitleEnglish + storiesDB.storiesCategories[i].storiesDBItems[j].storyTitle, storiesDB.storiesCategories[i].storiesDBItems[j]);                
                 }
                 //storiesDBList.Add(storiesDB.storiesCategories[i].storiesDBItems[j]);
                 // print(storiesDB.storiesCategories[i].storiesDBItems[j].storyTitleEnglish);
@@ -151,6 +155,7 @@ public class UISearchPanel : MonoBehaviour
         }
         else if(val.Length > 0)
         {
+            searchTextReplacer.UpdateMe();
             /*foreach (DictionaryEntry item in storiesItemsHash)
             {
                 UIStoriesItemSmall itemMain = (UIStoriesItemSmall)item.Value;

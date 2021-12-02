@@ -38,10 +38,46 @@ public class UIBottomPanel : MonoBehaviour
     [SerializeField] private CanvasGroup[] panelsList;
 
     private bool playSoundFirst = false;
+    private int lastButtonIndex;
+
+    private void OnEnable()
+    {
+        EpisodesSpawner.OnRateUsWindowClosed += OnRateUsWindowClosed;
+    }
+
+    private void OnDisable()
+    {
+        EpisodesSpawner.OnRateUsWindowClosed -= OnRateUsWindowClosed;
+    }
+
+    private void OnDestroy()
+    {
+        EpisodesSpawner.OnRateUsWindowClosed -= OnRateUsWindowClosed;
+    }
 
     private void Start()
     {
         SelectPanel(0);     //Home Panel
+
+        if (EpisodesSpawner.instance != null && EpisodesSpawner.instance.playerData != null)
+        {
+            if (EpisodesSpawner.instance.playerData.hasRatedGame && bottomButtons[2].buttonMain != null)
+                if (bottomButtons[2].buttonMain.gameObject.activeSelf)
+                    bottomButtons[2].buttonMain.gameObject.SetActive(false);
+        }
+    }
+
+    private void OnApplicationPause(bool pause)
+    {
+        if(!pause)
+        {
+            if(EpisodesSpawner.instance != null && EpisodesSpawner.instance.playerData != null)
+            {
+                if(EpisodesSpawner.instance.playerData.hasRatedGame && bottomButtons[2].buttonMain != null)
+                    if(bottomButtons[2].buttonMain.gameObject.activeSelf)
+                        bottomButtons[2].buttonMain.gameObject.SetActive(false);                
+            }
+        }
     }
 
     public void SelectPanel(int index)
@@ -78,6 +114,8 @@ public class UIBottomPanel : MonoBehaviour
         if (bottomButtons.Length <= 0)
             return;
 
+        lastButtonIndex = index;
+
         for (int i = 0; i < bottomButtons.Length; i++)
         {
             bottomButtons[i].SetButtonOff();
@@ -92,5 +130,35 @@ public class UIBottomPanel : MonoBehaviour
         }
 
         detailsPanel.PlayButtonClickSound();
+    }
+
+    public void OnStarRateUsClicked()
+    {
+        if (EpisodesSpawner.instance == null)
+            return;
+
+        detailsPanel?.PlayButtonClickSound();
+
+        for (int i = 0; i < bottomButtons.Length; i++)
+            bottomButtons[i].SetButtonOff();
+
+        if (bottomButtons[2].buttonMain != null)
+            bottomButtons[2].SetButtonOn();
+
+        EpisodesSpawner.instance.OpenRateUsWindow();
+    }
+
+    private void OnRateUsWindowClosed()
+    {
+        if (bottomButtons[2].buttonMain == null)
+            return;
+
+        detailsPanel?.PlayButtonClickSound();
+
+        for (int i = 0; i < bottomButtons.Length; i++)
+            bottomButtons[i].SetButtonOff();
+
+        bottomButtons[2].SetButtonOff();
+        bottomButtons[lastButtonIndex].SetButtonOn();
     }
 }
