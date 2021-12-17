@@ -16,7 +16,7 @@ public class EpisodesTesting : MonoBehaviour
 
     [Space(15)]
 
-    public GameObject currentEpisodePrefab;
+    public GameObject currentEpisodePrefab;    
 
     private void Start()
     {

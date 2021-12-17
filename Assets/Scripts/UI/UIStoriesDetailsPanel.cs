@@ -83,6 +83,9 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
             buttonsGroupSizeFitter.enabled = true;
 
+            if (shareButton && episodesSpawner)
+                shareButton.Setup(episodesSpawner.storyTitle, episodesSpawner.storyTitleEnglish, episodesSpawner.storyThumbnailSmallSprite);
+
             storyThumbnailBigImage.sprite = episodesSpawner.storyThumbnailBigSprite;
             storyThumbnailTitleImage.sprite = episodesSpawner.storyloadingTitleImage.sprite;
 
@@ -177,6 +180,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             episodesSpawner.storyTitleEnglish = _storyTitleEng;
             episodesSpawner.storyDescription = _storyDescription;
             episodesSpawner.storyloadingThumbnailImage.sprite = _thumbnailLoadingSprite;
+            episodesSpawner.storyThumbnailSmallSprite = _thumbnailSmallSprite;
             episodesSpawner.storyThumbnailBigSprite = _thumbnailBigSprite;
             episodesSpawner.storyloadingTitleImage.sprite = _thumbnailTitleSprite;
             episodesSpawner.storyData = _storyData;

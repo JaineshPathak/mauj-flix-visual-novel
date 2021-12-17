@@ -174,11 +174,16 @@ public class UIPersonalProfile : MonoBehaviour
             if (personalCategoryDatas[i].storiesDBItemList != null)
             {
                 UIStoriesLoaderSmall uIStoriesLoaderSmallInstance = Instantiate(sectionLoaderPrefab, sectionContentParent);
-                uIStoriesLoaderSmallInstance.PopulateCategory(personalCategoryDatas[i].categoryTitle, personalCategoryDatas[i].storiesDBItemList.ToArray());
+
+                if(i == personalCategoryDatas.Length - 1)
+                    uIStoriesLoaderSmallInstance.PopulateCategory(personalCategoryDatas[i].categoryTitle, storiesDB.storiesCategories.Length - 1, storiesDB);
+                else
+                    uIStoriesLoaderSmallInstance.PopulateCategory(personalCategoryDatas[i].categoryTitle, personalCategoryDatas[i].storiesDBItemList.ToArray());
 
                 sectionLoadedList.Add(uIStoriesLoaderSmallInstance);
 
-                personalCategoryDatas[i].countsCategoryTitleText.text = personalCategoryDatas[i].categoryTitle;                
+                if(personalCategoryDatas[i].countsCategoryTitleText != null)
+                    personalCategoryDatas[i].countsCategoryTitleText.text = personalCategoryDatas[i].categoryTitle;                
             }
         }
     }

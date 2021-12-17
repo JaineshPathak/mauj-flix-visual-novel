@@ -107,6 +107,30 @@ public class UIStoriesLoaderSmall : MonoBehaviour
             categoryCountText.text = "(" + storiesItemSmallList.Count + ")";
     }
 
+    public void PopulateCategory(string _categoryTitle, int _databaseIndex, StoriesDB _storyDB)
+    {
+        if (GameController.instance == null)
+            return;
+
+        if (categoryTitleText != null && categoryTitleFontFixer != null)
+        {
+            categoryTitleText.text = _categoryTitle + " ";
+            categoryTitleFontFixer.FixTexts();
+        }
+
+        for (int i = 0; i < _storyDB.storiesCategories[_databaseIndex].storiesDBItems.Length; i++)
+        {
+            UIStoriesItemSmall storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+            storyItemSmallInstance.transform.name = _storyDB.storiesCategories[_databaseIndex].storiesDBItems[i].storyTitleEnglish;
+            storyItemSmallInstance.LoadThumbnailAsset(_storyDB.storiesCategories[_databaseIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance);
+
+            storiesItemSmallList.Add(storyItemSmallInstance);
+        }
+
+        if (categoryCountText != null)
+            categoryCountText.text = "(" + storiesItemSmallList.Count + ")";
+    }
+
     public void AddStoryItemSmall(StoriesDBItem _storiesDBItem)
     {
         if (ContainsStoryItemSmall(_storiesDBItem.storyTitleEnglish))

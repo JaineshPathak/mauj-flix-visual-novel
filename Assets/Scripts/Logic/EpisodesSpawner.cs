@@ -46,6 +46,7 @@ public class EpisodesSpawner : MonoBehaviour
     [HideInInspector] public StoriesDBItem storiesDBItem;
     [HideInInspector] public StoryData storyData;
     [HideInInspector] public int currentEpisodeNumber;
+    [HideInInspector] public Sprite storyThumbnailSmallSprite;
     [HideInInspector] public Sprite storyThumbnailBigSprite;
 
     public static event Action OnRateUsWindowOpened;
