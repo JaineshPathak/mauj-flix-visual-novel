@@ -108,7 +108,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
             if (FirebaseDBHandler.instance != null)
             {
-                if(!likeButtonParent.activeSelf)
+                if (!likeButtonParent.activeSelf)
                     likeButtonParent.SetActive(true);
 
                 if (!viewsCountParent.activeSelf)

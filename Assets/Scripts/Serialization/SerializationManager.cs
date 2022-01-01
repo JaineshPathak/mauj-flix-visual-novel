@@ -45,7 +45,7 @@ public class SerializationManager
         File.WriteAllText(fullPath, saveData);
 
 #if UNITY_EDITOR
-        Debug.Log(path + " - FILE SAVED!");
+        Debug.Log(fullPath + " - FILE SAVED!");
 #endif
     }
 

@@ -29,6 +29,7 @@ public class UIEpisodeEndPanel : MonoBehaviour
     public ParticleSystem endParticleEffect;
     public Button playButton;
     public Button rateUsButton;
+    public Button nextEpisodeButton;
 
     private LTSeq endSeq;
     private LTSeq timerSeq;
@@ -44,7 +45,22 @@ public class UIEpisodeEndPanel : MonoBehaviour
 
         congralutionsImage.transform.localScale = Vector3.zero;
         nextEpisodePanel.transform.localScale = Vector3.zero;
-        playButton.transform.localScale = Vector3.zero;        
+
+        playButton.transform.localScale = Vector3.zero;
+
+        if (nextEpisodeButton == null)
+        {
+            //nextEpisodeButton = endScreenCanvasGroup.transform.Find("NextEpisodeButton").gameObject.GetComponent<Button>();
+            nextEpisodeButton = GameObject.Find("NextEpisodeButton").GetComponent<Button>();
+        }
+
+        if(nextEpisodeButton != null)
+        {
+            nextEpisodeButton.onClick.RemoveAllListeners();
+            nextEpisodeButton.onClick.AddListener(OnNextEpisodeButton);
+            nextEpisodeButton.transform.localScale = Vector3.zero;
+        }        
+
         rateUsButton.transform.localScale = Vector3.zero;
     }
 
@@ -75,7 +91,13 @@ public class UIEpisodeEndPanel : MonoBehaviour
     private void OnRateUsWindowClosed()
     {        
         LeanTween.resume(timerId);
-    }    
+
+        if(EpisodesSpawner.instance != null)
+        {
+            if (EpisodesSpawner.instance.playerData.hasRatedGame)
+                rateUsButton.gameObject.SetActive(false);
+        }
+    }
 
     public void PlayEndingScreen()
     {
@@ -84,7 +106,19 @@ public class UIEpisodeEndPanel : MonoBehaviour
 
         isTriggered = true;
 
-        if(!endScreenCanvasGroup.gameObject.activeSelf)
+        if (nextEpisodeButton == null)
+        {
+            //nextEpisodeButton = endScreenCanvasGroup.transform.Find("NextEpisodeButton").GetComponent<Button>();
+            nextEpisodeButton = GameObject.Find("NextEpisodeButton").GetComponent<Button>();
+        }
+
+        if (nextEpisodeButton != null)
+        {
+            nextEpisodeButton.onClick.RemoveAllListeners();
+            nextEpisodeButton.onClick.AddListener(OnNextEpisodeButton);
+        }
+
+        if (!endScreenCanvasGroup.gameObject.activeSelf)
             endScreenCanvasGroup.gameObject.SetActive(true);
 
         //endScreenCanvasGroup.alpha = 0;
@@ -124,10 +158,10 @@ public class UIEpisodeEndPanel : MonoBehaviour
                 nextEpisodeBarTimer.fillAmount = f;
             }).setOnComplete(OnNextEpisodeTimerUp));*/            
 
-            timerId = LeanTween.value(0, 1f, 8f).setEase(LeanTweenType.linear).setOnUpdate((float f) =>
+            /*timerId = LeanTween.value(0, 1f, 8f).setEase(LeanTweenType.linear).setOnUpdate((float f) =>
             {
                 nextEpisodeBarTimer.fillAmount = f;
-            }).setOnComplete(OnNextEpisodeTimerUp).id;
+            }).setOnComplete(OnNextEpisodeTimerUp).id;*/
 
             StartCoroutine(OpenedActionEventDelay());
         }
@@ -135,12 +169,17 @@ public class UIEpisodeEndPanel : MonoBehaviour
         playButton.interactable = true;
         LeanTween.scale(playButton.gameObject, Vector3.one, 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(1f);
 
-        if(EpisodesSpawner.instance != null)
+        nextEpisodeButton.interactable = true;
+        LeanTween.scale(nextEpisodeButton.gameObject, Vector3.one, 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(1f);
+
+        if (EpisodesSpawner.instance != null)
         {
             if(EpisodesSpawner.instance.playerData != null)
             {
-                if(!EpisodesSpawner.instance.playerData.hasRatedGame)
+                if (!EpisodesSpawner.instance.playerData.hasRatedGame)
                     LeanTween.scale(rateUsButton.gameObject, Vector3.one, 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(1f);
+                else
+                    rateUsButton.gameObject.SetActive(false);
             }
         }
     }
@@ -158,6 +197,22 @@ public class UIEpisodeEndPanel : MonoBehaviour
             return;
 
         playButton.interactable = false;
+        nextEpisodeButton.interactable = false;
+
+        EpisodesSpawner.instance.StartLoadingStoryScene();
+    }
+
+    public void OnNextEpisodeButton()
+    {
+        if (EpisodesSpawner.instance == null)
+            return;
+
+        if (LeanTween.isTweening(timerId))
+            LeanTween.cancel(timerId);
+
+        playButton.interactable = false;
+        nextEpisodeButton.interactable = false;
+        
         EpisodesSpawner.instance.StartLoadingStoryScene();
     }
 

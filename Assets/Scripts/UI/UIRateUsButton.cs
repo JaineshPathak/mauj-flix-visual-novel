@@ -15,7 +15,7 @@ public class UIRateUsButton : MonoBehaviour
             {
                 if(EpisodesSpawner.instance.playerData.hasRatedGame)
                 {
-                    homeButton.anchoredPosition = new Vector2(0, homeButton.anchoredPosition.y);
+                    //homeButton.anchoredPosition = new Vector2(0, homeButton.anchoredPosition.y);
                     gameObject.SetActive(false);
                 }
             }

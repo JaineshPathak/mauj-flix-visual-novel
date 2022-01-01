@@ -1,8 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-//This will be saved in a json file and stored as Addressable
+﻿//This will be saved in a json file and stored as Addressable Asset Bundle
 
 [System.Serializable]
 public class StoriesDB

@@ -26,12 +26,14 @@ public class EpisodesLoadButton : MonoBehaviour
         mainCamera.transform.position = Vector3.zero;
         mainCamera.transform.rotation = Quaternion.identity;
 
-        GameObject episodeInstance = Instantiate(episodePrefab);
+        /*GameObject episodeInstance = Instantiate(episodePrefab);
         episodeInstance.GetComponentInChildren<Flowchart>().ExecuteBlock("01 - Game Start");
 
         episodesTesting.currentEpisodePrefab = episodeInstance;
         episodesTesting.episodeButtonGroupLayout.gameObject.SetActive(false);
         episodesTesting.titleObject.SetActive(false);
-        episodesTesting.backButton.SetActive(true);
+        episodesTesting.backButton.SetActive(true);*/
+
+        episodesTesting.SpawnEpisode(episodePrefab);
     }
 }

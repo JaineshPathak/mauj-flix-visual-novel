@@ -28,7 +28,7 @@ public class MenuUpdater : MonoBehaviour
     {
         if (menuTextsReplacer.Length <= 0)
             return;
-
+        
         StartCoroutine(UpdateOptionsTextRoutine());        
     }
 

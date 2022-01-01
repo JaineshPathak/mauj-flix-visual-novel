@@ -1358,6 +1358,7 @@ MonoBehaviour:
   playerData: {fileID: 11400000, guid: 8f2aa17875b7e26469e45df76e6911ab, type: 2}
   rateUsCanvasGroup: {fileID: 3636323746705426176}
   blackScreenCanvasGroup: {fileID: 8844859466225251780}
+  percentDownloadedText: {fileID: 1035325974586140550}
   storyTitle: 
   storyTitleEnglish: 
   storyDescription: 
@@ -1381,6 +1382,7 @@ MonoBehaviour:
     currentEpisodeKey: 
     episodeDataList: []
   currentEpisodeNumber: 0
+  storyThumbnailSmallSprite: {fileID: 0}
   storyThumbnailBigSprite: {fileID: 0}
 --- !u!114 &4052109510307147025
 MonoBehaviour:
@@ -1802,7 +1804,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 515.4717}
+  m_AnchoredPosition: {x: 0, y: 600}
   m_SizeDelta: {x: 800, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3764121102049358847
@@ -2193,7 +2195,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4982343502727005469
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2210,8 +2212,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 55.71997}
-  m_SizeDelta: {x: 388.44824, y: 97.11206}
+  m_AnchoredPosition: {x: 0, y: 83}
+  m_SizeDelta: {x: 388.44824, y: 57.879395}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8539380445050130730
 CanvasRenderer:
@@ -2240,7 +2242,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 00%
+  m_text: 0%
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2ee10bad595bf3c40a454fbcd56abd42, type: 2}
   m_sharedMaterial: {fileID: 1945608079353743850, guid: 2ee10bad595bf3c40a454fbcd56abd42,
@@ -2269,8 +2271,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 75.9
-  m_fontSizeBase: 75.9
+  m_fontSize: 75
+  m_fontSizeBase: 75
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -2286,7 +2288,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: -1
+  m_firstOverflowCharacterIndex: 0
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -2310,7 +2312,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1035325974586140550}
-    characterCount: 3
+    characterCount: 2
     spriteCount: 0
     spaceCount: 0
     wordCount: 1

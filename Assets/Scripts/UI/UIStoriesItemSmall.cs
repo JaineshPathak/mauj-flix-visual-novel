@@ -157,11 +157,19 @@ public class UIStoriesItemSmall : MonoBehaviour
             viewCountRef = FirebaseDBHandler.instance.GetReferenceFromStoryTitle(storyItem.storyTitleEnglish, FirebaseDBHandler.viewCountKeyEnd);     //Eg: Udaan-View-Count
             likeCountRef = FirebaseDBHandler.instance.GetReferenceFromStoryTitle(storyItem.storyTitleEnglish, FirebaseDBHandler.likeCountKeyEnd);     //Eg: Udaan-Like-Count
 
+            FirebaseDBHandler.instance.GetCountFromFirebaseDB(viewCountRef, val => storyViewsCountText.text = val);
+            FirebaseDBHandler.instance.GetCountFromFirebaseDB(likeCountRef, val => storyLikesCountText.text = val);
+
             //storyViewsCountText.text = FirebaseDBHandler.instance.GetCountFromFirebaseDB(viewCountRef);
             //storyLikesCountText.text = FirebaseDBHandler.instance.GetCountFromFirebaseDB(likeCountRef);
 
-            FirebaseDBHandler.instance.GetCountFromFirebaseDB(viewCountRef, val => storyViewsCountText.text = val);
-            FirebaseDBHandler.instance.GetCountFromFirebaseDB(likeCountRef, val => storyLikesCountText.text = val);
+            /*if (FirebaseDBHandler.instance.IsFirebaseDBInitialized)
+            {
+                FirebaseDBHandler.instance.GetCountFromFirebaseDB(viewCountRef, val => storyViewsCountText.text = val);
+                FirebaseDBHandler.instance.GetCountFromFirebaseDB(likeCountRef, val => storyLikesCountText.text = val);
+            }
+            else
+                FirebaseDBHandler.instance.InitFirebaseDBHandler();*/
         }
         else
         {

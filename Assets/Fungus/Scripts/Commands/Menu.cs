@@ -43,6 +43,10 @@ namespace Fungus
 
         public MenuDialog SetMenuDialog  { get { return setMenuDialog; } set { setMenuDialog = value; } }
 
+        public string Text { get { return text; } }
+
+        public Block TargetBlock { get { return targetBlock; } }
+
         public override void OnEnter()
         {
             if (setMenuDialog != null)

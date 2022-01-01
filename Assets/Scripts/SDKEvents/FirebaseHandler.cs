@@ -22,8 +22,8 @@ namespace underDOGS.SDKEvents
                 if (FirebaseDBHandler.instance != null)
                     FirebaseDBHandler.instance.InitFirebaseDBHandler();
 
-                if (FirebaseRemoteConfigHandler.instance != null)
-                    FirebaseRemoteConfigHandler.instance.InitFirebaseRemoteConfigHandler();
+                //if (FirebaseRemoteConfigHandler.instance != null)
+                    //FirebaseRemoteConfigHandler.instance.InitFirebaseRemoteConfigHandler();
             });
         }
 

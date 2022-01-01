@@ -9,6 +9,8 @@ using Firebase.Extensions;
 
 public class FirebaseRemoteConfigHandler : MonoBehaviour
 {
+    public bool testMode;
+    public string testAppVersion = "0.1.4.2.2";
     public bool doVersionCheck;    
 
     public static FirebaseRemoteConfigHandler instance;
@@ -20,7 +22,9 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
     public static event Action OnAppVersionIgnoreCheck;
 
     private bool isFirebaseRCInitialized;
-    [HideInInspector] public bool isUpdateBtnClicked;    
+    [HideInInspector] public bool isUpdateBtnClicked;
+
+    private UISplashScreen splashScreen;
 
     private void Awake()
     {
@@ -34,7 +38,33 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
     {
         if(focus && isUpdateBtnClicked)
         {
-            FetchDataAsync();
+            //FetchDataAsync();
+            if (splashScreen == null)
+                splashScreen = FindObjectOfType<UISplashScreen>();
+
+            if (splashScreen != null)
+            {
+                splashScreen.StepOneVersionCheck();
+                FetchDataAsync();
+            }
+
+            isUpdateBtnClicked = false;
+        }
+    }
+
+    public void CheckVersionAgain()
+    {
+        if (isUpdateBtnClicked)
+        {
+            //FetchDataAsync();
+            if (splashScreen == null)
+                splashScreen = FindObjectOfType<UISplashScreen>();
+
+            if (splashScreen != null)
+            {
+                splashScreen.StepOneVersionCheck();
+                FetchDataAsync();
+            }
 
             isUpdateBtnClicked = false;
         }
@@ -118,8 +148,10 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
 #if UNITY_EDITOR
                     Debug.Log(string.Format("Firebase Remote Config: Remote data loaded and ready (last fetch time {0}).", info.FetchTime));
 #endif
-
-                    CheckGameAppVersion();
+                    if(testMode)
+                        CheckGameAppVersionTestMode();
+                    else
+                        CheckGameAppVersion();
                 });
 
                 break;
@@ -173,5 +205,27 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
             OnAppVersionIncorrect?.Invoke();
         }
     }
+    
+    private void CheckGameAppVersionTestMode()
+    {
+#if UNITY_EDITOR
+        Debug.Log("Firebase Remote Config: APP VERSION: " + Application.version);
+        Debug.Log("Firebase Remote Config: TEST APP VERSION: " + testAppVersion);
+#endif
 
+        if (Application.version.Equals(testAppVersion))        //Test Version match
+        {
+#if UNITY_EDITOR
+            Debug.Log("Firebase Remote Config: TEST MODE VERSION MATCH! GO AHEAD!");
+#endif
+            OnAppVersionCorrect?.Invoke();
+        }
+        else
+        {
+#if UNITY_EDITOR
+            Debug.Log("Firebase Remote Config: TEST MODE VERSION MISMATCH! SHOW UPDATE POPUP!");      //Test Version mismatch
+#endif
+            OnAppVersionIncorrect?.Invoke();
+        }
+    }
 }

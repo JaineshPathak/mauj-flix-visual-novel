@@ -1,11 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
-using System;
-using TMPro;
 
 public class FirebaseDBHandler : MonoBehaviour
 {
@@ -53,21 +52,21 @@ public class FirebaseDBHandler : MonoBehaviour
                 // Firebase Unity SDK is not safe to use here.
             }
         });
-    }
+    }    
 
     private void InitFirebaseDatabase()
     {
         isFirebaseDBInitialized = true;
 
-        databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
         firebaseDB = FirebaseDatabase.DefaultInstance;
+        databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
     public void GetCountFromFirebaseDB(string reference, Action<string> OnValueReceived)
     {
         if (!isFirebaseDBInitialized)
         {
-            Debug.LogError("Firebase Database not Initialized; Can't get the Count from key");
+            Debug.LogError("Firebase Database not Initialized; Can't get the Count from Key: " + reference);
             return;
         }
 
@@ -95,6 +94,12 @@ public class FirebaseDBHandler : MonoBehaviour
 
     public void UpdateViewCount(string reference)
     {
+        if (!isFirebaseDBInitialized)
+        {
+            Debug.LogError("Firebase Database not Initialized; Can't update Key: " + reference);
+            return;
+        }
+
         firebaseDB.GetReference(reference).GetValueAsync().ContinueWith(task => 
         {
             if(task.IsFaulted)
@@ -113,6 +118,12 @@ public class FirebaseDBHandler : MonoBehaviour
 
     public void LikesCountIncrement(string reference)
     {
+        if (!isFirebaseDBInitialized)
+        {
+            Debug.LogError("Firebase Database not Initialized; Can't update Key: " + reference);
+            return;
+        }
+
         firebaseDB.GetReference(reference).GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)
@@ -131,6 +142,12 @@ public class FirebaseDBHandler : MonoBehaviour
 
     public void LikesCountDecrement(string reference)
     {
+        if (!isFirebaseDBInitialized)
+        {
+            Debug.LogError("Firebase Database not Initialized; Can't update Key: " + reference);
+            return;
+        }
+
         firebaseDB.GetReference(reference).GetValueAsync().ContinueWith(task =>
         {
             if (task.IsFaulted)

@@ -7,7 +7,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 using Fungus;
-//using TMPro;
+using TMPro;
 
 public class EpisodesSpawner : MonoBehaviour
 {
@@ -36,7 +36,7 @@ public class EpisodesSpawner : MonoBehaviour
     [Space(15f)]
 
     public CanvasGroup blackScreenCanvasGroup;
-    //public TextMeshProUGUI percentDownloadedText;
+    public TextMeshProUGUI percentDownloadedText;
 
     private EpisodesHandler episodesHandler;
 
@@ -153,6 +153,7 @@ public class EpisodesSpawner : MonoBehaviour
         percentCanvasGroup.blocksRaycasts = true;
 
         storyPercentBar.fillAmount = 0;
+        percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 
         LeanTween.alphaCanvas(percentCanvasGroup, 1f, 1f).setOnComplete( () => 
         {
@@ -163,6 +164,7 @@ public class EpisodesSpawner : MonoBehaviour
     private IEnumerator StartLoadingStorySceneAsync()
     {
         storyPercentBar.fillAmount = 0;
+        percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 
         AsyncOperation sceneOperation = SceneManager.LoadSceneAsync(2);
         sceneOperation.completed += OnStorySceneLoadedComplete;
@@ -170,7 +172,9 @@ public class EpisodesSpawner : MonoBehaviour
         while(!sceneOperation.isDone)
         {
             float progress = Mathf.Clamp01(sceneOperation.progress / 0.9f);
+
             storyPercentBar.fillAmount = progress;
+            percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 
             yield return null;
         }
@@ -200,6 +204,7 @@ public class EpisodesSpawner : MonoBehaviour
         var isDone = false;
 
         storyPercentBar.fillAmount = 0;
+        percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 
         AsyncOperationHandle<GameObject> downloadEpisode = Addressables.LoadAssetAsync<GameObject>(storyData.currentEpisodeKey);
         downloadEpisode.Completed += EpisodeDownloadComplete;
@@ -208,6 +213,7 @@ public class EpisodesSpawner : MonoBehaviour
         {            
             downloadProgressCurrent = downloadEpisode.PercentComplete;
             storyPercentBar.fillAmount = downloadProgressCurrent;
+            percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 
             yield return null;
         }
@@ -215,8 +221,8 @@ public class EpisodesSpawner : MonoBehaviour
         yield return new WaitUntil(() => isDone);
 
         //Download Complete
-        //percentDownloadedText.text = "100%";
         storyPercentBar.fillAmount = 1f;
+        percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
     }
 
     /*private void Update()
