@@ -60,7 +60,7 @@ public class SaveStoriesDBEditor : Editor
             saveStoryData.SaveDBToJson();
 
         if (GUILayout.Button("Delete Json File"))
-            saveStoryData.DeleteDBJson();        
+            saveStoryData.DeleteDBJson();
     }
 }
 #endif

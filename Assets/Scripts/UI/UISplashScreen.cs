@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -137,7 +136,7 @@ public class UISplashScreen : MonoBehaviour
         //StartSequence();
         imageLoadingBarActual.fillAmount = 1f;
 
-        Invoke("StepTwoAdditionalResources", 1f);
+        Invoke("StepTwoAdditionalResources", 0.3f);
         //StepTwoAdditionalResources();
     }
 
@@ -242,7 +241,7 @@ public class UISplashScreen : MonoBehaviour
                     }
                     #endregion
 
-                    yield return new WaitForSeconds(1f);
+                    yield return new WaitForSeconds(0.3f);
 
                     imageLoadingStatusText.text = "DONE";
                     LeanTween.alphaCanvas(imageLoadingCanvasGroup, 0, 0.3f).setOnComplete( () => 
@@ -255,7 +254,7 @@ public class UISplashScreen : MonoBehaviour
 
             case AsyncOperationStatus.Failed:
 
-                imageLoadingStatusText.text = "Something Went Wrong..";
+                imageLoadingStatusText.text = "Something Went Wrong...";
                 imageLoadingBarActual.fillAmount = 0.1f;
 #if FCM_DEBUG
                 Debug.LogError("SPLASH SCREEN: Stories Load Images DB failed!");
@@ -306,20 +305,20 @@ public class UISplashScreen : MonoBehaviour
 
         LTSeq splashSeq = LeanTween.sequence();
 
-        splashSeq.append(1f);
+        splashSeq.append(0.5f);
         splashSeq.append(LeanTween.alphaCanvas(titleCompanyCanvas, 1f, 1f));
         splashSeq.append(1f);
         splashSeq.append(LeanTween.alphaCanvas(titleCompanyCanvas, 0, 1f));
-        splashSeq.append(1f);
+        splashSeq.append(0.5f);
         splashSeq.append(LeanTween.alphaCanvas(disclaimerCanvas, 1f, 1f));
         splashSeq.append(1f);
         splashSeq.append(LeanTween.alphaCanvas(disclaimerCanvas, 0, 1f));
-        splashSeq.append(1f);
+        splashSeq.append(0.5f);
         splashSeq.append(LeanTween.alphaCanvas(thumbnailLoadingCanvas, 1f, 1f).setOnStart( () => 
         {
             LeanTween.alpha(thumbnailImagesLoadedList[currentIndex].rectTransform, 1f, 1f).setOnComplete( () => 
             {
-                StartCoroutine(UpdateFadeRoutine());
+                //StartCoroutine(UpdateFadeRoutine());
             });
         }).setOnComplete( () => 
         {
