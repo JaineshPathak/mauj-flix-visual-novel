@@ -10,6 +10,7 @@ public class EpisodeMenuChoiceButton : MonoBehaviour
 
     public Block myTargetBlock;
     public TextMeshProUGUI choicebuttonText;
+    public CharReplacerHindi replacerHindi;
 
     public void OnMenuChoiceClicked()
     {

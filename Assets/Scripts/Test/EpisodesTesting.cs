@@ -154,7 +154,9 @@ public class EpisodesTesting : MonoBehaviour
                 EpisodeMenuChoiceButton menuChoiceButton = Instantiate(episodeChoiceButtonPrefab, episodeChoicesParent);
                 menuChoiceButton.episodesTesting = this;
                 menuChoiceButton.myTargetBlock = menuCommand.TargetBlock;
-                menuChoiceButton.choicebuttonText.text = menuCommand.Text;
+
+                string fixedText = menuChoiceButton.replacerHindi.GetFixedText(menuCommand.Text);
+                menuChoiceButton.choicebuttonText.text = fixedText;
 
                 menuChoiceButtonsList.Add(menuChoiceButton);
             }
