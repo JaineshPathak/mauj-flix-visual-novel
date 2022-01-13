@@ -27,14 +27,14 @@ public class StoriesDBSO : ScriptableObject
         }
 
         string saveString = JsonUtility.ToJson(storiesDB, true);
-        SerializationManager.SaveAsTextFile(Application.dataPath, DataPaths.storyDatabaseFileNameTest, saveString);
+        SerializationManager.SaveAsTextFile(Application.dataPath, DataPaths.storyDatabaseFileName, saveString);
 
         AssetDatabase.Refresh();
     }
 
     public void DeleteDBJson()
     {
-        SerializationManager.DeleteIfFileExists(Application.dataPath + "/" + DataPaths.storyDatabaseFileNameTest);
+        SerializationManager.DeleteIfFileExists(Application.dataPath + "/" + DataPaths.storyDatabaseFileName);
 
         AssetDatabase.Refresh();
     }
