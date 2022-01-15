@@ -28,10 +28,14 @@ public class EpisodesSpawner : MonoBehaviour
     public Image storyloadingTitleImage;
     public Image storyPercentBar;
 
-    [Space(15f)]
-
+    [Header("Player Data")]
     public Player_Data playerData;
+
+    [Header("Rate Us Window")]
     public CanvasGroup rateUsCanvasGroup;
+
+    [Header("Like Story Window")]
+    public CanvasGroup likeStoryCanvasGroup;
 
     [Space(15f)]
 
@@ -327,5 +331,39 @@ public class EpisodesSpawner : MonoBehaviour
 #if UNITY_ANDROID
         Application.OpenURL("market://details?id=com.culttales.maujflix");
 #endif
+    }
+
+    public void OpenLikeStoryWindow()
+    {
+        if (!likeStoryCanvasGroup.gameObject.activeSelf)
+            likeStoryCanvasGroup.gameObject.SetActive(true);
+
+        likeStoryCanvasGroup.alpha = 0;
+        likeStoryCanvasGroup.interactable = true;
+        likeStoryCanvasGroup.blocksRaycasts = true;
+
+        LeanTween.alphaCanvas(likeStoryCanvasGroup, 1f, 0.2f);
+    }
+
+    public void CloseLikeStoryWindow()
+    {
+        likeStoryCanvasGroup.alpha = 0;
+        likeStoryCanvasGroup.interactable = false;
+        likeStoryCanvasGroup.blocksRaycasts = false;
+        likeStoryCanvasGroup.gameObject.SetActive(false);
+    }
+
+    public void OnLikeStoryClicked()
+    {
+        CloseLikeStoryWindow();
+
+        if (!playerData.HasStoryLiked(storyTitleEnglish))
+        {
+            if(FirebaseDBHandler.instance != null)
+                FirebaseDBHandler.instance.LikesCountIncrement(FirebaseDBHandler.instance.GetReferenceFromStoryTitle(storyTitleEnglish, FirebaseDBHandler.likeCountKeyEnd));
+
+            playerData.AddStoryLiked(storyTitleEnglish);
+            SaveLoadGame.SavePlayerData(playerData);
+        }
     }
 }

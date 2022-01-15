@@ -82,11 +82,17 @@ public class EpisodesHandler : MonoBehaviour
             {
                 int episodeIndex = storyData.GetIndexFromEpisodeData(episodeData);
                 episodeIndex++;
-                print("EPISODE INDEX: " +episodeIndex);
+
+#if UNITY_EDITOR
+                Debug.Log("EPISODE INDEX: " +episodeIndex);
+#endif
 
                 if(episodeIndex % 2 == 0)
                     episodesSpawner.OpenRateUsWindow();
             }
+
+            if (!episodesSpawner.playerData.HasStoryLiked(episodesSpawner.storyTitleEnglish))
+                episodesSpawner.OpenLikeStoryWindow();
         }
     }
 
@@ -95,7 +101,10 @@ public class EpisodesHandler : MonoBehaviour
         if (endPanel == null)
             endPanel = GetComponentInChildren<UIEpisodeEndPanel>();
 
-        episodesSpawner = spawner;                
+        if (endPanel != null)
+            endPanel.episodesHandler = this;
+
+        episodesSpawner = spawner;
 
         mainCamera = Camera.main;
 
@@ -202,6 +211,9 @@ public class EpisodesHandler : MonoBehaviour
 
     private void SaveEpisodeData()
     {
+        if (episodeData == null)
+            return;
+
         episodeData.isFinished = false;
 
         if (!storyData.hasStarted)
@@ -282,6 +294,9 @@ public class EpisodesHandler : MonoBehaviour
     {
         StopCoroutine("UpdateRoutine");
 
+        if (episodeData == null)
+            return;
+
         //Send a "[StoryTitle]_episodeN_branchending_completed" event
         if(SDKManager.instance != null)
         {
@@ -314,6 +329,9 @@ public class EpisodesHandler : MonoBehaviour
     private void SaveEpisodeDataFinish()
     {
         StopCoroutine("UpdateRoutine");
+
+        if (episodeData == null)
+            return;
 
         //Send "episode_completed" Event
         if(SDKManager.instance != null)
@@ -392,7 +410,6 @@ public class EpisodesHandler : MonoBehaviour
             if (SDKManager.instance != null)
             {
                 //Send "story_completed" Event
-
                 string storyTitleProper = episodesSpawner.storyTitleEnglish;
                 storyTitleProper = storyTitleProper.Replace(" ", "_");
 
@@ -416,6 +433,35 @@ public class EpisodesHandler : MonoBehaviour
         }
 
         SaveStoryData();
+    }
+
+    public void PlayEpisodeAgain()
+    {
+        if (episodeData == null)
+            return;
+
+        StopCoroutine("UpdateRoutine");
+
+        episodeData.currentBlockID = -1;
+        episodeData.currentCommandID = -1;
+        episodeData.currentBlocksTotal = 0;
+        episodeData.currentBlocksVisited.Clear();
+        episodeData.lastCameraPosition = Vector3.zero;
+        episodeData.lastCameraRotation = Vector3.zero;
+        episodeData.lastCameraOrthosize = 21f;
+        episodeData.episodeTime = 0;        
+
+        int currentIndex = storyData.GetIndexFromEpisodeData(episodeData);
+        
+        storyData.currentEpisodeIndex = currentIndex;
+        storyData.currentEpisodeKey = storyData.GetEpisodeKeyFromIndex(storyData.currentEpisodeIndex);
+
+        SaveStoryData();
+
+        if (episodesSpawner == null)
+            episodesSpawner = EpisodesSpawner.instance;
+
+        episodesSpawner.StartLoadingStoryScene();
     }
 
     private void SaveStoryData()

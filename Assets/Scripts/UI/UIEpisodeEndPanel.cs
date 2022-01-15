@@ -30,11 +30,14 @@ public class UIEpisodeEndPanel : MonoBehaviour
     public Button playButton;
     public Button rateUsButton;
     public Button nextEpisodeButton;
+    public Button playAgainEpisodeButton;
 
     private LTSeq endSeq;
     private LTSeq timerSeq;
     private int timerId;
     private bool isTriggered;
+
+    [HideInInspector] public EpisodesHandler episodesHandler;
 
     public static event Action OnNextEpisodePanelOpened;
 
@@ -59,7 +62,17 @@ public class UIEpisodeEndPanel : MonoBehaviour
             nextEpisodeButton.onClick.RemoveAllListeners();
             nextEpisodeButton.onClick.AddListener(OnNextEpisodeButton);
             nextEpisodeButton.transform.localScale = Vector3.zero;
-        }        
+        }
+
+        if (playAgainEpisodeButton == null)
+            playAgainEpisodeButton = GameObject.Find("PlayEpisodeAgainButton").GetComponent<Button>();
+
+        if(playAgainEpisodeButton != null)
+        {
+            playAgainEpisodeButton.onClick.RemoveAllListeners();
+            playAgainEpisodeButton.onClick.AddListener(OnPlayAgainEpisodeButton);
+            playAgainEpisodeButton.transform.localScale = Vector3.zero;
+        }
 
         rateUsButton.transform.localScale = Vector3.zero;
     }
@@ -106,6 +119,7 @@ public class UIEpisodeEndPanel : MonoBehaviour
 
         isTriggered = true;
 
+        //Next Episode Button, too lazy to again assign in Editor in all episode prefabs
         if (nextEpisodeButton == null)
         {
             //nextEpisodeButton = endScreenCanvasGroup.transform.Find("NextEpisodeButton").GetComponent<Button>();
@@ -116,6 +130,17 @@ public class UIEpisodeEndPanel : MonoBehaviour
         {
             nextEpisodeButton.onClick.RemoveAllListeners();
             nextEpisodeButton.onClick.AddListener(OnNextEpisodeButton);
+        }
+
+        //Play Again Button, too lazy to again assign in Editor in all episode prefabs
+        if (playAgainEpisodeButton == null)
+            playAgainEpisodeButton = GameObject.Find("PlayEpisodeAgainButton").GetComponent<Button>();
+
+        if (playAgainEpisodeButton != null)
+        {
+            playAgainEpisodeButton.onClick.RemoveAllListeners();
+            playAgainEpisodeButton.onClick.AddListener(OnPlayAgainEpisodeButton);
+            playAgainEpisodeButton.transform.localScale = Vector3.zero;
         }
 
         if (!endScreenCanvasGroup.gameObject.activeSelf)
@@ -172,6 +197,9 @@ public class UIEpisodeEndPanel : MonoBehaviour
         nextEpisodeButton.interactable = true;
         LeanTween.scale(nextEpisodeButton.gameObject, Vector3.one, 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(1f);
 
+        playAgainEpisodeButton.interactable = true;
+        LeanTween.scale(playAgainEpisodeButton.gameObject, Vector3.one, 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(1f);
+
         if (EpisodesSpawner.instance != null)
         {
             if(EpisodesSpawner.instance.playerData != null)
@@ -198,6 +226,7 @@ public class UIEpisodeEndPanel : MonoBehaviour
 
         playButton.interactable = false;
         nextEpisodeButton.interactable = false;
+        playAgainEpisodeButton.interactable = false;
 
         EpisodesSpawner.instance.StartLoadingStoryScene();
     }
@@ -212,8 +241,18 @@ public class UIEpisodeEndPanel : MonoBehaviour
 
         playButton.interactable = false;
         nextEpisodeButton.interactable = false;
-        
+        playAgainEpisodeButton.interactable = false;
+
         EpisodesSpawner.instance.StartLoadingStoryScene();
+    }
+
+    public void OnPlayAgainEpisodeButton()
+    {
+        playButton.interactable = false;
+        nextEpisodeButton.interactable = false;
+        playAgainEpisodeButton.interactable = false;
+
+        episodesHandler.PlayEpisodeAgain();
     }
 
     public void LoadStoryEpisodesMenu()
@@ -224,7 +263,7 @@ public class UIEpisodeEndPanel : MonoBehaviour
         if (LeanTween.isTweening(timerId))        
             LeanTween.cancel(timerId);
 
-        //Send a "Udaan_episode1_completed_homebtn_clicked" event
+        //Send a Eg: "Udaan_episode1_completed_homebtn_clicked" event
         if (SDKManager.instance != null)
         {
             string storyTitleProper = EpisodesSpawner.instance.storyTitleEnglish;
