@@ -150,7 +150,7 @@ public class UIStoriesItemSmall : MonoBehaviour
             return;
         }
 
-        if(storyItem.storyEpisodesKeys.Length > 0)
+        if(storyItem.storyEpisodesKeys.Length > 0 && !storyItem.isShortStory)
         {
             storyCountsParent.SetActive(true);
 
@@ -388,6 +388,9 @@ public class UIStoriesItemSmall : MonoBehaviour
 
     private void IncrementViewCount()
     {
+        if (storyItem != null && !storyItem.isShortStory)
+            return;
+
         if (FirebaseDBHandler.instance == null)
             return;
 

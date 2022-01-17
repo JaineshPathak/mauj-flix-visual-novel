@@ -17,7 +17,11 @@ public class StoriesDB
 [System.Serializable]
 public class StoriesCategory
 {
+    public bool isEnabled = true;
+    public bool isForShortStories;
+
     public string categoryName;
     public int categoryIndex;
+
     public StoriesDBItem[] storiesDBItems;
 }

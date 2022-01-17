@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -170,6 +168,39 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
         if (storyData == null)
             storyData = _storyData;
+
+        //If it's a short story (only 1 episode) then load immediately
+        if(storyItem.isShortStory)
+        {
+            isShown = false;
+
+            episodesSpawner.storyTitle = _storyTitle;
+            episodesSpawner.storyTitleEnglish = _storyTitleEng;
+            episodesSpawner.storyDescription = _storyDescription;
+            episodesSpawner.storyloadingThumbnailImage.sprite = _thumbnailLoadingSprite;
+            episodesSpawner.storyThumbnailSmallSprite = _thumbnailSmallSprite;
+            episodesSpawner.storyThumbnailBigSprite = _thumbnailBigSprite;
+            episodesSpawner.storyloadingTitleImage.sprite = _thumbnailTitleSprite;
+            episodesSpawner.storyData = _storyData;
+            episodesSpawner.storiesDBItem = _storiesDBItem;
+
+            //Send a simple analytics event that user has opened/viewed a story
+            if (SDKManager.instance != null)
+            {
+                string storyTitleProper = _storyTitleEng;
+                storyTitleProper = storyTitleProper.Replace(" ", "_");
+
+                SDKEventStringData eventStoryViewedData;
+                eventStoryViewedData.eventParameterName = SDKEventsNames.storyParameterName;
+                eventStoryViewedData.eventParameterData = storyTitleProper;
+
+                SDKManager.instance.SendEvent(SDKEventsNames.storyViewedEventName, eventStoryViewedData);                
+            }
+
+            LoadStoryEpisode();
+
+            return;
+        }
 
         if (isShown)
         {

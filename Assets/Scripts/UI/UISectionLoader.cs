@@ -7,6 +7,10 @@ public class UISectionLoader : MonoBehaviour
 {
     [Header("Prefabs")]
     public UIStoriesLoaderSmall storiesLoaderPrefab;
+    public UIStoriesLoaderSmall storiesLoaderShortsPrefab;
+
+    [Space(15)]
+
     public Transform sectionLoaderContent;
 
     private void OnEnable()
@@ -29,12 +33,21 @@ public class UISectionLoader : MonoBehaviour
         if (storiesDB == null)
             return;
 
-        //Starting from 1. 0th is reserved for top big thumbnails ones
+        //Starting from index 1. 0th index is reserved for top big thumbnails ones
         for (int i = 1; i < storiesDB.storiesCategories.Length; i++)
         {
-            UIStoriesLoaderSmall uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, sectionLoaderContent);
-            uIStoriesLoaderSmallInstance.categoryIndex = i;
-            uIStoriesLoaderSmallInstance.OnStoryDBLoaded(storiesDB);
+            if (storiesDB.storiesCategories[i].isEnabled)       //Useful if you want to disable unwanted categories
+            {
+                UIStoriesLoaderSmall uIStoriesLoaderSmallInstance;
+
+                if (storiesDB.storiesCategories[i].isForShortStories)
+                    uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderShortsPrefab, sectionLoaderContent);
+                else
+                    uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, sectionLoaderContent);
+
+                uIStoriesLoaderSmallInstance.categoryIndex = i;
+                uIStoriesLoaderSmallInstance.OnStoryDBLoaded(storiesDB);
+            }
         }
     }
 }

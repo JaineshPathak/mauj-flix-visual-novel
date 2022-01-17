@@ -7,6 +7,9 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "StoryDBItem", menuName = "Stories/Create Story Item", order = 0)]
 public class StoriesDBItemSO : ScriptableObject
 {
+    [Header("Story Type")]
+    public bool isShortStory;
+
     [Header("Titles")]
     public string storyTitle;
     public string storyTitleEnglish;
@@ -74,6 +77,8 @@ public class StoriesDBItemSO : ScriptableObject
     {
         item = new StoriesDBItem();
 
+        item.isShortStory = isShortStory;
+
         item.storyTitle = storyTitle;
         item.storyTitleEnglish = storyTitleEnglish;
 
@@ -109,6 +114,8 @@ public class StoriesDBItemSOEditor : Editor
 {
     private StoriesDBItemSO item;
 
+    private SerializedProperty storyTypeSerial;
+
     private SerializedProperty storyTitleSerial;
     private SerializedProperty storyTitleEnglishSerial;
 
@@ -136,6 +143,8 @@ public class StoriesDBItemSOEditor : Editor
     private float imageScaleDivide = 9f;
     private float labelYOffset = 35f;
 
+    private bool showThumbnails;
+
     private enum ThumbnailType
     {
         Type_Small,
@@ -145,6 +154,8 @@ public class StoriesDBItemSOEditor : Editor
 
     private void OnEnable()
     {
+        storyTypeSerial = serializedObject.FindProperty("isShortStory");
+
         storyTitleSerial = serializedObject.FindProperty("storyTitle");
         storyTitleEnglishSerial = serializedObject.FindProperty("storyTitleEnglish");
 
@@ -168,7 +179,9 @@ public class StoriesDBItemSOEditor : Editor
     {
         item = target as StoriesDBItemSO;
 
-        serializedObject.Update();        
+        serializedObject.Update();
+
+        AddPropertyLabel(storyTypeSerial, "Short Story", "Is it a short story? False: Normal 9-10 episodes story");
 
         AddPropertyLabel(storyTitleSerial, "Story Title", "Story Title in Hindi or others (except English)");
         AddPropertyLabel(storyTitleEnglishSerial, "Story Title English", "Story Title in English only");
@@ -191,25 +204,30 @@ public class StoriesDBItemSOEditor : Editor
         AddPropertyLabel(storyProgressFileNameSerial, "Story Progress File name", "File name of the Story Progress. Hit the 'Update' button next to it after assigning at least three Episode prefabs in below list.");        
 
         AddPropertyLabel(storyEpisodesKeysSerial, "Story Episodes", "List of Story Episodes Prefabs (Eg: ST-Padosan-Ep1.prefab). This appears in Details Panel depending on array size.");
+        
         //DrawDefaultInspector();
 
         thumbnailLabelStyle = new GUIStyle(GUI.skin.label);
         thumbnailLabelStyle.alignment = TextAnchor.LowerCenter;        
-        thumbnailLabelStyle.fontStyle = FontStyle.Bold;
+        thumbnailLabelStyle.fontStyle = FontStyle.Bold;        
 
-        EditorGUILayout.Space(15);       
+        showThumbnails = EditorGUILayout.Toggle("Show Thumbnails", showThumbnails);
+        if(showThumbnails)
+        {
+            EditorGUILayout.Space(15);
 
-        EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.BeginHorizontal();
 
-        CheckForThumbnail(ThumbnailType.Type_Small);
+            CheckForThumbnail(ThumbnailType.Type_Small);
 
-        CheckForThumbnail(ThumbnailType.Type_Big);
+            CheckForThumbnail(ThumbnailType.Type_Big);
 
-        CheckForThumbnail(ThumbnailType.Type_Loading);
+            CheckForThumbnail(ThumbnailType.Type_Loading);
 
-        EditorGUILayout.EndHorizontal();
+            EditorGUILayout.EndHorizontal();
 
-        EditorGUILayout.Space(40);
+            EditorGUILayout.Space(40);
+        }        
 
         serializedObject.ApplyModifiedProperties();
     }

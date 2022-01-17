@@ -12,6 +12,7 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
     public int categoryIndex;
     public UIStoriesItemSmall storiesItemSmallPrefab;
+    public UIStoriesItemSmall storiesItemShortsPrefab;
 
     [Space(15)]
 
@@ -64,14 +65,20 @@ public class UIStoriesLoaderSmall : MonoBehaviour
         {
             categoryTitleText.text = storyDB.storiesCategories[categoryIndex].categoryName + " ";
             categoryTitleFontFixer.FixTexts();
-        }        
+        }
 
         if(categoryLayoutGroup)
             LayoutRebuilder.ForceRebuildLayoutImmediate(categoryLayoutGroup);
 
         for (int i = 0; i < storyDB.storiesCategories[categoryIndex].storiesDBItems.Length; i++)
         {
-            UIStoriesItemSmall storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+            UIStoriesItemSmall storyItemSmallInstance;
+
+            if(storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isShortStory)
+                storyItemSmallInstance = Instantiate(storiesItemShortsPrefab, scrollContent);
+            else
+                storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+            
             storyItemSmallInstance.transform.name = storyDB.storiesCategories[categoryIndex].storiesDBItems[i].storyTitleEnglish;
             storyItemSmallInstance.LoadThumbnailAsset(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance);
 
@@ -107,6 +114,7 @@ public class UIStoriesLoaderSmall : MonoBehaviour
             categoryCountText.text = "(" + storiesItemSmallList.Count + ")";
     }
 
+    //Called from UIPersonalProfile.cs
     public void PopulateCategory(string _categoryTitle, int _databaseIndex, StoriesDB _storyDB)
     {
         if (GameController.instance == null)

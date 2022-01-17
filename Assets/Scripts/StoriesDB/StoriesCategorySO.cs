@@ -5,6 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "StoriesCategorySO", menuName = "Stories/Create Stories Category", order = 1)]
 public class StoriesCategorySO : ScriptableObject
 {
+    public bool isEnabled = true;
+    public bool isForShortStories;
+
+    [Space(15)]
+
     public string categoryName;
     public int categoryIndex;
     public StoriesDBItemSO[] storiesDBItems;
@@ -14,6 +19,9 @@ public class StoriesCategorySO : ScriptableObject
     public StoriesCategory GetStoriesCategory()
     {
         category = new StoriesCategory();
+
+        category.isEnabled = this.isEnabled;
+        category.isForShortStories = this.isForShortStories;
 
         category.categoryName = this.categoryName;
         category.categoryIndex = this.categoryIndex;

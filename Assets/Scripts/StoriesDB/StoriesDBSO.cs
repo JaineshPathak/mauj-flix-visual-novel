@@ -10,6 +10,15 @@ public class StoriesDBSO : ScriptableObject
 
     private StoriesDB storiesDB;
 
+    private void OnValidate()
+    {
+        for (int i = 0; i < storyCategories.Length && (storyCategories.Length > 0); i++)
+        {
+            if (storyCategories[i] != null)
+                storyCategories[i].categoryIndex = i;
+        }
+    }
+
     public void SaveDBToJson()
     {
         if(storyCategories.Length > 0)

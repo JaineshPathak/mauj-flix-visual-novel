@@ -1,6 +1,7 @@
 ﻿[System.Serializable]
 public class StoriesDBItem
 {
+    public bool isShortStory;
     public string storyTitle;
     public string storyTitleEnglish;
     public string storyDescription;
