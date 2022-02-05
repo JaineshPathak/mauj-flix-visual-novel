@@ -305,18 +305,18 @@ public class UISplashScreen : MonoBehaviour
 
         LTSeq splashSeq = LeanTween.sequence();
 
-        splashSeq.append(0.5f);
-        splashSeq.append(LeanTween.alphaCanvas(titleCompanyCanvas, 1f, 1f));
+        //splashSeq.append(0.5f);
+        splashSeq.append(LeanTween.alphaCanvas(titleCompanyCanvas, 1f, 0.5f));
         splashSeq.append(1f);
-        splashSeq.append(LeanTween.alphaCanvas(titleCompanyCanvas, 0, 1f));
-        splashSeq.append(0.5f);
-        splashSeq.append(LeanTween.alphaCanvas(disclaimerCanvas, 1f, 1f));
+        splashSeq.append(LeanTween.alphaCanvas(titleCompanyCanvas, 0, 0.5f));
+        //splashSeq.append(0.5f);
+        splashSeq.append(LeanTween.alphaCanvas(disclaimerCanvas, 1f, 0.5f));
         splashSeq.append(1f);
-        splashSeq.append(LeanTween.alphaCanvas(disclaimerCanvas, 0, 1f));
-        splashSeq.append(0.5f);
-        splashSeq.append(LeanTween.alphaCanvas(thumbnailLoadingCanvas, 1f, 1f).setOnStart( () => 
+        splashSeq.append(LeanTween.alphaCanvas(disclaimerCanvas, 0, 0.5f));
+        //splashSeq.append(0.5f);
+        splashSeq.append(LeanTween.alphaCanvas(thumbnailLoadingCanvas, 1f, 0.5f).setOnStart( () => 
         {
-            LeanTween.alpha(thumbnailImagesLoadedList[currentIndex].rectTransform, 1f, 1f).setOnComplete( () => 
+            LeanTween.alpha(thumbnailImagesLoadedList[currentIndex].rectTransform, 1f, 0.5f).setOnComplete( () => 
             {
                 //StartCoroutine(UpdateFadeRoutine());
             });
@@ -354,7 +354,7 @@ public class UISplashScreen : MonoBehaviour
             }
         }
 
-        LeanTween.alphaCanvas(thumbnailLoadingCanvas, 0, 1f).setOnComplete( () => 
+        LeanTween.alphaCanvas(thumbnailLoadingCanvas, 0, 0.5f).setOnComplete( () => 
         {
             LeanTween.cancelAll();
             SceneManager.LoadScene(1);

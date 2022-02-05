@@ -344,7 +344,7 @@ public class EpisodesHandler : MonoBehaviour
             eventEpisodeData.episodeNum = storyData.GetIndexFromEpisodeData(episodeData) + 1;
             
             SDKManager.instance.SendEvent(eventEpisodeData);
-        }        
+        }
 
         //Episode was finished. Save the data and copy this Data to next Episode Data if any
         episodeData.isFinished = true;

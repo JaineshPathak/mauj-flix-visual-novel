@@ -12,7 +12,7 @@ public class UIAskQuitPopup : MonoBehaviour
     [Space(15)]
 
     public SayDialog sayDialog;
-    public string sayText = "कहानी बंद करना चाहते हैं ?";
+    public string sayText = "कहानी बंद करना चाहते हैं?";
 
     [Space(15)]
     public Text storyText;
@@ -75,7 +75,12 @@ public class UIAskQuitPopup : MonoBehaviour
         isYesClicked = true;
 
         if(episodesSpawner != null)
-            episodesSpawner.LoadEpisodesMainMenu();
+        {
+            if(episodesSpawner.storiesDBItem.isShortStory)
+                episodesSpawner.LoadEpisodesMainMenu(false);
+            else
+                episodesSpawner.LoadEpisodesMainMenu();
+        }
     }
 
     public void NoButtonClicked()

@@ -8,6 +8,7 @@ using UnityEditor;
 public class StoriesDBItemSO : ScriptableObject
 {
     [Header("Story Type")]
+    public bool isStoryEnabled = true;
     public bool isShortStory;
 
     [Header("Titles")]
@@ -77,6 +78,7 @@ public class StoriesDBItemSO : ScriptableObject
     {
         item = new StoriesDBItem();
 
+        item.isStoryEnabled = isStoryEnabled;
         item.isShortStory = isShortStory;
 
         item.storyTitle = storyTitle;
@@ -114,6 +116,7 @@ public class StoriesDBItemSOEditor : Editor
 {
     private StoriesDBItemSO item;
 
+    private SerializedProperty storyEnabledSerial;
     private SerializedProperty storyTypeSerial;
 
     private SerializedProperty storyTitleSerial;
@@ -154,6 +157,7 @@ public class StoriesDBItemSOEditor : Editor
 
     private void OnEnable()
     {
+        storyEnabledSerial = serializedObject.FindProperty("isStoryEnabled");
         storyTypeSerial = serializedObject.FindProperty("isShortStory");
 
         storyTitleSerial = serializedObject.FindProperty("storyTitle");
@@ -181,6 +185,7 @@ public class StoriesDBItemSOEditor : Editor
 
         serializedObject.Update();
 
+        AddPropertyLabel(storyEnabledSerial, "Story Enabled", "Is Story Enabled? Helpful when you want to disable a story for any changes or issues found.");
         AddPropertyLabel(storyTypeSerial, "Short Story", "Is it a short story? False: Normal 9-10 episodes story");
 
         AddPropertyLabel(storyTitleSerial, "Story Title", "Story Title in Hindi or others (except English)");

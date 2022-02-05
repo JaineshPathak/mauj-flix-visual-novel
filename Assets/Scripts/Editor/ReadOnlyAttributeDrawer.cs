@@ -33,16 +33,20 @@ public class ReadOnlyAttributeDrawer : PropertyDrawer
         EditorGUI.PropertyField(unitRect, property, GUIContent.none);
         //GUI.enabled = previousGUIState;
 
-        StoriesDBItemSO storyItem = targetObject as StoriesDBItemSO;
+        /*StoriesDBItemSO storyItem = targetObject as StoriesDBItemSO;
         if (storyItem != null)
         {
-            if (storyItem.storyEpisodesKeys.Length >= 3)
+            if (storyItem.storyEpisodesKeys.Length >= 3 && (storyItem.storyEpisodesKeys.Length > 0))
             {
                 Rect buttonRect = new Rect(position.x + position.width / 2f, position.y, position.width / 2f, position.height);
                 if (GUI.Button(buttonRect, "Update"))
                     method.Invoke(targetObject, null);
             }
-        }
+        }*/
+
+        Rect buttonRect = new Rect(position.x + position.width / 2f, position.y, position.width / 2f, position.height);
+        if (GUI.Button(buttonRect, "Update"))
+            method.Invoke(targetObject, null);
         //EditorGUI.PropertyField(position, property, GUIContent.none);
 
         EditorGUI.indentLevel = indent;

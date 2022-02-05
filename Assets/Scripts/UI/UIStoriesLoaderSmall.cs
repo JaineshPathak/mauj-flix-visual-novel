@@ -72,17 +72,20 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
         for (int i = 0; i < storyDB.storiesCategories[categoryIndex].storiesDBItems.Length; i++)
         {
-            UIStoriesItemSmall storyItemSmallInstance;
+            if(storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isStoryEnabled)
+            {
+                UIStoriesItemSmall storyItemSmallInstance;
 
-            if(storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isShortStory)
-                storyItemSmallInstance = Instantiate(storiesItemShortsPrefab, scrollContent);
-            else
-                storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
-            
-            storyItemSmallInstance.transform.name = storyDB.storiesCategories[categoryIndex].storiesDBItems[i].storyTitleEnglish;
-            storyItemSmallInstance.LoadThumbnailAsset(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance);
+                if (storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isShortStory)
+                    storyItemSmallInstance = Instantiate(storiesItemShortsPrefab, scrollContent);
+                else
+                    storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
 
-            storiesItemSmallList.Add(storyItemSmallInstance);
+                storyItemSmallInstance.transform.name = storyDB.storiesCategories[categoryIndex].storiesDBItems[i].storyTitleEnglish;
+                storyItemSmallInstance.LoadThumbnailAsset(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance);
+
+                storiesItemSmallList.Add(storyItemSmallInstance);
+            }            
         }
 
         if (categoryCountText != null)

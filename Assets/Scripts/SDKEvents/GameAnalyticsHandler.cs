@@ -40,10 +40,15 @@ namespace underDOGS.SDKEvents
             {
                 case SDKEventsNames.thumbnailsClickedEventName:         //thumbnails_clicked
 
-                    string playerGender = SDKManager.instance.GetGender(playerData.genderType);       //Male Or Female
+                    if (playerData != null)
+                    {
+                        string playerGender = SDKManager.instance.GetGender(playerData.genderType);       //Male Or Female
 
-                    //Eg: "Male_thumbnails_clicked_Udaan" OR "Female_thumbnails_clicked_Udaan"
-                    GameAnalytics.NewDesignEvent(playerGender + "_" + SDKEventsNames.thumbnailsClickedEventName + "_" + data.eventParameterData);
+                        //Eg: "Male_thumbnails_clicked_Udaan" OR "Female_thumbnails_clicked_Udaan"
+                        GameAnalytics.NewDesignEvent(playerGender + "_" + SDKEventsNames.thumbnailsClickedEventName + "_" + data.eventParameterData);
+                    }
+                    else
+                        GameAnalytics.NewDesignEvent(eventName + "_" + data.eventParameterData);
                     break;
 
                 case SDKEventsNames.topBannerEventNameStart:        //topbanner

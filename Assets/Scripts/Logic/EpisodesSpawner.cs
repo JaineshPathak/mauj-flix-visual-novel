@@ -5,7 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+//using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.SceneManagement;
+using System.Threading.Tasks;
 using Fungus;
 using TMPro;
 
@@ -199,8 +201,46 @@ public class EpisodesSpawner : MonoBehaviour
                 storyData = JsonUtility.FromJson<StoryData>(saveString);
         }
 
-        if(storyData != null)
-            StartCoroutine(DownloadEpisodeRoutine());
+        if (storyData != null)
+        {
+            DownloadEpisodeTask();
+            //StartCoroutine(DownloadEpisodeRoutine());
+        }
+    }
+
+    private async void DownloadEpisodeTask()
+    {
+        var totalDownloadSizeKb = BToKb(await Addressables.GetDownloadSizeAsync(storyData.currentEpisodeKey).Task);
+
+        var downloadedKb = 0f;
+        var keyDownloadOperation = Addressables.LoadAssetAsync<GameObject>(storyData.currentEpisodeKey);
+        keyDownloadOperation.Completed += EpisodeDownloadComplete;
+
+        if (totalDownloadSizeKb > 0)
+        {
+            while (!keyDownloadOperation.IsDone)
+            {
+                await System.Threading.Tasks.Task.Yield();
+
+                var acquiredKb = downloadedKb + (keyDownloadOperation.PercentComplete * totalDownloadSizeKb);
+                var totalProgressPercentage = (acquiredKb / totalDownloadSizeKb);
+
+                storyPercentBar.fillAmount = totalProgressPercentage;
+                percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
+
+                //Debug.Log("Download progress: " + (totalProgressPercentage * 100).ToString("0.00") + "% - " + acquiredKb + "kb /" + totalDownloadSizeKb + "kb");
+            }
+        }
+        else
+        {
+            storyPercentBar.fillAmount = 1f;
+            percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
+        }
+    }
+
+    private static float BToKb(long bytes)
+    {
+        return bytes / 1000f;
     }
 
     private IEnumerator DownloadEpisodeRoutine()
@@ -261,6 +301,8 @@ public class EpisodesSpawner : MonoBehaviour
 
     public void LoadEpisodesMainMenu()
     {
+        LeanTween.cancelAll();
+
         immediateOpenDetailsPanel = true;
 
         if (FungusManager.Instance != null)
@@ -276,6 +318,8 @@ public class EpisodesSpawner : MonoBehaviour
 
     public void LoadEpisodesMainMenu(bool _immediateOpenDetailsPanel)
     {
+        LeanTween.cancelAll();
+
         immediateOpenDetailsPanel = _immediateOpenDetailsPanel;
 
         if (FungusManager.Instance != null)

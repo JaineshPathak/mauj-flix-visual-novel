@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Diagnostics;
 
 public class SaveLoadGame : MonoBehaviour
 {
@@ -45,11 +46,11 @@ public class SaveLoadGame : MonoBehaviour
 
         if (File.Exists(configFilePath))
         {
-            Debug.Log(configFilePath + " - File is deleted!");
+            UnityEngine.Debug.Log(configFilePath + " - File is deleted!");
             File.Delete(configFilePath);
         }
         else
-            Debug.Log(configFilePath + " - No such File Found!");
+            UnityEngine.Debug.Log(configFilePath + " - No such File Found!");
     }
 
     public static bool CheckForFile()
@@ -60,5 +61,10 @@ public class SaveLoadGame : MonoBehaviour
             return true;
 
         return false;
-    }    
+    }
+
+    public static void OpenPlayerDataFileLocation()
+    {
+        Process.Start(Application.persistentDataPath);
+    }
 }

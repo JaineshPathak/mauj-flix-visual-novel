@@ -122,14 +122,19 @@ public class UISearchPanel : MonoBehaviour
         }*/
 
         foreach(DictionaryEntry de in storiesDBHash)
-        {
+        {           
             if (de.Value != null)
             {
-                UIStoriesItemSmall storyItemSmallInstance = Instantiate(storyItemSmallPrefab, searchContentParent);
-                storyItemSmallInstance.transform.name = de.Key.ToString();
-                storyItemSmallInstance.LoadThumbnailAsset((StoriesDBItem)de.Value, detailsPanel, GameController.instance);
+                StoriesDBItem item = de.Value as StoriesDBItem;
 
-                storiesItemsHash.Add(de.Key, storyItemSmallInstance);       //English Title, Item Instance
+                if (item.isStoryEnabled)
+                {
+                    UIStoriesItemSmall storyItemSmallInstance = Instantiate(storyItemSmallPrefab, searchContentParent);
+                    storyItemSmallInstance.transform.name = de.Key.ToString();
+                    storyItemSmallInstance.LoadThumbnailAsset((StoriesDBItem)de.Value, detailsPanel, GameController.instance);
+
+                    storiesItemsHash.Add(de.Key, storyItemSmallInstance);       //English Title, Item Instance
+                }
             }
 
             yield return waitDelay;
