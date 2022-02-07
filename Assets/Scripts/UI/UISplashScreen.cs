@@ -58,6 +58,8 @@ public class UISplashScreen : MonoBehaviour
 
     private void Awake()
     {
+        LeanTween.init(1000, 1000);
+
         imageLoadingCanvasGroup.alpha = 0;
         titleCompanyCanvas.alpha = 0;
         thumbnailLoadingCanvas.alpha = 0;
