@@ -10816,12 +10816,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTextObject: {fileID: 725712724424034224}
   punchObject: {fileID: 2153451352425499183}
-  writingSpeed: 15
+  writingSpeed: 60
   punctuationPause: 0.25
   hiddenTextColor: {r: 1, g: 1, b: 1, a: 0}
   writeWholeWords: 0
   forceRichText: 1
-  instantComplete: 0
+  instantComplete: 1
   doReadAheadText: 1
   currentContent: 
 --- !u!114 &8431149451495684646
@@ -33816,12 +33816,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTextObject: {fileID: 1040636788001940406}
   punchObject: {fileID: 8587842564331574260}
-  writingSpeed: 15
+  writingSpeed: 60
   punctuationPause: 0.25
   hiddenTextColor: {r: 1, g: 1, b: 1, a: 0}
   writeWholeWords: 0
   forceRichText: 1
-  instantComplete: 0
+  instantComplete: 1
   doReadAheadText: 1
   currentContent: 
 --- !u!114 &4674654446382382454
@@ -36046,7 +36046,12 @@ PrefabInstance:
     - target: {fileID: 8762276353205598644, guid: 3a0a549c812b40845924f897d15c1c15,
         type: 3}
       propertyPath: writingSpeed
-      value: 15
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 8762276353205598644, guid: 3a0a549c812b40845924f897d15c1c15,
+        type: 3}
+      propertyPath: instantComplete
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8762276353205598645, guid: 3a0a549c812b40845924f897d15c1c15,
         type: 3}
@@ -36298,6 +36303,26 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: LoadStoryEpisodesMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 1711151875247037478, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711151875247037478, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711151875247037478, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1711151875247037478, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5172914838052340442, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
       propertyPath: m_Color.r
@@ -36319,6 +36344,26 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: dcc9724db954c4b43860750be2c6159d,
         type: 3}
+    - target: {fileID: 7234437487361425769, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234437487361425769, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234437487361425769, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7234437487361425769, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7330273287796277690, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
       propertyPath: m_Material
@@ -36444,6 +36489,26 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8615252092266570799, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8615252092266570799, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8615252092266570799, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8615252092266570799, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8981196101519882443, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -36473,6 +36538,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.materialCount
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9041689589917603484, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9041689589917603484, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9041689589917603484, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9041689589917603484, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52aa275c784f5e649ac32858fd89e977, type: 3}
@@ -36606,7 +36691,12 @@ PrefabInstance:
     - target: {fileID: 7059805047216779698, guid: 359e27aaad98e7f43b5a60ab37b79356,
         type: 3}
       propertyPath: writingSpeed
-      value: 16
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059805047216779698, guid: 359e27aaad98e7f43b5a60ab37b79356,
+        type: 3}
+      propertyPath: instantComplete
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7059805047216779702, guid: 359e27aaad98e7f43b5a60ab37b79356,
         type: 3}

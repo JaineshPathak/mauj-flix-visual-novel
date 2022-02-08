@@ -18,7 +18,7 @@ public class BackendDownloadAssets : MonoBehaviour
     private IEnumerator Start()
     {
         if (clearCache)
-            Caching.ClearCache();
+            Caching.ClearCache();        
 
         AsyncOperationHandle<long> sizeDownloadHandle = Addressables.GetDownloadSizeAsync(storyEpisodesLabel);
         yield return sizeDownloadHandle;
