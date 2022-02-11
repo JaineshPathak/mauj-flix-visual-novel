@@ -26,5 +26,5 @@ public static class AbbrevationUtility
             }
         }
         return number.ToString("F0");
-    }
+    }    
 }

@@ -387,11 +387,11 @@ public class UIStoriesItemSmall : MonoBehaviour
     }    
 
     private void IncrementViewCount()
-    {
-        if (storyItem != null && !storyItem.isShortStory)
+    {       
+        if (FirebaseDBHandler.instance == null)
             return;
 
-        if (FirebaseDBHandler.instance == null)
+        if (storyItem != null && storyItem.isShortStory)
             return;
 
         FirebaseDBHandler.instance.UpdateViewCount(viewCountRef);

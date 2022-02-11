@@ -104,7 +104,7 @@ public class FirebaseDBHandler : MonoBehaviour
         {
             if(task.IsFaulted)
             {
-                Debug.LogError("Firebase Database Error: " + task);
+                Debug.LogError("Firebase Database Error: " + task + ", Reference: " + reference);
             }
             else if(task.IsCompleted)
             {
@@ -128,7 +128,7 @@ public class FirebaseDBHandler : MonoBehaviour
         {
             if (task.IsFaulted)
             {
-                Debug.LogError("Firebase Database Error: " + task);
+                Debug.LogError("Firebase Database Error: " + task + ", Reference: " + reference);
             }
             else if (task.IsCompleted)
             {
@@ -152,7 +152,7 @@ public class FirebaseDBHandler : MonoBehaviour
         {
             if (task.IsFaulted)
             {
-                Debug.LogError("Firebase Database Error: " + task);
+                Debug.LogError("Firebase Database Error: " + task + ", Reference: " + reference);
             }
             else if (task.IsCompleted)
             {

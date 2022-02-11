@@ -90,6 +90,14 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
         if (categoryCountText != null)
             categoryCountText.text = "(" + storiesItemSmallList.Count + ")";
+
+        //Shuffle List if the Category is "New Stories"
+        if(categoryIndex == 1)
+        {
+            storiesItemSmallList = OtherUtils.Shuffle<UIStoriesItemSmall>(storiesItemSmallList);
+            for (int i = 0; i < storiesItemSmallList.Count; i++)            
+                storiesItemSmallList[i].transform.SetSiblingIndex(i);            
+        }
     }
 
     //Called from UIPersonalProfile.cs

@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.AddressableAssets.ResourceLocators;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceLocations;
 
@@ -9,6 +11,8 @@ public class BackendDownloadAssets : MonoBehaviour
 {
     public bool clearCache;
     private const string storyEpisodesLabel = "StoryEpisode";
+
+    private const string catalogPath = "https://storage.googleapis.com/mauj-flix-stories-bundles-production/Android/catalog_2021.08.18.19.45.34.json";
 
     private void Awake()
     {
@@ -18,9 +22,19 @@ public class BackendDownloadAssets : MonoBehaviour
     private IEnumerator Start()
     {
         if (clearCache)
-            Caching.ClearCache();        
+            Caching.ClearCache();
 
-        AsyncOperationHandle<long> sizeDownloadHandle = Addressables.GetDownloadSizeAsync(storyEpisodesLabel);
+        yield return null;
+
+        /*AsyncOperationHandle<IResourceLocator> initHandle = Addressables.InitializeAsync();
+        initHandle.Completed += OnInitDone;
+        yield return initHandle;
+
+        AsyncOperationHandle<IResourceLocator> catalogHandle = Addressables.LoadContentCatalogAsync(catalogPath, true);
+        catalogHandle.Completed += OnCatalogDone;
+        yield return catalogHandle;*/
+
+        /*AsyncOperationHandle<long> sizeDownloadHandle = Addressables.GetDownloadSizeAsync(storyEpisodesLabel);
         yield return sizeDownloadHandle;
         
         if(sizeDownloadHandle.Status == AsyncOperationStatus.Succeeded)
@@ -55,7 +69,7 @@ public class BackendDownloadAssets : MonoBehaviour
             }
         }
 
-        Addressables.Release(sizeDownloadHandle);
+        Addressables.Release(sizeDownloadHandle);*/
 
         #region OLD codes
         /*AsyncOperationHandle<IList<IResourceLocation>> episodeLocations = Addressables.LoadResourceLocationsAsync(storyEpisodesLabel);
@@ -102,6 +116,85 @@ public class BackendDownloadAssets : MonoBehaviour
         #endregion
     }
 
+    private void OnInitDone(AsyncOperationHandle<IResourceLocator> handle)
+    {
+        switch (handle.Status)
+        {
+            case AsyncOperationStatus.None:
+                print("INIT: IDK!!");
+                break;
+            case AsyncOperationStatus.Succeeded:
+                print("INIT: YOOOOO!!");
+                print(handle.Result.LocatorId);
+                break;
+            case AsyncOperationStatus.Failed:
+                print("INIT: NAADA!!");
+                break;
+        }
+    }
+
+    private void OnCatalogDone(AsyncOperationHandle<IResourceLocator> handle)
+    {
+        switch (handle.Status)
+        {
+            case AsyncOperationStatus.None:
+                print("CATALOG: IDK!!");
+                break;
+
+            case AsyncOperationStatus.Succeeded:                
+                print("CATALOG: YOOOOO!!");
+
+                foreach (var locator in Addressables.ResourceLocators)
+                {
+                    switch (locator)
+                    {                        
+                        case ResourceLocationMap rlm:
+                            {
+                                Debug.Log(locator.LocatorId);
+                                foreach (var kvp in rlm.Locations)
+                                {
+                                    foreach(var internalid in kvp.Value)
+                                    {
+                                        Debug.Log(internalid.PrimaryKey + ": " + internalid.InternalId);
+                                    }
+                                }
+                                break;
+                            }
+                    }
+                }
+
+                break;
+
+            case AsyncOperationStatus.Failed:
+                print("CATALOG: NAADA!!");
+                break;
+        }
+    }
+
+    private void OnResourceDone(AsyncOperationHandle<IList<IResourceLocation>> handle)
+    {
+        switch (handle.Status)
+        {
+            case AsyncOperationStatus.None:
+                print("CATALOG: IDK!!");
+                break;
+
+            case AsyncOperationStatus.Succeeded:
+                print("CATALOG: YOOOOO!!");
+
+                foreach(var loc in handle.Result)
+                {
+                    Debug.Log($"{loc.PrimaryKey}: {loc.ProviderId}");
+                }
+
+                break;
+
+            case AsyncOperationStatus.Failed:
+                print("CATALOG: NAADA!!");
+                break;
+        }
+    }
+
     private void OnBackgroundDownloadComplete(AsyncOperationHandle handle)
     {
         if (handle.Status == AsyncOperationStatus.Failed)
@@ -121,5 +214,5 @@ public class BackendDownloadAssets : MonoBehaviour
     private static float BToKb(long bytes)
     {
         return bytes / 1000f;
-    }
+    }    
 }
