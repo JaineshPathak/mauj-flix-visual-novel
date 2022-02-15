@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468a46d0ae32c3544b7d98094e6448a9, type: 3}
   m_Name: AddressableAssetSettings
   m_EditorClassIdentifier: 
-  m_DefaultGroup: 9d0c03db607c0d642b058ee355b919e5
+  m_DefaultGroup: 78c860ef6f5243d4e9f23c3661adcd6f
   m_BuildRemoteCatalog: 1
   m_BundleLocalCatalog: 0
   m_DisableCatalogUpdateOnStart: 0
@@ -24,6 +24,7 @@ MonoBehaviour:
   m_overridePlayerVersion: 
   m_GroupAssets:
   - {fileID: 11400000, guid: 54126bd198f380944b9f0023b6191675, type: 2}
+  - {fileID: 11400000, guid: 9a2eb48c9c304464c91d0fd84b03f283, type: 2}
   - {fileID: 11400000, guid: 481608eee88952041be6f62f996ac134, type: 2}
   - {fileID: 11400000, guid: 8d753e6b81ca3614db99c71ca4275d60, type: 2}
   - {fileID: 11400000, guid: c2c044b0210dcb54ab02e5581b19cb2f, type: 2}
@@ -175,7 +176,11 @@ MonoBehaviour:
       - m_Id: 15eae513a71c59b4fa53dc1c082cafd0
         m_Value: ServerData/[BuildTarget]
       - m_Id: 6cd3d1e369e7f2e41bed849ad99ae9e6
+        m_Value: https://storage.googleapis.com/mauj-flix-stories-bundles-production/[BuildTarget]
+      - m_Id: a5e638b38f77bf249920c377425c0fae
         m_Value: https://storage.googleapis.com/mauj-flix-stories-bundles-release/[BuildTarget]
+      - m_Id: 48a62a33a8971554984fbac6754b9df0
+        m_Value: ServerDataRelease/[BuildTarget]
     - m_InheritedParent: 
       m_Id: 03b10c0efbf8c4f419f10f02e3a1c263
       m_ProfileName: Development
@@ -190,6 +195,10 @@ MonoBehaviour:
         m_Value: ServerDataDevelopment/[BuildTarget]
       - m_Id: 6cd3d1e369e7f2e41bed849ad99ae9e6
         m_Value: https://storage.googleapis.com/mauj-flix-stories-development/[BuildTarget]
+      - m_Id: a5e638b38f77bf249920c377425c0fae
+        m_Value: https://storage.googleapis.com/mauj-flix-stories-bundles-production/[BuildTarget]
+      - m_Id: 48a62a33a8971554984fbac6754b9df0
+        m_Value: ServerDataRelease/[BuildTarget]
     m_ProfileEntryNames:
     - m_Id: 72c89e75d1850534eb42386bd1439236
       m_Name: BuildTarget
@@ -205,6 +214,12 @@ MonoBehaviour:
       m_InlineUsage: 0
     - m_Id: 6cd3d1e369e7f2e41bed849ad99ae9e6
       m_Name: RemoteLoadPath
+      m_InlineUsage: 0
+    - m_Id: a5e638b38f77bf249920c377425c0fae
+      m_Name: RemoteLoadPathRelease
+      m_InlineUsage: 0
+    - m_Id: 48a62a33a8971554984fbac6754b9df0
+      m_Name: RemoteBuildPathRelease
       m_InlineUsage: 0
     m_ProfileVersion: 1
   m_LabelTable:
