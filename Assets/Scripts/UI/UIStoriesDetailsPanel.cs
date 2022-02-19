@@ -127,7 +127,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             ShowPanel();
         }
         else if (episodesSpawner.blackScreenCanvasGroup.alpha > 0)
-            episodesSpawner.FadeOutBlackScreen();
+            episodesSpawner.FadeOutBlackScreen();        
     }
 
     private void Update()

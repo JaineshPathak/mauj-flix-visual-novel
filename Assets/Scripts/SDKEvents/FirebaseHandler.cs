@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Firebase;
 using Firebase.Analytics;
+using System;
 
 namespace underDOGS.SDKEvents
 {
@@ -14,16 +15,22 @@ namespace underDOGS.SDKEvents
         {
             FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(continuationAction: task =>
             {
-                FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
+                if(task.Result == DependencyStatus.Available)
+                {
+                    FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
 
-                if (FirebaseMessagingHandler.instance != null)
-                    FirebaseMessagingHandler.instance.InitFirebaseMessagingHandler();
+                    if (FirebaseMessagingHandler.instance != null)
+                        FirebaseMessagingHandler.instance.InitFirebaseMessagingHandler();
 
-                if (FirebaseDBHandler.instance != null)
-                    FirebaseDBHandler.instance.InitFirebaseDBHandler();
+                    if (FirebaseDBHandler.instance != null)
+                        FirebaseDBHandler.instance.InitFirebaseDBHandler();
 
-                //if (FirebaseRemoteConfigHandler.instance != null)
-                    //FirebaseRemoteConfigHandler.instance.InitFirebaseRemoteConfigHandler();
+                    if (FirebaseRemoteConfigHandler.instance != null)
+                        FirebaseRemoteConfigHandler.instance.InitFirebaseRemoteConfigHandler();
+
+                    if (FirebaseAuthHandler.instance != null)
+                        FirebaseAuthHandler.instance.InitFirebaseAuthHandler();
+                }                
             });
         }
 

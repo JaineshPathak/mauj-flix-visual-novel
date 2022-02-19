@@ -31,7 +31,7 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
         if (instance == null)
             instance = this;
         else
-            Destroy(gameObject);        
+            Destroy(gameObject);
     }
 
     private void OnApplicationFocus(bool focus)
@@ -75,12 +75,13 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
         if (isFirebaseRCInitialized)
             return;
 
+        //InitFirebaseRemoteConfig();
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
             var dependencyStatus = task.Result;
             if (dependencyStatus == DependencyStatus.Available)
             {
-                InitFirebaseRemoteConfig();                
+                InitFirebaseRemoteConfig();
             }
             else
             {
@@ -183,7 +184,7 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
 
     private void CheckGameAppVersion()
     {
-        string remoteAppVersion = FirebaseRemoteConfig.DefaultInstance.GetValue(gameAppVersionSetting).StringValue;        
+        string remoteAppVersion = FirebaseRemoteConfig.DefaultInstance.GetValue(gameAppVersionSetting).StringValue;
 
 #if UNITY_EDITOR
         Debug.Log("Firebase Remote Config: APP VERSION: " + Application.version);

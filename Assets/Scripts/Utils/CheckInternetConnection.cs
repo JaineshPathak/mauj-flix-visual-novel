@@ -4,14 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
+using Firebase.RemoteConfig;
 
 public class CheckInternetConnection : MonoBehaviour
 {
     public static CheckInternetConnection instance;
 
     public bool isInternetConnected;
+    public string websitePinging = "https://www.maujflix.com";
 
     public static event Action<bool> BroadcastInternetConnectionStatus;
+
+    private const string websiteToCheckConfig = "WebsiteToPing";
 
     private void Awake()
     {
@@ -23,7 +27,12 @@ public class CheckInternetConnection : MonoBehaviour
 
     private void Start()
     {
-        StartCoroutine(CheckConnectionPoll());        
+        var remoteConfig = FirebaseRemoteConfig.DefaultInstance;
+        if(remoteConfig != null)        
+            websitePinging = remoteConfig.GetValue(websiteToCheckConfig).StringValue;        
+
+        if(websitePinging.Length > 0 && (websitePinging.Contains("https://") || websitePinging.Contains("www.")) )
+            StartCoroutine(CheckConnectionPoll());
     }
 
     private void OnDestroy()
@@ -76,7 +85,8 @@ public class CheckInternetConnection : MonoBehaviour
 
     IEnumerator CheckInternetAsync(Action<bool> status)
     {
-        UnityWebRequest unityWebRequest = new UnityWebRequest("https://www.underdogsthestudio.com");
+        //UnityWebRequest unityWebRequest = new UnityWebRequest("https://www.maujflix.com");
+        UnityWebRequest unityWebRequest = new UnityWebRequest(websitePinging);
 
         yield return unityWebRequest.SendWebRequest();
 

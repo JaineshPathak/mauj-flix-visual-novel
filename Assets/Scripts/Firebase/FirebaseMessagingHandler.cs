@@ -27,23 +27,17 @@ public class FirebaseMessagingHandler : MonoBehaviour
         if (isFirebaseInitialized)
             return;
 
+        //InitFirebaseMessaging();
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => 
         {
             var dependencyStatus = task.Result;
             if (dependencyStatus == DependencyStatus.Available)
             {
-                // Create and hold a reference to your FirebaseApp,
-                // where app is a Firebase.FirebaseApp property of your application class.
-                //var app = Firebase.FirebaseApp.DefaultInstance;
-
-                InitFirebaseMessaging();
-
-                // Set a flag here to indicate whether Firebase is ready to use by your app.
+                InitFirebaseMessaging();                
             }
             else
             {
-                Debug.LogError(string.Format("Could not resolve all Firebase Messaging dependencies: {0}", dependencyStatus));
-                // Firebase Unity SDK is not safe to use here.
+                Debug.LogError(string.Format("Could not resolve all Firebase Messaging dependencies: {0}", dependencyStatus));                
             }
         });
     }
