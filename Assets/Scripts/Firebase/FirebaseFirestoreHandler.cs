@@ -14,7 +14,6 @@ public class FirebaseFirestoreHandler : MonoBehaviour
     public FirebaseUser firebaseUser;
     public FirestoreUserData firestoreUserData;
 
-
     private FirebaseFirestore firestoreDB;
     private DocumentReference userRef;
     private ListenerRegistration firestoreDBListener;
@@ -34,11 +33,11 @@ public class FirebaseFirestoreHandler : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
 #if UNITY_EDITOR
-        devicePlatformCollection = "PC Users (TEST)";
+        devicePlatformCollection = "Users PC (TEST)";
 #elif UNITY_ANDROID
-        devicePlatformCollection = "Android Users";
+        devicePlatformCollection = "Users Android";
 #elif UNITY_IOS
-        devicePlatformCollection = "iOS Users";
+        devicePlatformCollection = "Users iOS";
 #endif
     }
 
@@ -87,6 +86,15 @@ public class FirebaseFirestoreHandler : MonoBehaviour
             return;
 
         firebaseUser = user;
+        Debug.Log("Firebase Firestore: UserID: " + firebaseUser.UserId);
+        Debug.Log("Firebase Firestore: User Name: " + firebaseUser.DisplayName);
+        Debug.Log("Firebase Firestore: User Email: " + firebaseUser.Email);
+        Debug.Log("Firebase Firestore: User Main Provider: " + firebaseUser.ProviderId);
+        foreach(var providerData in firebaseUser.ProviderData)
+        {
+            Debug.Log("Firebase Firestore: User Provider Display Name: " + providerData.DisplayName);
+            Debug.Log("Firebase Firestore: User Provider ID: " + providerData.ProviderId);
+        }       
 
         if (firestoreDB == null)
             firestoreDB = FirebaseFirestore.DefaultInstance;
@@ -104,11 +112,23 @@ public class FirebaseFirestoreHandler : MonoBehaviour
             firestoreUserData.userName = firebaseUser.DisplayName;
             firestoreUserData.userEmail = firebaseUser.Email;
             firestoreUserData.diamondsAmount = 50f;
-            
+            firestoreUserData.ticketsAmount = 10f;
+
+            if (FirebaseAuthHandler.instance.GetProviderID() == "google.com")
+            {
+                firestoreUserData.userName = FirebaseAuthHandler.instance.GetDisplayNameFromProviderID(DataPaths.firebaseGoogleProviderID);
+                firestoreUserData.userEmail = FirebaseAuthHandler.instance.GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID);
+            }
+            else
+            {
+                firestoreUserData.userName = "";
+                firestoreUserData.userEmail = "";
+            }
+
             userRef.SetAsync(firestoreUserData).ContinueWith(task => 
             {
                 if(task.IsCompleted)
-                    Debug.LogFormat("Firebase Firestore: New User Data added {0}, {1}, {2}, {3}", firestoreUserData.userID, firestoreUserData.userName, firestoreUserData.userEmail, firestoreUserData.diamondsAmount);
+                    Debug.LogFormat("Firebase Firestore: New User Data added {0}, {1}, {2}, {3}, {4}", firestoreUserData.userID, firestoreUserData.userName, firestoreUserData.userEmail, firestoreUserData.diamondsAmount, firestoreUserData.ticketsAmount);
             });
 
             if (mainMenuDiamondsText != null)
@@ -116,8 +136,28 @@ public class FirebaseFirestoreHandler : MonoBehaviour
         }
         else                            //Existing User
         {            
-            Debug.LogFormat("Firebase Firestore: Existing User Data loaded/changed {0}, {1}, {2}, {3}", firestoreUserData.userID, firestoreUserData.userName, firestoreUserData.userEmail, firestoreUserData.diamondsAmount);
+            Debug.LogFormat("Firebase Firestore: Existing User Data loaded/changed {0}, {1}, {2}, {3}, {4}", firestoreUserData.userID, firestoreUserData.userName, firestoreUserData.userEmail, firestoreUserData.diamondsAmount, firestoreUserData.ticketsAmount);
             firestoreUserData = snapshot.ConvertTo<FirestoreUserData>();
+            firestoreUserData.userID = firebaseUser.UserId;
+            firestoreUserData.userName = firebaseUser.DisplayName;
+            firestoreUserData.userEmail = firebaseUser.Email;
+
+            if (FirebaseAuthHandler.instance.GetProviderID() == "google.com")
+            {
+                firestoreUserData.userName = FirebaseAuthHandler.instance.GetDisplayNameFromProviderID(DataPaths.firebaseGoogleProviderID);
+                firestoreUserData.userEmail = FirebaseAuthHandler.instance.GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID);
+            }
+            else
+            {
+                firestoreUserData.userName = "";
+                firestoreUserData.userEmail = "";
+            }
+
+            userRef.SetAsync(firestoreUserData).ContinueWith(task =>
+            {
+                if (task.IsCompleted)
+                    Debug.LogFormat("Firebase Firestore: Existing User Data Updated {0}, {1}, {2}, {3}, {4}", firestoreUserData.userID, firestoreUserData.userName, firestoreUserData.userEmail, firestoreUserData.diamondsAmount, firestoreUserData.ticketsAmount);
+            });
 
             if (mainMenuDiamondsText != null)
                 mainMenuDiamondsText.text = GetUserDiamondsAmount();
@@ -151,15 +191,16 @@ public class FirebaseFirestoreHandler : MonoBehaviour
 
     public string GetUserDiamondsAmount()
     {
-        return Mathf.RoundToInt(firestoreUserData.diamondsAmount).ToString();
+        //return Mathf.RoundToInt(firestoreUserData.diamondsAmount).ToString();
+        return AbbrevationUtility.AbbreviateNumber(firestoreUserData.diamondsAmount);
     }
     
-    public void AddDiamondsAmount(int addAmount)
+    public void DepositDiamondsAmount(int addAmount)
     {
         firestoreUserData.diamondsAmount += addAmount;        
     }
 
-    public void DeductDiamondsAmount(int deductAmount)
+    public void DebitDiamondsAmount(int deductAmount)
     {
         firestoreUserData.diamondsAmount -= deductAmount;
         if (firestoreUserData.diamondsAmount <= 0)

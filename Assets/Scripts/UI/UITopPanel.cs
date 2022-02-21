@@ -28,4 +28,20 @@ public class UITopPanel : MonoBehaviour
         if (fireStoreHandler.mainMenuDiamondsText == null)
             fireStoreHandler.mainMenuDiamondsText = diamondsText;
     }
+
+    public void TryGoogleSignIn()
+    {
+        if (FirebaseAuthHandler.instance == null)
+            return;
+
+        FirebaseAuthHandler.instance.OnGoogleSignIn();
+    }
+
+    public void TryGoogleSignOut()
+    {
+        if (FirebaseAuthHandler.instance == null)
+            return;
+
+        FirebaseAuthHandler.instance.OnGoogleSignOut();
+    }
 }

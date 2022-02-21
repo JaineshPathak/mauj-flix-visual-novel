@@ -13,5 +13,8 @@ public struct FirestoreUserData
     public string userEmail { get; set; }
 
     [FirestoreProperty]
-    public float diamondsAmount { get; set; }    
+    public float diamondsAmount { get; set; }
+
+    [FirestoreProperty]
+    public float ticketsAmount { get; set; }
 }
