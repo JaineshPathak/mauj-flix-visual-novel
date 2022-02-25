@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Fungus;
+using TMPro;
 
 public enum CharacterGender
 {
@@ -14,9 +15,14 @@ public enum CharacterGender
 [System.Serializable]
 public class CharacterDataAssets
 {
+    [Header("Diamonds Cost")]
+    public bool hasDiamondCost;
+    public float diamondCost;
+
+    [Header("Characters Data")]
     public Character fungusCharacter;
-    public List<Sprite> fungusCharacterPortraits = new List<Sprite>();
-    public List<string> fungusPortraitsStrings = new List<string>();
+    public List<Sprite> fungusCharacterPortraits = new List<Sprite>();    
+    //public List<string> fungusPortraitsStrings = new List<string>();
 
     public void PopulatePortraitsList()
     {
@@ -42,7 +48,11 @@ public class CharacterSelectionScreen : MonoBehaviour
     public int currentCharacterIndex = 0;
     public VariableReference characterVariableRef;
     public List<CharacterDataAssets> characterDataAssets = new List<CharacterDataAssets>();
-    //public List<Character> characterFungus;    
+    //public List<Character> characterFungus;
+
+    [Header("UI")]
+    public Transform diamondCostPanel;
+    public TextMeshProUGUI diamondCostText;
 
     private void Awake()
     {
@@ -59,6 +69,11 @@ public class CharacterSelectionScreen : MonoBehaviour
                 characterDataAssets[i].PopulatePortraitsList();
             }
         }
+    }
+
+    private void Start()
+    {
+        SelectCharacter(0);
     }
 
     public void GetEpisodeHandler()
@@ -82,6 +97,17 @@ public class CharacterSelectionScreen : MonoBehaviour
     {
         characterIndex = Mathf.Clamp(characterIndex, 0, charactersListFromUI.Count - 1);
         currentCharacterIndex = characterIndex;
+
+        if(characterDataAssets[currentCharacterIndex].hasDiamondCost)
+        {
+            diamondCostPanel.gameObject.SetActive(true);
+            diamondCostText.text = Mathf.RoundToInt(characterDataAssets[currentCharacterIndex].diamondCost).ToString();
+        }
+        else
+        {
+            diamondCostPanel.gameObject.SetActive(false);
+            diamondCostText.text = "";
+        }
     }
     
     public void SelectCharacterFromLoadedData()
@@ -116,7 +142,23 @@ public class CharacterSelectionScreen : MonoBehaviour
         if (episodesHandler == null)
             return;
 
+        if (FirebaseFirestoreHandler.instance == null)
+            return;
+
+        //If the current character costs Diamonds
+        if (characterDataAssets[currentCharacterIndex].hasDiamondCost)
+        {
+            //If users Diamond amounts is less than current diamond cost, then return
+            if (FirebaseFirestoreHandler.instance.GetUserDiamondsAmountInt() < characterDataAssets[currentCharacterIndex].diamondCost)
+                return;
+
+            //Debit the diamonds and select the character
+            FirebaseFirestoreHandler.instance.DebitDiamondsAmount(characterDataAssets[currentCharacterIndex].diamondCost);
+            episodesHandler.SelectCharacter(characterGender, characterDataAssets[currentCharacterIndex], characterVariableRef, currentCharacterIndex, true);
+        }
+        else
+            episodesHandler.SelectCharacter(characterGender, characterDataAssets[currentCharacterIndex], characterVariableRef, currentCharacterIndex, true);
+
         //episodesHandler.SelectCharacter(characterGender, characterFungus[currentCharacterIndex], characterVariableRef, currentCharacterIndex);
-        episodesHandler.SelectCharacter(characterGender, characterDataAssets[currentCharacterIndex], characterVariableRef, currentCharacterIndex, true);
     }
 }
