@@ -29,7 +29,7 @@ public class CheckInternetConnection : MonoBehaviour
     {
         var remoteConfig = FirebaseRemoteConfig.DefaultInstance;
         if(remoteConfig != null)        
-            websitePinging = remoteConfig.GetValue(websiteToCheckConfig).StringValue;        
+            websitePinging = remoteConfig.GetValue(websiteToCheckConfig).StringValue;
 
         if(websitePinging.Length > 0 && (websitePinging.Contains("https://") || websitePinging.Contains("www.")) )
             StartCoroutine(CheckConnectionPoll());

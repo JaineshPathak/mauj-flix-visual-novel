@@ -30,7 +30,7 @@ namespace underDOGS.SDKEvents
 
                     if (FirebaseAuthHandler.instance != null)
                         FirebaseAuthHandler.instance.InitFirebaseAuthHandler();
-                }                
+                }
             });
         }
 

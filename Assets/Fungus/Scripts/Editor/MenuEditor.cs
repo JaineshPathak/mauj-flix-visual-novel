@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Fungus.EditorUtils
 {
-    [CustomEditor (typeof(Menu))]
+    [CustomEditor (typeof(Menu))]    
     public class MenuEditor : CommandEditor 
     {
         protected SerializedProperty textProp;

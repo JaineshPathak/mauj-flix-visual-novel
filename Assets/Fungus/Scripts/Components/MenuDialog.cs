@@ -25,7 +25,7 @@ namespace Fungus
         protected Button[] cachedButtons;
 
         protected Slider cachedSlider;
-        private int nextOptionIndex;
+        protected int nextOptionIndex;
 
         #region Public members
 

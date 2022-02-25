@@ -110,9 +110,9 @@ public class FirebaseFirestoreHandler : MonoBehaviour
             firestoreUserData = new FirestoreUserData();
             firestoreUserData.userID = firebaseUser.UserId;
             firestoreUserData.userName = firebaseUser.DisplayName;
-            firestoreUserData.userEmail = firebaseUser.Email;
+            firestoreUserData.userEmail = firebaseUser.Email;            
             firestoreUserData.diamondsAmount = 50f;
-            firestoreUserData.ticketsAmount = 10f;
+            firestoreUserData.ticketsAmount = 15f;
 
             if (FirebaseAuthHandler.instance.GetProviderID() == "google.com")
             {
@@ -189,21 +189,63 @@ public class FirebaseFirestoreHandler : MonoBehaviour
         });
     }
 
+    //=======================================================================================
+
+    //Diamonds Public methods
+
     public string GetUserDiamondsAmount()
     {
         //return Mathf.RoundToInt(firestoreUserData.diamondsAmount).ToString();
         return AbbrevationUtility.AbbreviateNumber(firestoreUserData.diamondsAmount);
     }
+
+    public int GetUserDiamondsAmountInt()
+    {
+        return Mathf.RoundToInt(firestoreUserData.diamondsAmount);
+    }
     
-    public void DepositDiamondsAmount(int addAmount)
+    public void DepositDiamondsAmount(float addAmount)
     {
         firestoreUserData.diamondsAmount += addAmount;        
     }
 
-    public void DebitDiamondsAmount(int deductAmount)
+    public void DebitDiamondsAmount(float deductAmount)
     {
         firestoreUserData.diamondsAmount -= deductAmount;
         if (firestoreUserData.diamondsAmount <= 0)
             firestoreUserData.diamondsAmount = 0;
+
+        userRef.SetAsync(firestoreUserData).ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+                Debug.LogFormat("Firebase Firestore: Existing User Data Updated {0}, {1}, {2}, {3}, {4}", firestoreUserData.userID, firestoreUserData.userName, firestoreUserData.userEmail, firestoreUserData.diamondsAmount, firestoreUserData.ticketsAmount);
+        });
     }
+
+    //=======================================================================================
+
+    public string GetUserTicketsAmount()
+    {
+        return AbbrevationUtility.AbbreviateNumber(firestoreUserData.ticketsAmount);
+    }
+
+    public void DepositTicketsAmount(float addAmount)
+    {
+        firestoreUserData.ticketsAmount += addAmount;
+    }
+
+    public void DebitTicketsAmount(float deductAmount)
+    {
+        firestoreUserData.ticketsAmount -= deductAmount;
+        if (firestoreUserData.ticketsAmount <= 0)
+            firestoreUserData.ticketsAmount = 0;
+
+        userRef.SetAsync(firestoreUserData).ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+                Debug.LogFormat("Firebase Firestore: Existing User Data Updated {0}, {1}, {2}, {3}, {4}", firestoreUserData.userID, firestoreUserData.userName, firestoreUserData.userEmail, firestoreUserData.diamondsAmount, firestoreUserData.ticketsAmount);
+        });
+    }
+
+    //=======================================================================================
 }
