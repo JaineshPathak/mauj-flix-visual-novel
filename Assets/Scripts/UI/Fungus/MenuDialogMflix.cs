@@ -56,17 +56,28 @@ public class MenuDialogMflix : MenuDialog
 
         UnityAction action = null;
 
-        if (hasDiamondCost && FirebaseFirestoreHandler.instance != null)
+        if (hasDiamondCost && FirebaseFirestoreOffline.instance != null)
         {
+            if (EpisodesSpawner.instance != null)
+                EpisodesSpawner.instance.ShowHideDiamondPanel(true);
+
             action = delegate
             {
-                if (FirebaseFirestoreHandler.instance.GetUserDiamondsAmountInt() < diamondCost)
+                /*if (FirebaseFirestoreHandler.instance.GetUserDiamondsAmountInt() < diamondCost)
                     return;
 
-                FirebaseFirestoreHandler.instance.DebitDiamondsAmount(diamondCost);
+                FirebaseFirestoreHandler.instance.DebitDiamondsAmount(diamondCost);*/
+
+                if (FirebaseFirestoreOffline.instance.GetDiamondsAmountInt() < diamondCost)
+                    return;
+
+                FirebaseFirestoreOffline.instance.DebitDiamondsAmount(diamondCost);
+
+                if (EpisodesSpawner.instance != null)
+                    EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.5f, 1f);
 
 #if UNITY_EDITOR
-                Debug.Log("Firebase Firestore: Diamonds Deducted: " + FirebaseFirestoreHandler.instance.GetUserDiamondsAmount());
+                Debug.Log("Firebase Firestore Offline: Diamonds Deducted: " + FirebaseFirestoreOffline.instance.GetDiamondsAmountString());
 #endif
 
                 EventSystem.current.SetSelectedGameObject(null);
@@ -84,12 +95,15 @@ public class MenuDialogMflix : MenuDialog
                 }
             };
         }
-        else if (hasDiamondCost && FirebaseFirestoreHandler.instance == null)
+        else if (hasDiamondCost && FirebaseFirestoreOffline.instance == null)
         {
+            if (EpisodesSpawner.instance != null)
+                EpisodesSpawner.instance.ShowHideDiamondPanel(true);
+
             action = delegate
             {
 #if UNITY_EDITOR
-                Debug.Log("Firebase Firestore: No instance found. Control Returned");
+                Debug.Log("Firebase Firestore Offline: No instance found. Control Returned!");
 #endif
                 return;
             };
@@ -98,6 +112,13 @@ public class MenuDialogMflix : MenuDialog
         {
             action = delegate
             {
+#if UNITY_EDITOR
+                Debug.Log("Firebase Firestore Offline: No Diamond Cost, Go Ahead!");
+#endif
+
+                if (EpisodesSpawner.instance != null)
+                    EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.5f, 1f);
+
                 EventSystem.current.SetSelectedGameObject(null);
                 StopAllCoroutines();
                 // Stop timeout

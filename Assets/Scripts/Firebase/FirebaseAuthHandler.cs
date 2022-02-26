@@ -123,7 +123,7 @@ public class FirebaseAuthHandler : MonoBehaviour
         {
             userCurrent = auth.CurrentUser;
             OnFirebaseUserAccountLoaded?.Invoke(userCurrent);
-            Debug.LogFormat("Firebase Auth: [CURRENT USER] User signed in anonymously successfully: {0}, ({1})", userCurrent.DisplayName, userCurrent.UserId);                        
+            Debug.LogFormat("Firebase Auth: [EXISTING USER] User signed in anonymously successfully: {0}, ({1})", userCurrent.DisplayName, userCurrent.UserId);                        
         }
     }
 

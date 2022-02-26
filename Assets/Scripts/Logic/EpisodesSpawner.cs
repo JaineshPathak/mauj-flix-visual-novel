@@ -39,8 +39,11 @@ public class EpisodesSpawner : MonoBehaviour
     [Header("Like Story Window")]
     public CanvasGroup likeStoryCanvasGroup;
 
-    [Space(15f)]
+    [Header("Diamonds Panel")]
+    public CanvasGroup diamondsPanelCanvasGroup;
+    public TextMeshProUGUI diamondText;
 
+    [Header("Background Progress")]
     public CanvasGroup blackScreenCanvasGroup;
     public TextMeshProUGUI percentDownloadedText;
 
@@ -58,7 +61,7 @@ public class EpisodesSpawner : MonoBehaviour
     public static event Action OnRateUsWindowOpened;
     public static event Action OnRateUsWindowClosed;
 
-    private StoriesDB storiesDB;
+    private StoriesDB storiesDB;    
 
     private void Awake()
     {
@@ -73,16 +76,28 @@ public class EpisodesSpawner : MonoBehaviour
     private void OnEnable()
     {
         GameController.OnStoryDBLoaded += OnStoryDBLoaded;
+
+        SceneManager.sceneLoaded += OnSceneLoad;
     }
 
     private void OnDisable()
     {
         GameController.OnStoryDBLoaded -= OnStoryDBLoaded;
+
+        SceneManager.sceneLoaded -= OnSceneLoad;
     }
 
     private void OnDestroy()
     {
         GameController.OnStoryDBLoaded -= OnStoryDBLoaded;
+
+        SceneManager.sceneLoaded -= OnSceneLoad;
+    }
+
+    private void OnSceneLoad(Scene scene, LoadSceneMode sceneMode)
+    {
+        if(FirebaseFirestoreOffline.instance != null && diamondText != null)        
+            FirebaseFirestoreOffline.instance.RegisterDiamondAmountText(diamondText);
     }
 
     private void OnStoryDBLoaded(StoriesDB _storiesDB)
@@ -333,6 +348,8 @@ public class EpisodesSpawner : MonoBehaviour
         });
     }
 
+    //=========================================================================================================
+
     public void OpenRateUsWindow()
     {
         if (!rateUsCanvasGroup.gameObject.activeSelf)
@@ -377,6 +394,8 @@ public class EpisodesSpawner : MonoBehaviour
 #endif
     }
 
+    //=========================================================================================================
+
     public void OpenLikeStoryWindow()
     {
         if (!likeStoryCanvasGroup.gameObject.activeSelf)
@@ -410,4 +429,19 @@ public class EpisodesSpawner : MonoBehaviour
             SaveLoadGame.SavePlayerData(playerData);
         }
     }
+
+    //=========================================================================================================
+
+    public void ShowHideDiamondPanel(bool showPanel, float speed = 0.5f, float delay = 0)
+    {
+        if (diamondsPanelCanvasGroup == null)
+            return;
+
+        if(showPanel)        
+            LeanTween.alphaCanvas(diamondsPanelCanvasGroup, 1f, speed).setDelay(delay);
+        else
+            LeanTween.alphaCanvas(diamondsPanelCanvasGroup, 0, speed).setDelay(delay);
+    }
+
+    //=========================================================================================================
 }

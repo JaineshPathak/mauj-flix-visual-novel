@@ -100,11 +100,17 @@ public class CharacterSelectionScreen : MonoBehaviour
 
         if(characterDataAssets[currentCharacterIndex].hasDiamondCost)
         {
+            if (EpisodesSpawner.instance != null)
+                EpisodesSpawner.instance.ShowHideDiamondPanel(true, 0.3f);
+
             diamondCostPanel.gameObject.SetActive(true);
             diamondCostText.text = Mathf.RoundToInt(characterDataAssets[currentCharacterIndex].diamondCost).ToString();
         }
         else
         {
+            if (EpisodesSpawner.instance != null)
+                EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.3f);
+
             diamondCostPanel.gameObject.SetActive(false);
             diamondCostText.text = "";
         }
@@ -142,22 +148,33 @@ public class CharacterSelectionScreen : MonoBehaviour
         if (episodesHandler == null)
             return;
 
-        if (FirebaseFirestoreHandler.instance == null)
+        if ( /*FirebaseFirestoreHandler.instance == null*/ FirebaseFirestoreOffline.instance == null)
             return;
 
         //If the current character costs Diamonds
         if (characterDataAssets[currentCharacterIndex].hasDiamondCost)
         {
+            if (EpisodesSpawner.instance != null)
+                EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.3f);
+
             //If users Diamond amounts is less than current diamond cost, then return
-            if (FirebaseFirestoreHandler.instance.GetUserDiamondsAmountInt() < characterDataAssets[currentCharacterIndex].diamondCost)
+            /*if (FirebaseFirestoreHandler.instance.GetUserDiamondsAmountInt() < characterDataAssets[currentCharacterIndex].diamondCost)
+                return;*/
+
+            if (FirebaseFirestoreOffline.instance.GetDiamondsAmountInt() < characterDataAssets[currentCharacterIndex].diamondCost)
                 return;
 
             //Debit the diamonds and select the character
-            FirebaseFirestoreHandler.instance.DebitDiamondsAmount(characterDataAssets[currentCharacterIndex].diamondCost);
+            FirebaseFirestoreOffline.instance.DebitDiamondsAmount(characterDataAssets[currentCharacterIndex].diamondCost);
             episodesHandler.SelectCharacter(characterGender, characterDataAssets[currentCharacterIndex], characterVariableRef, currentCharacterIndex, true);
         }
         else
+        {
+            if (EpisodesSpawner.instance != null)
+                EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.3f);
+
             episodesHandler.SelectCharacter(characterGender, characterDataAssets[currentCharacterIndex], characterVariableRef, currentCharacterIndex, true);
+        }
 
         //episodesHandler.SelectCharacter(characterGender, characterFungus[currentCharacterIndex], characterVariableRef, currentCharacterIndex);
     }

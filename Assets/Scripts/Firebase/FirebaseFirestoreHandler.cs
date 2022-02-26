@@ -1,11 +1,7 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Firebase;
-using Firebase.Extensions;
 using Firebase.Firestore;
 using Firebase.Auth;
-using TMPro;
 
 public class FirebaseFirestoreHandler : MonoBehaviour
 {
@@ -16,12 +12,13 @@ public class FirebaseFirestoreHandler : MonoBehaviour
 
     private FirebaseFirestore firestoreDB;
     private DocumentReference userRef;
-    private ListenerRegistration firestoreDBListener;
+    //private ListenerRegistration firestoreDBListener;
+
+    private FirebaseFirestoreOffline firestoreOffline;
+    
+    public static event Action<FirebaseFirestoreHandler> OnFirestoreLoaded;
 
     private string devicePlatformCollection;
-
-    [HideInInspector] public TextMeshProUGUI mainMenuDiamondsText;
-    public static event Action<FirebaseFirestoreHandler> OnFirestoreLoaded;
 
     private void Awake()
     {
@@ -31,6 +28,8 @@ public class FirebaseFirestoreHandler : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+
+        firestoreOffline = GetComponent<FirebaseFirestoreOffline>();
 
 #if UNITY_EDITOR
         devicePlatformCollection = "Users PC (TEST)";
@@ -46,7 +45,7 @@ public class FirebaseFirestoreHandler : MonoBehaviour
         FirebaseAuthHandler.OnFirebaseUserAccountLoaded += OnFirebaseUserLoaded;
         FirebaseAuthHandler.OnFirebaseUserAccountDeleted += OnFirebaseUserDeleted;
 
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        //SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
@@ -54,7 +53,7 @@ public class FirebaseFirestoreHandler : MonoBehaviour
         FirebaseAuthHandler.OnFirebaseUserAccountLoaded -= OnFirebaseUserLoaded;
         FirebaseAuthHandler.OnFirebaseUserAccountDeleted -= OnFirebaseUserDeleted;
 
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        //SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void OnDestroy()
@@ -62,23 +61,23 @@ public class FirebaseFirestoreHandler : MonoBehaviour
         FirebaseAuthHandler.OnFirebaseUserAccountLoaded -= OnFirebaseUserLoaded;
         FirebaseAuthHandler.OnFirebaseUserAccountDeleted -= OnFirebaseUserDeleted;
 
-        firestoreDBListener.Stop();
+        //firestoreDBListener.Stop();
 
-        SceneManager.sceneLoaded -= OnSceneLoaded;
+        //SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
+    /*private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
     {
         //print(scene.name + " (" + scene.buildIndex + ")");
         if (scene.buildIndex == 1)
         {
             OnFirestoreLoaded?.Invoke(this);
 
-            GetUserDiamondsOnSceneLoad();
+            //GetUserDiamondsOnSceneLoad();
         }
         else if (mainMenuDiamondsText != null)
             mainMenuDiamondsText = null;
-    }
+    }*/
 
     private void OnFirebaseUserLoaded(FirebaseUser user)
     {
@@ -86,6 +85,7 @@ public class FirebaseFirestoreHandler : MonoBehaviour
             return;
 
         firebaseUser = user;
+#if UNITY_EDITOR
         Debug.Log("Firebase Firestore: UserID: " + firebaseUser.UserId);
         Debug.Log("Firebase Firestore: User Name: " + firebaseUser.DisplayName);
         Debug.Log("Firebase Firestore: User Email: " + firebaseUser.Email);
@@ -94,16 +94,85 @@ public class FirebaseFirestoreHandler : MonoBehaviour
         {
             Debug.Log("Firebase Firestore: User Provider Display Name: " + providerData.DisplayName);
             Debug.Log("Firebase Firestore: User Provider ID: " + providerData.ProviderId);
-        }       
+        }
+#endif
 
         if (firestoreDB == null)
             firestoreDB = FirebaseFirestore.DefaultInstance;
 
         userRef = firestoreDB.Collection(devicePlatformCollection).Document(user.UserId);
-        firestoreDBListener = userRef.Listen(OnFirestoreUserDataListener);
+        userRef.GetSnapshotAsync().ContinueWith(getTask =>
+        {
+            DocumentSnapshot snapShot = getTask.Result;
+            if (!snapShot.Exists)          //New User
+            {
+                firestoreUserData = new FirestoreUserData();
+                firestoreUserData.userID = firebaseUser.UserId;
+                firestoreUserData.userName = firebaseUser.DisplayName;
+                firestoreUserData.userEmail = firebaseUser.Email;
+                firestoreUserData.diamondsAmount = 50f;
+                firestoreUserData.ticketsAmount = 15f;
+
+                if (FirebaseAuthHandler.instance.GetProviderID() == "google.com")
+                {
+                    firestoreUserData.userName = FirebaseAuthHandler.instance.GetDisplayNameFromProviderID(DataPaths.firebaseGoogleProviderID);
+                    firestoreUserData.userEmail = FirebaseAuthHandler.instance.GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID);
+                }
+                else
+                {
+                    firestoreUserData.userName = "";
+                    firestoreUserData.userEmail = "";
+                }
+
+                userRef.SetAsync(firestoreUserData).ContinueWith(setTask =>
+                {
+                    if (setTask.IsCompleted)
+                        Debug.LogFormat("Firebase Firestore: New User Data added {0}, {1}, {2}, {3}, {4}", firestoreUserData.userID, firestoreUserData.userName, firestoreUserData.userEmail, firestoreUserData.diamondsAmount, firestoreUserData.ticketsAmount);
+                });
+
+                if (firestoreOffline != null)
+                {
+                    Debug.Log("Firebase Firestore: Offline Handler Initialized with New User: " + firestoreUserData.userID);
+                    firestoreOffline.InitFirebaseFirestoreOffline(this, firestoreUserData.diamondsAmount, firestoreUserData.ticketsAmount);
+                }
+            }
+            else
+            {
+                Debug.LogFormat("Firebase Firestore: Existing User Data loaded/changed {0}, {1}, {2}, {3}, {4}", firestoreUserData.userID, firestoreUserData.userName, firestoreUserData.userEmail, firestoreUserData.diamondsAmount, firestoreUserData.ticketsAmount);
+
+                firestoreUserData = snapShot.ConvertTo<FirestoreUserData>();
+                firestoreUserData.userID = firebaseUser.UserId;
+                firestoreUserData.userName = firebaseUser.DisplayName;
+                firestoreUserData.userEmail = firebaseUser.Email;
+
+                if (FirebaseAuthHandler.instance.GetProviderID() == "google.com")
+                {
+                    firestoreUserData.userName = FirebaseAuthHandler.instance.GetDisplayNameFromProviderID(DataPaths.firebaseGoogleProviderID);
+                    firestoreUserData.userEmail = FirebaseAuthHandler.instance.GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID);
+                }
+                else
+                {
+                    firestoreUserData.userName = "";
+                    firestoreUserData.userEmail = "";
+                }
+
+                userRef.SetAsync(firestoreUserData).ContinueWith(setTask =>
+                {
+                    if (setTask.IsCompleted)
+                        Debug.LogFormat("Firebase Firestore: Existing User Data Updated {0}, {1}, {2}, {3}, {4}", firestoreUserData.userID, firestoreUserData.userName, firestoreUserData.userEmail, firestoreUserData.diamondsAmount, firestoreUserData.ticketsAmount);
+                });
+
+                if (firestoreOffline != null)
+                {
+                    Debug.Log("Firebase Firestore: Offline Handler Initialized with Existing User: " + firestoreUserData.userID);
+                    firestoreOffline.InitFirebaseFirestoreOffline(this, firestoreUserData.diamondsAmount, firestoreUserData.ticketsAmount);
+                }
+            }
+        });        
+        //firestoreDBListener = userRef.Listen(OnFirestoreUserDataListener);
     }
 
-    private void OnFirestoreUserDataListener(DocumentSnapshot snapshot)
+    /*private void OnFirestoreUserDataListener(DocumentSnapshot snapshot)
     {
         if(!snapshot.Exists)            //New User
         {            
@@ -162,7 +231,7 @@ public class FirebaseFirestoreHandler : MonoBehaviour
             if (mainMenuDiamondsText != null)
                 mainMenuDiamondsText.text = GetUserDiamondsAmount();
         }
-    }
+    }*/
 
     private void OnFirebaseUserDeleted(FirebaseUser user)
     {
@@ -183,8 +252,8 @@ public class FirebaseFirestoreHandler : MonoBehaviour
             {
                 firestoreUserData = task.Result.ConvertTo<FirestoreUserData>();
 
-                if (mainMenuDiamondsText != null)
-                    mainMenuDiamondsText.text = GetUserDiamondsAmount();
+                /*if (mainMenuDiamondsText != null)
+                    mainMenuDiamondsText.text = GetUserDiamondsAmount();*/
             }
         });
     }
@@ -248,4 +317,16 @@ public class FirebaseFirestoreHandler : MonoBehaviour
     }
 
     //=======================================================================================
+
+    public void PushOfflineData(float _diamondsAmount, float _ticketsAmount)
+    {
+        firestoreUserData.diamondsAmount = _diamondsAmount;
+        firestoreUserData.ticketsAmount = _ticketsAmount;
+
+        userRef.SetAsync(firestoreUserData).ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+                Debug.LogFormat("Firebase Firestore: Existing User Data Updated {0}, {1}, {2}, {3}, {4}", firestoreUserData.userID, firestoreUserData.userName, firestoreUserData.userEmail, firestoreUserData.diamondsAmount, firestoreUserData.ticketsAmount);
+        });
+    }
 }

@@ -4,8 +4,9 @@ using TMPro;
 public class UITopPanel : MonoBehaviour
 {
     public TextMeshProUGUI diamondsText;
+    public TextMeshProUGUI ticketsText;
 
-    private void OnEnable()
+    /*private void OnEnable()
     {
         FirebaseFirestoreHandler.OnFirestoreLoaded += OnFirestoreLoaded;
     }
@@ -27,6 +28,15 @@ public class UITopPanel : MonoBehaviour
 
         if (fireStoreHandler.mainMenuDiamondsText == null)
             fireStoreHandler.mainMenuDiamondsText = diamondsText;
+    }*/
+
+    private void Start()
+    {
+        if (FirebaseFirestoreOffline.instance && diamondsText && ticketsText)
+        {
+            FirebaseFirestoreOffline.instance.RegisterDiamondAmountText(diamondsText);
+            FirebaseFirestoreOffline.instance.RegisterTicketAmountText(ticketsText);
+        }
     }
 
     public void TryGoogleSignIn()
