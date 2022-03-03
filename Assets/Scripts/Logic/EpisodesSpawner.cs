@@ -6,8 +6,8 @@ using UnityEngine.UI;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 //using UnityEngine.AddressableAssets.ResourceLocators;
+//using System.Threading.Tasks;
 using UnityEngine.SceneManagement;
-using System.Threading.Tasks;
 using Fungus;
 using TMPro;
 
@@ -46,6 +46,10 @@ public class EpisodesSpawner : MonoBehaviour
     [Header("Background Progress")]
     public CanvasGroup blackScreenCanvasGroup;
     public TextMeshProUGUI percentDownloadedText;
+
+    [Header("Top Panel")]
+    public UITopPanel topPanel;
+    public UIDiamondsPool diamondsPool;
 
     private EpisodesHandler episodesHandler;
 
@@ -172,6 +176,9 @@ public class EpisodesSpawner : MonoBehaviour
     {
         percentCanvasGroup.interactable = true;
         percentCanvasGroup.blocksRaycasts = true;
+
+        if (topPanel)
+            topPanel.HideTopPanel();
 
         storyPercentBar.fillAmount = 0;
         percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";

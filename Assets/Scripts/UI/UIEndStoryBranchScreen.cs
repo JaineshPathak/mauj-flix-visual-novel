@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using Fungus;
 using underDOGS.SDKEvents;
@@ -28,11 +26,11 @@ public class UIEndStoryBranchScreen : MonoBehaviour
     public Button yesButton;
     public Button noButton;
 
-    private bool isTriggered;
+    protected bool isTriggered;
 
-    private LTSeq endSeq;
+    protected LTSeq endSeq;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         sayText = sayText.Replace("\\n", "\n");
 
@@ -45,7 +43,7 @@ public class UIEndStoryBranchScreen : MonoBehaviour
         noButton.transform.localScale = Vector3.zero;
     }
 
-    public void PlayEndingStoryBranchScreen()
+    public virtual void PlayEndingStoryBranchScreen()
     {
         if (isTriggered)
             return;
@@ -68,13 +66,13 @@ public class UIEndStoryBranchScreen : MonoBehaviour
         endSeq.append(LeanTween.scale(endStoryPanel.gameObject, Vector3.one, 0.5f).setDelay(1f).setEase(LeanTweenType.easeOutBack).setOnComplete(OnEndStoryPanelUp));
     }
 
-    private void OnEndStoryPanelUp()
+    protected virtual void OnEndStoryPanelUp()
     {
         if (sayDialog != null)
             sayDialog.Say(sayText, true, false, false, false, false, null, OnSayTextComplete);
     }
 
-    private void OnSayTextComplete()
+    protected virtual void OnSayTextComplete()
     {
         if (secondSayDialog != null)
         {

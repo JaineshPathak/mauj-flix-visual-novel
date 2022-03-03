@@ -19,6 +19,7 @@ public class MenuDialogMflix : MenuDialog
     protected Transform[] cachedButtonsDiamondPanel;
     protected TextMeshProUGUI[] cachedButtonsText;
     protected TextMeshProUGUI[] cachedButtonsDiamondsCostText;
+    protected Animator[] cachedShineEffectAnim;
 
     protected override void Awake()
     {
@@ -29,6 +30,7 @@ public class MenuDialogMflix : MenuDialog
         Array.Resize(ref cachedButtonsDiamondPanel, cachedButtons.Length);
         Array.Resize(ref cachedButtonsDiamondsCostText, cachedButtons.Length);
         Array.Resize(ref cachedButtonsText, cachedButtons.Length);
+        Array.Resize(ref cachedShineEffectAnim, cachedButtons.Length);
         for (int i = 0; i < cachedButtons.Length; i++)
         {
             cachedButtonsImages[i] = cachedButtons[i].GetComponent<Image>();
@@ -36,6 +38,9 @@ public class MenuDialogMflix : MenuDialog
             cachedButtonsDiamondsCostText[i] = cachedButtons[i].transform.Find("DiamondCostPanel").GetComponentInChildren<TextMeshProUGUI>();
 
             cachedButtonsDiamondPanel[i] = cachedButtons[i].transform.Find("DiamondCostPanel");
+
+            cachedShineEffectAnim[i] = cachedButtons[i].GetComponent<Animator>();
+            cachedShineEffectAnim[i].enabled = false;
         }
 
         Slider timeoutSlider = GetComponentInChildren<Slider>();
@@ -48,7 +53,7 @@ public class MenuDialogMflix : MenuDialog
         }
 
         CheckEventSystem();
-    }
+    }    
 
     public bool AddOptionWithCost(string text, bool interactable, bool hideOption, Block targetBlock, bool hasDiamondCost, float diamondCost)
     {
@@ -59,46 +64,36 @@ public class MenuDialogMflix : MenuDialog
         if (hasDiamondCost && FirebaseFirestoreOffline.instance != null)
         {
             if (EpisodesSpawner.instance != null)
-                EpisodesSpawner.instance.ShowHideDiamondPanel(true);
+            {
+                //EpisodesSpawner.instance.ShowHideDiamondPanel(true);
+                EpisodesSpawner.instance.topPanel.ShowTopPanel();
+            }
 
             action = delegate
             {
+                #region Old code
                 /*if (FirebaseFirestoreHandler.instance.GetUserDiamondsAmountInt() < diamondCost)
                     return;
 
                 FirebaseFirestoreHandler.instance.DebitDiamondsAmount(diamondCost);*/
 
+                //FirebaseFirestoreOffline.instance.DebitDiamondsAmount(diamondCost);
+
+                /*if (EpisodesSpawner.instance != null)
+                    EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.5f, 1f);*/
+                #endregion
+
                 if (FirebaseFirestoreOffline.instance.GetDiamondsAmountInt() < diamondCost)
                     return;
 
-                FirebaseFirestoreOffline.instance.DebitDiamondsAmount(diamondCost);
-
-                if (EpisodesSpawner.instance != null)
-                    EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.5f, 1f);
-
-#if UNITY_EDITOR
-                Debug.Log("Firebase Firestore Offline: Diamonds Deducted: " + FirebaseFirestoreOffline.instance.GetDiamondsAmountString());
-#endif
-
-                EventSystem.current.SetSelectedGameObject(null);
-                StopAllCoroutines();
-                // Stop timeout
-                Clear();
-                HideSayDialog();
-                if (block != null)
-                {
-                    var flowchart = block.GetFlowchart();
-                    gameObject.SetActive(false);
-                    // Use a coroutine to call the block on the next frame
-                    // Have to use the Flowchart gameobject as the MenuDialog is now inactive
-                    flowchart.StartCoroutine(CallBlock(block));
-                }
+                Transform buttonDiamondPanelStart = cachedButtonsDiamondPanel[nextOptionIndex];
+                StartCoroutine(ActionWithDiamondCostRoutine(block, diamondCost, buttonDiamondPanelStart));               
             };
         }
         else if (hasDiamondCost && FirebaseFirestoreOffline.instance == null)
         {
-            if (EpisodesSpawner.instance != null)
-                EpisodesSpawner.instance.ShowHideDiamondPanel(true);
+            /*if (EpisodesSpawner.instance != null)
+                EpisodesSpawner.instance.ShowHideDiamondPanel(true);*/
 
             action = delegate
             {
@@ -117,7 +112,10 @@ public class MenuDialogMflix : MenuDialog
 #endif
 
                 if (EpisodesSpawner.instance != null)
-                    EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.5f, 1f);
+                {
+                    //EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.5f, 1f);
+                    EpisodesSpawner.instance.topPanel.HideTopPanel();
+                }
 
                 EventSystem.current.SetSelectedGameObject(null);
                 StopAllCoroutines();
@@ -135,6 +133,7 @@ public class MenuDialogMflix : MenuDialog
             };
         }
 
+        #region Backup action code
         /*UnityAction action = delegate
         {
             EventSystem.current.SetSelectedGameObject(null);
@@ -150,33 +149,11 @@ public class MenuDialogMflix : MenuDialog
                 // Have to use the Flowchart gameobject as the MenuDialog is now inactive
                 flowchart.StartCoroutine(CallBlock(block));
             }
-        };*/        
+        };*/
+        #endregion
 
         return AddOptionWithCost(text, interactable, hideOption, action, hasDiamondCost, diamondCost);
-    }
-
-    /*public override bool AddOption(string text, bool interactable, bool hideOption, Block targetBlock)
-    {
-        var block = targetBlock;
-        UnityAction action = delegate
-        {
-            EventSystem.current.SetSelectedGameObject(null);
-            StopAllCoroutines();
-            // Stop timeout
-            Clear();
-            HideSayDialog();
-            if (block != null)
-            {
-                var flowchart = block.GetFlowchart();
-                gameObject.SetActive(false);
-                // Use a coroutine to call the block on the next frame
-                // Have to use the Flowchart gameobject as the MenuDialog is now inactive
-                flowchart.StartCoroutine(CallBlock(block));
-            }
-        };
-
-        return AddOption(text, interactable, hideOption, action);
-    }*/
+    }    
 
     private bool AddOptionWithCost(string text, bool interactable, bool hideOption, UnityAction action, bool hasDiamondCost, float diamondCost)
     {
@@ -194,6 +171,7 @@ public class MenuDialogMflix : MenuDialog
         var buttonDiamondPanel = cachedButtonsDiamondPanel[nextOptionIndex];
         var buttonText = cachedButtonsText[nextOptionIndex];
         var buttonDiamondCostText = cachedButtonsDiamondsCostText[nextOptionIndex];
+        var buttonShineAim = cachedShineEffectAnim[nextOptionIndex];
 
         if (hasDiamondCost)
         {
@@ -201,6 +179,7 @@ public class MenuDialogMflix : MenuDialog
             buttonDiamondPanel.gameObject.SetActive(true);
             buttonDiamondCostText.text = diamondCost.ToString();
             buttonText.color = Color.black;
+            buttonShineAim.enabled = true;
         }
         else
         {
@@ -208,6 +187,7 @@ public class MenuDialogMflix : MenuDialog
             buttonDiamondPanel.gameObject.SetActive(false);
             buttonDiamondCostText.text = "";
             buttonText.color = Color.white;
+            buttonShineAim.enabled = false;
         }
 
         //move forward for next call
@@ -241,4 +221,67 @@ public class MenuDialogMflix : MenuDialog
 
         return true;
     }
+
+    private IEnumerator ActionWithDiamondCostRoutine(Block block, float diamondCost, Transform buttonDiamondPanelStart)
+    {
+        // Stop timeout
+
+#if UNITY_EDITOR
+        Debug.Log("STEP 1 - Diamond Cost Coroutine Started for Block: " + block.BlockName);
+#endif
+
+        //StopAllCoroutines();
+
+        yield return null;
+
+        if (EpisodesSpawner.instance != null)
+        {
+            EpisodesSpawner.instance.diamondsPool.PlayDiamondsAnimationDebit(buttonDiamondPanelStart, EpisodesSpawner.instance.topPanel.diamondsPanelIcon, (int)diamondCost, () =>
+            {
+#if UNITY_EDITOR
+                Debug.Log("STEP 2 - Diamond Cost Coroutine Completed for Block: " + block.BlockName);
+#endif
+
+                EpisodesSpawner.instance.topPanel.HideTopPanel(0.3f, 0.7f);
+
+                EventSystem.current.SetSelectedGameObject(null);
+                StopAllCoroutines();
+
+                Clear();
+                HideSayDialog();
+                if (block != null)
+                {
+                    var flowchart = block.GetFlowchart();
+                    gameObject.SetActive(false);
+                    // Use a coroutine to call the block on the next frame
+                    // Have to use the Flowchart gameobject as the MenuDialog is now inactive
+                    flowchart.StartCoroutine(CallBlock(block));
+                }
+
+                //StartCoroutine(OnDiamondsDebitCompletedRoutine(block));
+            }, 200f, Color.red);
+        }
+    }
+
+    /*private IEnumerator OnDiamondsDebitCompletedRoutine(Block block)
+    {
+        Debug.Log("3 - Diamond Cost Coroutine Finishing Up for Block: " + block.BlockName);
+
+        yield return new WaitForSecondsRealtime(0.35f);
+
+        Clear();
+        HideSayDialog();
+
+        EpisodesSpawner.instance.topPanel.HideTopPanel();
+        
+        //yield return new WaitForSecondsRealtime(0.4f);
+
+        Debug.Log("4 - Diamond Cost Coroutine Calling Block: " + block.BlockName);
+
+        var flowchart = block.GetFlowchart();
+        flowchart.StartCoroutine(CallBlock(block));
+        gameObject.SetActive(false);
+        // Use a coroutine to call the block on the next frame
+        // Have to use the Flowchart gameobject as the MenuDialog is now inactive
+    }*/
 }

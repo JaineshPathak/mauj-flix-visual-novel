@@ -94,6 +94,11 @@ public class UIBottomPanel : MonoBehaviour
         if (index > panelsList.Length)
             return;
 
+        if (index == 0)
+            detailsPanel.episodesSpawner.topPanel.ShowTopPanel();
+        else
+            detailsPanel.episodesSpawner.topPanel.HideTopPanel();
+
         for (int i = 0; i < panelsList.Length; i++)
         {
             if (panelsList[i] != null && panelsList[i] != panelsList[index])

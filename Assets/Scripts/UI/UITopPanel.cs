@@ -3,9 +3,31 @@ using TMPro;
 
 public class UITopPanel : MonoBehaviour
 {
+    [Header("Texts")]
     public TextMeshProUGUI diamondsText;
     public TextMeshProUGUI ticketsText;
 
+    [Header("Panels")]
+    public RectTransform topPanel;
+    public float yPosOn = -100f;
+    public float yPosOff = 100f;
+
+    [Space(15)]
+
+    public Transform diamondsPanel;
+    public Transform diamondsPanelIcon;
+    public ParticleSystem diamondPickEffectVFX;
+
+    [Space(10)]
+
+    public Transform ticketsPanel;
+    public Transform ticketsPanelIcon;
+
+    private int showSeqID;
+    private int diamondSeqID;
+    private int ticketSeqID;
+
+    #region
     /*private void OnEnable()
     {
         FirebaseFirestoreHandler.OnFirestoreLoaded += OnFirestoreLoaded;
@@ -29,6 +51,7 @@ public class UITopPanel : MonoBehaviour
         if (fireStoreHandler.mainMenuDiamondsText == null)
             fireStoreHandler.mainMenuDiamondsText = diamondsText;
     }*/
+    #endregion
 
     private void Start()
     {
@@ -38,6 +61,10 @@ public class UITopPanel : MonoBehaviour
             FirebaseFirestoreOffline.instance.RegisterTicketAmountText(ticketsText);
         }
     }
+
+    //----------------------------------------------------------------------------------------------------
+
+    //Google Sign In
 
     public void TryGoogleSignIn()
     {
@@ -54,4 +81,84 @@ public class UITopPanel : MonoBehaviour
 
         FirebaseAuthHandler.instance.OnGoogleSignOut();
     }
+
+    //----------------------------------------------------------------------------------------------------
+
+    //Tweens
+
+    public void ShowTopPanel(float speed = 0.3f, float delay = 0)
+    {
+        if (LeanTween.isTweening(showSeqID))
+            LeanTween.cancel(showSeqID);
+
+        if (topPanel.anchoredPosition.y == yPosOn)
+            return;
+
+        showSeqID = LeanTween.moveY(topPanel, yPosOn, speed).setDelay(delay).setEase(LeanTweenType.easeInOutSine).id;
+    }
+
+    public void HideTopPanel(float speed = 0.3f, float delay = 0)
+    {
+        if (LeanTween.isTweening(showSeqID))
+            LeanTween.cancel(showSeqID);
+
+        if (topPanel.anchoredPosition.y == yPosOff)
+            return;
+
+        showSeqID = LeanTween.moveY(topPanel, yPosOff, speed).setDelay(delay).setEase(LeanTweenType.easeInOutSine).id;
+    }
+
+    public void PlayDiamondPanelCollectAnim(float speed = 1f, bool playVFXEffect = false)
+    {
+        if (diamondsPanel == null)
+            return;
+
+        if (LeanTween.isTweening(diamondSeqID))
+            LeanTween.cancel(diamondSeqID);
+
+        diamondsPanel.localScale = Vector3.one;
+        diamondSeqID = LeanTween.scale(diamondsPanel.gameObject, new Vector3(1.2f, 1.2f, 1.2f), speed).setEasePunch().id;
+
+        if(playVFXEffect && diamondPickEffectVFX != null)
+        {
+            if (diamondPickEffectVFX.isPlaying)
+                diamondPickEffectVFX.Stop();
+
+            diamondPickEffectVFX.Play();
+        }
+    }
+
+    public void PlayDiamondIconCollectAnim(float speed = 1f, float scale = 1.5f, bool playVFXEffect = false)
+    {
+        if (diamondsPanelIcon == null)
+            return;
+
+        if (LeanTween.isTweening(diamondSeqID))
+            LeanTween.cancel(diamondSeqID);
+
+        diamondsPanelIcon.localScale = Vector3.one;
+        diamondSeqID = LeanTween.scale(diamondsPanelIcon.gameObject, new Vector3(scale, scale, scale), speed).setEasePunch().id;
+
+        if (playVFXEffect && diamondPickEffectVFX != null)
+        {
+            if (diamondPickEffectVFX.isPlaying)
+                diamondPickEffectVFX.Stop();
+
+            diamondPickEffectVFX.Play();
+        }
+    }
+
+    public void PlayTicketPanelCollectAnim(float speed = 1f)
+    {
+        if (ticketsPanel == null)
+            return;
+
+        if (LeanTween.isTweening(ticketSeqID))
+            LeanTween.cancel(ticketSeqID);
+
+        ticketsPanel.localScale = Vector3.one;
+        ticketSeqID = LeanTween.scale(ticketsPanel.gameObject, new Vector3(1.2f, 1.2f, 1.2f), speed).setEasePunch().id;
+    }
+
+    //----------------------------------------------------------------------------------------------------
 }

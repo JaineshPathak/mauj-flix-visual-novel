@@ -61,8 +61,11 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
     private void Start()
     {
-        if(episodesSpawner == null)
+        if (episodesSpawner == null)
+        {
             episodesSpawner = EpisodesSpawner.instance;
+            episodesSpawner.topPanel.ShowTopPanel();
+        }
 
         episodesContainerRect = episodeContainer.GetComponent<RectTransform>();
 

@@ -53,6 +53,9 @@ public class CharacterSelectionScreen : MonoBehaviour
     [Header("UI")]
     public Transform diamondCostPanel;
     public TextMeshProUGUI diamondCostText;
+    public Animator buttonShineAnim;
+
+    private EpisodesSpawner episodesSpawner;
 
     private void Awake()
     {
@@ -73,6 +76,9 @@ public class CharacterSelectionScreen : MonoBehaviour
 
     private void Start()
     {
+        if (EpisodesSpawner.instance != null)
+            episodesSpawner = EpisodesSpawner.instance;
+
         SelectCharacter(0);
     }
 
@@ -100,19 +106,34 @@ public class CharacterSelectionScreen : MonoBehaviour
 
         if(characterDataAssets[currentCharacterIndex].hasDiamondCost)
         {
-            if (EpisodesSpawner.instance != null)
-                EpisodesSpawner.instance.ShowHideDiamondPanel(true, 0.3f);
+            if (episodesSpawner == null && EpisodesSpawner.instance != null)
+                episodesSpawner = EpisodesSpawner.instance;
+
+            if (episodesSpawner != null)
+                episodesSpawner.topPanel.ShowTopPanel();
+
+            /*if (EpisodesSpawner.instance != null)
+                EpisodesSpawner.instance.ShowHideDiamondPanel(true, 0.3f);*/
 
             diamondCostPanel.gameObject.SetActive(true);
             diamondCostText.text = Mathf.RoundToInt(characterDataAssets[currentCharacterIndex].diamondCost).ToString();
+
+            if(buttonShineAnim != null)
+                buttonShineAnim.enabled = true;
         }
         else
         {
-            if (EpisodesSpawner.instance != null)
-                EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.3f);
+            /*if (EpisodesSpawner.instance != null)
+                EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.3f);*/
+
+            if (episodesSpawner != null)
+                episodesSpawner.topPanel.HideTopPanel();
 
             diamondCostPanel.gameObject.SetActive(false);
             diamondCostText.text = "";
+
+            if (buttonShineAnim != null)
+                buttonShineAnim.enabled = false;
         }
     }
     
@@ -151,29 +172,64 @@ public class CharacterSelectionScreen : MonoBehaviour
         if ( /*FirebaseFirestoreHandler.instance == null*/ FirebaseFirestoreOffline.instance == null)
             return;
 
+        MessageReceivedMFlix[] messageReceiversMaujflix = episodesHandler.episodeFlowchart.GetComponentsInChildren<MessageReceivedMFlix>();
+
         //If the current character costs Diamonds
         if (characterDataAssets[currentCharacterIndex].hasDiamondCost)
         {
-            if (EpisodesSpawner.instance != null)
-                EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.3f);
+            if (episodesSpawner == null && EpisodesSpawner.instance != null)
+                episodesSpawner = EpisodesSpawner.instance;
 
-            //If users Diamond amounts is less than current diamond cost, then return
             /*if (FirebaseFirestoreHandler.instance.GetUserDiamondsAmountInt() < characterDataAssets[currentCharacterIndex].diamondCost)
                 return;*/
 
+            //If users Diamond amounts is less than current diamond cost, then return
             if (FirebaseFirestoreOffline.instance.GetDiamondsAmountInt() < characterDataAssets[currentCharacterIndex].diamondCost)
                 return;
 
             //Debit the diamonds and select the character
-            FirebaseFirestoreOffline.instance.DebitDiamondsAmount(characterDataAssets[currentCharacterIndex].diamondCost);
-            episodesHandler.SelectCharacter(characterGender, characterDataAssets[currentCharacterIndex], characterVariableRef, currentCharacterIndex, true);
+            episodesSpawner.diamondsPool.PlayDiamondsAnimationDebit(diamondCostPanel, episodesSpawner.topPanel.diamondsPanelIcon, (int)characterDataAssets[currentCharacterIndex].diamondCost, () =>
+            {
+                if (episodesSpawner == null && EpisodesSpawner.instance != null)
+                    episodesSpawner = EpisodesSpawner.instance;
+
+
+                if (episodesSpawner != null)
+                    episodesSpawner.topPanel.HideTopPanel(0.3f, 0.7f);
+
+                episodesHandler.SelectCharacter(characterGender, characterDataAssets[currentCharacterIndex], characterVariableRef, currentCharacterIndex, true);
+
+                if(messageReceiversMaujflix.Length > 0)
+                {
+                    for (int i = 0; i < messageReceiversMaujflix.Length; i++)
+                    {
+                        if (messageReceiversMaujflix[i] != null)
+                            messageReceiversMaujflix[i].OnFungusMessageReceivedForCharacter("CharacterSelected", this);
+                    }
+                }
+            }, 200f, Color.red);
+
+            //FirebaseFirestoreOffline.instance.DebitDiamondsAmount(characterDataAssets[currentCharacterIndex].diamondCost);
+            //episodesHandler.SelectCharacter(characterGender, characterDataAssets[currentCharacterIndex], characterVariableRef, currentCharacterIndex, true);
         }
         else
         {
-            if (EpisodesSpawner.instance != null)
-                EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.3f);
+            //if (EpisodesSpawner.instance != null)
+                //EpisodesSpawner.instance.ShowHideDiamondPanel(false, 0.3f);
+
+            if (episodesSpawner != null)
+                episodesSpawner.topPanel.HideTopPanel(0.3f, 0.7f);
 
             episodesHandler.SelectCharacter(characterGender, characterDataAssets[currentCharacterIndex], characterVariableRef, currentCharacterIndex, true);
+
+            if (messageReceiversMaujflix.Length > 0)
+            {
+                for (int i = 0; i < messageReceiversMaujflix.Length; i++)
+                {
+                    if (messageReceiversMaujflix[i] != null)
+                        messageReceiversMaujflix[i].OnFungusMessageReceivedForCharacter("CharacterSelected", this);
+                }
+            }
         }
 
         //episodesHandler.SelectCharacter(characterGender, characterFungus[currentCharacterIndex], characterVariableRef, currentCharacterIndex);
