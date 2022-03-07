@@ -236,7 +236,7 @@ public class MenuDialogMflix : MenuDialog
 
         if (EpisodesSpawner.instance != null)
         {
-            EpisodesSpawner.instance.diamondsPool.PlayDiamondsAnimationDebit(buttonDiamondPanelStart, EpisodesSpawner.instance.topPanel.diamondsPanelIcon, (int)diamondCost, () =>
+            EpisodesSpawner.instance.diamondsPool.PlayDiamondsAnimationDebit(buttonDiamondPanelStart, EpisodesSpawner.instance.topPanel.diamondsPanelIcon, (int)diamondCost, (int)diamondCost, () =>
             {
 #if UNITY_EDITOR
                 Debug.Log("STEP 2 - Diamond Cost Coroutine Completed for Block: " + block.BlockName);

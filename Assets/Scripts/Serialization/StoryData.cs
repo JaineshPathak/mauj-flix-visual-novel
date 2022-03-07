@@ -45,6 +45,20 @@ public class StoryData
         return -1;
     }
 
+    public int GetIndexFromEpisodeKey(string key)
+    {
+        if (episodeDataList.Count <= 0)
+            return -1;
+
+        for (int i = 0; i < episodeDataList.Count; i++)
+        {
+            if (episodeDataList[i].episodeAssetKey == key)
+                return i;
+        }
+
+        return -1;
+    }
+
     public string GetEpisodeKeyFromIndex(int index)
     {
         return episodeDataList[index].episodeAssetKey;

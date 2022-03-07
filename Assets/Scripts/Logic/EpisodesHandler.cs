@@ -449,7 +449,7 @@ public class EpisodesHandler : MonoBehaviour
         episodeData.lastCameraPosition = Vector3.zero;
         episodeData.lastCameraRotation = Vector3.zero;
         episodeData.lastCameraOrthosize = 21f;
-        episodeData.episodeTime = 0;        
+        episodeData.episodeTime = 0;
 
         int currentIndex = storyData.GetIndexFromEpisodeData(episodeData);
         
@@ -458,10 +458,46 @@ public class EpisodesHandler : MonoBehaviour
 
         SaveStoryData();
 
-        if (episodesSpawner == null)
+        if (episodesSpawner == null && EpisodesSpawner.instance != null)
             episodesSpawner = EpisodesSpawner.instance;
 
-        episodesSpawner.StartLoadingStoryScene();
+        if(episodesSpawner != null)
+            episodesSpawner.StartLoadingStoryScene();
+    }
+
+    public void PlayLatestBranchEpisode()
+    {
+        if (episodeData == null)
+            return;
+
+        StopCoroutine("UpdateRoutine");
+
+        episodeData.currentBlockID = -1;
+        episodeData.currentCommandID = -1;
+        episodeData.currentBlocksTotal = 0;
+        episodeData.currentBlocksVisited.Clear();
+        episodeData.lastCameraPosition = Vector3.zero;
+        episodeData.lastCameraRotation = Vector3.zero;
+        episodeData.lastCameraOrthosize = 21f;
+        episodeData.episodeTime = 0;
+
+        if (episodesSpawner == null && EpisodesSpawner.instance != null)
+            episodesSpawner = EpisodesSpawner.instance;
+
+        if(episodesSpawner != null)
+        {
+            int latestBranchEpisodeIndex = storyData.GetIndexFromEpisodeKey(episodesSpawner.storiesDBItem.storyBranchEpisodesKeys[episodesSpawner.storiesDBItem.storyBranchEpisodesKeys.Length - 1]);
+            
+            if (latestBranchEpisodeIndex != -1)
+            {
+                storyData.currentEpisodeIndex = latestBranchEpisodeIndex;
+                storyData.currentEpisodeKey = storyData.GetEpisodeKeyFromIndex(storyData.currentEpisodeIndex);                
+            }
+
+            SaveStoryData();
+
+            episodesSpawner.StartLoadingStoryScene();
+        }
     }
 
     private void SaveStoryData()

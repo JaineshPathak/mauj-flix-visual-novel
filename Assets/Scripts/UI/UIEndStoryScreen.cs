@@ -24,11 +24,11 @@ public class UIEndStoryScreen : MonoBehaviour
     public Button homeButton;
     public Button restartStoryButton;
 
-    private bool isTriggered;
+    protected bool isTriggered;
 
-    private LTSeq endSeq;
+    protected LTSeq endSeq;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         sayText = sayText.Replace("\\n", "\n");
 
@@ -41,7 +41,7 @@ public class UIEndStoryScreen : MonoBehaviour
         restartStoryButton.transform.localScale = Vector3.zero;
     }
 
-    public void PlayEndingStoryScreen()
+    public virtual void PlayEndingStoryScreen()
     {
         if (isTriggered)
             return;
@@ -64,13 +64,13 @@ public class UIEndStoryScreen : MonoBehaviour
         endSeq.append(LeanTween.scale(endStoryPanel.gameObject, Vector3.one, 0.5f).setDelay(1f).setEase(LeanTweenType.easeOutBack).setOnComplete(OnEndStoryPanelUp));
     }
 
-    private void OnEndStoryPanelUp()
+    protected virtual void OnEndStoryPanelUp()
     {        
         if (sayDialog != null)
             sayDialog.Say(sayText, true, false, false, false, false, null, OnSayTextComplete);
     }
 
-    private void OnSayTextComplete()
+    protected virtual void OnSayTextComplete()
     {
         LeanTween.scale(homeButton.gameObject, Vector3.one, 0.5f).setDelay(0.5f).setEase(LeanTweenType.easeOutBack);
         LeanTween.scale(restartStoryButton.gameObject, Vector3.one, 0.5f).setDelay(0.5f).setEase(LeanTweenType.easeOutBack);

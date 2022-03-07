@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Fungus;
-using underDOGS.SDKEvents;
+//using underDOGS.SDKEvents;
 
 public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
 {
@@ -175,7 +175,7 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
         collectDiamondsButton.interactable = false;
         LeanTween.scale(collectDiamondsButton.gameObject, Vector3.zero, 0.4f).setEase(LeanTweenType.easeInBack);
 
-        episodesSpawner.diamondsPool.PlayDiamondsAnimationDeposit(collectDiamondsPanel, episodesSpawner.topPanel.diamondsPanelIcon, 10, OnBranchedDiamondCollected);
+        episodesSpawner.diamondsPool.PlayDiamondsAnimationDeposit(collectDiamondsPanel, episodesSpawner.topPanel.diamondsPanelIcon, 10, 10, OnBranchedDiamondCollected);
     }
 
     private void OnBranchedDiamondCollected()
@@ -276,7 +276,7 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
 
         yield return new WaitForSeconds(0.35f);
 
-        episodesSpawner.diamondsPool.PlayDiamondsAnimationDebit(playEndingDiamondIcon, episodesSpawner.topPanel.diamondsPanelIcon, 5, OnBranchedDiamondDebitComplete);
+        episodesSpawner.diamondsPool.PlayDiamondsAnimationDebit(playEndingDiamondIcon, episodesSpawner.topPanel.diamondsPanelIcon, 5, 5, OnBranchedDiamondDebitComplete);
     }
 
     private void OnBranchedDiamondDebitComplete()
@@ -305,6 +305,10 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
 
         if (episodesSpawner == null)
             return;
+
+        noThanksButton.interactable = false;
+        playEndingButton.interactable = false;
+        playEndingButtonAd.interactable = false;
 
         EpisodesSpawner.instance.LoadEpisodesMainMenu(false);
     }

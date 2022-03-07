@@ -19,6 +19,8 @@ public class StoriesDBItemSO : ScriptableObject
     [TextArea]
     public string storyDescription = "Coming Soon";
 
+    [Header("Branches")]
+
     [Header("Total Blocks")]
     public int storyTotalBlocksCount;
 
@@ -37,6 +39,9 @@ public class StoriesDBItemSO : ScriptableObject
 
     [Header("Story Episodes Keys")]
     public AssetReferenceGameObject[] storyEpisodesKeys;
+
+    [Header("Story Episodes Branch Keys")]
+    public AssetReferenceGameObject[] storyEpisodesBranchkeys;
 
     private StoriesDBItem item = null;
 
@@ -107,6 +112,16 @@ public class StoriesDBItemSO : ScriptableObject
             }
         }
 
+        if(this.storyEpisodesBranchkeys.Length > 0)
+        {        
+            Array.Resize(ref item.storyBranchEpisodesKeys, this.storyEpisodesBranchkeys.Length);
+            for (int i = 0; i < storyEpisodesBranchkeys.Length; i++)
+            {
+                if(this.storyEpisodesBranchkeys[i] != null)
+                    item.storyBranchEpisodesKeys[i] = storyEpisodesBranchkeys[i].RuntimeKey.ToString();
+            }
+        }
+
         return item;
     }
 }
@@ -136,6 +151,7 @@ public class StoriesDBItemSOEditor : Editor
     private SerializedProperty storyProgressFileNameSerial;
 
     private SerializedProperty storyEpisodesKeysSerial;
+    private SerializedProperty storyBranchEpisodesKeysSerial;
 
     private Texture2D thumbnailSmallTex;
     private Texture2D thumbnailBigTex;
@@ -177,6 +193,7 @@ public class StoriesDBItemSOEditor : Editor
         storyProgressFileNameSerial = serializedObject.FindProperty("storyProgressFileName");
 
         storyEpisodesKeysSerial = serializedObject.FindProperty("storyEpisodesKeys");
+        storyBranchEpisodesKeysSerial = serializedObject.FindProperty("storyEpisodesBranchkeys");
     }
 
     public override void OnInspectorGUI()
@@ -209,6 +226,7 @@ public class StoriesDBItemSOEditor : Editor
         AddPropertyLabel(storyProgressFileNameSerial, "Story Progress File name", "File name of the Story Progress. Hit the 'Update' button next to it after assigning at least three Episode prefabs in below list.");        
 
         AddPropertyLabel(storyEpisodesKeysSerial, "Story Episodes", "List of Story Episodes Prefabs (Eg: ST-Padosan-Ep1.prefab). This appears in Details Panel depending on array size.");
+        AddPropertyLabel(storyBranchEpisodesKeysSerial, "Story Branch Episodes", "List of Story Episodes Prefabs With Branch Endings (Eg: ST-Padosan-Ep1.prefab). This appears in Details Panel depending on array size.");
         
         //DrawDefaultInspector();
 

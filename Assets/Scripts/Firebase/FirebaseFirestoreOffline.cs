@@ -118,7 +118,8 @@ public class FirebaseFirestoreOffline : MonoBehaviour
 
     public string GetDiamondsAmountString()
     {
-        return AbbrevationUtility.AbbreviateNumber(DiamondsAmount);
+        //return AbbrevationUtility.AbbreviateNumber(DiamondsAmount);
+        return Mathf.RoundToInt(DiamondsAmount).ToString();
     }
 
     public void DepositDiamondsAmount(float depositAmount)
@@ -140,7 +141,8 @@ public class FirebaseFirestoreOffline : MonoBehaviour
 
     public string GetTicketsAmountString()
     {
-        return AbbrevationUtility.AbbreviateNumber(TicketsAmount);
+        //return AbbrevationUtility.AbbreviateNumber(TicketsAmount);
+        return Mathf.RoundToInt(TicketsAmount).ToString();
     }
 
     public void DepositTicketsAmount(float depositAmount)

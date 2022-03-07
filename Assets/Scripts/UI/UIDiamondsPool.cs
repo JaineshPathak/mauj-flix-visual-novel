@@ -11,18 +11,25 @@ using UnityEditor;
 
 public class UIDiamondsPool : MonoBehaviour
 {
-    [Header("Prefabs")]
+    [Header("Prefabs - Diamonds")]
     public int diamondsCount = 20;
     public Transform diamondsSmallPrefab;
     public Transform diamondsSmallParent;
     public List<Transform> diamondsList = new List<Transform>();
     public List<TextMeshProUGUI> diamondDebitTextList = new List<TextMeshProUGUI>();
 
-    [Header("Middle Paths")]
-    //public Transform[] middleTransformPoints;
+    [Header("Prefabs - Tickets")]
+    public int ticketsCount = 20;
+    public Transform ticketsSmallPrefab;
+    public Transform ticketsSmallParent;
+    public List<Transform> ticketsList = new List<Transform>();
+    public List<TextMeshProUGUI> ticketsDebitTextList = new List<TextMeshProUGUI>();
+
+    /*[Header("Middle Paths")]
+    public Transform[] middleTransformPoints;
     public List<Vector3> diamondsPathLeft = new List<Vector3>();
     public List<Vector3> diamondsPathMiddle = new List<Vector3>();
-    public List<Vector3> diamondsPathRight = new List<Vector3>();
+    public List<Vector3> diamondsPathRight = new List<Vector3>();*/
 
     private UITopPanel topPanel;
 
@@ -60,6 +67,35 @@ public class UIDiamondsPool : MonoBehaviour
             DestroyImmediate(diamondsSmallParent.GetChild(0).gameObject);
 
         diamondsList.Clear();
+        diamondDebitTextList.Clear();
+    }
+
+    public void SpawnSmallTickets()
+    {
+        if (ticketsList.Count > 0 || ticketsSmallPrefab == null)
+            return;
+
+        for (int i = 0; i < diamondsCount; i++)
+        {
+            //Transform coinsSmallInstance = Instantiate(coinsSmallPrefab, coinsSmallParent);
+            Transform ticketsSmallInstance = PrefabUtility.InstantiatePrefab(ticketsSmallPrefab, ticketsSmallParent) as Transform;
+            ticketsSmallInstance.gameObject.SetActive(false);
+
+            ticketsList.Add(ticketsSmallInstance);
+            ticketsDebitTextList.Add(ticketsSmallInstance.GetComponentInChildren<TextMeshProUGUI>());
+        }
+    }
+
+    public void ClearSmallTickets()
+    {
+        if (ticketsList.Count <= 0)
+            return;
+
+        while (ticketsSmallParent.childCount > 0)
+            DestroyImmediate(ticketsSmallParent.GetChild(0).gameObject);
+
+        ticketsList.Clear();
+        ticketsDebitTextList.Clear();
     }
 #endif    
 
@@ -128,18 +164,18 @@ public class UIDiamondsPool : MonoBehaviour
     //============================================================================================================
     
     //When player gets Diamond rewards
-    public void PlayDiamondsAnimationDeposit(Transform start, Transform end, int totalDiamonds, Action callback, float spreadRadius = 300f)
+    public void PlayDiamondsAnimationDeposit(Transform start, Transform end, int diamondsToEmit, int totalDiamonds, Action callback, float spreadRadius = 300f)
     {
-        StartCoroutine(PlayDiamondsAnimationRoutineDeposit(start, end, totalDiamonds, callback, spreadRadius));
+        StartCoroutine(PlayDiamondsAnimationRoutineDeposit(start, end, diamondsToEmit, totalDiamonds, callback, spreadRadius));
     }
 
-    private IEnumerator PlayDiamondsAnimationRoutineDeposit(Transform start, Transform end, int totalDiamonds, Action callback, float spreadRadius)
+    private IEnumerator PlayDiamondsAnimationRoutineDeposit(Transform start, Transform end, int diamondsToEmit, int totalDiamonds, Action callback, float spreadRadius)
     {
         yield return new WaitForSeconds(0.5f);
 
-        for (int i = 0; i < totalDiamonds && (diamondsList.Count > 0); i++)
+        for (int i = 0; i < diamondsToEmit && (diamondsList.Count > 0); i++)
         {
-            MoveDiamond(diamondsList[i], false, diamondDebitTextList[i], start, end, totalDiamonds, spreadRadius);
+            MoveDiamond(diamondsList[i], false, diamondDebitTextList[i], start, end, diamondsToEmit, totalDiamonds, spreadRadius);
 
             yield return new WaitForSeconds(0.1f);
         }
@@ -152,7 +188,7 @@ public class UIDiamondsPool : MonoBehaviour
     //============================================================================================================
 
     //When player buys something using Diamonds
-    public void PlayDiamondsAnimationDebit(Transform start, Transform end, int totalDiamonds, Action callback, float spreadRadius = 300f, Color? textColor = null)
+    public void PlayDiamondsAnimationDebit(Transform start, Transform end, int diamondsToEmit, int totalDiamonds, Action callback, float spreadRadius = 300f, Color? textColor = null)
     {
         if(FirebaseFirestoreOffline.instance != null)
         {
@@ -160,16 +196,16 @@ public class UIDiamondsPool : MonoBehaviour
                 return;
         }
 
-        StartCoroutine(PlayDiamondsAnimationDebitRoutine(start, end, totalDiamonds, callback, spreadRadius, textColor));
+        StartCoroutine(PlayDiamondsAnimationDebitRoutine(start, end, diamondsToEmit, totalDiamonds, callback, spreadRadius, textColor));
     }
 
-    private IEnumerator PlayDiamondsAnimationDebitRoutine(Transform start, Transform end, int totalDiamonds, Action callback, float spreadRadius, Color? textColor = null)
+    private IEnumerator PlayDiamondsAnimationDebitRoutine(Transform start, Transform end, int diamondsToEmit, int totalDiamonds, Action callback, float spreadRadius, Color? textColor = null)
     {
         yield return new WaitForSeconds(0.5f);
 
-        for (int i = 0; i < totalDiamonds && (diamondsList.Count > 0); i++)
+        for (int i = 0; i < diamondsToEmit && (diamondsList.Count > 0); i++)
         {
-            MoveDiamond(diamondsList[i], true, diamondDebitTextList[i], start, end, totalDiamonds, spreadRadius, textColor);
+            MoveDiamond(diamondsList[i], true, diamondDebitTextList[i], start, end, diamondsToEmit, totalDiamonds, spreadRadius, textColor);
 
             yield return new WaitForSeconds(0.1f);
         }
@@ -181,7 +217,7 @@ public class UIDiamondsPool : MonoBehaviour
 
     //============================================================================================================
 
-    private void MoveDiamond(Transform diamond, bool debitMode, TextMeshProUGUI diamondDebitText, Transform start, Transform end, int totalDiamonds, float spreadRadius, Color? textColor = null)
+    private void MoveDiamond(Transform diamond, bool debitMode, TextMeshProUGUI diamondDebitText, Transform start, Transform end, int diamondsToEmit, int totalDiamonds, float spreadRadius, Color? textColor = null)
     {
         if (!diamond.gameObject.activeSelf)
             diamond.gameObject.SetActive(true);
@@ -189,7 +225,7 @@ public class UIDiamondsPool : MonoBehaviour
         diamondDebitText.gameObject.SetActive(debitMode);
         diamondDebitText.color = textColor ?? Color.white;
 
-        float perDiamondAmount = totalDiamonds / totalDiamonds;
+        float perDiamondAmount = totalDiamonds / diamondsToEmit;
         if (debitMode)
             diamondDebitText.text = "-" + Mathf.RoundToInt(perDiamondAmount).ToString();
 
@@ -220,6 +256,100 @@ public class UIDiamondsPool : MonoBehaviour
     }
 
     //============================================================================================================
+
+    //When player gets Tickets rewards
+    public void PlayTicketsAnimationDeposit(Transform start, Transform end, int totalTickets, Action callback, float spreadRadius = 300f)
+    {
+        StartCoroutine(PlayTicketsAnimationRoutineDeposit(start, end, totalTickets, callback, spreadRadius));
+    }
+
+    private IEnumerator PlayTicketsAnimationRoutineDeposit(Transform start, Transform end, int totalTickets, Action callback, float spreadRadius)
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        for (int i = 0; i < totalTickets && (ticketsList.Count > 0); i++)
+        {
+            MoveTicket(ticketsList[i], false, ticketsDebitTextList[i], start, end, totalTickets, spreadRadius);
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        callback?.Invoke();
+    }
+
+    //============================================================================================================
+
+    //When player buys something using Tickets
+    public void PlayTicketsAnimationDebit(Transform start, Transform end, int totalTickets, Action callback, float spreadRadius = 300f, Color? textColor = null)
+    {
+        if (FirebaseFirestoreOffline.instance != null)
+        {
+            if (FirebaseFirestoreOffline.instance.GetTicketsAmountInt() < totalTickets)
+                return;
+        }
+
+        StartCoroutine(PlayTicketsAnimationDebitRoutine(start, end, totalTickets, callback, spreadRadius, textColor));
+    }
+
+    private IEnumerator PlayTicketsAnimationDebitRoutine(Transform start, Transform end, int totalTickets, Action callback, float spreadRadius, Color? textColor = null)
+    {
+        yield return new WaitForSeconds(0.5f);
+
+        for (int i = 0; i < totalTickets && (ticketsList.Count > 0); i++)
+        {
+            MoveTicket(ticketsList[i], true, ticketsDebitTextList[i], start, end, totalTickets, spreadRadius, textColor);
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        yield return new WaitForSeconds(0.5f);
+
+        callback?.Invoke();
+    }
+
+    //============================================================================================================
+
+    private void MoveTicket(Transform ticket, bool debitMode, TextMeshProUGUI ticketDebitText, Transform start, Transform end, int totalTickets, float spreadRadius, Color? textColor = null)
+    {
+        if (!ticket.gameObject.activeSelf)
+            ticket.gameObject.SetActive(true);
+
+        ticketDebitText.gameObject.SetActive(debitMode);
+        ticketDebitText.color = textColor ?? Color.white;
+
+        float perTicketAmount = totalTickets / totalTickets;
+        if (debitMode)
+            ticketDebitText.text = "-" + Mathf.RoundToInt(perTicketAmount).ToString();
+
+        ticket.position = start.position;
+
+        LeanTween.move(ticket.gameObject, GetRandomPositionInsideCircle(start, spreadRadius), 0.5f).setEase(LeanTweenType.easeOutSine).setOnComplete(() =>
+        {
+            //LTBezierPath diamondPath = new LTBezierPath(GetDiamondPath(diamond, end));            
+            LeanTween.move(ticket.gameObject, end.position, 0.5f).setEase(LeanTweenType.easeInSine).setOnComplete(() =>
+            {
+                if (FirebaseFirestoreOffline.instance != null)
+                {
+                    if (!debitMode)
+                        FirebaseFirestoreOffline.instance.DepositTicketsAmount(perTicketAmount);
+                    else
+                        FirebaseFirestoreOffline.instance.DebitTicketsAmount(perTicketAmount);
+                }
+
+                if (MMVibrationManager.HapticsSupported())
+                    MMVibrationManager.Haptic(HapticTypes.LightImpact);
+
+                if (topPanel != null)
+                    topPanel.PlayTicketIconCollectAnim(1f, 1.8f, !debitMode);
+
+                ticket.gameObject.SetActive(false);
+            });
+        });
+    }
+
+    //============================================================================================================
 }
 
 #if UNITY_EDITOR
@@ -239,7 +369,8 @@ public class UIDiamondsPoolEditor : Editor
 
         GUILayout.BeginHorizontal();
         {
-            GUILayout.Space(EditorGUIUtility.labelWidth);
+            //GUILayout.Space(EditorGUIUtility.labelWidth);
+            GUILayout.FlexibleSpace();
             if (GUILayout.Button(Resources.Load<Texture>("Icons/Icon_Diamond_Editor_Spawn"), GUILayout.Width(thumbnailWidth), GUILayout.Height(thumbnailHeight)))
             {
                 Undo.RecordObject(target, "Spawn Diamonds");
@@ -251,6 +382,19 @@ public class UIDiamondsPoolEditor : Editor
                 Undo.RecordObject(target, "Clear Diamonds");
                 pool.ClearSmallDiamonds();
             }
+
+            if (GUILayout.Button(Resources.Load<Texture>("Icons/Icon_Tickets_Add"), GUILayout.Width(thumbnailWidth), GUILayout.Height(thumbnailHeight)))
+            {
+                Undo.RecordObject(target, "Spawn Tickets");
+                pool.SpawnSmallTickets();
+            }
+
+            if (GUILayout.Button(Resources.Load<Texture>("Icons/Icon_Tickets_Clear"), GUILayout.Width(thumbnailWidth), GUILayout.Height(thumbnailHeight)))
+            {
+                Undo.RecordObject(target, "Clear Tickets");
+                pool.ClearSmallTickets();
+            }
+            GUILayout.FlexibleSpace();
         }
 
         GUILayout.EndHorizontal();

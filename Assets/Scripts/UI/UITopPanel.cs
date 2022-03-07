@@ -22,6 +22,7 @@ public class UITopPanel : MonoBehaviour
 
     public Transform ticketsPanel;
     public Transform ticketsPanelIcon;
+    public ParticleSystem ticketPickEffectVFX;
 
     private int showSeqID;
     private int diamondSeqID;
@@ -158,6 +159,26 @@ public class UITopPanel : MonoBehaviour
 
         ticketsPanel.localScale = Vector3.one;
         ticketSeqID = LeanTween.scale(ticketsPanel.gameObject, new Vector3(1.2f, 1.2f, 1.2f), speed).setEasePunch().id;
+    }
+
+    public void PlayTicketIconCollectAnim(float speed = 1f, float scale = 1.5f, bool playVFXEffect = false)
+    {
+        if (ticketsPanelIcon == null)
+            return;
+
+        if (LeanTween.isTweening(ticketSeqID))
+            LeanTween.cancel(ticketSeqID);
+
+        ticketsPanelIcon.localScale = Vector3.one;
+        ticketSeqID = LeanTween.scale(ticketsPanelIcon.gameObject, new Vector3(scale, scale, scale), speed).setEasePunch().id;
+
+        if (playVFXEffect && ticketPickEffectVFX != null)
+        {
+            if (ticketPickEffectVFX.isPlaying)
+                ticketPickEffectVFX.Stop();
+
+            ticketPickEffectVFX.Play();
+        }
     }
 
     //----------------------------------------------------------------------------------------------------

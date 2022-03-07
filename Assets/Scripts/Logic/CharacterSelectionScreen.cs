@@ -188,7 +188,7 @@ public class CharacterSelectionScreen : MonoBehaviour
                 return;
 
             //Debit the diamonds and select the character
-            episodesSpawner.diamondsPool.PlayDiamondsAnimationDebit(diamondCostPanel, episodesSpawner.topPanel.diamondsPanelIcon, (int)characterDataAssets[currentCharacterIndex].diamondCost, () =>
+            episodesSpawner.diamondsPool.PlayDiamondsAnimationDebit(diamondCostPanel, episodesSpawner.topPanel.diamondsPanelIcon, (int)characterDataAssets[currentCharacterIndex].diamondCost, (int)characterDataAssets[currentCharacterIndex].diamondCost, () =>
             {
                 if (episodesSpawner == null && EpisodesSpawner.instance != null)
                     episodesSpawner = EpisodesSpawner.instance;

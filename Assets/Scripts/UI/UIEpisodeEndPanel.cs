@@ -43,19 +43,26 @@ public class UIEpisodeEndPanel : MonoBehaviour
 
     private void Awake()
     {
-        endScreenCanvasGroup.interactable = false;
-        endScreenCanvasGroup.blocksRaycasts = false;
+        if (endScreenCanvasGroup)
+        {
+            endScreenCanvasGroup.interactable = false;
+            endScreenCanvasGroup.blocksRaycasts = false;
+        }
 
-        congralutionsImage.transform.localScale = Vector3.zero;
-        nextEpisodePanel.transform.localScale = Vector3.zero;
+        if(congralutionsImage)
+            congralutionsImage.transform.localScale = Vector3.zero;
 
-        playButton.transform.localScale = Vector3.zero;
+        if(nextEpisodePanel)
+            nextEpisodePanel.transform.localScale = Vector3.zero;
 
-        if (nextEpisodeButton == null)
+        if(playButton)
+            playButton.transform.localScale = Vector3.zero;
+
+        /*if (nextEpisodeButton == null)
         {
             //nextEpisodeButton = endScreenCanvasGroup.transform.Find("NextEpisodeButton").gameObject.GetComponent<Button>();
             nextEpisodeButton = GameObject.Find("NextEpisodeButton").GetComponent<Button>();
-        }
+        }*/
 
         if(nextEpisodeButton != null)
         {
@@ -64,8 +71,8 @@ public class UIEpisodeEndPanel : MonoBehaviour
             nextEpisodeButton.transform.localScale = Vector3.zero;
         }
 
-        if (playAgainEpisodeButton == null)
-            playAgainEpisodeButton = GameObject.Find("PlayEpisodeAgainButton").GetComponent<Button>();
+        //if (playAgainEpisodeButton == null)
+            //playAgainEpisodeButton = GameObject.Find("PlayEpisodeAgainButton").GetComponent<Button>();
 
         if(playAgainEpisodeButton != null)
         {
@@ -74,7 +81,8 @@ public class UIEpisodeEndPanel : MonoBehaviour
             playAgainEpisodeButton.transform.localScale = Vector3.zero;
         }
 
-        rateUsButton.transform.localScale = Vector3.zero;
+        if(rateUsButton)
+            rateUsButton.transform.localScale = Vector3.zero;
     }
 
     private void OnEnable()
@@ -119,6 +127,13 @@ public class UIEpisodeEndPanel : MonoBehaviour
 
         isTriggered = true;
 
+        if(UIEpisodeEndPanelMk2.instance != null)
+        {
+            UIEpisodeEndPanelMk2.instance.episodesHandler = episodesHandler;
+            UIEpisodeEndPanelMk2.instance.PlayEndingScreen();
+            return;
+        }
+
         //Next Episode Button, too lazy to again assign in Editor in all episode prefabs
         if (nextEpisodeButton == null)
         {
@@ -152,7 +167,7 @@ public class UIEpisodeEndPanel : MonoBehaviour
 
         endSeq = LeanTween.sequence();
         endSeq.append(LeanTween.alphaCanvas(endScreenCanvasGroup, 1f, 1f));
-        endSeq.append(LeanTween.scale(congralutionsImage.gameObject, Vector3.one, 0.5f).setDelay(0.5f).setEase(LeanTweenType.easeOutBack).setOnComplete(OnCongratsComplete));        
+        endSeq.append(LeanTween.scale(congralutionsImage.gameObject, Vector3.one, 0.5f).setDelay(0.5f).setEase(LeanTweenType.easeOutBack).setOnComplete(OnCongratsComplete));
         /*endSeq.append(() => 
         {
             LeanTween.scale(playButton.gameObject, Vector3.one, 0.5f).setEase(LeanTweenType.easeOutBack).setDelay(2f);
