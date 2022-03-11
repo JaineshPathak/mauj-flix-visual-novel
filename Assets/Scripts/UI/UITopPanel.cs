@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using TMPro;
 
 public class UITopPanel : MonoBehaviour
@@ -107,6 +108,17 @@ public class UITopPanel : MonoBehaviour
             return;
 
         showSeqID = LeanTween.moveY(topPanel, yPosOff, speed).setDelay(delay).setEase(LeanTweenType.easeInOutSine).id;
+    }
+
+    public void HideTopPanel(Action callback, float speed = 0.3f, float delay = 0)
+    {
+        if (LeanTween.isTweening(showSeqID))
+            LeanTween.cancel(showSeqID);
+
+        if (topPanel.anchoredPosition.y == yPosOff)
+            return;
+
+        showSeqID = LeanTween.moveY(topPanel, yPosOff, speed).setDelay(delay).setEase(LeanTweenType.easeInOutSine).setOnComplete( () => callback?.Invoke() ).id;
     }
 
     public void PlayDiamondPanelCollectAnim(float speed = 1f, bool playVFXEffect = false)
