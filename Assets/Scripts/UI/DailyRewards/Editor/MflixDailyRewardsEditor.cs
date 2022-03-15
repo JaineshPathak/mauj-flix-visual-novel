@@ -13,6 +13,7 @@ public class MflixDailyRewardsEditor : Editor
         SerializedProperty instanceIdProp = serializedObject.FindProperty("instanceId");
         SerializedProperty useCloudClockProp = serializedObject.FindProperty("useCloudClock");
         SerializedProperty rewardsProp = serializedObject.FindProperty("rewards");
+        SerializedProperty rewardsGiftProp = serializedObject.FindProperty("rewardsGift");
         SerializedProperty cloudClockListProp = serializedObject.FindProperty("cloudClockList");
         SerializedProperty isSingletonProp = serializedObject.FindProperty("isSingleton");
         SerializedProperty keepOpenProp = serializedObject.FindProperty("keepOpen");
@@ -122,6 +123,45 @@ public class MflixDailyRewardsEditor : Editor
             if (GUILayout.Button("Add Reward"))
             {
                 rewardsProp.InsertArrayElementAtIndex(rewardsProp.arraySize);
+            }
+        }
+
+        EditorGUILayout.Space(15f);
+
+        if (EditorTools.DrawHeader("Rewards Gift"))
+        {
+            for (int i = 0; i < rewardsGiftProp.arraySize; i++)
+            {
+                SerializedProperty giftProp = rewardsGiftProp.GetArrayElementAtIndex(i);
+                var giftDayToRewardProp = giftProp.FindPropertyRelative("dayToReward");
+                
+                if (EditorTools.DrawHeader("Day " + giftDayToRewardProp.intValue))
+                {
+                    EditorTools.BeginContents();
+                    
+                    var giftDiamondAmountProp = giftProp.FindPropertyRelative("giftDiamondAmount");
+                    var gifTicketAmountProp = giftProp.FindPropertyRelative("giftTicketAmount");
+                    var giftClosedSpriteProp = giftProp.FindPropertyRelative("giftClosedSprite");
+                    var giftOpenedSpriteProp = giftProp.FindPropertyRelative("giftOpenedSprite");
+
+                    EditorGUILayout.PropertyField(giftDayToRewardProp, new GUIContent("Day To Reward"));
+                    EditorGUILayout.PropertyField(giftDiamondAmountProp, new GUIContent("Diamond Amount"));
+                    EditorGUILayout.PropertyField(gifTicketAmountProp, new GUIContent("Ticket Amount"));
+                    giftClosedSpriteProp.objectReferenceValue = EditorGUILayout.ObjectField("Gift Closed Sprite", giftClosedSpriteProp.objectReferenceValue, typeof(Sprite), false);
+                    giftOpenedSpriteProp.objectReferenceValue = EditorGUILayout.ObjectField("Gift Opened Sprite", giftOpenedSpriteProp.objectReferenceValue, typeof(Sprite), false);
+
+                    EditorTools.EndContents();
+
+                    if (GUILayout.Button("Remove Reward Gift"))
+                    {
+                        rewardsGiftProp.DeleteArrayElementAtIndex(i);
+                    }
+                }
+            }
+
+            if (GUILayout.Button("Add Reward Gift"))
+            {
+                rewardsGiftProp.InsertArrayElementAtIndex(rewardsGiftProp.arraySize);
             }
         }
 

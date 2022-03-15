@@ -9,6 +9,7 @@ using NiobiumStudios;
 public class MflixDailyRewards : DailyRewardsCore<MflixDailyRewards>
 {
     public List<MflixReward> rewards;
+    public List<MflixRewardGift> rewardsGift;
     public DateTime lastRewardTime;
     public int availableReward;
     public int lastReward;
@@ -20,6 +21,8 @@ public class MflixDailyRewards : DailyRewardsCore<MflixDailyRewards>
 
     private const string LAST_REWARD_TIME = "LastRewardTime";
     private const string LAST_REWARD = "LastReward";
+    private const string LAST_GIFT_REWARD_DAY = "LastGiftRewardDay";
+    private const string LAST_GIFT_REWARD_PROGRESS = "LastGiftRewardProgress";
     private const string DEBUG_TIME = "DebugTime";
     private const string FMT = "O";
 
@@ -172,6 +175,22 @@ public class MflixDailyRewards : DailyRewardsCore<MflixDailyRewards>
         return string.Format("{0}_{1}", LAST_REWARD_TIME, instanceId);
     }
 
+    public string GetLastRewardGiftDayKey()
+    {
+        if (instanceId == 0)
+            return LAST_GIFT_REWARD_DAY;
+
+        return string.Format("{0}_{1}", LAST_GIFT_REWARD_DAY, instanceId);
+    }
+
+    public string GetLastRewardGiftProgressKey()
+    {
+        if (instanceId == 0)
+            return LAST_GIFT_REWARD_PROGRESS;
+
+        return string.Format("{0}_{1}", LAST_GIFT_REWARD_PROGRESS, instanceId);
+    }
+
     //Returns the advanced debug time playerPrefs key depending on instanceId
     private string GetDebugTimeKey()
     {
@@ -179,7 +198,7 @@ public class MflixDailyRewards : DailyRewardsCore<MflixDailyRewards>
             return DEBUG_TIME;
 
         return string.Format("{0}_{1}", DEBUG_TIME, instanceId);
-    }
+    }    
 
     // Returns the daily Reward of the day
     public MflixReward GetReward(int day)
@@ -187,11 +206,29 @@ public class MflixDailyRewards : DailyRewardsCore<MflixDailyRewards>
         return rewards[day - 1];
     }
 
+    public MflixRewardGift GetRewardGift(int index)
+    {
+        return rewardsGift[index - 1];
+    }
+
+    public MflixRewardGift GetRewardGiftFromDay(int day)
+    {
+        for (int i = 0; i < rewardsGift.Count; i++)
+        {
+            if (rewardsGift[i].dayToReward == day)
+                return rewardsGift[i];
+        }
+
+        return null;
+    }
+
     // Resets the Daily Reward for testing purposes
     public void Reset()
     {
         PlayerPrefs.DeleteKey(GetLastRewardKey());
         PlayerPrefs.DeleteKey(GetLastRewardTimeKey());
+        PlayerPrefs.DeleteKey(GetLastRewardGiftDayKey());
+        PlayerPrefs.DeleteKey(GetLastRewardGiftProgressKey());
         PlayerPrefs.DeleteKey(GetDebugTimeKey());
     }
 

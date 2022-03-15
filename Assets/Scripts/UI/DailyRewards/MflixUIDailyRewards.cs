@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class MflixUIDailyRewards : MonoBehaviour
 {
@@ -30,6 +31,23 @@ public class MflixUIDailyRewards : MonoBehaviour
 
     [Header("Gifts Panel")]
     public Image giftProgressBar;
+    public MflixUIGiftItem[] giftItems;
+
+    [Space(15)]
+
+    public CanvasGroup giftPanelMain;
+    public Text giftDayText;
+
+    public Image giftLockedImage;
+    public Image giftUnlockedImage;
+
+    public Transform giftDiamondPanel;
+    public TextMeshProUGUI giftDiamondAmountText;
+
+    public Transform giftTicketPanel;
+    public TextMeshProUGUI giftTicketAmountText;
+
+    public Button giftCollectButton;
 
     private MflixDailyRewards dailyRewards;
 
@@ -38,19 +56,19 @@ public class MflixUIDailyRewards : MonoBehaviour
 
     private EpisodesSpawner episodesSpawner;
 
+    private int giftDay;
     private float giftProgress;
 
-    private float GiftProgress 
+    private int giftDiamondAmount;
+    private int giftTicketAmount;
+
+    private bool isGiftCheckupDone;
+    private bool isGiftRewardAvailable = false;
+
+    private void OnValidate()
     {
-        get { return giftProgress; }
-        set
-        {
-            if (giftProgressBar)
-            {
-                //value = Mathf.Clamp(value, 0, 1f);
-                giftProgressBar.fillAmount = value / 30f;
-            }
-        } 
+        if (giftItems.Length <= 0)
+            giftItems = GetComponentsInChildren<MflixUIGiftItem>();
     }
 
     private void Awake()
@@ -63,6 +81,25 @@ public class MflixUIDailyRewards : MonoBehaviour
             dailyCanvasMain.interactable = false;
             dailyCanvasMain.blocksRaycasts = false;
         }
+
+        if(giftPanelMain)
+        {
+            giftPanelMain.alpha = 0;
+            giftPanelMain.interactable = false;
+            giftPanelMain.blocksRaycasts = false;
+        }
+
+        if (giftDiamondPanel)
+            giftDiamondPanel.transform.localScale = Vector3.zero;
+
+        if (giftTicketPanel)
+            giftTicketPanel.transform.localScale = Vector3.zero;
+
+        if(giftCollectButton)
+        {
+            giftCollectButton.transform.localScale = Vector3.zero;
+            giftCollectButton.onClick.AddListener(OnGiftCollectButton);
+        }    
     }
 
     private void OnEnable()
@@ -121,6 +158,7 @@ public class MflixUIDailyRewards : MonoBehaviour
                 buttonAdvanceDay.onClick.AddListener(() =>
                 {
                     dailyRewards.debugTime = dailyRewards.debugTime.Add(new TimeSpan(1, 0, 0, 0));
+                    isGiftCheckupDone = false;
                     UpdateUI();
                 });
             }
@@ -253,6 +291,51 @@ public class MflixUIDailyRewards : MonoBehaviour
         }
 
         readyToClaim = isRewardAvailableNow;
+
+        //Gifts Section
+        giftDay = PlayerPrefs.GetInt(dailyRewards.GetLastRewardGiftDayKey());
+        giftProgress = PlayerPrefs.GetFloat(dailyRewards.GetLastRewardGiftProgressKey());
+
+        giftProgressBar.fillAmount = giftProgress;
+
+        for (int i = 0; i < giftItems.Length && (giftItems.Length > 0); i++)        
+            giftItems[i].IsDone = (giftDay > giftItems[i].day) ? true : false;
+
+        //if (isRewardAvailableNow && isDebug)
+            //SetupGiftRewards();
+
+        /*print(isRewardAvailableNow);
+        if(isRewardAvailableNow && !isGiftCheckupDone)
+        {
+            isGiftCheckupDone = true;
+
+            giftDay++;
+            if (giftDay >= 31)
+                giftDay = 1;
+
+            giftProgress = giftDay / 30f;
+
+            //giftProgressBar.fillAmount = giftProgress;
+            LeanTween.value(giftProgressBar.fillAmount, giftProgress, 1f).setEaseLinear();
+
+            PlayerPrefs.SetInt(dailyRewards.GetLastRewardGiftDayKey(), giftDay);
+            PlayerPrefs.SetFloat(dailyRewards.GetLastRewardGiftProgressKey(), giftProgress);
+
+            for (int i = 0; i < giftItems.Length && (giftItems.Length > 0); i++)
+            {
+                giftItems[i].IsDone = (giftDay > giftItems[i].day) ? true : false;
+
+                if (giftDay == giftItems[i].day)
+                {
+                    isGiftRewardAvailable = true;
+
+                    if(giftItems[i].giftParticlesVfx)
+                        giftItems[i].giftParticlesVfx.Play(true);
+
+                    break;
+                }
+            }
+        }*/
     }
 
     private void OnClaimPrize(int day)
@@ -281,20 +364,41 @@ public class MflixUIDailyRewards : MonoBehaviour
         MflixReward reward = dailyRewards.GetReward(day);
         MflixDailyRewardItemSmall rewardItem = dailyRewardsUIItems[day - 1];
 
+        MflixRewardGift giftReward = null;
+        MflixUIGiftItem giftItem = null;
+        
+        if (isGiftRewardAvailable)
+        {
+            giftReward = dailyRewards.GetRewardGiftFromDay(giftDay);
+            giftItem = GetGiftItem(giftDay);
+        }
+
         episodesSpawner.topPanel.ShowTopPanel(0.3f);
 
         if (reward.hasDiamondReward && !reward.hasTicketReward)          //Only Diamonds
         {
             episodesSpawner.diamondsPool.PlayDiamondsAnimationDeposit(rewardItem.transform, episodesSpawner.topPanel.diamondsPanelIcon, reward.rewardDiamondAmount, reward.rewardDiamondAmount, () =>
             {
-                OnPriceClaimedDone();
+                if (isGiftRewardAvailable && giftReward != null && giftItem != null)
+                {
+                    giftItem.IsDone = true;
+                    ShowGiftRewardPanel(giftReward);
+                }
+                else
+                    OnPriceClaimedDone();
             }, 200f);
         }
         else if(!reward.hasDiamondReward && reward.hasTicketReward)     //Only tickets
         {
             episodesSpawner.diamondsPool.PlayTicketsAnimationDeposit(rewardItem.transform, episodesSpawner.topPanel.ticketsPanelIcon, reward.rewardTicketAmount, () =>
             {
-                OnPriceClaimedDone();
+                if (isGiftRewardAvailable && giftReward != null && giftItem != null)
+                {
+                    giftItem.IsDone = true;
+                    ShowGiftRewardPanel(giftReward);
+                }
+                else
+                    OnPriceClaimedDone();
             }, 200f);
         }
         else if(reward.hasDiamondReward && reward.hasTicketReward)      //Both
@@ -303,7 +407,13 @@ public class MflixUIDailyRewards : MonoBehaviour
             {
                 episodesSpawner.diamondsPool.PlayTicketsAnimationDeposit(rewardItem.transform, episodesSpawner.topPanel.ticketsPanelIcon, reward.rewardTicketAmount, () =>
                 {
-                    OnPriceClaimedDone();
+                    if (isGiftRewardAvailable && giftReward != null && giftItem != null)
+                    {
+                        giftItem.IsDone = true;
+                        ShowGiftRewardPanel(giftReward);
+                    }
+                    else
+                        OnPriceClaimedDone();
                 }, 200f);
             }, 200f);
         }
@@ -312,11 +422,16 @@ public class MflixUIDailyRewards : MonoBehaviour
     private void OnPriceClaimedDone()
     {
         UpdateUI();
-        episodesSpawner.topPanel.HideTopPanel(0.3f, 1f);
-        //dailyCanvasMain.interactable = false;
-        //dailyCanvasMain.blocksRaycasts = false;
-        //LeanTween.alphaCanvas(dailyCanvasMain, 0, 0.3f).setDelay(1f);
-    }
+
+        if(isDebug)
+            episodesSpawner.topPanel.HideTopPanel(0.3f, 1f);
+        else if (!isDebug)
+        {
+            dailyCanvasMain.interactable = false;
+            dailyCanvasMain.blocksRaycasts = false;
+            LeanTween.alphaCanvas(dailyCanvasMain, 0, 0.3f).setDelay(1f);
+        }
+    }    
 
     private void CheckTimeDifference()
     {
@@ -356,11 +471,42 @@ public class MflixUIDailyRewards : MonoBehaviour
                     episodesSpawner = EpisodesSpawner.instance;
                     episodesSpawner.topPanel.HideTopPanel(0.3f);
                 }
+
+                SetupGiftRewards();
             }
 
             CheckTimeDifference();
 
             StartCoroutine(TickTime());
+        }
+    }
+
+    private void SetupGiftRewards()
+    {
+        giftDay++;
+        if (giftDay >= 31)
+            giftDay = 1;
+
+        giftProgress = giftDay / 30f;
+
+        LeanTween.value(giftProgressBar.fillAmount, giftProgress, 1f).setEaseLinear();
+
+        PlayerPrefs.SetInt(dailyRewards.GetLastRewardGiftDayKey(), giftDay);
+        PlayerPrefs.SetFloat(dailyRewards.GetLastRewardGiftProgressKey(), giftProgress);
+
+        for (int i = 0; i < giftItems.Length && (giftItems.Length > 0); i++)
+        {
+            giftItems[i].IsDone = (giftDay > giftItems[i].day) ? true : false;
+
+            if (giftDay == giftItems[i].day)
+            {
+                isGiftRewardAvailable = true;
+
+                if (giftItems[i].giftParticlesVfx)
+                    giftItems[i].giftParticlesVfx.Play(true);
+
+                break;
+            }
         }
     }
 
@@ -373,5 +519,84 @@ public class MflixUIDailyRewards : MonoBehaviour
             CheckTimeDifference();
             yield return null;
         }
+    }
+
+    private MflixUIGiftItem GetGiftItem(int day)
+    {
+        for (int i = 0; i < giftItems.Length && (giftItems.Length > 0); i++)
+        {
+            if (giftItems[i].day == day)
+                return giftItems[i];
+        }
+
+        return null;
+    }
+
+    private void ShowGiftRewardPanel(MflixRewardGift giftReward)
+    {
+        giftCollectButton.interactable = true;
+
+        giftDayText.text = string.Format("दिन {0}", MflixDailyRewards.GetHindiNumber(giftReward.dayToReward.ToString()));
+
+        giftDiamondAmount = giftReward.giftDiamondAmount;
+        giftTicketAmount = giftReward.giftTicketAmount;
+
+        giftLockedImage.sprite = giftReward.giftClosedSprite;
+        giftLockedImage.color = Color.white;
+
+        giftUnlockedImage.sprite = giftReward.giftOpenedSprite;
+        giftUnlockedImage.color = new Color(1f, 1f, 1f, 0);
+
+        giftDiamondPanel.localScale = Vector3.zero;
+        giftTicketPanel.localScale = Vector3.zero;
+
+        giftDiamondAmountText.text = "0";
+        giftTicketAmountText.text = "0";
+
+        LTSeq giftPanelSeq = LeanTween.sequence();
+
+        giftPanelSeq.append(1f);
+        giftPanelSeq.append(LeanTween.alphaCanvas(giftPanelMain, 1f, 0.5f).setOnStart( () => 
+        {
+            giftPanelMain.interactable = true;
+            giftPanelMain.blocksRaycasts = true;
+        }).setEaseInOutSine());
+        giftPanelSeq.append(0.5f);
+        giftPanelSeq.append(LeanTween.scale(giftDiamondPanel.gameObject, Vector3.one, 0.5f).setEaseOutBack());
+        giftPanelSeq.append(LeanTween.value(0, giftReward.giftDiamondAmount, 0.5f).setEaseLinear().setOnUpdate( (float f) => giftDiamondAmountText.text = "+" + Mathf.RoundToInt(f).ToString()));
+        giftPanelSeq.append(0.5f);
+        giftPanelSeq.append(LeanTween.scale(giftTicketPanel.gameObject, Vector3.one, 0.5f).setEaseOutBack());
+        giftPanelSeq.append(LeanTween.value(0, giftReward.giftTicketAmount, 0.5f).setEaseLinear().setOnUpdate( (float f) => giftTicketAmountText.text = "+" + Mathf.RoundToInt(f).ToString()));
+        giftPanelSeq.append(0.5f);
+        giftPanelSeq.append(LeanTween.scale(giftCollectButton.gameObject, Vector3.one, 0.5f).setEaseOutBack());
+    }
+
+    private void OnGiftCollectButton()
+    {
+        giftCollectButton.interactable = false;
+
+        LTSeq rewardSeq = LeanTween.sequence();
+
+        rewardSeq.append(LeanTween.scale(giftCollectButton.gameObject, Vector3.zero, 0.4f).setEaseInBack());        
+        rewardSeq.append(LeanTween.alpha(giftLockedImage.rectTransform, 0, 1f).setEaseInOutSine().setOnStart( () => 
+        {
+            LeanTween.alpha(giftUnlockedImage.rectTransform, 1f, 1f).setEaseInOutSine();
+        }));
+        rewardSeq.append(0.5f);
+        rewardSeq.append(() =>
+        {
+            episodesSpawner.topPanel.ShowTopPanel();
+            episodesSpawner.diamondsPool.PlayDiamondsAnimationDeposit(giftDiamondPanel, episodesSpawner.topPanel.diamondsPanelIcon, giftDiamondAmount, giftDiamondAmount, () =>
+            {
+                episodesSpawner.diamondsPool.PlayTicketsAnimationDeposit(giftTicketPanel, episodesSpawner.topPanel.ticketsPanelIcon, giftTicketAmount, () =>
+                {
+                    giftPanelMain.interactable = false;
+                    giftPanelMain.blocksRaycasts = false;
+                    LeanTween.alphaCanvas(giftPanelMain, 0, 0.5f).setEaseInOutSine().setDelay(1f);
+
+                    OnPriceClaimedDone();
+                });
+            });
+        });        
     }
 }
