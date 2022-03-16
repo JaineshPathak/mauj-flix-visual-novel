@@ -192,7 +192,7 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
 
     private void OnEndStoryDiamondsCollected()
     {
-        episodesSpawner.diamondsPool.PlayTicketsAnimationDeposit(collectTicketsPanel, episodesSpawner.topPanel.ticketsPanelIcon, 10, OnEndStoryDiamondsTicketsCollected);
+        episodesSpawner.diamondsPool.PlayTicketsAnimationDeposit(collectTicketsPanel, episodesSpawner.topPanel.ticketsPanelIcon, 10, 10, OnEndStoryDiamondsTicketsCollected);
     }
 
     private void OnEndStoryDiamondsTicketsCollected()

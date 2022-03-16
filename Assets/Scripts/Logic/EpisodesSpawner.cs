@@ -51,6 +51,16 @@ public class EpisodesSpawner : MonoBehaviour
     public UITopPanel topPanel;
     public UIDiamondsPool diamondsPool;
 
+    [Header("Ask To Quit Panel")]
+    public bool isAskPopupOn;
+    public bool isInTransition;
+    public CanvasGroup askToQuitCanvasGroup;
+    public string askToQuitDialogue = "आप गेम बंद करना चाहते है?";
+    public SayDialog askToQuitSayDialogue;
+    public Text askToQuitText;
+    public Button askToQuitYesButton;
+    public Button askToQuitNoButton;
+
     private EpisodesHandler episodesHandler;
 
     [HideInInspector] public string storyTitle;    
@@ -150,6 +160,12 @@ public class EpisodesSpawner : MonoBehaviour
         rateUsCanvasGroup.blocksRaycasts = false;
 
         //OpenRateUsWindow();
+        isAskPopupOn = false;
+        if(askToQuitYesButton)        
+            askToQuitYesButton.onClick.AddListener(OnAskYesButton);
+
+        if (askToQuitNoButton)
+            askToQuitNoButton.onClick.AddListener(OnAskNoButton);
     }
 
     public void FadeOutBlackScreen()
@@ -228,6 +244,19 @@ public class EpisodesSpawner : MonoBehaviour
             DownloadEpisodeTask();
             //StartCoroutine(DownloadEpisodeRoutine());
         }
+    }
+
+    public StoryData GetStoryData()
+    {
+        string filePath = DataPaths.loadProgressPath + storyDataKey + DataPaths.loadProgressFileExtension;
+        if (SerializationManager.FileExists(filePath))
+        {
+            string saveString = SerializationManager.LoadFromTextFile(filePath);
+            if (saveString != null)
+                storyData = JsonUtility.FromJson<StoryData>(saveString);
+        }
+
+        return storyData;
     }
 
     private async void DownloadEpisodeTask()
@@ -448,6 +477,59 @@ public class EpisodesSpawner : MonoBehaviour
             LeanTween.alphaCanvas(diamondsPanelCanvasGroup, 1f, speed).setDelay(delay);
         else
             LeanTween.alphaCanvas(diamondsPanelCanvasGroup, 0, speed).setDelay(delay);
+    }
+
+    //=========================================================================================================    
+
+    public void ShowAskToQuitPanel()
+    {
+        isAskPopupOn = !isAskPopupOn;
+
+        if (isAskPopupOn)
+        {
+            askToQuitText.text = "";
+            
+            askToQuitCanvasGroup.interactable = true;
+            askToQuitCanvasGroup.blocksRaycasts = true;
+
+            askToQuitYesButton.interactable = true;
+            askToQuitNoButton.interactable = true;
+
+            LeanTween.alphaCanvas(askToQuitCanvasGroup, 1f, 0.5f).setOnStart(() =>
+            {
+                isInTransition = true;
+
+                if (askToQuitSayDialogue != null)
+                    askToQuitSayDialogue.Say(askToQuitDialogue, true, false, false, false, false, null, null);
+
+            }).setOnComplete(() => isInTransition = false);
+        }
+        else
+        {
+            LeanTween.alphaCanvas(askToQuitCanvasGroup, 0, 0.5f).setOnStart(() => isInTransition = true).setOnComplete(() =>
+            {
+                isInTransition = false;
+
+                askToQuitCanvasGroup.interactable = false;
+                askToQuitCanvasGroup.blocksRaycasts = false;
+            });
+        }
+    }
+
+    private void OnAskYesButton()
+    {
+        askToQuitYesButton.interactable = false;
+        askToQuitNoButton.interactable = false;
+
+        Application.Quit();
+    }
+
+    private void OnAskNoButton()
+    {
+        askToQuitYesButton.interactable = false;
+        askToQuitNoButton.interactable = false;
+
+        ShowAskToQuitPanel();
     }
 
     //=========================================================================================================

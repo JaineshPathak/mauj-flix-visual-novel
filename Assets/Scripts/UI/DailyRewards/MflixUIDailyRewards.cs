@@ -158,7 +158,7 @@ public class MflixUIDailyRewards : MonoBehaviour
                 buttonAdvanceDay.onClick.AddListener(() =>
                 {
                     dailyRewards.debugTime = dailyRewards.debugTime.Add(new TimeSpan(1, 0, 0, 0));
-                    isGiftCheckupDone = false;
+                    SetupGiftRewards();
                     UpdateUI();
                 });
             }
@@ -390,7 +390,7 @@ public class MflixUIDailyRewards : MonoBehaviour
         }
         else if(!reward.hasDiamondReward && reward.hasTicketReward)     //Only tickets
         {
-            episodesSpawner.diamondsPool.PlayTicketsAnimationDeposit(rewardItem.transform, episodesSpawner.topPanel.ticketsPanelIcon, reward.rewardTicketAmount, () =>
+            episodesSpawner.diamondsPool.PlayTicketsAnimationDeposit(rewardItem.transform, episodesSpawner.topPanel.ticketsPanelIcon, reward.rewardTicketAmount >= 15f ? 10 : reward.rewardTicketAmount, reward.rewardTicketAmount, () =>
             {
                 if (isGiftRewardAvailable && giftReward != null && giftItem != null)
                 {
@@ -405,7 +405,7 @@ public class MflixUIDailyRewards : MonoBehaviour
         {
             episodesSpawner.diamondsPool.PlayDiamondsAnimationDeposit(rewardItem.transform, episodesSpawner.topPanel.diamondsPanelIcon, reward.rewardDiamondAmount, reward.rewardDiamondAmount, () =>
             {
-                episodesSpawner.diamondsPool.PlayTicketsAnimationDeposit(rewardItem.transform, episodesSpawner.topPanel.ticketsPanelIcon, reward.rewardTicketAmount, () =>
+                episodesSpawner.diamondsPool.PlayTicketsAnimationDeposit(rewardItem.transform, episodesSpawner.topPanel.ticketsPanelIcon, reward.rewardTicketAmount >= 15f ? 10 : reward.rewardTicketAmount, reward.rewardTicketAmount, () =>
                 {
                     if (isGiftRewardAvailable && giftReward != null && giftItem != null)
                     {
@@ -472,7 +472,8 @@ public class MflixUIDailyRewards : MonoBehaviour
                     episodesSpawner.topPanel.HideTopPanel(0.3f);
                 }
 
-                SetupGiftRewards();
+                if(isRewardAvailable)
+                    SetupGiftRewards();
             }
 
             CheckTimeDifference();
@@ -537,6 +538,7 @@ public class MflixUIDailyRewards : MonoBehaviour
         giftCollectButton.interactable = true;
 
         giftDayText.text = string.Format("दिन {0}", MflixDailyRewards.GetHindiNumber(giftReward.dayToReward.ToString()));
+        giftDayText.GetComponent<SiddhantaFixer>().FixTexts();
 
         giftDiamondAmount = giftReward.giftDiamondAmount;
         giftTicketAmount = giftReward.giftTicketAmount;
@@ -586,9 +588,9 @@ public class MflixUIDailyRewards : MonoBehaviour
         rewardSeq.append(() =>
         {
             episodesSpawner.topPanel.ShowTopPanel();
-            episodesSpawner.diamondsPool.PlayDiamondsAnimationDeposit(giftDiamondPanel, episodesSpawner.topPanel.diamondsPanelIcon, giftDiamondAmount, giftDiamondAmount, () =>
+            episodesSpawner.diamondsPool.PlayDiamondsAnimationDeposit(giftDiamondPanel, episodesSpawner.topPanel.diamondsPanelIcon, giftDiamondAmount >= 30f ? 10 : giftDiamondAmount, giftDiamondAmount, () =>
             {
-                episodesSpawner.diamondsPool.PlayTicketsAnimationDeposit(giftTicketPanel, episodesSpawner.topPanel.ticketsPanelIcon, giftTicketAmount, () =>
+                episodesSpawner.diamondsPool.PlayTicketsAnimationDeposit(giftTicketPanel, episodesSpawner.topPanel.ticketsPanelIcon, giftTicketAmount >= 15f ? 10 : giftTicketAmount, giftTicketAmount, () =>
                 {
                     giftPanelMain.interactable = false;
                     giftPanelMain.blocksRaycasts = false;

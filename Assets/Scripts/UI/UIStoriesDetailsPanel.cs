@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -48,9 +49,21 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     public EpisodesSpawner episodesSpawner;
     public Button startNowButton;
 
+    [Header("Ask Next Episode Panel")]
+    public CanvasGroup nextEpAskPanelCanvasGroup;
+    public Transform nextEpAskPanel;
+    public Transform nextEpTicketPanel;
+    public Button nextEpYesButton;
+    public Button nextEpNoButton;
+
     private bool isShown;
+    public bool IsShown { get { return isShown; } }
+
     private StoryData storyData;
     private StoriesDBItem storyItem;
+
+    private List<UIEpisodeItem> episodeItemsList = new List<UIEpisodeItem>();
+    private UIEpisodeItem selectedEpisodeItem;
 
     private LTSeq moveSeq;
 
@@ -58,6 +71,25 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
     public static event Action<string> OnStoryLiked;
     public static event Action<string> OnStoryUnliked;
+
+    private void Awake()
+    {
+        if(nextEpAskPanelCanvasGroup)
+        {
+            nextEpAskPanelCanvasGroup.alpha = 0;
+            nextEpAskPanelCanvasGroup.interactable = false;
+            nextEpAskPanelCanvasGroup.blocksRaycasts = false;
+        }
+
+        if (nextEpAskPanel)
+            nextEpAskPanel.localScale = Vector3.zero;
+
+        if (nextEpYesButton)
+            nextEpYesButton.onClick.AddListener(OnNextEpisodeYesButton);
+
+        if (nextEpNoButton)
+            nextEpNoButton.onClick.AddListener(OnNextEpisodeNoButton);
+    }
 
     private void Start()
     {
@@ -133,7 +165,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             episodesSpawner.FadeOutBlackScreen();        
     }
 
-    private void Update()
+    /*private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape))
         {
@@ -146,7 +178,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
                 Application.Quit();
             }
         }
-    }
+    }*/
 
     private void ShowPanel()
     {
@@ -172,8 +204,9 @@ public class UIStoriesDetailsPanel : MonoBehaviour
         if (storyData == null)
             storyData = _storyData;
 
+        episodesSpawner.storyDataKey = storyItem.storyProgressFileName;        
         //If it's a short story (only 1 episode) then load immediately
-        if(storyItem.isShortStory)
+        if (storyItem.isShortStory)
         {
             isShown = false;
 
@@ -339,6 +372,28 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             {
                 UIEpisodeItem episodeItemInstance = Instantiate(episodeItemPrefab, episodeContainer);
                 episodeItemInstance.Setup(i + 1, storyItem, storyItem.storyEpisodesKeys[i], storyItem.storyProgressFileName, storyData, this);
+
+                episodeItemsList.Add(episodeItemInstance);
+            }
+
+            if(episodeItemsList.Count > 0)
+            {
+                for (int i = 0; i < episodeItemsList.Count; i++)
+                {
+                    if(episodeItemsList[i] != null)
+                    {
+                        if (i + 1 < episodeItemsList.Count - 1)
+                        {
+                            if(episodeItemsList[i].EpisodesData.isUnlocked &&
+                                episodeItemsList[i].EpisodesData.isFinished &&
+                                !episodeItemsList[i + 1].EpisodesData.isUnlocked)
+                            {
+                                episodeItemsList[i + 1].AllowPaymentUnlockable();
+                                break;
+                            }
+                        }
+                    }
+                }
             }
 
             float totalEpisodesItems = episodeContainer.childCount - 1;            
@@ -370,6 +425,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
         if (episodeContainer == null)
             return;
 
+        episodeItemsList.Clear();
         if (episodeContainer.childCount > 0)
         {
             foreach (Transform episodeItem in episodeContainer)
@@ -528,4 +584,81 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             OnStoryLiked?.Invoke(storyItem.storyTitleEnglish);
         }
     }
+
+    //===============================================================================================================
+
+    public void ShowNextEpisodeAskPanel()
+    {
+        if (nextEpAskPanelCanvasGroup == null || nextEpAskPanel == null)
+            return;
+
+        nextEpAskPanelCanvasGroup.interactable = true;
+        nextEpAskPanelCanvasGroup.blocksRaycasts = true;
+
+        LeanTween.alphaCanvas(nextEpAskPanelCanvasGroup, 1f, 0.5f).setEaseInOutSine();
+        LeanTween.scale(nextEpAskPanel.gameObject, Vector3.one, 0.5f).setEaseOutBack();
+    }
+
+    public void ShowNextEpisodeAskPanel(UIEpisodeItem _episodeItem)
+    {
+        if (nextEpAskPanelCanvasGroup == null || nextEpAskPanel == null)
+            return;
+
+        nextEpAskPanelCanvasGroup.interactable = true;
+        nextEpAskPanelCanvasGroup.blocksRaycasts = true;
+
+        LeanTween.alphaCanvas(nextEpAskPanelCanvasGroup, 1f, 0.4f).setEaseInOutSine();
+        LeanTween.scale(nextEpAskPanel.gameObject, Vector3.one, 0.4f).setEaseOutBack();
+
+        selectedEpisodeItem = _episodeItem;
+    }
+
+    public void HideNextEpisodeAskPanel()
+    {
+        if (nextEpAskPanelCanvasGroup == null || nextEpAskPanel == null)
+            return;
+
+        nextEpAskPanelCanvasGroup.interactable = false;
+        nextEpAskPanelCanvasGroup.blocksRaycasts = false;
+
+        LeanTween.alphaCanvas(nextEpAskPanelCanvasGroup, 0, 0.4f).setEaseInOutSine();
+        LeanTween.scale(nextEpAskPanel.gameObject, Vector3.zero, 0.4f).setEaseInBack();
+
+        selectedEpisodeItem = null;
+    }
+
+    private void OnNextEpisodeYesButton()
+    {
+        if (nextEpAskPanelCanvasGroup == null)
+            return;
+
+        nextEpAskPanelCanvasGroup.interactable = false;
+        nextEpAskPanelCanvasGroup.blocksRaycasts = false;
+
+        PlayButtonClickSound();
+
+        episodesSpawner.diamondsPool.PlayTicketsAnimationDebit(nextEpTicketPanel, episodesSpawner.topPanel.ticketsPanelIcon, 1, 1, () =>
+        {
+            if(selectedEpisodeItem != null)
+            {
+                selectedEpisodeItem.EpisodesData.isUnlocked = true;
+                selectedEpisodeItem.OnEpisodePlayClick(false);
+            }
+        }, 150f, Color.red);
+    }
+
+    private void OnNextEpisodeNoButton()
+    {
+        if (nextEpAskPanelCanvasGroup == null)
+            return;
+
+        nextEpAskPanelCanvasGroup.interactable = false;
+        nextEpAskPanelCanvasGroup.blocksRaycasts = false;
+
+        PlayButtonClickSound();
+
+        HideNextEpisodeAskPanel();
+    }
+
+    //===============================================================================================================
 }

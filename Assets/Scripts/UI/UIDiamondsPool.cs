@@ -225,7 +225,7 @@ public class UIDiamondsPool : MonoBehaviour
         diamondDebitText.gameObject.SetActive(debitMode);
         diamondDebitText.color = textColor ?? Color.white;
 
-        float perDiamondAmount = totalDiamonds / diamondsToEmit;
+        float perDiamondAmount = (float)totalDiamonds / (float)diamondsToEmit;
         if (debitMode)
             diamondDebitText.text = "-" + Mathf.RoundToInt(perDiamondAmount).ToString();
 
@@ -258,18 +258,18 @@ public class UIDiamondsPool : MonoBehaviour
     //============================================================================================================
 
     //When player gets Tickets rewards
-    public void PlayTicketsAnimationDeposit(Transform start, Transform end, int totalTickets, Action callback, float spreadRadius = 300f)
+    public void PlayTicketsAnimationDeposit(Transform start, Transform end, int ticketsToEmit, int totalTickets, Action callback, float spreadRadius = 300f)
     {
-        StartCoroutine(PlayTicketsAnimationRoutineDeposit(start, end, totalTickets, callback, spreadRadius));
+        StartCoroutine(PlayTicketsAnimationRoutineDeposit(start, end, ticketsToEmit, totalTickets, callback, spreadRadius));
     }
 
-    private IEnumerator PlayTicketsAnimationRoutineDeposit(Transform start, Transform end, int totalTickets, Action callback, float spreadRadius)
+    private IEnumerator PlayTicketsAnimationRoutineDeposit(Transform start, Transform end, int ticketsToEmit, int totalTickets, Action callback, float spreadRadius)
     {
         yield return new WaitForSeconds(0.5f);
 
         for (int i = 0; i < totalTickets && (ticketsList.Count > 0); i++)
         {
-            MoveTicket(ticketsList[i], false, ticketsDebitTextList[i], start, end, totalTickets, spreadRadius);
+            MoveTicket(ticketsList[i], false, ticketsDebitTextList[i], start, end, ticketsToEmit, totalTickets, spreadRadius);
 
             yield return new WaitForSeconds(0.1f);
         }
@@ -282,7 +282,7 @@ public class UIDiamondsPool : MonoBehaviour
     //============================================================================================================
 
     //When player buys something using Tickets
-    public void PlayTicketsAnimationDebit(Transform start, Transform end, int totalTickets, Action callback, float spreadRadius = 300f, Color? textColor = null)
+    public void PlayTicketsAnimationDebit(Transform start, Transform end, int ticketsToEmit, int totalTickets, Action callback, float spreadRadius = 300f, Color? textColor = null)
     {
         if (FirebaseFirestoreOffline.instance != null)
         {
@@ -290,16 +290,16 @@ public class UIDiamondsPool : MonoBehaviour
                 return;
         }
 
-        StartCoroutine(PlayTicketsAnimationDebitRoutine(start, end, totalTickets, callback, spreadRadius, textColor));
+        StartCoroutine(PlayTicketsAnimationDebitRoutine(start, end, ticketsToEmit, totalTickets, callback, spreadRadius, textColor));
     }
 
-    private IEnumerator PlayTicketsAnimationDebitRoutine(Transform start, Transform end, int totalTickets, Action callback, float spreadRadius, Color? textColor = null)
+    private IEnumerator PlayTicketsAnimationDebitRoutine(Transform start, Transform end, int ticketsToEmit, int totalTickets, Action callback, float spreadRadius, Color? textColor = null)
     {
         yield return new WaitForSeconds(0.5f);
 
         for (int i = 0; i < totalTickets && (ticketsList.Count > 0); i++)
         {
-            MoveTicket(ticketsList[i], true, ticketsDebitTextList[i], start, end, totalTickets, spreadRadius, textColor);
+            MoveTicket(ticketsList[i], true, ticketsDebitTextList[i], start, end, ticketsToEmit, totalTickets, spreadRadius, textColor);
 
             yield return new WaitForSeconds(0.1f);
         }
@@ -311,7 +311,7 @@ public class UIDiamondsPool : MonoBehaviour
 
     //============================================================================================================
 
-    private void MoveTicket(Transform ticket, bool debitMode, TextMeshProUGUI ticketDebitText, Transform start, Transform end, int totalTickets, float spreadRadius, Color? textColor = null)
+    private void MoveTicket(Transform ticket, bool debitMode, TextMeshProUGUI ticketDebitText, Transform start, Transform end, int ticketsToEmit, int totalTickets, float spreadRadius, Color? textColor = null)
     {
         if (!ticket.gameObject.activeSelf)
             ticket.gameObject.SetActive(true);
@@ -319,7 +319,7 @@ public class UIDiamondsPool : MonoBehaviour
         ticketDebitText.gameObject.SetActive(debitMode);
         ticketDebitText.color = textColor ?? Color.white;
 
-        float perTicketAmount = totalTickets / totalTickets;
+        float perTicketAmount = (float)totalTickets / (float)ticketsToEmit;
         if (debitMode)
             ticketDebitText.text = "-" + Mathf.RoundToInt(perTicketAmount).ToString();
 

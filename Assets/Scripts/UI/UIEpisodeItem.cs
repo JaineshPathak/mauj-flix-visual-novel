@@ -19,10 +19,16 @@ public class UIEpisodeItem : MonoBehaviour
     public Button playButton;
     public Button lockButton;
 
+    [Space(15)]
+
+    public Image episodeTicketIcon;
+
     private UIStoriesDetailsPanel detailsPanel;
     private StoryData storyData;
     private StoriesDBItem storyItem;
     private EpisodeData episodeData;
+
+    public EpisodeData EpisodesData { get { return episodeData; } }
 
     private int episodeNumber;
 
@@ -62,7 +68,28 @@ public class UIEpisodeItem : MonoBehaviour
         }        
     }
 
-    private void OnEpisodePlayClick()
+    public void AllowPaymentUnlockable()
+    {
+        if (episodeTicketIcon == null || lockButton == null)
+            return;
+
+        episodeTicketIcon.gameObject.SetActive(true);
+
+        lockButton.interactable = true;
+        lockButton.onClick.AddListener(OnLockedPaymentButton);
+    }
+
+    private void OnLockedPaymentButton()
+    {
+        //lockButton.interactable = false;
+        if (EpisodesSpawner.instance == null)
+            return;
+
+        detailsPanel.PlayButtonClickSound();
+        detailsPanel.ShowNextEpisodeAskPanel(this);
+    }
+
+    public void OnEpisodePlayClick()
     {
         if (detailsPanel == null)
             return;
@@ -87,6 +114,49 @@ public class UIEpisodeItem : MonoBehaviour
         SerializationManager.SaveAsTextFile(episodeFileName, saveString);
 
         detailsPanel.PlayButtonClickSound();
+        detailsPanel.LoadStoryEpisode();
+
+        //Send a "[StoryTitle]_[episodeN]_playbtn" event
+        if (SDKManager.instance != null && EpisodesSpawner.instance != null)
+        {
+            string storyTitleProper = EpisodesSpawner.instance.storyTitleEnglish;
+            storyTitleProper = storyTitleProper.Replace(" ", "");
+
+            SDKEventStringData eventPlayButtonEpisode;
+            eventPlayButtonEpisode.eventParameterName = storyTitleProper;
+            eventPlayButtonEpisode.eventParameterData = "episode" + episodeNumber.ToString();
+
+            SDKManager.instance.SendEvent(SDKEventsNames.episodePlayBtnEventName, eventPlayButtonEpisode);
+        }
+    }
+
+    public void OnEpisodePlayClick(bool playSound = true)
+    {
+        if (detailsPanel == null)
+            return;
+
+        if (episodeNumber == 1 && EpisodesSpawner.instance != null)
+        {
+            if (!EpisodesSpawner.instance.playerData.ContainsStoryStarted(storyItem.storyTitleEnglish) &&
+                !EpisodesSpawner.instance.playerData.ContainsStoryCompleted(storyItem.storyTitleEnglish))
+            {
+                EpisodesSpawner.instance.playerData.AddStoryStarted(storyItem.storyTitleEnglish);
+                SaveLoadGame.SavePlayerData(EpisodesSpawner.instance.playerData);
+            }
+        }
+
+        if (detailsPanel.episodesSpawner != null)
+            detailsPanel.episodesSpawner.currentEpisodeNumber = episodeNumber;
+
+        storyData.currentEpisodeKey = episodeKey;
+        storyData.currentEpisodeIndex = storyData.GetIndexFromEpisodeData(episodeData);
+
+        string saveString = JsonUtility.ToJson(storyData, true);
+        SerializationManager.SaveAsTextFile(episodeFileName, saveString);
+
+        if (playSound)
+            detailsPanel.PlayButtonClickSound();
+
         detailsPanel.LoadStoryEpisode();
 
         //Send a "[StoryTitle]_[episodeN]_playbtn" event

@@ -37,6 +37,7 @@ public class UIBottomPanel : MonoBehaviour
     [Header("Panels")]
     [SerializeField] private CanvasGroup[] panelsList;
 
+    private EpisodesSpawner episodesSpawner;    
     private bool playSoundFirst = false;
     private int lastButtonIndex;
 
@@ -57,6 +58,9 @@ public class UIBottomPanel : MonoBehaviour
 
     private void Start()
     {
+        if (EpisodesSpawner.instance != null)
+            episodesSpawner = EpisodesSpawner.instance;
+
         SelectPanel(0);     //Home Panel
 
         /*if (EpisodesSpawner.instance != null && EpisodesSpawner.instance.playerData != null)
@@ -79,6 +83,19 @@ public class UIBottomPanel : MonoBehaviour
             }
         }
     }*/
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (lastButtonIndex != 0)
+                SelectPanel(0);
+            else if (detailsPanel.IsShown)
+                detailsPanel.MoveHidePanel();
+            else
+                episodesSpawner.ShowAskToQuitPanel();
+        }
+    }
 
     public void SelectPanel(int index)
     {

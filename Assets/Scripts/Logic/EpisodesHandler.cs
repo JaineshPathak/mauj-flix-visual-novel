@@ -30,8 +30,10 @@ public class EpisodesHandler : MonoBehaviour
 
     private StoryData storyData;
     private EpisodeData episodeData;
+    [HideInInspector] public EpisodeData NextEpisodeData;
 
-    private MusicManager musicManager;    
+    private MusicManager musicManager;
+
 
     private void OnEnable()
     {
@@ -349,8 +351,7 @@ public class EpisodesHandler : MonoBehaviour
         //Episode was finished. Save the data and copy this Data to next Episode Data if any
         episodeData.isFinished = true;
         episodeData.isUnlocked = true;
-
-        episodeData.currentBlocksTotal = episodeData.currentBlocksVisited.Count;        
+        episodeData.currentBlocksTotal = episodeData.currentBlocksVisited.Count;
 
         storyData.blocksGrandDone = 0;
         for (int i = 0; i < storyData.episodeDataList.Count; i++)
@@ -378,7 +379,11 @@ public class EpisodesHandler : MonoBehaviour
 
             EpisodeData nextEpisodeData = storyData.GetEpisodeDataFromIndex(storyData.currentEpisodeIndex);
             nextEpisodeData.isFinished = false;
-            nextEpisodeData.isUnlocked = true;
+            
+            if(!nextEpisodeData.isUnlocked)
+                nextEpisodeData.isUnlocked = false;     //v0.2 Added
+            //nextEpisodeData.isUnlocked = true;        //Pre v0.2            
+            
             nextEpisodeData.currentBlockID = 0;
             nextEpisodeData.currentCommandID = 0;
             nextEpisodeData.lastCameraPosition = Vector3.zero;
@@ -390,7 +395,9 @@ public class EpisodesHandler : MonoBehaviour
                 nextEpisodeData.variableDatas[i].variableKey = episodeData.variableDatas[i].variableKey;
                 nextEpisodeData.variableDatas[i].variableValue = episodeData.variableDatas[i].variableValue;
                 nextEpisodeData.variableDatas[i].variableType = episodeData.variableDatas[i].variableType;
-            }   
+            }
+
+            NextEpisodeData = nextEpisodeData;
         }
         else //All Episodes are completed
         {
@@ -500,7 +507,7 @@ public class EpisodesHandler : MonoBehaviour
         }
     }
 
-    private void SaveStoryData()
+    public void SaveStoryData()
     {
         string saveString = JsonUtility.ToJson(storyData, true);
         SerializationManager.SaveAsTextFile(episodesSpawner.storyDataKey, saveString);

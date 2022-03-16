@@ -27,7 +27,14 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
     public RectTransform middlePanelPart2;
     public CanvasGroup storyTextPart2;
     
+    [Space(10)]
+
     public Button nextEpisodeButton;
+    public Transform nextEpisodeTicketIcon;
+    public RectTransform nextEpisodeText;
+
+    [Space(10)]
+
     public Button noThanksButton;
 
     [Header("VFX")]
@@ -40,6 +47,7 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
     private CanvasGroup noThanksButtonCanvasGrp;
 
     private bool isTriggered;
+    private bool debitTicketsNextEpisode;
     private LTSeq endSeq;
 
     private void Awake()
@@ -176,7 +184,20 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         }).setEase(LeanTweenType.easeInOutBack));
         //seqPart2.insert(LeanTween.moveLocalX(middlePanelPartTwo.gameObject, 0, 0.7f).setEase(LeanTweenType.easeInOutBack));
         seqPart2.append(LeanTween.alphaCanvas(storyTextPart2, 1f, 0.5f));
-        seqPart2.append(LeanTween.scale(nextEpisodeButton.gameObject, Vector3.one, 0.4f).setEase(outBackMore));
+        seqPart2.append(LeanTween.scale(nextEpisodeButton.gameObject, Vector3.one, 0.4f).setOnStart( () => 
+        {
+            //If the next episode is already unlocked i.e If User is playing the already unlocked episode again, then don't debit the tickets
+            //If not unlocked then do debit the tickets and unlock the episode
+            if(episodesHandler != null && episodesHandler.NextEpisodeData != null)
+                debitTicketsNextEpisode = episodesHandler.NextEpisodeData.isUnlocked ? false : true;
+
+            if (nextEpisodeTicketIcon && nextEpisodeText)
+            {
+                nextEpisodeTicketIcon.gameObject.SetActive(debitTicketsNextEpisode);
+                nextEpisodeText.anchoredPosition = new Vector2(0, nextEpisodeText.anchoredPosition.y);
+            }
+
+        }).setEase(outBackMore));
         seqPart2.append(3f);
         seqPart2.append(LeanTween.alphaCanvas(noThanksButtonCanvasGrp, 1f, 1f).setOnStart(() =>
         {
@@ -200,11 +221,18 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         noThanksButton.interactable = false;
         nextEpisodeButton.interactable = false;
 
-        episodesSpawner.diamondsPool.PlayTicketsAnimationDebit(nextEpisodeButton.transform, episodesSpawner.topPanel.ticketsPanelIcon, 1, () =>
+        if (debitTicketsNextEpisode)
         {
-            StartCoroutine(OnNextEpisodeButtonRoutine());
-        }, 200f, Color.red);
-
+            episodesSpawner.diamondsPool.PlayTicketsAnimationDebit(nextEpisodeButton.transform, episodesSpawner.topPanel.ticketsPanelIcon, 1, 1, () =>
+            {
+                StartCoroutine(OnNextEpisodeButtonRoutine());
+            }, 200f, Color.red);
+        }
+        else
+        {
+            episodesSpawner.topPanel.HideTopPanel(0.3f, 0.7f);
+            episodesSpawner.StartLoadingStoryScene();
+        }
     }
 
     private IEnumerator OnNextEpisodeButtonRoutine()
@@ -213,7 +241,14 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
 
         yield return new WaitForSeconds(0.5f);
 
-        episodesSpawner.StartLoadingStoryScene();
+        //After Tickets Payment, unlock and save the Next Episode Data and Start Loading next episode
+        if(episodesHandler != null && episodesHandler.NextEpisodeData != null)
+        {
+            episodesHandler.NextEpisodeData.isUnlocked = true;
+            episodesHandler.SaveStoryData();
+            
+            episodesSpawner.StartLoadingStoryScene();
+        }
     }
 
     private void OnNoThanksButton()

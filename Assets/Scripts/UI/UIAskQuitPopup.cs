@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using Fungus;
 
@@ -39,7 +37,7 @@ public class UIAskQuitPopup : MonoBehaviour
         if (episodesSpawner == null)
             episodesSpawner = EpisodesSpawner.instance;
 
-        isOn = !isOn;        
+        isOn = !isOn;
 
         if (isOn)
         {
