@@ -46,6 +46,7 @@ public class FirebaseFirestoreHandler : MonoBehaviour
     {
         FirebaseAuthHandler.OnFirebaseUserAccountLoaded += OnFirebaseUserLoaded;
         FirebaseAuthHandler.OnFirebaseUserAccountDeleted += OnFirebaseUserDeleted;
+        FirebaseAuthHandler.OnFirebaseUserAccountSignedIn += OnFirebaseUserSignedIn;
 
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
@@ -54,6 +55,7 @@ public class FirebaseFirestoreHandler : MonoBehaviour
     {
         FirebaseAuthHandler.OnFirebaseUserAccountLoaded -= OnFirebaseUserLoaded;
         FirebaseAuthHandler.OnFirebaseUserAccountDeleted -= OnFirebaseUserDeleted;
+        FirebaseAuthHandler.OnFirebaseUserAccountSignedIn -= OnFirebaseUserSignedIn;
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
@@ -62,6 +64,7 @@ public class FirebaseFirestoreHandler : MonoBehaviour
     {
         FirebaseAuthHandler.OnFirebaseUserAccountLoaded -= OnFirebaseUserLoaded;
         FirebaseAuthHandler.OnFirebaseUserAccountDeleted -= OnFirebaseUserDeleted;
+        FirebaseAuthHandler.OnFirebaseUserAccountSignedIn -= OnFirebaseUserSignedIn;
 
         //firestoreDBListener.Stop();
 
@@ -247,11 +250,28 @@ public class FirebaseFirestoreHandler : MonoBehaviour
         });*/
     }
 
+    private void OnFirebaseUserSignedIn(FirebaseUser user)
+    {
+        if (firestoreOffline != null)
+        {
+            userRef = firestoreDB.Collection(devicePlatformCollection).Document(user.UserId);
+            userRef.GetSnapshotAsync().ContinueWith(getTask =>
+            {
+                DocumentSnapshot snapShot = getTask.Result;
+                if (snapShot.Exists)
+                {
+                    firestoreUserData = snapShot.ConvertTo<FirestoreUserData>();
+                    firestoreOffline.UpdateFirebaseFirestoreData(firestoreUserData.diamondsAmount, firestoreUserData.ticketsAmount);
+                }
+            });
+        }
+    }
+
     public void GetUserDiamondsOnSceneLoad()
     {
         userRef = firestoreDB.Collection(devicePlatformCollection).Document(firebaseUser.UserId);
         userRef.GetSnapshotAsync().ContinueWith(task => 
-        { 
+        {
             if(task.IsCompleted)
             {
                 firestoreUserData = task.Result.ConvertTo<FirestoreUserData>();
@@ -300,6 +320,11 @@ public class FirebaseFirestoreHandler : MonoBehaviour
     public string GetUserTicketsAmount()
     {
         return AbbrevationUtility.AbbreviateNumber(firestoreUserData.ticketsAmount);
+    }
+
+    public int GetUserTicketsAmountInt()
+    {
+        return Mathf.RoundToInt(firestoreUserData.ticketsAmount);
     }
 
     public void DepositTicketsAmount(float addAmount)

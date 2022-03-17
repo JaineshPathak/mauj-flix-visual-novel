@@ -102,6 +102,31 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
         base.Awake();
     }
 
+    private void OnEnable()
+    {
+        AdsManager.OnIronSrcRewardVideoComplete += OnRewardAdComplete;
+    }
+
+    private void OnDisable()
+    {
+        AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+    }
+
+    private void OnDestroy()
+    {
+        AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+    }
+
+    private void OnRewardAdComplete(string placementName)
+    {
+        switch (placementName)
+        {
+            case AdsNames.rewardFreeStoryEnd:
+                OnAdFreeStoryEnd();
+                break;
+        }
+    }
+
     private void Start()
     {
         if (EpisodesSpawner.instance != null)
@@ -307,6 +332,23 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
     private void OnPlayEndingButtonAd()
     {
         //TODO: Add Iron Source Integration
+#if UNITY_EDITOR
+        OnAdFreeStoryEnd();
+#elif UNITY_ANDROID || UNITY_IOS
+        if (AdsManager.instance == null)
+            return;
+
+        AdsManager.instance.ShowRewardAd(AdsNames.rewardFreeStoryEnd);
+#endif
+    }
+
+    private void OnAdFreeStoryEnd()
+    {
+        noThanksButton.interactable = false;
+        playEndingButton.interactable = false;
+        playEndingButtonAd.interactable = false;
+
+        StartCoroutine(OnStoryEndDiamondDebitCompleteRoutine());
     }
 
     private void OnNoThanksButton()

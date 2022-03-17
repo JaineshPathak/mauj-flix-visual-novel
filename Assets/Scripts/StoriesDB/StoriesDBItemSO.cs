@@ -43,7 +43,7 @@ public class StoriesDBItemSO : ScriptableObject
     [Header("Story Episodes Branch Keys")]
     public AssetReferenceGameObject[] storyEpisodesBranchkeys;
 
-    private StoriesDBItem item = null;
+    //private StoriesDBItem item = null;
 
     /*private void OnValidate()
     {
@@ -81,7 +81,7 @@ public class StoriesDBItemSO : ScriptableObject
 
     public StoriesDBItem GetStoriesDBItem()
     {
-        item = new StoriesDBItem();
+        StoriesDBItem item = new StoriesDBItem();
 
         item.isStoryEnabled = isStoryEnabled;
         item.isShortStory = isShortStory;
@@ -112,9 +112,9 @@ public class StoriesDBItemSO : ScriptableObject
             }
         }
 
+        Array.Resize(ref item.storyBranchEpisodesKeys, this.storyEpisodesBranchkeys.Length);
         if(this.storyEpisodesBranchkeys.Length > 0)
-        {        
-            Array.Resize(ref item.storyBranchEpisodesKeys, this.storyEpisodesBranchkeys.Length);
+        {
             for (int i = 0; i < storyEpisodesBranchkeys.Length; i++)
             {
                 if(this.storyEpisodesBranchkeys[i] != null)

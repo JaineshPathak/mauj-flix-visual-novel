@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Fungus;
+using System;
 //using underDOGS.SDKEvents;
 
 public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
@@ -89,6 +90,31 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
         }
 
         base.Awake();
+    }
+
+    private void OnEnable()
+    {        
+        AdsManager.OnIronSrcRewardVideoComplete += OnRewardAdComplete;
+    }
+
+    private void OnDisable()
+    {        
+        AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+    }
+
+    private void OnDestroy()
+    {
+        AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+    }
+
+    private void OnRewardAdComplete(string placementName)
+    {
+        switch(placementName)
+        {
+            case AdsNames.rewardFreeStoryBranchEnd:
+                OnAdFreeStoryBranchEnd();
+                break;
+        }
     }
 
     private void Start()
@@ -296,6 +322,24 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
     private void OnPlayEndingButtonAd()
     {
         //TODO: Add Iron Source Integration
+
+#if UNITY_EDITOR
+        OnAdFreeStoryBranchEnd();
+#elif UNITY_ANDROID || UNITY_IOS
+        if (AdsManager.instance == null)
+            return;
+
+        AdsManager.instance.ShowRewardAd(AdsNames.rewardFreeStoryBranchEnd);
+#endif
+    }
+
+    private void OnAdFreeStoryBranchEnd()
+    {
+        noThanksButton.interactable = false;
+        playEndingButton.interactable = false;
+        playEndingButtonAd.interactable = false;
+
+        StartCoroutine(OnBranchedDiamondDebitCompleteRoutine());
     }
 
     private void OnNoThanksButton()

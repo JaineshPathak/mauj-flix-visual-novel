@@ -19,6 +19,9 @@ public class MflixDailyRewards : DailyRewardsCore<MflixDailyRewards>
     public delegate void OnMFlixClaimPrize(int day);
     public OnMFlixClaimPrize onMFlixClaimPrize;
 
+    public delegate void OnMFlixMissedPrize();
+    public OnMFlixMissedPrize onMFlixMissedPrize;
+
     private const string LAST_REWARD_TIME = "LastRewardTime";
     private const string LAST_REWARD = "LastReward";
     private const string LAST_GIFT_REWARD_DAY = "LastGiftRewardDay";
@@ -118,8 +121,11 @@ public class MflixDailyRewards : DailyRewardsCore<MflixDailyRewards>
             if (days >= 2 && resetPrize)
             {
                 // The player loses the following day reward and resets the prize
+                if (onMFlixMissedPrize != null)
+                    onMFlixMissedPrize();
+
                 availableReward = 1;
-                lastReward = 0;
+                lastReward = 0;                
                 //Debug.Log("ID " + instanceId + " Prize reset ");
             }
         }

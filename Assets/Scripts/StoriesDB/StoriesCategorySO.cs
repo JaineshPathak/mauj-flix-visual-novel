@@ -14,11 +14,11 @@ public class StoriesCategorySO : ScriptableObject
     public int categoryIndex;
     public StoriesDBItemSO[] storiesDBItems;
 
-    private StoriesCategory category;
+    //private StoriesCategory category;
 
     public StoriesCategory GetStoriesCategory()
     {
-        category = new StoriesCategory();
+        StoriesCategory category = new StoriesCategory();
 
         category.isEnabled = this.isEnabled;
         category.isForShortStories = this.isForShortStories;

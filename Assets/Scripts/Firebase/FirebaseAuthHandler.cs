@@ -21,6 +21,7 @@ public class FirebaseAuthHandler : MonoBehaviour
 
     public static event Action<FirebaseUser> OnFirebaseUserAccountLoaded;
     public static event Action<FirebaseUser> OnFirebaseUserAccountDeleted;
+    public static event Action<FirebaseUser> OnFirebaseUserAccountSignedIn;
 
     private GoogleSignInConfiguration configuration;
 
@@ -153,7 +154,34 @@ public class FirebaseAuthHandler : MonoBehaviour
 
                 UpdateUserEmail(GetEmailFromProviderID(DataPaths.firebaseAnonymousProviderID));
             }
-        });                    
+        });
+    }
+
+    public void OnGoogleSignOut(Action<Task> unlinkTaskCallback)
+    {
+        if (auth.CurrentUser == null || GetProviderID() != "google.com")
+            return;
+
+        auth.CurrentUser.UnlinkAsync("google.com").ContinueWith(unlinkTask =>
+        {
+            if (unlinkTask.IsCanceled)
+                Debug.Log("Firebase Auth: Unlinking Google Account Canceled");
+            else if (unlinkTask.IsFaulted)
+                Debug.Log("Firebase Auth: Unlinking Google Account Failed: " + unlinkTask.Exception);
+            else if (unlinkTask.IsCompleted)
+            {
+                Debug.Log("Firebase Auth: Unlinking Google Account Successful");
+
+                userCurrent = unlinkTask.Result;
+                OnFirebaseUserAccountLoaded?.Invoke(userCurrent);
+
+                GoogleSignIn.DefaultInstance.SignOut();
+
+                UpdateUserEmail(GetEmailFromProviderID(DataPaths.firebaseAnonymousProviderID));
+
+                unlinkTaskCallback?.Invoke(unlinkTask);
+            }
+        });
     }
 
     public void OnGoogleSignIn()
@@ -173,7 +201,7 @@ public class FirebaseAuthHandler : MonoBehaviour
             else if (task.IsFaulted)
                 signInCompleted.SetException(task.Exception);
             else
-            {
+            {                
                 Credential googleCredentials = GoogleAuthProvider.GetCredential(((Task<GoogleSignInUser>)task).Result.IdToken, null);
                 /*auth.CurrentUser.LinkWithCredentialAsync(googleCredentials).ContinueWith(signTask =>
                 {                    
@@ -211,8 +239,116 @@ public class FirebaseAuthHandler : MonoBehaviour
 
                         UpdateUserEmail(GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID));
                         GetProvidersDataFromEmail(GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID));
+
+                        OnFirebaseUserAccountSignedIn?.Invoke(userCurrent);
                     }
                 }); 
+            }
+        });
+    }
+
+    public void OnGoogleSignIn(Action<Task<GoogleSignInUser>> completedTaskCallback)
+    {
+        GoogleSignIn.Configuration = configuration;
+        GoogleSignIn.Configuration.RequestIdToken = true;
+        GoogleSignIn.Configuration.RequestProfile = true;
+        GoogleSignIn.Configuration.RequestEmail = true;
+
+        Task<GoogleSignInUser> signIn = GoogleSignIn.DefaultInstance.SignIn();
+
+        TaskCompletionSource<FirebaseUser> signInCompleted = new TaskCompletionSource<FirebaseUser>();
+        signIn.ContinueWith(task =>
+        {
+            if (task.IsCanceled)
+                signInCompleted.SetCanceled();
+            else if (task.IsFaulted)
+                signInCompleted.SetException(task.Exception);
+            else
+            {
+                completedTaskCallback?.Invoke(signIn);
+
+                Credential googleCredentials = GoogleAuthProvider.GetCredential(((Task<GoogleSignInUser>)task).Result.IdToken, null);
+                /*auth.CurrentUser.LinkWithCredentialAsync(googleCredentials).ContinueWith(signTask =>
+                {                    
+                    if (signTask.IsCanceled)
+                    {
+                        Debug.LogError("Firebase Auth: LinkWithCredentialAsync was canceled.");
+                        return;
+                    }
+                    else if (signTask.IsFaulted)
+                    {
+                        Debug.LogError("Firebase Auth: LinkWithCredentialAsync encountered an error: " + signTask.Exception);
+                        return;
+                    }
+                    else if (signTask.IsCompleted)
+                    {
+                        userCurrent = signTask.Result;
+                        Debug.LogFormat("Firebase Auth: Credentials successfully linked to Firebase user: {0} ({1})", userCurrent.DisplayName, userCurrent.UserId);
+
+                        OnFirebaseUserAccountLoaded?.Invoke(userCurrent);
+
+                        UpdateUserEmail(GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID));
+
+                        GetProvidersDataFromEmail(GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID));
+                    }
+                });*/
+
+                auth.SignInWithCredentialAsync(googleCredentials).ContinueWith(signTask =>
+                {
+                    if (signIn.IsCompleted)
+                    {
+                        userCurrent = signTask.Result;
+                        Debug.LogFormat("Firebase Auth: Credentials successfully linked to Firebase user: {0} ({1})", userCurrent.UserId, userCurrent.DisplayName);
+
+                        OnFirebaseUserAccountLoaded?.Invoke(userCurrent);
+
+                        UpdateUserEmail(GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID));
+                        GetProvidersDataFromEmail(GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID));
+
+                        OnFirebaseUserAccountSignedIn?.Invoke(userCurrent);
+                    }
+                });
+            }
+        });
+    }
+
+    public void OnGoogleSignInSilent(Action<Task<GoogleSignInUser>> completedTaskCallback)
+    {
+        GoogleSignIn.Configuration = configuration;
+        GoogleSignIn.Configuration.RequestIdToken = true;
+        GoogleSignIn.Configuration.RequestProfile = true;
+        GoogleSignIn.Configuration.RequestEmail = true;
+
+        Task<GoogleSignInUser> signIn = GoogleSignIn.DefaultInstance.SignInSilently();
+
+        TaskCompletionSource<FirebaseUser> signInCompleted = new TaskCompletionSource<FirebaseUser>();
+        signIn.ContinueWith(task =>
+        {
+            if (task.IsCanceled)
+                signInCompleted.SetCanceled();
+            else if (task.IsFaulted)
+                signInCompleted.SetException(task.Exception);
+            else
+            {
+                completedTaskCallback?.Invoke(signIn);
+
+                Credential googleCredentials = GoogleAuthProvider.GetCredential(((Task<GoogleSignInUser>)task).Result.IdToken, null);                
+
+                auth.SignInWithCredentialAsync(googleCredentials).ContinueWith(signTask =>
+                {
+                    if (signIn.IsCompleted)
+                    {
+                        userCurrent = signTask.Result;
+                        Debug.LogFormat("Firebase Auth: Google Credentials successfully linked to Firebase user: {0} ({1})", userCurrent.UserId, userCurrent.DisplayName);
+
+                        OnFirebaseUserAccountLoaded?.Invoke(userCurrent);
+
+                        UpdateUserEmail(GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID));
+                        GetProvidersDataFromEmail(GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID));
+
+                        OnFirebaseUserAccountSignedIn?.Invoke(userCurrent);
+                    }
+                });
             }
         });
     }
@@ -246,7 +382,7 @@ public class FirebaseAuthHandler : MonoBehaviour
                 Debug.Log("Firebase Auth: Getting Providers from Email task Failed: " + dataTask.Exception);
             else if (dataTask.IsCompleted)
             {
-                Debug.Log("Firebase Auth: Getting Providers from Email Task completed GIVING NOW!");
+                Debug.Log("Firebase Auth: Getting Providers from Email Task completed GIVING NOW:");
 
                 List<string> allProviders = ((IEnumerable<string>)dataTask.Result).ToList();
 

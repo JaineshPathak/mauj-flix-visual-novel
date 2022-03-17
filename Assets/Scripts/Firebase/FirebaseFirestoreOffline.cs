@@ -90,13 +90,29 @@ public class FirebaseFirestoreOffline : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    private void OnApplicationFocus(bool focus)
+    {
+        if (firestoreHandler == null && FirebaseFirestoreHandler.instance != null)
+            firestoreHandler = FirebaseFirestoreHandler.instance;
+
+        firestoreHandler.PushOfflineData(DiamondsAmount, TicketsAmount);
+    }
+
+    private void OnApplicationPause(bool pause)
+    {
+        if (firestoreHandler == null && FirebaseFirestoreHandler.instance != null)
+            firestoreHandler = FirebaseFirestoreHandler.instance;
+
+        firestoreHandler.PushOfflineData(DiamondsAmount, TicketsAmount);
+    }
+
     private void OnApplicationQuit()
     {
         if (firestoreHandler == null && FirebaseFirestoreHandler.instance != null)
             firestoreHandler = FirebaseFirestoreHandler.instance;
 
         firestoreHandler.PushOfflineData(DiamondsAmount, TicketsAmount);
-    }    
+    }
 
     //Called from FirestoreHandler, copy the diamonds and tickets fetched from firestore database server
     public void InitFirebaseFirestoreOffline(FirebaseFirestoreHandler _firestoreHandler, float _diamondsAmount, float _ticketsAmount)
@@ -107,6 +123,12 @@ public class FirebaseFirestoreOffline : MonoBehaviour
         isFirestoreOfflineInitialized = true;
 
         firestoreHandler = _firestoreHandler;
+        DiamondsAmount = _diamondsAmount;
+        TicketsAmount = _ticketsAmount;
+    }
+
+    public void UpdateFirebaseFirestoreData(float _diamondsAmount, float _ticketsAmount)
+    {
         DiamondsAmount = _diamondsAmount;
         TicketsAmount = _ticketsAmount;
     }

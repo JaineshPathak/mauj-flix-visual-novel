@@ -28,6 +28,7 @@ public class MflixUIDailyRewards : MonoBehaviour
 
     [Header("Buttons")]
     public Button buttonClaim;
+    public Button buttonClaimAd;
 
     [Header("Gifts Panel")]
     public Image giftProgressBar;
@@ -64,6 +65,7 @@ public class MflixUIDailyRewards : MonoBehaviour
 
     private bool isGiftCheckupDone;
     private bool isGiftRewardAvailable = false;
+    private bool isDoubleRewardTriggered;
 
     private void OnValidate()
     {
@@ -104,29 +106,62 @@ public class MflixUIDailyRewards : MonoBehaviour
 
     private void OnEnable()
     {
-        if(dailyRewards)
+        AdsManager.OnIronSrcRewardVideoComplete += OnRewardAdComplete;
+
+        if (dailyRewards)
         {
             dailyRewards.onMFlixClaimPrize += OnClaimPrize;
+            //dailyRewards.onMFlixMissedPrize += OnMissedPrize;
             dailyRewards.onInitialize += OnInitialize;
         }
     }
 
     private void OnDisable()
     {
+        AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+
         if (dailyRewards)
         {
             dailyRewards.onMFlixClaimPrize -= OnClaimPrize;
+            //dailyRewards.onMFlixMissedPrize -= OnMissedPrize;
             dailyRewards.onInitialize -= OnInitialize;
         }
     }
 
     private void OnDestroy()
     {
+        AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+
         if (dailyRewards)
         {
             dailyRewards.onMFlixClaimPrize -= OnClaimPrize;
+            //dailyRewards.onMFlixMissedPrize -= OnMissedPrize;
             dailyRewards.onInitialize -= OnInitialize;
         }
+    }
+
+    private void OnRewardAdComplete(string placementName)
+    {
+        switch (placementName)
+        {
+            case AdsNames.rewardDoubleDaily:
+                OnAdDoubleDailyRewardComplete();
+                break;
+        }
+    }
+
+    private void OnAdDoubleDailyRewardComplete()
+    {
+        isDoubleRewardTriggered = true;
+
+        dailyRewards.ClaimPrize();
+        readyToClaim = false;
+
+        buttonClaim.interactable = false;
+        LeanTween.scale(buttonClaim.gameObject, Vector3.zero, 0.5f).setEaseInBack();
+
+        buttonClaimAd.interactable = false;
+        LeanTween.scale(buttonClaimAd.gameObject, Vector3.zero, 0.5f).setEaseInBack();
     }
 
     private void Start()
@@ -145,7 +180,34 @@ public class MflixUIDailyRewards : MonoBehaviour
                 
                 buttonClaim.interactable = false;
                 LeanTween.scale(buttonClaim.gameObject, Vector3.zero, 0.5f).setEaseInBack();
+
+                buttonClaimAd.interactable = false;
+                LeanTween.scale(buttonClaimAd.gameObject, Vector3.zero, 0.5f).setEaseInBack();
                 //UpdateUI();
+            });
+        }
+
+        if(buttonClaimAd)
+        {
+            buttonClaimAd.onClick.AddListener(() =>
+            {
+#if UNITY_EDITOR
+                isDoubleRewardTriggered = true;
+
+                dailyRewards.ClaimPrize();
+                readyToClaim = false;
+
+                buttonClaim.interactable = false;
+                LeanTween.scale(buttonClaim.gameObject, Vector3.zero, 0.5f).setEaseInBack();
+
+                buttonClaimAd.interactable = false;
+                LeanTween.scale(buttonClaimAd.gameObject, Vector3.zero, 0.5f).setEaseInBack();
+#elif UNITY_ANDROID || UNITY_IOS
+                if (AdsManager.instance == null)
+                    return;
+
+                AdsManager.instance.ShowRewardAd(AdsNames.rewardDoubleDaily);
+#endif                
             });
         }
 
@@ -158,7 +220,7 @@ public class MflixUIDailyRewards : MonoBehaviour
                 buttonAdvanceDay.onClick.AddListener(() =>
                 {
                     dailyRewards.debugTime = dailyRewards.debugTime.Add(new TimeSpan(1, 0, 0, 0));
-                    SetupGiftRewards();
+                    SetupGiftRewardsPanel();
                     UpdateUI();
                 });
             }
@@ -283,11 +345,17 @@ public class MflixUIDailyRewards : MonoBehaviour
         {
             buttonClaim.interactable = true;
             LeanTween.scale(buttonClaim.gameObject, Vector3.one, 0.5f).setEaseOutBack();
+
+            buttonClaimAd.interactable = true;
+            LeanTween.scale(buttonClaimAd.gameObject, Vector3.one, 0.5f).setEaseOutBack();
         }
         else
         {
             buttonClaim.interactable = false;
             LeanTween.scale(buttonClaim.gameObject, Vector3.zero, 0.5f).setEaseInBack();
+
+            buttonClaimAd.interactable = false;
+            LeanTween.scale(buttonClaimAd.gameObject, Vector3.zero, 0.5f).setEaseInBack();
         }
 
         readyToClaim = isRewardAvailableNow;
@@ -362,6 +430,14 @@ public class MflixUIDailyRewards : MonoBehaviour
         }*/
 
         MflixReward reward = dailyRewards.GetReward(day);
+        if(isDoubleRewardTriggered)
+        {
+            reward.rewardDiamondAmount *= 2;
+            reward.rewardTicketAmount *= 2;
+
+            isDoubleRewardTriggered = false;
+        }
+
         MflixDailyRewardItemSmall rewardItem = dailyRewardsUIItems[day - 1];
 
         MflixRewardGift giftReward = null;
@@ -419,6 +495,18 @@ public class MflixUIDailyRewards : MonoBehaviour
         }
     }
 
+    private void OnMissedPrize()
+    {
+        if (dailyRewards == null)
+            return;
+
+        giftDay = 1;
+        giftProgress = giftDay / 30f;
+        giftProgressBar.fillAmount = 0;
+
+        dailyRewards.Reset();
+    }
+
     private void OnPriceClaimedDone()
     {
         UpdateUI();
@@ -431,7 +519,7 @@ public class MflixUIDailyRewards : MonoBehaviour
             dailyCanvasMain.blocksRaycasts = false;
             LeanTween.alphaCanvas(dailyCanvasMain, 0, 0.3f).setDelay(1f);
         }
-    }    
+    }
 
     private void CheckTimeDifference()
     {
@@ -473,7 +561,7 @@ public class MflixUIDailyRewards : MonoBehaviour
                 }
 
                 if(isRewardAvailable)
-                    SetupGiftRewards();
+                    SetupGiftRewardsPanel();
             }
 
             CheckTimeDifference();
@@ -482,15 +570,15 @@ public class MflixUIDailyRewards : MonoBehaviour
         }
     }
 
-    private void SetupGiftRewards()
+    private void SetupGiftRewardsPanel()
     {
         giftDay++;
         if (giftDay >= 31)
             giftDay = 1;
 
         giftProgress = giftDay / 30f;
-
-        LeanTween.value(giftProgressBar.fillAmount, giftProgress, 1f).setEaseLinear();
+        giftProgressBar.fillAmount = giftProgress;
+        //LeanTween.value(giftProgressBar.fillAmount, giftProgress, 1f).setEaseLinear().setOnUpdate( (float val) => giftProgressBar.fillAmount = val );
 
         PlayerPrefs.SetInt(dailyRewards.GetLastRewardGiftDayKey(), giftDay);
         PlayerPrefs.SetFloat(dailyRewards.GetLastRewardGiftProgressKey(), giftProgress);
