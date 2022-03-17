@@ -22,6 +22,11 @@ public class UIEpisodeItem : MonoBehaviour
     [Space(15)]
 
     public Image episodeTicketIcon;
+    public Image episodePlayIcon;
+    public Image episodeLockIcon;
+
+    public Sprite episodePlaySprite;
+    public Sprite episodeLockSprite;
 
     private UIStoriesDetailsPanel detailsPanel;
     private StoryData storyData;
@@ -73,9 +78,11 @@ public class UIEpisodeItem : MonoBehaviour
         if (episodeTicketIcon == null || lockButton == null)
             return;
 
-        episodeTicketIcon.gameObject.SetActive(true);
+        //episodeTicketIcon.gameObject.SetActive(true);
 
         lockButton.interactable = true;
+        episodeLockIcon.sprite = episodePlaySprite;
+        episodeLockIcon.rectTransform.sizeDelta = episodePlayIcon.rectTransform.sizeDelta;
         lockButton.onClick.AddListener(OnLockedPaymentButton);
     }
 

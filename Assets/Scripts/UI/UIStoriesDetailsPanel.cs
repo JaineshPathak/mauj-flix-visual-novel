@@ -56,6 +56,10 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     public Button nextEpYesButton;
     public Button nextEpNoButton;
 
+    [Space(15)]
+
+    public UIBottomPanel bottomPanel;
+
     private bool isShown;
     public bool IsShown { get { return isShown; } }
 
@@ -204,6 +208,8 @@ public class UIStoriesDetailsPanel : MonoBehaviour
         if (storyData == null)
             storyData = _storyData;
 
+        episodesSpawner.topPanel.ShowTopPanel();
+
         episodesSpawner.storyDataKey = storyItem.storyProgressFileName;        
         //If it's a short story (only 1 episode) then load immediately
         if (storyItem.isShortStory)
@@ -343,6 +349,11 @@ public class UIStoriesDetailsPanel : MonoBehaviour
         }
         else
         {
+            if (bottomPanel.LastButtonIndex == 0)
+                episodesSpawner.topPanel.ShowTopPanel();
+            else
+                episodesSpawner.topPanel.HideTopPanel();
+
             moveSeq.append(() =>
             {
                 LeanTween.moveLocalX(gameObject, 1500f, speed).setEase(easeType).setOnComplete(OnPanelHidden);
@@ -416,7 +427,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     }
 
     private void OnPanelHidden()
-    {
+    {        
         ClearEpisodesContainer();
     }
 

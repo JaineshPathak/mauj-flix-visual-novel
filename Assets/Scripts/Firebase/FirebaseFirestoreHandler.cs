@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Firebase.Firestore;
 using Firebase.Auth;
 
@@ -18,7 +19,8 @@ public class FirebaseFirestoreHandler : MonoBehaviour
     
     public static event Action<FirebaseFirestoreHandler> OnFirestoreLoaded;
 
-    private string devicePlatformCollection;
+    private bool firstTimeUser;
+    private string devicePlatformCollection;    
 
     private void Awake()
     {
@@ -45,7 +47,7 @@ public class FirebaseFirestoreHandler : MonoBehaviour
         FirebaseAuthHandler.OnFirebaseUserAccountLoaded += OnFirebaseUserLoaded;
         FirebaseAuthHandler.OnFirebaseUserAccountDeleted += OnFirebaseUserDeleted;
 
-        //SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void OnDisable()
@@ -53,7 +55,7 @@ public class FirebaseFirestoreHandler : MonoBehaviour
         FirebaseAuthHandler.OnFirebaseUserAccountLoaded -= OnFirebaseUserLoaded;
         FirebaseAuthHandler.OnFirebaseUserAccountDeleted -= OnFirebaseUserDeleted;
 
-        //SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
     private void OnDestroy()
@@ -63,21 +65,21 @@ public class FirebaseFirestoreHandler : MonoBehaviour
 
         //firestoreDBListener.Stop();
 
-        //SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    /*private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
+    private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
     {
         //print(scene.name + " (" + scene.buildIndex + ")");
-        if (scene.buildIndex == 1)
+        if (scene.buildIndex == 1 && firstTimeUser && EpisodesSpawner.instance != null)
         {
-            OnFirestoreLoaded?.Invoke(this);
+            firstTimeUser = false;
+            EpisodesSpawner.instance.ShowFirstTimeReward();
 
+            //OnFirestoreLoaded?.Invoke(this);
             //GetUserDiamondsOnSceneLoad();
         }
-        else if (mainMenuDiamondsText != null)
-            mainMenuDiamondsText = null;
-    }*/
+    }
 
     private void OnFirebaseUserLoaded(FirebaseUser user)
     {
@@ -106,12 +108,14 @@ public class FirebaseFirestoreHandler : MonoBehaviour
             DocumentSnapshot snapShot = getTask.Result;
             if (!snapShot.Exists)          //New User
             {
+                firstTimeUser = true;
+
                 firestoreUserData = new FirestoreUserData();
                 firestoreUserData.userID = firebaseUser.UserId;
                 firestoreUserData.userName = firebaseUser.DisplayName;
                 firestoreUserData.userEmail = firebaseUser.Email;
-                firestoreUserData.diamondsAmount = 50f;
-                firestoreUserData.ticketsAmount = 15f;
+                firestoreUserData.diamondsAmount = 0;
+                firestoreUserData.ticketsAmount = 0;
 
                 if (FirebaseAuthHandler.instance.GetProviderID() == "google.com")
                 {

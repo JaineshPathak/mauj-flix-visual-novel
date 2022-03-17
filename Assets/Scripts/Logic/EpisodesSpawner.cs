@@ -61,6 +61,12 @@ public class EpisodesSpawner : MonoBehaviour
     public Button askToQuitYesButton;
     public Button askToQuitNoButton;
 
+    [Header("First Time Reward Panel")]
+    public CanvasGroup firstTimeRewardCanvasGroup;
+    public Transform firstTimeDiamondPanel;
+    public Transform firstTimeTicketPanel;
+    public Button firstTimeRewardCollectButton;
+
     private EpisodesHandler episodesHandler;
 
     [HideInInspector] public string storyTitle;    
@@ -85,6 +91,16 @@ public class EpisodesSpawner : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
+
+        if(firstTimeRewardCanvasGroup)
+        {
+            firstTimeRewardCanvasGroup.alpha = 0;
+            firstTimeRewardCanvasGroup.interactable = false;
+            firstTimeRewardCanvasGroup.blocksRaycasts = false;
+        }
+
+        if(firstTimeRewardCollectButton)        
+            firstTimeRewardCollectButton.onClick.AddListener(OnFirstTimeRewardCollectButton);        
     }
 
     private void OnEnable()
@@ -533,4 +549,42 @@ public class EpisodesSpawner : MonoBehaviour
     }
 
     //=========================================================================================================
+
+    public void ShowFirstTimeReward()
+    {
+        topPanel.ShowTopPanel();
+
+        firstTimeRewardCanvasGroup.interactable = true;
+        firstTimeRewardCanvasGroup.blocksRaycasts = true;
+
+        firstTimeRewardCollectButton.interactable = true;
+
+        LeanTween.alphaCanvas(firstTimeRewardCanvasGroup, 1f, 0.5f).setEaseInOutSine();
+    }
+    
+    private void OnFirstTimeRewardCollectButton()
+    {
+        topPanel.ShowTopPanel();
+
+        firstTimeRewardCollectButton.interactable = false;
+        LeanTween.scale(firstTimeRewardCollectButton.gameObject, Vector3.zero, 0.4f).setEaseInBack();
+
+        diamondsPool.PlayDiamondsAnimationDeposit(firstTimeDiamondPanel, topPanel.diamondsPanelIcon, 10, 50, () =>
+        {
+            diamondsPool.PlayTicketsAnimationDeposit(firstTimeTicketPanel, topPanel.ticketsPanelIcon, 15, 15, () =>
+            {
+                StartCoroutine(OnFirstRewardCompleteRoutine());
+            });
+        });
+    }
+
+    private IEnumerator OnFirstRewardCompleteRoutine()
+    {
+        yield return new WaitForSeconds(1f);
+
+        firstTimeRewardCanvasGroup.interactable = false;
+        firstTimeRewardCanvasGroup.blocksRaycasts = false;
+
+        LeanTween.alphaCanvas(firstTimeRewardCanvasGroup, 0, 0.5f).setEaseInOutSine();
+    }
 }

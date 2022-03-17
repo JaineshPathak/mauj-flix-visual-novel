@@ -80,10 +80,13 @@ public class UIPersonalProfile : MonoBehaviour
             }
         }
 
+        if (playerData.StoriesLikedList.Count > 0 && !sectionLoadedList[0].gameObject.activeSelf)
+            sectionLoadedList[0].gameObject.SetActive(true);
+
         //if (!sectionLoadedList[0].ContainsStoryItemSmall(_storyTitleEng))
         //sectionLoadedList[0].PopulateCategory(personalCategoryDatas[0].categoryTitle, personalCategoryDatas[0].storiesDBItemList.ToArray());
 
-        if(!sectionLoadedList[0].ContainsStoryItemSmall(_storyTitleEng))
+        if (!sectionLoadedList[0].ContainsStoryItemSmall(_storyTitleEng))
             sectionLoadedList[0].AddStoryItemSmall(episodesSpawner.GetStoriesDBItemFromTitle(_storyTitleEng));
 
         personalCategoryDatas[0].countsDataText.text = playerData.StoriesLikedList.Count.ToString();
@@ -106,10 +109,16 @@ public class UIPersonalProfile : MonoBehaviour
             }
         }
 
+        if (playerData.StoriesLikedList.Count > 0 && !sectionLoadedList[0].gameObject.activeSelf)
+            sectionLoadedList[0].gameObject.SetActive(true);
+
         if (sectionLoadedList[0].ContainsStoryItemSmall(_storyTitleEng))
             sectionLoadedList[0].RemoveStoryItemSmall(_storyTitleEng);
 
         personalCategoryDatas[0].countsDataText.text = playerData.StoriesLikedList.Count.ToString();
+
+        if (playerData.StoriesLikedList.Count <= 0 && sectionLoadedList[0] != null)
+            sectionLoadedList[0].gameObject.SetActive(false);               
     }
 
     private void Start()
@@ -141,7 +150,7 @@ public class UIPersonalProfile : MonoBehaviour
             for (int i = 0; i < playerData.StoriesLikedList.Count; i++)
             {
                 personalCategoryDatas[0].storiesDBItemList.Add(episodesSpawner.GetStoriesDBItemFromTitle(playerData.StoriesLikedList[i]));
-            }            
+            }
         }
 
         //Started Stories Category
@@ -183,5 +192,14 @@ public class UIPersonalProfile : MonoBehaviour
                     personalCategoryDatas[i].countsCategoryTitleText.text = personalCategoryDatas[i].categoryTitle;                
             }
         }
+
+        if (playerData.StoriesLikedList.Count <= 0 && sectionLoadedList[0] != null)
+            sectionLoadedList[0].gameObject.SetActive(false);
+
+        if (playerData.StoriesStartedList.Count <= 0 && sectionLoadedList[1] != null)
+            sectionLoadedList[1].gameObject.SetActive(false);
+
+        if (playerData.StoriesCompletedList.Count <= 0 && sectionLoadedList[2] != null)
+            sectionLoadedList[2].gameObject.SetActive(false);
     }
 }

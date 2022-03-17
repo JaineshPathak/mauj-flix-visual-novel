@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 [System.Serializable]
@@ -40,6 +38,12 @@ public class UIBottomPanel : MonoBehaviour
     private EpisodesSpawner episodesSpawner;    
     private bool playSoundFirst = false;
     private int lastButtonIndex;
+
+    public int LastButtonIndex
+    {
+        get { return lastButtonIndex; }
+    }
+
 
     private void OnEnable()
     {
