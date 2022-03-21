@@ -3,6 +3,8 @@
 [System.Serializable]
 public class MflixReward
 {
+    public bool skipThisDay;
+
     public bool isBigReward;
 
     public bool hasDiamondReward;

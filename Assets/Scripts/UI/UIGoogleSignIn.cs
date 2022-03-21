@@ -11,15 +11,26 @@ public class UIGoogleSignIn : MonoBehaviour
 {
     public RawImage displayPicImage;
     public TextMeshProUGUI displayNameText;
+    public TextMeshProUGUI displayIDText;
 
     [Space(15)]
 
     public Button signInButton;
     public Button signOutButton;
+    public Button userIDCopyClipboardButton;
     
     [Space(15)]
 
     public Sprite genericAvatarSprite;
+
+    [Space(15)]
+
+    public CanvasGroup copiedIDPanel;
+
+    private string userID;
+
+    private LTSeq copySeq;
+    private int copySeqID;
 
     private void Awake()
     {
@@ -34,6 +45,12 @@ public class UIGoogleSignIn : MonoBehaviour
             signOutButton.onClick.AddListener(OnGoogleLogOut);
             signOutButton.gameObject.SetActive(false);
         }
+
+        if (userIDCopyClipboardButton)
+        {
+            userIDCopyClipboardButton.onClick.AddListener(OnUserIDCopyButton);
+            userIDCopyClipboardButton.gameObject.SetActive(false);
+        }
     }
 
     private void Start()
@@ -47,9 +64,23 @@ public class UIGoogleSignIn : MonoBehaviour
             {
                 //User is not Google Logged In
                 displayNameText.text = "Guest";
+                if (FirebaseAuthHandler.instance.userCurrent != null)
+                {
+                    userIDCopyClipboardButton.gameObject.SetActive(true);
+                    displayIDText.text = "ID: " + FirebaseAuthHandler.instance.userCurrent.UserId;
 
+                    userID = FirebaseAuthHandler.instance.userCurrent.UserId;
+                }
+                else
+                    userIDCopyClipboardButton.gameObject.SetActive(false);
+
+#if UNITY_EDITOR
+                signInButton.gameObject.SetActive(false);
+                signOutButton.gameObject.SetActive(false);
+#elif UNITY_ANDROID || UNITY_IOS
                 signInButton.gameObject.SetActive(true);
                 signOutButton.gameObject.SetActive(false);
+#endif
 
                 displayPicImage.texture = genericAvatarSprite.texture;
             }
@@ -62,6 +93,12 @@ public class UIGoogleSignIn : MonoBehaviour
         signOutButton.gameObject.SetActive(true);
 
         displayNameText.text = UserResult.Result.DisplayName;
+
+        userIDCopyClipboardButton.gameObject.SetActive(true);
+        displayIDText.text = "ID: " + UserResult.Result.UserId;
+
+        userID = UserResult.Result.UserId;
+
         StartCoroutine(GetProfilePic(UserResult.Result.ImageUrl));
     }
 
@@ -76,6 +113,11 @@ public class UIGoogleSignIn : MonoBehaviour
     private void OnLoginDone(Task<GoogleSignInUser> UserResult)
     {
         displayNameText.text = UserResult.Result.DisplayName;
+
+        userIDCopyClipboardButton.gameObject.SetActive(true);
+        displayIDText.text = "ID: " + UserResult.Result.UserId;
+
+        userID = UserResult.Result.UserId;
 
         signInButton.gameObject.SetActive(false);
         signOutButton.gameObject.SetActive(true);
@@ -114,10 +156,51 @@ public class UIGoogleSignIn : MonoBehaviour
     private void OnLogoutDone(Task task)
     {
         displayNameText.text = "Guest";
+        if (FirebaseAuthHandler.instance.userCurrent != null)
+        {
+            userIDCopyClipboardButton.gameObject.SetActive(true);
+            displayIDText.text = "ID: " + FirebaseAuthHandler.instance.userCurrent.UserId;
+
+            userID = FirebaseAuthHandler.instance.userCurrent.UserId;
+        }
+        else
+            userIDCopyClipboardButton.gameObject.SetActive(false);
 
         signInButton.gameObject.SetActive(true);
         signOutButton.gameObject.SetActive(false);
 
         displayPicImage.texture = genericAvatarSprite.texture;
     }
+
+    //========================================================================================================
+
+    private void OnUserIDCopyButton()
+    {
+        if (userID.Length <= 0)
+            return;
+
+        UniClipboard.SetText(userID);
+
+        ShowCopyIDWindow();
+    }
+
+    private void ShowCopyIDWindow()
+    {
+        if (copiedIDPanel == null)
+            return;
+
+        if (LeanTween.isTweening(copySeqID))
+            LeanTween.cancel(copySeqID);
+
+        copiedIDPanel.alpha = 0;
+
+        copySeq = LeanTween.sequence();
+
+        copySeqID = copySeq.id;
+
+        copySeq.append(LeanTween.alphaCanvas(copiedIDPanel, 1f, 0.3f).setEaseInOutSine());
+        copySeq.append(0.5f);
+        copySeq.append(LeanTween.alphaCanvas(copiedIDPanel, 0, 0.3f).setEaseInOutSine());
+    }
+    //========================================================================================================
 }

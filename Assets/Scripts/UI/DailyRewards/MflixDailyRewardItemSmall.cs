@@ -57,7 +57,7 @@ public class MflixDailyRewardItemSmall : MonoBehaviour
     {        
         if (textDay)
         {
-            textDay.text = string.Format("दिन {0}", MflixDailyRewards.GetHindiNumber(day.ToString()));
+            textDay.text = string.Format("दिन {0}", MflixDailyRewards.GetHindiNumber( (day).ToString()));
             textDay.GetComponent<SiddhantaFixer>().FixTexts();
         }
 

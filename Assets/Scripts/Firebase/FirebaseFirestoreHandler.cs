@@ -349,9 +349,13 @@ public class FirebaseFirestoreHandler : MonoBehaviour
 
     public void PushOfflineData(float _diamondsAmount, float _ticketsAmount)
     {
+        if (firebaseUser == null)
+            return;
+
         firestoreUserData.diamondsAmount = _diamondsAmount;
         firestoreUserData.ticketsAmount = _ticketsAmount;
 
+        userRef = firestoreDB.Collection(devicePlatformCollection).Document(firebaseUser.UserId);
         userRef.SetAsync(firestoreUserData).ContinueWith(task =>
         {
             if (task.IsCompleted)

@@ -453,7 +453,7 @@ public class MflixUIDailyRewards : MonoBehaviour
 
         if (reward.hasDiamondReward && !reward.hasTicketReward)          //Only Diamonds
         {
-            episodesSpawner.diamondsPool.PlayDiamondsAnimationDeposit(rewardItem.transform, episodesSpawner.topPanel.diamondsPanelIcon, reward.rewardDiamondAmount, reward.rewardDiamondAmount, () =>
+            episodesSpawner.diamondsPool.PlayDiamondsAnimationDeposit(rewardItem.transform, episodesSpawner.topPanel.diamondsPanelIcon, reward.rewardDiamondAmount >= 10 ? 10 : reward.rewardDiamondAmount, reward.rewardDiamondAmount, () =>
             {
                 if (isGiftRewardAvailable && giftReward != null && giftItem != null)
                 {
@@ -479,7 +479,7 @@ public class MflixUIDailyRewards : MonoBehaviour
         }
         else if(reward.hasDiamondReward && reward.hasTicketReward)      //Both
         {
-            episodesSpawner.diamondsPool.PlayDiamondsAnimationDeposit(rewardItem.transform, episodesSpawner.topPanel.diamondsPanelIcon, reward.rewardDiamondAmount, reward.rewardDiamondAmount, () =>
+            episodesSpawner.diamondsPool.PlayDiamondsAnimationDeposit(rewardItem.transform, episodesSpawner.topPanel.diamondsPanelIcon, reward.rewardDiamondAmount >= 10 ? 10 : reward.rewardDiamondAmount, reward.rewardDiamondAmount, () =>
             {
                 episodesSpawner.diamondsPool.PlayTicketsAnimationDeposit(rewardItem.transform, episodesSpawner.topPanel.ticketsPanelIcon, reward.rewardTicketAmount >= 15f ? 10 : reward.rewardTicketAmount, reward.rewardTicketAmount, () =>
                 {

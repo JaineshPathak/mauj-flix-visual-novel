@@ -25,7 +25,10 @@ public class UIEpisodeItem : MonoBehaviour
     public Image episodePlayIcon;
     public Image episodeLockIcon;
 
+    [Space(15)]
+
     public Sprite episodePlaySprite;
+    public Sprite episodePlayWhiteSprite;
     public Sprite episodeLockSprite;
 
     private UIStoriesDetailsPanel detailsPanel;
@@ -82,6 +85,7 @@ public class UIEpisodeItem : MonoBehaviour
 
         lockButton.interactable = true;
         episodeLockIcon.sprite = episodePlaySprite;
+        //episodeLockIcon.color = Color.yellow;
         episodeLockIcon.rectTransform.sizeDelta = episodePlayIcon.rectTransform.sizeDelta;
         lockButton.onClick.AddListener(OnLockedPaymentButton);
     }

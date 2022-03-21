@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Fungus;
 using TMPro;
+using System;
 
 public enum CharacterGender
 {
@@ -56,11 +57,15 @@ public class CharacterSelectionScreen : MonoBehaviour
     public Animator buttonShineAnim;
 
     private EpisodesSpawner episodesSpawner;
+    private ScrollSnapRect snapRect;
 
     private void Awake()
     {
         if (charactersListFromUI.Count == 0)
             charactersListFromUI = characterSelectionContent.GetComponentsInChildren<Image>().ToList();
+
+        if (snapRect == null)
+            snapRect = GetComponentInChildren<ScrollSnapRect>();
 
         if (episodesHandler == null)
             GetEpisodeHandler();
@@ -79,12 +84,23 @@ public class CharacterSelectionScreen : MonoBehaviour
         if (EpisodesSpawner.instance != null)
             episodesSpawner = EpisodesSpawner.instance;
 
+        StartCoroutine("SelectUpdateRoutine");
+
         SelectCharacter(0);
     }
 
     public void GetEpisodeHandler()
     {
-        episodesHandler = transform.parent.GetComponent<EpisodesHandler>();
+        try
+        {
+            episodesHandler = transform.parent.GetComponent<EpisodesHandler>();
+        }
+        catch(NullReferenceException e)
+        {
+#if UNITY_EDITOR
+            Debug.LogError("Cannot get Episode Handler as it is NULL: " + e.Message);
+#endif
+        }
     }
 
     //From UI Button
@@ -103,6 +119,9 @@ public class CharacterSelectionScreen : MonoBehaviour
     {
         characterIndex = Mathf.Clamp(characterIndex, 0, charactersListFromUI.Count - 1);
         currentCharacterIndex = characterIndex;
+
+        if (characterDataAssets.Count <= 0)
+            return;
 
         if(characterDataAssets[currentCharacterIndex].hasDiamondCost)
         {
@@ -165,7 +184,7 @@ public class CharacterSelectionScreen : MonoBehaviour
     }
 
     public void OnCharacterSubmit()
-    {
+    {        
         if (episodesHandler == null)
             return;
 
@@ -232,6 +251,28 @@ public class CharacterSelectionScreen : MonoBehaviour
             }
         }
 
+        StopCoroutine("SelectUpdateRoutine");
+
         //episodesHandler.SelectCharacter(characterGender, characterFungus[currentCharacterIndex], characterVariableRef, currentCharacterIndex);
+    }
+
+    private IEnumerator SelectUpdateRoutine()
+    {
+        while(true)
+        {
+            if (SwipeManager.IsSwipingLeft())
+            {
+                if (snapRect)
+                    snapRect.NextScreen();
+            }
+
+            if (SwipeManager.IsSwipingRight())
+            {
+                if (snapRect)
+                    snapRect.PreviousScreen();
+            }
+
+            yield return null;
+        }
     }
 }

@@ -29,7 +29,43 @@ public class MflixDailyRewards : DailyRewardsCore<MflixDailyRewards>
     private const string DEBUG_TIME = "DebugTime";
     private const string FMT = "O";
 
+    private const string FIRSTTIMEKEY = "FirstTimeDate";
+    private const string ALLOWDAILYREWARDS = "AllowDailyRewards";
+
     public TimeSpan debugTime;         // For debug purposes only
+
+    protected override void Awake()
+    {
+        base.Awake();
+        
+        if(!PlayerPrefs.HasKey(ALLOWDAILYREWARDS) && !PlayerPrefs.HasKey(FIRSTTIMEKEY))
+        {
+#if UNITY_EDITOR
+            DateTime currentTime = DateTime.Now.AddMinutes(5);
+            currentTime.SaveDate(FIRSTTIMEKEY);
+#elif UNITY_ANDROID || UNITY_IOS
+            DateTime currentTime = DateTime.Now.AddMinutes(1440);
+            currentTime.SaveDate(FIRSTTIMEKEY);
+#endif
+
+            PlayerPrefs.SetInt(ALLOWDAILYREWARDS, 0);
+        }
+        else if ((PlayerPrefs.HasKey(ALLOWDAILYREWARDS)) && PlayerPrefs.GetInt(ALLOWDAILYREWARDS) <= 0)
+        {
+            DateTime savedTime = DateTimeExtension.GetSavedDate(FIRSTTIMEKEY);
+            TimeSpan remainingTime = savedTime.Subtract(DateTime.Now);
+
+#if UNITY_EDITOR
+            Debug.LogFormat("Wait For: {0}:{1}:{2}", remainingTime.Hours, remainingTime.Minutes, remainingTime.Seconds);
+#endif
+
+            if(remainingTime.TotalMinutes <= 0)
+                PlayerPrefs.SetInt(ALLOWDAILYREWARDS, 1);
+        }
+
+        if ((PlayerPrefs.HasKey(ALLOWDAILYREWARDS)) && PlayerPrefs.GetInt(ALLOWDAILYREWARDS) <= 0)
+            gameObject.SetActive(false);
+    }
 
     private void Start()
     {

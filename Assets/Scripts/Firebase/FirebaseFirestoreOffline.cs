@@ -95,7 +95,8 @@ public class FirebaseFirestoreOffline : MonoBehaviour
         if (firestoreHandler == null && FirebaseFirestoreHandler.instance != null)
             firestoreHandler = FirebaseFirestoreHandler.instance;
 
-        firestoreHandler.PushOfflineData(DiamondsAmount, TicketsAmount);
+        if(firestoreHandler != null)
+            firestoreHandler.PushOfflineData(DiamondsAmount, TicketsAmount);
     }
 
     private void OnApplicationPause(bool pause)
@@ -103,7 +104,8 @@ public class FirebaseFirestoreOffline : MonoBehaviour
         if (firestoreHandler == null && FirebaseFirestoreHandler.instance != null)
             firestoreHandler = FirebaseFirestoreHandler.instance;
 
-        firestoreHandler.PushOfflineData(DiamondsAmount, TicketsAmount);
+        if (firestoreHandler != null)
+            firestoreHandler.PushOfflineData(DiamondsAmount, TicketsAmount);
     }
 
     private void OnApplicationQuit()
@@ -111,7 +113,8 @@ public class FirebaseFirestoreOffline : MonoBehaviour
         if (firestoreHandler == null && FirebaseFirestoreHandler.instance != null)
             firestoreHandler = FirebaseFirestoreHandler.instance;
 
-        firestoreHandler.PushOfflineData(DiamondsAmount, TicketsAmount);
+        if (firestoreHandler != null)
+            firestoreHandler.PushOfflineData(DiamondsAmount, TicketsAmount);
     }
 
     //Called from FirestoreHandler, copy the diamonds and tickets fetched from firestore database server

@@ -67,7 +67,7 @@ public class MflixDailyRewardsEditor : Editor
             // Rewards
             for (int i = 0; i < rewardsProp.arraySize; i++)
             {
-                if (EditorTools.DrawHeader("Day " + (i + 1)))
+                if (EditorTools.DrawHeader("Day " + (i + 1) + " [" + i + "]"))
                 {
                     EditorTools.BeginContents();
                     SerializedProperty rewardProp = rewardsProp.GetArrayElementAtIndex(i);
@@ -79,6 +79,9 @@ public class MflixDailyRewardsEditor : Editor
                     EditorGUILayout.PropertyField(unitRewardProp, new GUIContent("Unit"));
                     EditorGUILayout.PropertyField(rewardQtProp, new GUIContent("Reward"));
                     rewardSpriteProp.objectReferenceValue = EditorGUILayout.ObjectField("Sprite", rewardSpriteProp.objectReferenceValue, typeof(Sprite), false);*/
+
+                    var skipThisDayProp = rewardProp.FindPropertyRelative("skipThisDay");
+                    EditorGUILayout.PropertyField(skipThisDayProp, new GUIContent("Skip This Day"));
 
                     var isBigRewardProp = rewardProp.FindPropertyRelative("isBigReward");
                     EditorGUILayout.PropertyField(isBigRewardProp, new GUIContent("Is Big Reward"));

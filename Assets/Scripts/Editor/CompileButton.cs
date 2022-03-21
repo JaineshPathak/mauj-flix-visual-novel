@@ -15,7 +15,7 @@ public class CompileButton
             GUIContent compileButtonContent = new GUIContent();
             compileButtonContent.text = "Compile/Re-import";
 
-            GUIStyle style = new GUIStyle(EditorStyles.toolbarButton);            
+            GUIStyle style = new GUIStyle(EditorStyles.toolbarButton);
 
             if (GUILayout.Button(compileButtonContent, style, GUILayout.ExpandWidth(true)) && EditorPrefs.GetInt("kAutoRefresh") == 0)
                 AssetDatabase.Refresh();

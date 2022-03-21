@@ -224,12 +224,12 @@ public class ScrollSnapRect : MonoBehaviour, IBeginDragHandler, IEndDragHandler,
     }
 
     //------------------------------------------------------------------------
-    private void NextScreen() {
+    public void NextScreen() {
         LerpToPage(_currentPage + 1);
     }
 
     //------------------------------------------------------------------------
-    private void PreviousScreen() {
+    public void PreviousScreen() {
         LerpToPage(_currentPage - 1);
     }
 

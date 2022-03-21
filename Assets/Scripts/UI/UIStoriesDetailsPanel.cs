@@ -32,6 +32,10 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     public UIEpisodeItem episodeItemPrefab;
     public Transform episodeContainer;
     public RectTransform storyEpisodesContainer;
+    
+    [Space(10)]
+
+    public ScrollRect moreLikeScrollMain;
     public Transform moreLikeThisSection;
 
     [Header("Like Story Section")]
@@ -53,8 +57,9 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     public CanvasGroup nextEpAskPanelCanvasGroup;
     public Transform nextEpAskPanel;
     public Transform nextEpTicketPanel;
-    public Button nextEpYesButton;
-    public Button nextEpNoButton;
+    public Button nextEpTicketButton;
+    public Button nextEpAdButton;
+    public Button nextEpCloseButton;
 
     [Space(15)]
 
@@ -88,11 +93,39 @@ public class UIStoriesDetailsPanel : MonoBehaviour
         if (nextEpAskPanel)
             nextEpAskPanel.localScale = Vector3.zero;
 
-        if (nextEpYesButton)
-            nextEpYesButton.onClick.AddListener(OnNextEpisodeYesButton);
+        if (nextEpTicketButton)
+            nextEpTicketButton.onClick.AddListener(OnNextEpisodeTicketButton);
 
-        if (nextEpNoButton)
-            nextEpNoButton.onClick.AddListener(OnNextEpisodeNoButton);
+        if (nextEpAdButton)
+            nextEpAdButton.onClick.AddListener(OnNextEpisodeAdButton);
+
+        if (nextEpCloseButton)
+            nextEpCloseButton.onClick.AddListener(OnNextEpisodeCloseButton);
+    }
+
+    private void OnEnable()
+    {
+        AdsManager.OnIronSrcRewardVideoComplete += OnRewardAdComplete;
+    }
+
+    private void OnDisable()
+    {
+        AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+    }
+
+    private void OnDestroy()
+    {
+        AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+    }
+
+    private void OnRewardAdComplete(string placementName)
+    {
+        switch (placementName)
+        {
+            case AdsNames.rewardFreeNextEpisode:
+                OnNextEpisodeAdButtonComplete();
+                break;
+        }
     }
 
     private void Start()
@@ -353,6 +386,8 @@ public class UIStoriesDetailsPanel : MonoBehaviour
                 episodesSpawner.topPanel.ShowTopPanel();
             else
                 episodesSpawner.topPanel.HideTopPanel();
+
+            moreLikeScrollMain.normalizedPosition = new Vector2(0, 1f);
 
             moveSeq.append(() =>
             {
@@ -638,15 +673,13 @@ public class UIStoriesDetailsPanel : MonoBehaviour
         selectedEpisodeItem = null;
     }
 
-    private void OnNextEpisodeYesButton()
+    private void OnNextEpisodeTicketButton()
     {
         if (nextEpAskPanelCanvasGroup == null)
             return;
 
         nextEpAskPanelCanvasGroup.interactable = false;
         nextEpAskPanelCanvasGroup.blocksRaycasts = false;
-
-        PlayButtonClickSound();
 
         episodesSpawner.diamondsPool.PlayTicketsAnimationDebit(nextEpTicketPanel, episodesSpawner.topPanel.ticketsPanelIcon, 1, 1, () =>
         {
@@ -658,15 +691,44 @@ public class UIStoriesDetailsPanel : MonoBehaviour
         }, 150f, Color.red);
     }
 
-    private void OnNextEpisodeNoButton()
+    private void OnNextEpisodeAdButton()
+    {
+#if UNITY_EDITOR
+        nextEpAskPanelCanvasGroup.interactable = false;
+        nextEpAskPanelCanvasGroup.blocksRaycasts = false;
+
+        if (selectedEpisodeItem != null)
+        {
+            selectedEpisodeItem.EpisodesData.isUnlocked = true;
+            selectedEpisodeItem.OnEpisodePlayClick(false);
+        }
+#elif UNITY_ANDROID || UNITY_IOS
+        if (AdsManager.instance == null)
+            return;
+
+        AdsManager.instance.ShowRewardAd(AdsNames.rewardFreeNextEpisode);
+#endif
+    }
+
+    private void OnNextEpisodeAdButtonComplete()
+    {
+        nextEpAskPanelCanvasGroup.interactable = false;
+        nextEpAskPanelCanvasGroup.blocksRaycasts = false;
+
+        if (selectedEpisodeItem != null)
+        {
+            selectedEpisodeItem.EpisodesData.isUnlocked = true;
+            selectedEpisodeItem.OnEpisodePlayClick(false);
+        }
+    }
+
+    private void OnNextEpisodeCloseButton()
     {
         if (nextEpAskPanelCanvasGroup == null)
             return;
 
         nextEpAskPanelCanvasGroup.interactable = false;
         nextEpAskPanelCanvasGroup.blocksRaycasts = false;
-
-        PlayButtonClickSound();
 
         HideNextEpisodeAskPanel();
     }

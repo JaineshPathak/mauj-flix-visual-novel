@@ -25,11 +25,13 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
 
     [Header("Part 2")]
     public RectTransform middlePanelPart2;
+    public RectTransform nextEpisodeButtonGroups;
     public CanvasGroup storyTextPart2;
     
     [Space(10)]
 
     public Button nextEpisodeButton;
+    public Button nextEpisodeAdButton;
     public Transform nextEpisodeTicketIcon;
     public RectTransform nextEpisodeText;
 
@@ -73,6 +75,9 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         if (middlePanelPart2)
             middlePanelPart2.anchoredPosition = new Vector2(-1000f, middlePanelPart2.anchoredPosition.y);
 
+        if(nextEpisodeButtonGroups)
+            nextEpisodeButtonGroups.anchoredPosition = new Vector2(-1000f, nextEpisodeButtonGroups.anchoredPosition.y);
+
         if (storyTextPart1)
             storyTextPart1.alpha = 0;
 
@@ -97,6 +102,12 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
             nextEpisodeButton.onClick.AddListener(OnNextEpisodeButton);
         }
 
+        if(nextEpisodeAdButton)
+        {
+            nextEpisodeAdButton.transform.localScale = Vector3.zero;
+            nextEpisodeAdButton.onClick.AddListener(OnNextEpisodeAdButton);
+        }
+
         if (noThanksButton)
         {
             noThanksButton.onClick.AddListener(OnNoThanksButton);
@@ -105,6 +116,31 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
             noThanksButtonCanvasGrp.alpha = 0;
             noThanksButtonCanvasGrp.interactable = false;
             noThanksButtonCanvasGrp.blocksRaycasts = false;
+        }
+    }
+
+    private void OnEnable()
+    {
+        AdsManager.OnIronSrcRewardVideoComplete += OnRewardAdComplete;
+    }
+
+    private void OnDisable()
+    {
+        AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+    }
+
+    private void OnDestroy()
+    {
+        AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+    }
+
+    private void OnRewardAdComplete(string placementName)
+    {
+        switch (placementName)
+        {
+            case AdsNames.rewardFreeNextEpisode:
+                OnNextEpisodeAdButtonComplete();
+                break;
         }
     }
 
@@ -178,6 +214,7 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         seqPart2.append(LeanTween.moveLocalX(middlePanelPart1.gameObject, 1000f, 0.7f).setOnStart(() =>
         {
             LeanTween.moveLocalX(middlePanelPart2.gameObject, 0, 0.7f).setEase(LeanTweenType.easeInOutBack);
+            LeanTween.moveLocalX(nextEpisodeButtonGroups.gameObject, 0, 0.7f).setEase(LeanTweenType.easeInOutBack);
 
             if (episodesSpawner)
                 episodesSpawner.topPanel.HideTopPanel();
@@ -195,6 +232,14 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
             {
                 nextEpisodeTicketIcon.gameObject.SetActive(debitTicketsNextEpisode);
                 nextEpisodeText.anchoredPosition = new Vector2(0, nextEpisodeText.anchoredPosition.y);
+            }
+
+            if (nextEpisodeAdButton)
+            {
+                if (!debitTicketsNextEpisode)
+                    nextEpisodeAdButton.gameObject.SetActive(false);
+                else
+                    LeanTween.scale(nextEpisodeAdButton.gameObject, Vector3.one, 0.4f);
             }
 
         }).setEase(outBackMore));
@@ -220,6 +265,7 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
 
         noThanksButton.interactable = false;
         nextEpisodeButton.interactable = false;
+        nextEpisodeAdButton.interactable = false;
 
         if (debitTicketsNextEpisode)
         {
@@ -237,6 +283,10 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
 
     private IEnumerator OnNextEpisodeButtonRoutine()
     {
+        noThanksButton.interactable = false;
+        nextEpisodeButton.interactable = false;
+        nextEpisodeAdButton.interactable = false;
+
         episodesSpawner.topPanel.HideTopPanel(0.3f, 0.7f);
 
         yield return new WaitForSeconds(0.5f);
@@ -251,6 +301,23 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         }
     }
 
+    private void OnNextEpisodeAdButton()
+    {
+#if UNITY_EDITOR
+        OnNextEpisodeAdButtonComplete();
+#elif UNITY_ANDROID || UNITY_IOS
+        if (AdsManager.instance == null)
+            return;
+
+        AdsManager.instance.ShowRewardAd(AdsNames.rewardFreeNextEpisode);
+#endif
+    }
+
+    private void OnNextEpisodeAdButtonComplete()
+    {
+        StartCoroutine(OnNextEpisodeButtonRoutine());
+    }
+
     private void OnNoThanksButton()
     {
         if (episodesSpawner == null && EpisodesSpawner.instance)
@@ -261,7 +328,8 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
 
         noThanksButton.interactable = false;
         nextEpisodeButton.interactable = false;
+        nextEpisodeAdButton.interactable = false;
 
         episodesSpawner.LoadEpisodesMainMenu(false);
-    }
+    }    
 }
