@@ -246,6 +246,7 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         seqPart2.append(3f);
         seqPart2.append(LeanTween.alphaCanvas(noThanksButtonCanvasGrp, 1f, 1f).setOnStart(() =>
         {
+            noThanksButton.interactable = true;
             noThanksButtonCanvasGrp.interactable = true;
             noThanksButtonCanvasGrp.blocksRaycasts = true;
         }).setEase(LeanTweenType.easeInOutSine).setOnComplete( () => 

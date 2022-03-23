@@ -55,6 +55,38 @@ namespace Fungus
 
         #region Public members
 
+        public List<CanvasGroup> TargetCanvasGroups
+        {
+            get
+            {
+                return targetCanvasGroups;
+            }            
+        }
+
+        public void AddCanvasGroupItem(CanvasGroup newItem)
+        {
+            if (targetCanvasGroups.Contains(newItem))
+                return;
+
+            targetCanvasGroups.Add(newItem);
+        }
+
+        public void RemoveCanvasGroupItem(CanvasGroup oldItem)
+        {
+            if (!targetCanvasGroups.Contains(oldItem))
+                return;
+
+            targetCanvasGroups.Remove(oldItem);
+        }
+
+        public void UpdateItemAtIndex(CanvasGroup newItem, int index)
+        {
+            if (targetCanvasGroups.Count <= 0)
+                return;
+
+            targetCanvasGroups[index] = newItem;
+        }
+
         public override void OnEnter()
         {
             if (targetCanvasGroups.Count == 0)

@@ -41,11 +41,19 @@ namespace Fungus
 
         #region Public members
 
+        public string Text { get { return text; } set { text = value; } }
+
+        public string Description { get { return description; } set { description = value; } }
+
+        public Block TargetBlock { get { return targetBlock; } set { targetBlock = value; } }
+
+        public bool HideIfVisited { get { return hideIfVisited; } set { hideIfVisited = value; } }
+
+        public bool Interactable { get { return interactable.Value; } set { interactable.Value = value; } }
+
         public MenuDialog SetMenuDialog  { get { return setMenuDialog; } set { setMenuDialog = value; } }
 
-        public string Text { get { return text; } }
-
-        public Block TargetBlock { get { return targetBlock; } }
+        public bool HideThisOption { get { return hideThisOption.Value; } set { hideThisOption.Value = value; } }
 
         public override void OnEnter()
         {

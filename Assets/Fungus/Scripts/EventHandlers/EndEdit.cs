@@ -17,6 +17,12 @@ namespace Fungus
     {   
         [Tooltip("The UI Input Field that the user can enter text into")]
         [SerializeField] protected InputField targetInputField;
+
+        public InputField TargetInputField
+        {
+            get { return targetInputField; }
+            set { targetInputField = value; }
+        }
         
         protected virtual void Start()
         {

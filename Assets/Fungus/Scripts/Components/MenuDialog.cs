@@ -195,6 +195,9 @@ namespace Fungus
 
             if (customSayDialog != null)
             {
+                if (!customSayDialog.gameObject.activeSelf)
+                    customSayDialog.gameObject.SetActive(true);
+
                 for (int i = 0; i < optionButtons.Length; i++)
                 {
                     var button = optionButtons[i];

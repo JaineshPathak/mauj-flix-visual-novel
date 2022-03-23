@@ -24,6 +24,18 @@ namespace Fungus
     
         #region Public members
 
+        public GameObject TargetGameObject 
+        { 
+            get 
+            { 
+                return _targetGameObject.Value; 
+            }
+            set
+            {
+                _targetGameObject.Value = value;
+            }
+        }
+
         public override void OnEnter()
         {
             if (_targetGameObject.Value != null)

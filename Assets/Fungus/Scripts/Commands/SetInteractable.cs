@@ -23,6 +23,36 @@ namespace Fungus
 
         #region Public members
 
+        public List<GameObject> TargetObjects
+        {
+            get { return targetObjects; }
+            set { targetObjects = value; }
+        }
+
+        public void AddCanvasGroupItem(GameObject newItem)
+        {
+            if (targetObjects.Contains(newItem))
+                return;
+
+            targetObjects.Add(newItem);
+        }
+
+        public void RemoveCanvasGroupItem(GameObject oldItem)
+        {
+            if (!targetObjects.Contains(oldItem))
+                return;
+
+            targetObjects.Remove(oldItem);
+        }
+
+        public void UpdateItemAtIndex(GameObject newItem, int index)
+        {
+            if (targetObjects.Count <= 0)
+                return;
+
+            targetObjects[index] = newItem;
+        }
+
         public override void OnEnter()
         {
             if (targetObjects.Count == 0)

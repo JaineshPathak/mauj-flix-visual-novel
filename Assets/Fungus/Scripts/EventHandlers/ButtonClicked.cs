@@ -20,6 +20,12 @@ namespace Fungus
 
         #region Public members
 
+        public Button TargetButton
+        {
+            get { return targetButton; }
+            set { targetButton = value; }
+        }
+
         public virtual void Start()
         {
             if (targetButton != null)

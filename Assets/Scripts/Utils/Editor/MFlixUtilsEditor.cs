@@ -31,6 +31,9 @@ public class MFlixUtilsEditor : Editor
     private SerializedProperty menuDialogueInSceneSerialized;
     private SerializedProperty menuDialoguePrefabSerialized;
 
+    //Menu Commands Update
+    private SerializedProperty destroyOldMenuCommandsSerialized;
+
     //End Episode Screen Mode
     private SerializedProperty episodeEndDestroyOriginalSerialized;
     private SerializedProperty episodeEndInSceneSerialized;
@@ -47,6 +50,17 @@ public class MFlixUtilsEditor : Editor
     private SerializedProperty askYesNoPopupDestroyOriginalSerialized;
     private SerializedProperty askYesNoPopupInSceneSerialized;
     private SerializedProperty askYesNoPopupPrefabSerialized;
+
+    //Character Selection Screen
+    private SerializedProperty destroyOriginalCharSelectionScreenSerialized;
+    private SerializedProperty copyFromOriginalCharScreenSerialized;
+    private SerializedProperty charSelectionScreenInSceneSerialized;
+    private SerializedProperty charSelectionScreenPrefabSerialized;
+
+    //Character Name Screen
+    private SerializedProperty destoryOriginalCharNameScreenSerialized;
+    private SerializedProperty charNameScreenInSceneSerialized;
+    private SerializedProperty charNameScreenPrefabSerialized;
 
     private MFlixUtils flixReplacer;
 
@@ -71,6 +85,8 @@ public class MFlixUtilsEditor : Editor
         menuDialogueInSceneSerialized = serializedObject.FindProperty("menuDialogueInScene");
         menuDialoguePrefabSerialized = serializedObject.FindProperty("menuDialoguePrefab");
 
+        destroyOldMenuCommandsSerialized = serializedObject.FindProperty("destroyOldMenuCommands");
+
         episodeEndDestroyOriginalSerialized = serializedObject.FindProperty("destroyOriginalEndEpisodeScreen");
         episodeEndInSceneSerialized = serializedObject.FindProperty("endEpisodeScreenInScene");
         episodeEndPrefabSerialized = serializedObject.FindProperty("endEpisodeScreenPrefab");
@@ -84,6 +100,15 @@ public class MFlixUtilsEditor : Editor
         askYesNoPopupDestroyOriginalSerialized = serializedObject.FindProperty("destroyOriginalAskYesPopupScreen");
         askYesNoPopupInSceneSerialized = serializedObject.FindProperty("askYesNoPopupInScene");
         askYesNoPopupPrefabSerialized = serializedObject.FindProperty("askYesNoPopupPrefab");
+
+        destroyOriginalCharSelectionScreenSerialized = serializedObject.FindProperty("destroyOriginalCharSelectionScreen");
+        copyFromOriginalCharScreenSerialized = serializedObject.FindProperty("copyFromOriginalCharScreen");
+        charSelectionScreenInSceneSerialized = serializedObject.FindProperty("charSelectionScreenInScene");
+        charSelectionScreenPrefabSerialized = serializedObject.FindProperty("charSelectionScreenPrefab");
+
+        destoryOriginalCharNameScreenSerialized = serializedObject.FindProperty("destoryOriginalCharNameScreen");
+        charNameScreenInSceneSerialized = serializedObject.FindProperty("charNameScreenInScene");
+        charNameScreenPrefabSerialized = serializedObject.FindProperty("charNameScreenPrefab");
     }
 
     public override void OnInspectorGUI()
@@ -233,6 +258,25 @@ public class MFlixUtilsEditor : Editor
 
                 break;
 
+            case MFlixUtils.WhatToReplace.MenuCommandUpdate:
+                
+                if(flixReplacer.episodeFlowchart != null)
+                {
+                    GUIContent menuCommandsContent = new GUIContent("Destroy Old Menu Commands", "Destroy Old Menu Commands from Flowchart");
+                    EditorGUILayout.PropertyField(destroyOldMenuCommandsSerialized, menuCommandsContent, GUILayout.ExpandHeight(false));
+
+                    EditorGUILayout.Space(10f);
+
+                    if (DrawButtonColored("Update Menu Commands".ToUpper(), "#3c8b50", Color.white))
+                    {
+                        //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
+                        Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Menu Update");
+                        flixReplacer.UpdateMenuCommands();
+                    }
+                }
+
+                break;
+
             case MFlixUtils.WhatToReplace.EpisodeEndScreen:
 
                 GUIContent endEpisodeDestroySceneContent = new GUIContent("Destroy Original", "Destroy Original End Episode Screen from Prefab");
@@ -322,6 +366,59 @@ public class MFlixUtilsEditor : Editor
                         //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
                         Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Ask/No Popup Screen");
                         flixReplacer.ReplaceYesNoPopupScreen();
+                    }
+                }
+
+                break;
+
+            case MFlixUtils.WhatToReplace.CharacterSelectionScreen:
+
+                GUIContent charSelectDestroySceneContent = new GUIContent("Destroy Original", "Destroy Original Character Selection Screen from Prefab");
+                EditorGUILayout.PropertyField(destroyOriginalCharSelectionScreenSerialized, charSelectDestroySceneContent, GUILayout.ExpandHeight(false));
+
+                GUIContent charSelectCopyContent = new GUIContent("Copy Original Component", "Copy Original Component and Paste it to new ones");
+                EditorGUILayout.PropertyField(copyFromOriginalCharScreenSerialized, charSelectCopyContent, GUILayout.ExpandHeight(false));
+
+                GUIContent charSelectSceneContent = new GUIContent("Char Selection In Scene", "Character Selection Screen from Scene");
+                EditorGUILayout.PropertyField(charSelectionScreenInSceneSerialized, charSelectSceneContent, GUILayout.ExpandHeight(false));
+
+                GUIContent charSelectPrefabContent = new GUIContent("Char Selection Prefab", "Character Selection Screen Prefab");
+                EditorGUILayout.PropertyField(charSelectionScreenPrefabSerialized, charSelectPrefabContent, GUILayout.ExpandHeight(false));                
+
+                EditorGUILayout.Space(10f);
+
+                if (flixReplacer.charSelectionScreenInScene != null && flixReplacer.charSelectionScreenPrefab != null)
+                {
+                    if (DrawButtonColored("Replace Char Selection Screen".ToUpper(), "#3c8b50", Color.white))
+                    {
+                        //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
+                        Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Replace Character Screen");
+                        flixReplacer.ReplaceCharacterSelectionScreen();                        
+                    }
+                }
+
+                break;
+
+            case MFlixUtils.WhatToReplace.CharacterNameDialogueScreen:
+
+                GUIContent charNameDestroySceneContent = new GUIContent("Destroy Original", "Destroy Original Character Name Screen from Prefab");
+                EditorGUILayout.PropertyField(destoryOriginalCharNameScreenSerialized, charNameDestroySceneContent, GUILayout.ExpandHeight(false));
+
+                GUIContent charNameSceneContent = new GUIContent("Char Name In Scene", "Character Name Screen from Scene");
+                EditorGUILayout.PropertyField(charNameScreenInSceneSerialized, charNameSceneContent, GUILayout.ExpandHeight(false));
+
+                GUIContent charNamePrefabContent = new GUIContent("Char Name Prefab", "Character Name Screen Prefab");
+                EditorGUILayout.PropertyField(charNameScreenPrefabSerialized, charNamePrefabContent, GUILayout.ExpandHeight(false));
+
+                EditorGUILayout.Space(10f);
+
+                if (flixReplacer.charNameScreenInScene != null && flixReplacer.charNameScreenPrefab != null)
+                {
+                    if (DrawButtonColored("Replace Char Name Screen".ToUpper(), "#3c8b50", Color.white))
+                    {
+                        //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
+                        Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Replace Character Name");
+                        flixReplacer.ReplaceCharacterNameScreen();
                     }
                 }
 

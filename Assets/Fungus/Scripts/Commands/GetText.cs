@@ -25,6 +25,12 @@ namespace Fungus
 
         #region Public members
 
+        public GameObject TargetTextObject
+        {
+            get { return targetTextObject; }
+            set { targetTextObject = value; }
+        }
+
         public override void OnEnter()
         {
             if (stringVariable == null)
