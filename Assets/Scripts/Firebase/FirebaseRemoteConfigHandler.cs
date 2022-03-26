@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Firebase;
@@ -75,7 +73,8 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
         if (isFirebaseRCInitialized)
             return;
 
-        //InitFirebaseRemoteConfig();
+        //if (FirebaseApp.DefaultInstance != null)
+            //InitFirebaseRemoteConfig();
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
             var dependencyStatus = task.Result;

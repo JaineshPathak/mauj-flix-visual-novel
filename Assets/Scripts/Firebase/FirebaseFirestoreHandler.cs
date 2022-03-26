@@ -73,7 +73,7 @@ public class FirebaseFirestoreHandler : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode sceneMode)
     {
-        //print(scene.name + " (" + scene.buildIndex + ")");
+        print(scene.name + " (" + scene.buildIndex + ")");
         if (scene.buildIndex == 1 && firstTimeUser && EpisodesSpawner.instance != null)
         {
             firstTimeUser = false;

@@ -263,13 +263,19 @@ public class CharacterSelectionScreen : MonoBehaviour
             if (SwipeManager.IsSwipingLeft())
             {
                 if (snapRect)
+                {
                     snapRect.NextScreen();
+                    NextCharacter();
+                }
             }
 
             if (SwipeManager.IsSwipingRight())
             {
                 if (snapRect)
+                {
                     snapRect.PreviousScreen();
+                    PreviousCharacter();
+                }
             }
 
             yield return null;

@@ -1,10 +1,7 @@
 ﻿#if ENABLE_SDKS
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Firebase;
 using Firebase.Analytics;
-using System;
 
 namespace underDOGS.SDKEvents
 {
@@ -13,6 +10,23 @@ namespace underDOGS.SDKEvents
     {
         public override void InitSDK()
         {
+            /*if (FirebaseApp.DefaultInstance != null)
+            {
+                FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
+
+                if (FirebaseMessagingHandler.instance != null)
+                    FirebaseMessagingHandler.instance.InitFirebaseMessagingHandler();
+
+                if (FirebaseDBHandler.instance != null)
+                    FirebaseDBHandler.instance.InitFirebaseDBHandler();
+
+                if (FirebaseRemoteConfigHandler.instance != null)
+                    FirebaseRemoteConfigHandler.instance.InitFirebaseRemoteConfigHandler();
+
+                if (FirebaseAuthHandler.instance != null)
+                    FirebaseAuthHandler.instance.InitFirebaseAuthHandler();
+            }*/
+
             FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(continuationAction: task =>
             {
                 if(task.Result == DependencyStatus.Available)

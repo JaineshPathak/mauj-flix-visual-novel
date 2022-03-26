@@ -41,10 +41,10 @@ public class FirebaseAuthHandler : MonoBehaviour
         configuration.WebClientId = webClientID;
     }
 
-    private void Start()
+    /*private void Start()
     {
         InitFirebaseAuthHandler();        
-    }
+    }*/
 
     [ContextMenu("Delete User")]
     public void DeleteUser()
@@ -76,7 +76,8 @@ public class FirebaseAuthHandler : MonoBehaviour
         if (isFirebaseAuthInitialized)
             return;
 
-        //InitFirebaseAuth();
+        //if(FirebaseApp.DefaultInstance != null)
+            //InitFirebaseAuth();        
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
             var dependencyStatus = task.Result;

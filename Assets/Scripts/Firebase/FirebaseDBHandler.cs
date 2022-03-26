@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using Firebase;
 using Firebase.Database;
@@ -47,7 +45,7 @@ public class FirebaseDBHandler : MonoBehaviour
                 // Firebase Unity SDK is not safe to use here.
             }
         });
-    }    
+    }
 
     private void InitFirebaseDatabase()
     {

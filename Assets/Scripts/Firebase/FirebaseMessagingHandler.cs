@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Firebase;
 using Firebase.Messaging;
 using System;
@@ -27,7 +25,8 @@ public class FirebaseMessagingHandler : MonoBehaviour
         if (isFirebaseInitialized)
             return;
 
-        //InitFirebaseMessaging();
+        //if (FirebaseApp.DefaultInstance != null)
+            //InitFirebaseMessaging();
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => 
         {
             var dependencyStatus = task.Result;
