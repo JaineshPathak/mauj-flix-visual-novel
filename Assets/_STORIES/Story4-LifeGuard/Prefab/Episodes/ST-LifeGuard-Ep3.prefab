@@ -2382,25 +2382,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &3740477568800422424
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5419981956544783014}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: c9f69e2e87d3ea7478c0161b79bc1c78, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2252939935777743199
 GameObject:
   m_ObjectHideFlags: 0
@@ -5277,6 +5258,25 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!95 &3740477568800422424
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5419981956544783014}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: c9f69e2e87d3ea7478c0161b79bc1c78, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5450952155505335112
 GameObject:
   m_ObjectHideFlags: 0
@@ -7316,10 +7316,10 @@ GameObject:
   - component: {fileID: 817559132237307059}
   - component: {fileID: 857198243479327689}
   - component: {fileID: 5755389922151784884}
-  - component: {fileID: 5274861137836620683}
-  - component: {fileID: 1614757035490937543}
-  - component: {fileID: 166540814202558429}
-  - component: {fileID: 2826847359823481504}
+  - component: {fileID: 2989011240971307610}
+  - component: {fileID: 981827181444081430}
+  - component: {fileID: 7856953330177551052}
+  - component: {fileID: 726883037427473030}
   m_Layer: 0
   m_Name: LifeGuardEp3-Flowchart
   m_TagString: Untagged
@@ -7354,7 +7354,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   version: 1
-  scrollPos: {x: 486.86234, y: 147.48982}
+  scrollPos: {x: 396.69846, y: -239.3953}
   variablesScrollPos: {x: 0, y: 0}
   variablesExpanded: 1
   blockViewHeight: 385
@@ -15109,8 +15109,8 @@ MonoBehaviour:
   - {fileID: 3921882889535711048}
   - {fileID: 7175842524734654873}
   - {fileID: 1612178207492727085}
-  - {fileID: 5274861137836620683}
-  - {fileID: 1614757035490937543}
+  - {fileID: 2989011240971307610}
+  - {fileID: 981827181444081430}
   suppressAllAutoSelections: 0
 --- !u!114 &1745719793063845874
 MonoBehaviour:
@@ -25579,8 +25579,8 @@ MonoBehaviour:
   - {fileID: 4301972394513114898}
   - {fileID: 6193398158031940866}
   - {fileID: 6745552611025814932}
-  - {fileID: 166540814202558429}
-  - {fileID: 2826847359823481504}
+  - {fileID: 7856953330177551052}
+  - {fileID: 726883037427473030}
   suppressAllAutoSelections: 0
 --- !u!114 &7317488010990090662
 MonoBehaviour:
@@ -31245,7 +31245,7 @@ MonoBehaviour:
   methodName: PlayMusicAtIndex
   delay: 0
   musicIndex: 1
---- !u!114 &5274861137836620683
+--- !u!114 &2989011240971307610
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -31257,10 +31257,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04a56d8d22599bf4fb3a7813c55da869, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemId: 3812
+  itemId: 3816
   indentLevel: 0
   text: "\u0939\u094B \u0917\u092F\u093E \u0939\u0948\u0902\u0964"
-  description: Chose an Option
+  description: 
   targetBlock: {fileID: 7840540809362139326}
   hideIfVisited: 0
   interactable:
@@ -31272,7 +31272,7 @@ MonoBehaviour:
     booleanVal: 0
   hasDiamondCost: 0
   diamondCost: 0
---- !u!114 &1614757035490937543
+--- !u!114 &981827181444081430
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -31284,7 +31284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04a56d8d22599bf4fb3a7813c55da869, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemId: 3813
+  itemId: 3817
   indentLevel: 0
   text: "\u0928\u0939\u0940\u0902, \u0939\u0947\u0932\u094D\u092A \u0915\u0930\u094B\u2026"
   description: 
@@ -31299,7 +31299,7 @@ MonoBehaviour:
     booleanVal: 0
   hasDiamondCost: 0
   diamondCost: 0
---- !u!114 &166540814202558429
+--- !u!114 &7856953330177551052
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -31311,10 +31311,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04a56d8d22599bf4fb3a7813c55da869, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemId: 3814
+  itemId: 3818
   indentLevel: 0
   text: "\u0909\u0938\u0947 \u0930\u094B\u0915\u094B!"
-  description: Chose an Option
+  description: 
   targetBlock: {fileID: 4382317818525872200}
   hideIfVisited: 0
   interactable:
@@ -31326,7 +31326,7 @@ MonoBehaviour:
     booleanVal: 0
   hasDiamondCost: 0
   diamondCost: 0
---- !u!114 &2826847359823481504
+--- !u!114 &726883037427473030
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -31338,7 +31338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04a56d8d22599bf4fb3a7813c55da869, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemId: 3815
+  itemId: 3819
   indentLevel: 0
   text: "\u0909\u0938\u0947 \u0915\u0942\u0926 \u091C\u093E\u0928\u0947 \u0926\u094B!"
   description: 

@@ -22,21 +22,34 @@ public class MenuMflix : Menu
 
         bool hideOption = (hideIfVisited && targetBlock != null && targetBlock.GetExecutionCount() > 0) || hideThisOption.Value;
 
-        var menuDialog = MenuDialog.GetMenuDialog();              
+        /*var menuDialog = MenuDialog.GetMenuDialog();              
         if (menuDialog != null)
         {
-            menuDialog.SetActive(true);            
+            menuDialog.SetActive(true);
 
             var flowchart = GetFlowchart();
             string displayText = flowchart.SubstituteVariables(text);
 
             if (menuDialog.GetType() == typeof(MenuDialogMflix))
             {
-                var menuDialogMflix = menuDialog as MenuDialogMflix;
+                MenuDialogMflix menuDialogMflix = menuDialog as MenuDialogMflix;
                 menuDialogMflix.AddOptionWithCost(displayText, interactable, hideOption, targetBlock, hasDiamondCost, diamondCost);
             }
             else
                 menuDialog.AddOption(displayText, interactable, hideOption, targetBlock);
+        }*/
+
+        MenuDialogMflix menuDialogMflix = FindObjectOfType<MenuDialogMflix>();
+        if(menuDialogMflix != null)
+        {
+            Debug.Log("MenuDialogMflix : [0] - FOUND!");
+
+            menuDialogMflix.SetActive(true);
+
+            var flowchart = GetFlowchart();
+            string displayText = flowchart.SubstituteVariables(text);
+
+            menuDialogMflix.AddOptionWithCost(displayText, interactable, hideOption, targetBlock, hasDiamondCost, diamondCost);
         }
 
         Continue();

@@ -56,7 +56,9 @@ public class MenuDialogMflix : MenuDialog
     }    
 
     public bool AddOptionWithCost(string text, bool interactable, bool hideOption, Block targetBlock, bool hasDiamondCost, float diamondCost)
-    {
+    {        
+        //Debug.LogFormat("MenuDialogMflix : [1] - Called from MenuMflix with Details: text: {0} || Interactable: {1} || hideOptions: {2} || Block Name: {3} || HasDiamondCost: {4} || DiamondCost: {5}", text, interactable, hideOption, targetBlock.BlockName, hasDiamondCost, diamondCost);
+        
         var block = targetBlock;
 
         UnityAction action = null;
@@ -128,7 +130,7 @@ public class MenuDialogMflix : MenuDialog
                     gameObject.SetActive(false);
                     // Use a coroutine to call the block on the next frame
                     // Have to use the Flowchart gameobject as the MenuDialog is now inactive
-                    flowchart.StartCoroutine(CallBlock(block));
+                    flowchart.StartCoroutine(CallBlockExecute(block));
                 }
             };
         }
@@ -157,9 +159,11 @@ public class MenuDialogMflix : MenuDialog
 
     private bool AddOptionWithCost(string text, bool interactable, bool hideOption, UnityAction action, bool hasDiamondCost, float diamondCost)
     {
+        //Debug.LogFormat("MenuDialogMflix : [2] - Called To Main Function with Details: text: {0} || Interactable: {1} || hideOptions: {2} || HasDiamondCost: {3} || DiamondCost: {4}", text, interactable, hideOption, hasDiamondCost, diamondCost);
+
         if (nextOptionIndex >= CachedButtons.Length)
         {
-            Debug.LogWarning("Unable to add menu item, not enough buttons: " + text);
+            Debug.LogWarning("FUNGUS: Unable to add menu item, not enough buttons: " + text);
             return false;
         }
         //if first option notify that a menu has started
@@ -189,6 +193,15 @@ public class MenuDialogMflix : MenuDialog
             buttonText.color = Color.white;
             buttonShineAim.enabled = false;
         }
+
+        /*
+        Debug.LogFormat("MenuDialogMflix: [2] - Checking Button at iteration: {0} || AND Button Name: {1}", nextOptionIndex, button.name);
+        Debug.LogFormat("MenuDialogMflix: [3] - Checking Button Image at iteration: {0} || AND Button Image Name: {1}", nextOptionIndex, buttonImage.name);
+        Debug.LogFormat("MenuDialogMflix: [4] - Checking Button Diamond Panel at iteration: {0} || AND Button Diamond Panel Name: {1}", nextOptionIndex, buttonDiamondPanel.name);
+        Debug.LogFormat("MenuDialogMflix: [5] - Checking Button Text at iteration: {0} || AND Button Text: {1}", nextOptionIndex, buttonText.text);
+        Debug.LogFormat("MenuDialogMflix: [6] - Checking Button Diamond Cost at iteration: {0} || AND Button Cost Text: {1}", nextOptionIndex, buttonDiamondCostText.text);
+        Debug.LogFormat("MenuDialogMflix: [7] - Checking Button Shine Anim at iteration: {0} || AND Button Anim Enabled: {1}", nextOptionIndex, buttonShineAim.enabled);
+        */
 
         //move forward for next call
         nextOptionIndex++;
@@ -255,12 +268,18 @@ public class MenuDialogMflix : MenuDialog
                     gameObject.SetActive(false);
                     // Use a coroutine to call the block on the next frame
                     // Have to use the Flowchart gameobject as the MenuDialog is now inactive
-                    flowchart.StartCoroutine(CallBlock(block));
+                    flowchart.StartCoroutine(CallBlockExecute(block));
                 }
 
                 //StartCoroutine(OnDiamondsDebitCompletedRoutine(block));
             }, 200f, Color.red);
         }
+    }
+
+    private IEnumerator CallBlockExecute(Block block)
+    {
+        yield return new WaitForEndOfFrame();
+        block.StartExecution();
     }
 
     /*private IEnumerator OnDiamondsDebitCompletedRoutine(Block block)

@@ -315,7 +315,7 @@ public class MFlixUtils : MonoBehaviour
 
                 menuCommandv2.OnCommandAdded(block);
 
-                block.CommandList.Insert(block.CommandList.Count, menuCommandv2);
+                block.CommandList.Add(menuCommandv2);
 
                 PrefabUtility.RecordPrefabInstancePropertyModifications(block);
 

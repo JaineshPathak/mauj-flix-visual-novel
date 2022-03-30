@@ -59,8 +59,12 @@ public class CharacterSelectionScreen : MonoBehaviour
     private EpisodesSpawner episodesSpawner;
     private ScrollSnapRect snapRect;
 
+    private CanvasGroup canvasGroup;
+
     private void Awake()
     {
+        canvasGroup = GetComponent<CanvasGroup>();
+
         if (charactersListFromUI.Count == 0)
             charactersListFromUI = characterSelectionContent.GetComponentsInChildren<Image>().ToList();
 
@@ -76,7 +80,7 @@ public class CharacterSelectionScreen : MonoBehaviour
             {
                 characterDataAssets[i].PopulatePortraitsList();
             }
-        }
+        }        
     }
 
     private void Start()
@@ -260,21 +264,24 @@ public class CharacterSelectionScreen : MonoBehaviour
     {
         while(true)
         {
-            if (SwipeManager.IsSwipingLeft())
+            if (canvasGroup != null && canvasGroup.alpha == 1 && canvasGroup.interactable && canvasGroup.blocksRaycasts)
             {
-                if (snapRect)
+                if (SwipeManager.IsSwipingLeft())
                 {
-                    snapRect.NextScreen();
-                    NextCharacter();
+                    if (snapRect)
+                    {
+                        snapRect.NextScreen();
+                        NextCharacter();
+                    }
                 }
-            }
 
-            if (SwipeManager.IsSwipingRight())
-            {
-                if (snapRect)
+                if (SwipeManager.IsSwipingRight())
                 {
-                    snapRect.PreviousScreen();
-                    PreviousCharacter();
+                    if (snapRect)
+                    {
+                        snapRect.PreviousScreen();
+                        PreviousCharacter();
+                    }
                 }
             }
 

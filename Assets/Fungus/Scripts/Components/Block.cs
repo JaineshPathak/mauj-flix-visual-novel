@@ -259,6 +259,15 @@ namespace Fungus
 
             jumpToCommandIndex = commandIndex;
 
+            /*try
+            {
+                Debug.Log("Command Lists Count: " + commandList.Count);
+            }
+            catch(NullReferenceException e)
+            {
+                Debug.LogError("Command Lists is NOT INITIALIZED! " + e.Message);
+            }*/
+
             int i = 0;
             while (true)
             {
