@@ -10,6 +10,9 @@ public class GameController : MonoBehaviour
 {
     public static GameController instance;
 
+    [Header("Flags")]
+    public bool devMode = false;
+
     [Header("Stories Database Key")]
     public string storiesDBKey;     //This will download the json file
 
@@ -174,7 +177,12 @@ public class GameController : MonoBehaviour
                 EpisodeData episodeData = new EpisodeData();
                 episodeData.episodeAssetKey = storiesDBItemLoaded.storyEpisodesKeys[i];
                 episodeData.isFinished = false;
-                episodeData.isUnlocked = (i == 0) ? true : false;
+
+                if (devMode)
+                    episodeData.isUnlocked = true;
+                else
+                    episodeData.isUnlocked = (i == 0) ? true : false;
+                
                 episodeData.currentBlockID = 0;
                 episodeData.currentCommandID = 0;
                 episodeData.lastCameraPosition = Vector3.zero;

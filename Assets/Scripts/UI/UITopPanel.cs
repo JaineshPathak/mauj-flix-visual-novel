@@ -25,6 +25,10 @@ public class UITopPanel : MonoBehaviour
     public Transform ticketsPanelIcon;
     public ParticleSystem ticketPickEffectVFX;
 
+    [Space(15)]
+
+    public Transform devModeIcon;
+
     private int showSeqID;
     private int diamondSeqID;
     private int ticketSeqID;
@@ -62,6 +66,9 @@ public class UITopPanel : MonoBehaviour
             FirebaseFirestoreOffline.instance.RegisterDiamondAmountText(diamondsText);
             FirebaseFirestoreOffline.instance.RegisterTicketAmountText(ticketsText);
         }
+
+        if (GameController.instance != null && devModeIcon)
+            devModeIcon.gameObject.SetActive(GameController.instance.devMode);
     }
 
     //----------------------------------------------------------------------------------------------------

@@ -52,8 +52,8 @@ public class UIEpisodeEndPanel : MonoBehaviour
         if(congralutionsImage)
             congralutionsImage.transform.localScale = Vector3.zero;
 
-        if(nextEpisodePanel)
-            nextEpisodePanel.transform.localScale = Vector3.zero;
+        //if(nextEpisodePanel)
+            //nextEpisodePanel.transform.localScale = Vector3.zero;
 
         if(playButton)
             playButton.transform.localScale = Vector3.zero;
