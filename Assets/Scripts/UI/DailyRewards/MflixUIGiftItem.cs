@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MflixUIGiftItem : MonoBehaviour
 {
     public int day;
     public Image isDoneIcon;
-    public Text dayText;
+    public TextMeshProUGUI dayText;
+    public CharReplacerHindi dayTextFixer;
+    //public Text dayText;
     public ParticleSystem giftParticlesVfx;
 
     public bool IsDone
@@ -43,6 +46,11 @@ public class MflixUIGiftItem : MonoBehaviour
     private void Start()
     {
         if (dayText)
-            dayText.text = MflixDailyRewards.GetHindiNumber(day.ToString());        
+        {
+            dayText.text = MflixDailyRewards.GetHindiNumber(day.ToString());
+
+            if (dayTextFixer)
+                dayTextFixer.UpdateMe();
+        }
     }
 }

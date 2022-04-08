@@ -48,11 +48,25 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
     public Button playEndingButtonAd;
     public Button noThanksButton;
 
+    [Header("No Diamonds Panel")]
+    public CanvasGroup noDiamondsPanel;
+    public Button noDiamondsOkButton;
+
     private CanvasGroup noThanksButtonCanvasGrp;
     private EpisodesHandler episodesHandler;
 
     protected override void Awake()
     {
+        if(noDiamondsPanel)
+        {
+            noDiamondsPanel.alpha = 0;
+            noDiamondsPanel.interactable = false;
+            noDiamondsPanel.blocksRaycasts = false;
+        }
+
+        if (noDiamondsOkButton)
+            noDiamondsOkButton.onClick.AddListener(OnNoDiamondsOkButton);
+
         if (middlePanelPartOne)
             middlePanelPartOne.anchoredPosition = new Vector2(-1000f, middlePanelPartOne.anchoredPosition.y);
 
@@ -289,6 +303,15 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
         if (episodesSpawner == null)
             return;
 
+        if (FirebaseFirestoreOffline.instance == null)
+            return;
+
+        if(FirebaseFirestoreHandler.instance.GetUserDiamondsAmountInt() < 5)
+        {
+            ShowNoDiamondsPopup();
+            return;
+        }
+
         //if (FirebaseFirestoreOffline.instance == null)
         //return;
 
@@ -365,4 +388,33 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
 
         episodesSpawner.LoadEpisodesMainMenu(false);
     }
+
+    //-------------------------------------------------------------------------------------------------------
+
+    private void ShowNoDiamondsPopup()
+    {
+        if (noDiamondsPanel == null)
+            return;
+
+        noDiamondsPanel.interactable = true;
+        noDiamondsPanel.blocksRaycasts = true;
+        LeanTween.alphaCanvas(noDiamondsPanel, 1f, 0.2f).setEaseInOutSine();
+    }
+
+    private void HideNoDiamondsPopup()
+    {
+        if (noDiamondsPanel == null)
+            return;
+
+        noDiamondsPanel.interactable = false;
+        noDiamondsPanel.blocksRaycasts = false;
+        LeanTween.alphaCanvas(noDiamondsPanel, 0, 0.2f).setEaseInOutSine();
+    }
+
+    private void OnNoDiamondsOkButton()
+    {
+        HideNoDiamondsPopup();
+    }
+
+    //-------------------------------------------------------------------------------------------------------
 }

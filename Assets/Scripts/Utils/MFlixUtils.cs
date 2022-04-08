@@ -20,6 +20,7 @@ public class MFlixUtils : MonoBehaviour
         TutorialNarrativeDialogue,
         NarrativeDialogue,
         SayDialogue,
+        SayDialogueReplace,
         MenuDialogue,
         MenuCommandUpdate,
         PickNameDialogue,
@@ -48,6 +49,11 @@ public class MFlixUtils : MonoBehaviour
     public bool destroyOriginalSayDialogue;
     public SayDialog sayDialogueInScene;
     public SayDialog sayDialoguePrefab;
+
+    //Say Dialogue Replace
+    public bool destroyOldSayDialogue;
+    public SayDialog sayDialogueInSceneOld;
+    public SayDialog sayDialogueInSceneNew;
 
     //Menu Dialogue Box
     public bool destroyOriginalMenuDialogue;
@@ -211,6 +217,46 @@ public class MFlixUtils : MonoBehaviour
         {
             SceneVisibilityManager.DestroyImmediate(sayDialogueInScene.gameObject);
             sayDialogueInScene = null;
+        }
+
+        PrefabUtility.RecordPrefabInstancePropertyModifications(episodeFlowchart);
+        PrefabUtility.RecordPrefabInstancePropertyModifications(transform);
+    }
+
+    public void ReplaceSayDialogueScene()
+    {
+        if (PrefabStageUtility.GetCurrentPrefabStage() == null)
+        {
+            Debug.LogError("MFlix Replacer: You need to be in Prefab Mode");
+            return;
+        }
+
+        if (episodeFlowchart == null || sayDialogueInSceneNew == null || sayDialogueInSceneOld == null)
+            return;
+
+        int siblingIndexScene = sayDialogueInSceneOld.transform.GetSiblingIndex();
+
+        foreach (Say say in episodeFlowchart.GetComponentsInChildren<Say>())
+        {
+            if (say.setSayDialog == sayDialogueInSceneOld)
+            {
+                say.setSayDialog = sayDialogueInSceneNew;
+                Debug.Log("Replaced Say Dialogue: [OLD: " + sayDialogueInSceneOld + "] --> [NEW: " + sayDialogueInSceneNew + "]");
+                Debug.Log("New Say Dialogue: " + say.setSayDialog.gameObject.transform.name);
+
+                if (say._Character != null && say.Portrait != null)
+                    say.Portrait = null;
+
+                PrefabUtility.RecordPrefabInstancePropertyModifications(say);
+            }
+        }
+        
+        if(destroyOldSayDialogue)
+        {
+            SceneVisibilityManager.DestroyImmediate(sayDialogueInSceneOld.gameObject);
+            sayDialogueInSceneOld = null;
+
+            PrefabUtility.RecordPrefabInstancePropertyModifications(transform);
         }
 
         PrefabUtility.RecordPrefabInstancePropertyModifications(episodeFlowchart);

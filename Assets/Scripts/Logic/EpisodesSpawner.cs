@@ -226,7 +226,7 @@ public class EpisodesSpawner : MonoBehaviour
         storyPercentBar.fillAmount = 0;
         percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 
-        AsyncOperation sceneOperation = SceneManager.LoadSceneAsync(2);
+        AsyncOperation sceneOperation = SceneManager.LoadSceneAsync(3);
         sceneOperation.completed += OnStorySceneLoadedComplete;
 
         while(!sceneOperation.isDone)
@@ -379,7 +379,7 @@ public class EpisodesSpawner : MonoBehaviour
         blackScreenCanvasGroup.blocksRaycasts = true;
         LeanTween.alphaCanvas(blackScreenCanvasGroup, 1f, 1f).setOnComplete( () => 
         {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(2);
         });
     }
 
@@ -396,7 +396,7 @@ public class EpisodesSpawner : MonoBehaviour
         blackScreenCanvasGroup.blocksRaycasts = true;
         LeanTween.alphaCanvas(blackScreenCanvasGroup, 1f, 1f).setOnComplete(() =>
         {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(2);
         });
     }
 

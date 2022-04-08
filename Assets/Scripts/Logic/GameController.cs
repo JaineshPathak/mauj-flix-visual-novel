@@ -11,7 +11,12 @@ public class GameController : MonoBehaviour
     public static GameController instance;
 
     [Header("Flags")]
-    public bool devMode = false;
+    [SerializeField] private bool devMode = false;
+
+    public bool DevMode
+    {
+        get { return devMode; }
+    }
 
     [Header("Stories Database Key")]
     public string storiesDBKey;     //This will download the json file

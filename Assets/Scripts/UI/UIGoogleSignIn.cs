@@ -66,7 +66,8 @@ public class UIGoogleSignIn : MonoBehaviour
                 displayNameText.text = "Guest";
                 if (FirebaseAuthHandler.instance.userCurrent != null)
                 {
-                    userIDCopyClipboardButton.gameObject.SetActive(true);
+                    //userIDCopyClipboardButton.gameObject.SetActive(true);
+                    userIDCopyClipboardButton.gameObject.SetActive(false);
                     displayIDText.text = "ID: " + FirebaseAuthHandler.instance.userCurrent.UserId;
 
                     userID = FirebaseAuthHandler.instance.userCurrent.UserId;
@@ -94,7 +95,8 @@ public class UIGoogleSignIn : MonoBehaviour
 
         displayNameText.text = UserResult.Result.DisplayName;
 
-        userIDCopyClipboardButton.gameObject.SetActive(true);
+        //userIDCopyClipboardButton.gameObject.SetActive(true);
+        userIDCopyClipboardButton.gameObject.SetActive(false);
         displayIDText.text = "ID: " + UserResult.Result.UserId;
 
         userID = UserResult.Result.UserId;
@@ -114,7 +116,8 @@ public class UIGoogleSignIn : MonoBehaviour
     {
         displayNameText.text = UserResult.Result.DisplayName;
 
-        userIDCopyClipboardButton.gameObject.SetActive(true);
+        //userIDCopyClipboardButton.gameObject.SetActive(true);
+        userIDCopyClipboardButton.gameObject.SetActive(false);
         displayIDText.text = "ID: " + UserResult.Result.UserId;
 
         userID = UserResult.Result.UserId;
@@ -158,7 +161,8 @@ public class UIGoogleSignIn : MonoBehaviour
         displayNameText.text = "Guest";
         if (FirebaseAuthHandler.instance.userCurrent != null)
         {
-            userIDCopyClipboardButton.gameObject.SetActive(true);
+            //userIDCopyClipboardButton.gameObject.SetActive(true);
+            userIDCopyClipboardButton.gameObject.SetActive(false);
             displayIDText.text = "ID: " + FirebaseAuthHandler.instance.userCurrent.UserId;
 
             userID = FirebaseAuthHandler.instance.userCurrent.UserId;

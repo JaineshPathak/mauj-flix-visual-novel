@@ -31,12 +31,16 @@ public class SceneLoadButtons
         {
             //GUILayout.FlexibleSpace();
 
+            GUIContent loadSceneRootContent = new GUIContent();
+            loadSceneRootContent.text = "0";
+            loadSceneRootContent.tooltip = "Loads Root Scene";
+
             GUIContent loadScene0Content = new GUIContent();
-            loadScene0Content.text = "0";
+            loadScene0Content.text = "1";
             loadScene0Content.tooltip = "Loads SplashScreen Scene";
 
             GUIContent loadScene1Content = new GUIContent();
-            loadScene1Content.text = "1";
+            loadScene1Content.text = "2";
             loadScene1Content.tooltip = "Loads MenuIndex Scene";
 
             GUIStyle style = new GUIStyle(EditorStyles.toolbarButton);
@@ -46,13 +50,24 @@ public class SceneLoadButtons
 
             GUILayout.Space(10);
 
+            if (GUILayout.Button(loadSceneRootContent, style))
+            {
+                if (EditorApplication.isPlaying || EditorApplication.isPaused ||
+                EditorApplication.isCompiling || EditorApplication.isPlayingOrWillChangePlaymode)
+                    return;
+
+                EditorSceneManager.OpenScene("Assets/Scenes/00_Root.unity");
+            }
+
+            GUILayout.Space(5);
+
             if (GUILayout.Button(loadScene0Content, style))
             {
                 if (EditorApplication.isPlaying || EditorApplication.isPaused ||
                 EditorApplication.isCompiling || EditorApplication.isPlayingOrWillChangePlaymode)
                     return;
 
-                EditorSceneManager.OpenScene("Assets/Scenes/SplashScreen.unity");
+                EditorSceneManager.OpenScene("Assets/Scenes/01_SplashScreen.unity");
             }
 
             GUILayout.Space(5);
@@ -63,7 +78,7 @@ public class SceneLoadButtons
                 EditorApplication.isCompiling || EditorApplication.isPlayingOrWillChangePlaymode)
                     return;
 
-                EditorSceneManager.OpenScene("Assets/Scenes/MenuIndex.unity");
+                EditorSceneManager.OpenScene("Assets/Scenes/02_MenuIndex.unity");
             }
         });
     }

@@ -60,6 +60,11 @@ namespace Fungus
 
         [SerializeField] protected bool doReadAheadText = true;
 
+        [Space(15)]
+
+        [SerializeField] protected CharReplacerHindi charReplacerFixer;
+        [SerializeField] protected SiddhantaFixer siddhantaFixer;
+
         // This property is true when the writer is waiting for user input to continue
         protected bool isWaitingForInput;
 
@@ -960,11 +965,26 @@ namespace Fungus
         /// <param name="onComplete">Callback to call when writing is finished.</param>
         public virtual IEnumerator Write(string content, bool clear, bool waitForInput, bool stopAudio, bool waitForVO, AudioClip audioClip, System.Action onComplete)
         {
-            if (content.Length > 0)
+            /*if (content.Length > 0)
             {
                 //currentContent = content;
                 currentContent = HindiCorrector2.Correct(content);
                 content = HindiCorrector2.Correct(content);                
+            }*/
+
+            if(content.Length > 0)
+            {
+                //currentContent = 
+                if(siddhantaFixer != null && charReplacerFixer == null)
+                {
+                    currentContent = HindiCorrector2.Correct(content);
+                    content = currentContent;
+                }
+                else if(siddhantaFixer == null && charReplacerFixer != null)
+                {
+                    currentContent = charReplacerFixer.GetFixedText(content);
+                    content = currentContent;
+                }
             }
 
             if (clear)

@@ -10,24 +10,31 @@ namespace underDOGS.SDKEvents
     {
         public override void InitSDK()
         {
-            /*if (FirebaseApp.DefaultInstance != null)
+            if (FirebaseApp.DefaultInstance != null)
             {
+                Debug.Log("Firebase Handler: FirebaseApp Default Instance Found. Initialising...");
+
                 FirebaseAnalytics.SetAnalyticsCollectionEnabled(true);
 
                 if (FirebaseMessagingHandler.instance != null)
                     FirebaseMessagingHandler.instance.InitFirebaseMessagingHandler();
 
                 if (FirebaseDBHandler.instance != null)
+                {
+                    Debug.Log("Firebase Handler: Firebase DB Instance Found!");
                     FirebaseDBHandler.instance.InitFirebaseDBHandler();
+                }
 
                 if (FirebaseRemoteConfigHandler.instance != null)
                     FirebaseRemoteConfigHandler.instance.InitFirebaseRemoteConfigHandler();
 
                 if (FirebaseAuthHandler.instance != null)
                     FirebaseAuthHandler.instance.InitFirebaseAuthHandler();
-            }*/
+            }
+            else
+                Debug.LogError("Firebase Handler: FirebaseApp Default Instance Not Found!");
 
-            FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(continuationAction: task =>
+            /*FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(continuationAction: task =>
             {
                 if(task.Result == DependencyStatus.Available)
                 {
@@ -45,7 +52,7 @@ namespace underDOGS.SDKEvents
                     if (FirebaseAuthHandler.instance != null)
                         FirebaseAuthHandler.instance.InitFirebaseAuthHandler();
                 }
-            });
+            });*/
         }
 
         public override void OnApplicationPausedCallback(bool isPaused)

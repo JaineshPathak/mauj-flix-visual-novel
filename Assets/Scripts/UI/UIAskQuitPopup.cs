@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using Fungus;
+using TMPro;
 
 public class UIAskQuitPopup : MonoBehaviour
 {
@@ -13,7 +14,9 @@ public class UIAskQuitPopup : MonoBehaviour
     public string sayText = "कहानी बंद करना चाहते हैं?";
 
     [Space(15)]
-    public Text storyText;
+
+    public TextMeshProUGUI storyText;
+    //public Text storyText;
 
     private EpisodesSpawner episodesSpawner;
     private bool isYesClicked;
@@ -42,6 +45,9 @@ public class UIAskQuitPopup : MonoBehaviour
         if (isOn)
         {
             storyText.text = "";
+            if (storyText.GetComponent<CharReplacerHindi>() != null)
+                storyText.GetComponent<CharReplacerHindi>().UpdateMe();
+
             popupScreenCanvas.interactable = true;
             popupScreenCanvas.blocksRaycasts = true;
             LeanTween.alphaCanvas(popupScreenCanvas, 1f, 0.5f).setOnStart(() => 

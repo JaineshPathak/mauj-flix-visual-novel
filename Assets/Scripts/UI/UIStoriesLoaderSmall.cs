@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIStoriesLoaderSmall : MonoBehaviour
 {
@@ -18,9 +19,13 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
     public RectTransform categoryLayoutGroup;
 
-    public Text categoryTitleText;
+    /*public Text categoryTitleText;
     public SiddhantaFixer categoryTitleFontFixer;
-    public Text categoryCountText;
+    public Text categoryCountText;*/
+
+    public TextMeshProUGUI categoryTitleText;
+    public CharReplacerHindi categoryTitleFontFixer;
+    public TextMeshProUGUI categoryCountText;
 
     [Space(15)]
 
@@ -64,7 +69,9 @@ public class UIStoriesLoaderSmall : MonoBehaviour
         if (categoryTitleText != null && categoryTitleFontFixer != null)
         {
             categoryTitleText.text = storyDB.storiesCategories[categoryIndex].categoryName + " ";
-            categoryTitleFontFixer.FixTexts();
+            categoryTitleFontFixer.UpdateMe();
+            
+            //categoryTitleFontFixer.FixTexts();
         }
 
         if(categoryLayoutGroup)
@@ -109,7 +116,8 @@ public class UIStoriesLoaderSmall : MonoBehaviour
         if (categoryTitleText != null && categoryTitleFontFixer != null)
         {
             categoryTitleText.text = _categoryTitle + " ";
-            categoryTitleFontFixer.FixTexts();
+            categoryTitleFontFixer.UpdateMe();
+            //categoryTitleFontFixer.FixTexts();
         }        
 
         for (int i = 0; i < _storiesDBItems.Length; i++)
@@ -134,7 +142,8 @@ public class UIStoriesLoaderSmall : MonoBehaviour
         if (categoryTitleText != null && categoryTitleFontFixer != null)
         {
             categoryTitleText.text = _categoryTitle + " ";
-            categoryTitleFontFixer.FixTexts();
+            categoryTitleFontFixer.UpdateMe();
+            //categoryTitleFontFixer.FixTexts();
         }
 
         for (int i = 0; i < _storyDB.storiesCategories[_databaseIndex].storiesDBItems.Length; i++)

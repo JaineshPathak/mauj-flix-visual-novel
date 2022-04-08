@@ -30,6 +30,8 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
             instance = this;
         else
             Destroy(gameObject);
+
+        DontDestroyOnLoad(gameObject);
     }
 
     private void OnApplicationFocus(bool focus)
@@ -73,9 +75,15 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
         if (isFirebaseRCInitialized)
             return;
 
-        //if (FirebaseApp.DefaultInstance != null)
-            //InitFirebaseRemoteConfig();
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+        if (FirebaseApp.DefaultInstance != null)
+        {
+            Debug.Log("Firebase Remote Config: FirebaseApp Default Instance Found. Initialising...");
+            InitFirebaseRemoteConfig();
+        }
+        else
+            Debug.LogError("Firebase Remote Config: FirebaseApp Default Instance Not Found!");
+        
+        /*FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
             var dependencyStatus = task.Result;
             if (dependencyStatus == DependencyStatus.Available)
@@ -86,7 +94,7 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
             {
                 Debug.LogError(string.Format("Firebase Remote Config: Could not resolve all dependencies: {0}", dependencyStatus));                
             }
-        });
+        });*/
     }    
 
     private void InitFirebaseRemoteConfig()

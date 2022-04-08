@@ -359,7 +359,7 @@ public class UISplashScreen : MonoBehaviour
         LeanTween.alphaCanvas(thumbnailLoadingCanvas, 0, 0.5f).setOnComplete( () => 
         {
             LeanTween.cancelAll();
-            SceneManager.LoadScene(1);      //Menu Index screen
+            SceneManager.LoadScene(2);      //Menu Index screen
         });
     }
     

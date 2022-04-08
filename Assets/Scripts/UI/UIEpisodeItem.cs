@@ -1,13 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using underDOGS.SDKEvents;
 
 public class UIEpisodeItem : MonoBehaviour
 {
     public string episodeString = "एपिसोड";
-    public Text episodeNumberText;
+    public TextMeshProUGUI episodeNumberText;
+    //public Text episodeNumberText;
 
     [Space(15)]
 

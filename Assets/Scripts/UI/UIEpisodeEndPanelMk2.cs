@@ -43,6 +43,10 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
     public ParticleSystem vfxDiamondsParticles;
     public AnimationCurve outBackMore;
 
+    [Header("No Tickets Panel")]
+    public CanvasGroup noTicketsPanel;
+    public Button noTicketsOkButton;
+
     [HideInInspector] public EpisodesHandler episodesHandler;
     private EpisodesSpawner episodesSpawner;
 
@@ -65,6 +69,16 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
             endScreenCanvasGroup.interactable = false;
             endScreenCanvasGroup.blocksRaycasts = false;
         }
+
+        if(noTicketsPanel)
+        {
+            noTicketsPanel.alpha = 0;
+            noTicketsPanel.interactable = false;
+            noTicketsPanel.blocksRaycasts = false;
+        }
+
+        if (noTicketsOkButton)
+            noTicketsOkButton.onClick.AddListener(OnNoTicketsOkButton);
 
         if(congratulationsImage)
             congratulationsImage.transform.localScale = Vector3.zero;
@@ -270,6 +284,12 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
 
         if (debitTicketsNextEpisode)
         {
+            if ( (FirebaseFirestoreHandler.instance != null) && FirebaseFirestoreOffline.instance.GetTicketsAmountInt() < 1)
+            {
+                ShowNoTicketsPopup();
+                return;
+            }
+
             episodesSpawner.diamondsPool.PlayTicketsAnimationDebit(nextEpisodeButton.transform, episodesSpawner.topPanel.ticketsPanelIcon, 1, 1, () =>
             {
                 StartCoroutine(OnNextEpisodeButtonRoutine());
@@ -332,5 +352,39 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         nextEpisodeAdButton.interactable = false;
 
         episodesSpawner.LoadEpisodesMainMenu(false);
-    }    
+    }
+
+
+    //-------------------------------------------------------------------------------------------------------
+
+    private void ShowNoTicketsPopup()
+    {
+        if (noTicketsPanel == null)
+            return;
+
+        noTicketsPanel.interactable = true;
+        noTicketsPanel.blocksRaycasts = true;
+        LeanTween.alphaCanvas(noTicketsPanel, 1f, 0.2f).setEaseInOutSine();
+    }
+
+    private void HideNoTicketsPopup()
+    {
+        if (noTicketsPanel == null)
+            return;
+
+        noTicketsPanel.interactable = false;
+        noTicketsPanel.blocksRaycasts = false;
+        LeanTween.alphaCanvas(noTicketsPanel, 0, 0.2f).setEaseInOutSine();
+
+        noThanksButton.interactable = true;
+        nextEpisodeButton.interactable = true;
+        nextEpisodeAdButton.interactable = true;
+    }
+
+    private void OnNoTicketsOkButton()
+    {
+        HideNoTicketsPopup();
+    }
+
+    //-------------------------------------------------------------------------------------------------------
 }

@@ -25,9 +25,14 @@ public class FirebaseMessagingHandler : MonoBehaviour
         if (isFirebaseInitialized)
             return;
 
-        //if (FirebaseApp.DefaultInstance != null)
-            //InitFirebaseMessaging();
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => 
+        if (FirebaseApp.DefaultInstance != null)
+        {
+            Debug.Log("Firebase Messaging: FirebaseApp Default Instance Found. Initialising...");
+            InitFirebaseMessaging();
+        }
+        else
+            Debug.LogError("Firebase Messaging: FirebaseApp Default Instance Not Found!");
+        /*FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => 
         {
             var dependencyStatus = task.Result;
             if (dependencyStatus == DependencyStatus.Available)
@@ -38,7 +43,7 @@ public class FirebaseMessagingHandler : MonoBehaviour
             {
                 Debug.LogError(string.Format("Could not resolve all Firebase Messaging dependencies: {0}", dependencyStatus));                
             }
-        });
+        });*/
     }
 
     private void InitFirebaseMessaging()

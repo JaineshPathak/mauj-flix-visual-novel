@@ -28,11 +28,21 @@ public class FirebaseDBHandler : MonoBehaviour
 
     public void InitFirebaseDBHandler()
     {
+        Debug.Log("Firebase DB: Step 1 - Called!");
+
         if (isFirebaseDBInitialized)
             return;
 
-        //InitFirebaseDatabase();
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+        Debug.Log("Firebase DB: Step 2 - Called!");
+
+        if (FirebaseApp.DefaultInstance != null)
+        {
+            Debug.Log("Firebase DB: FirebaseApp Default Instance Found. Initialising...");
+            InitFirebaseDatabase();
+        }
+        else
+            Debug.LogError("Firebase DB: FirebaseApp Default Instance Not Found!");
+        /*FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
             var dependencyStatus = task.Result;
             if (dependencyStatus == DependencyStatus.Available)
@@ -44,7 +54,7 @@ public class FirebaseDBHandler : MonoBehaviour
                 Debug.LogError(string.Format("Firebase Database: Could not resolve all Firebase Database dependencies: {0}", dependencyStatus));
                 // Firebase Unity SDK is not safe to use here.
             }
-        });
+        });*/
     }
 
     private void InitFirebaseDatabase()

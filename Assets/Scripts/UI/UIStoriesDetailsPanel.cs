@@ -18,8 +18,10 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     public ScrollRect mainScrollRect;
     public RectTransform buttonsVerticalGroup;
     public ContentSizeFitter buttonsGroupSizeFitter;
-    public Text storyTitleText;
-    public Text storyDescriptionText;
+    //public Text storyTitleText;
+    public TextMeshProUGUI storyTitleText;
+    //public Text storyDescriptionText;
+    public TextMeshProUGUI storyDescriptionText;
     public Image storyThumbnailBigImage;
     public Image storyThumbnailTitleImage;
     [HideInInspector] public Sprite storyThumbnailLoadingImage;
@@ -141,15 +143,20 @@ public class UIStoriesDetailsPanel : MonoBehaviour
         if (episodesSpawner.immediateOpenDetailsPanel && episodesSpawner.storiesDBItem != null && episodesSpawner.storyData != null)
         {
             storyTitleText.text = episodesSpawner.storyTitle;
-            if (storyTitleText.GetComponent<SiddhantaFixer>() != null)
-                storyTitleText.GetComponent<SiddhantaFixer>().FixTexts();
+            if (storyTitleText.GetComponent<CharReplacerHindi>() != null)
+                storyTitleText.GetComponent<CharReplacerHindi>().UpdateMe();
+
+            //if (storyTitleText.GetComponent<SiddhantaFixer>() != null)
+                //storyTitleText.GetComponent<SiddhantaFixer>().FixTexts();
 
             buttonsGroupSizeFitter.enabled = false;
             buttonsGroupSizeFitter.SetLayoutVertical();
 
             storyDescriptionText.text = episodesSpawner.storyDescription;
-            if (storyDescriptionText.GetComponent<SiddhantaFixer>() != null)
-                storyDescriptionText.GetComponent<SiddhantaFixer>().FixTexts();
+            if (storyDescriptionText.GetComponent<CharReplacerHindi>() != null)
+                storyDescriptionText.GetComponent<CharReplacerHindi>().UpdateMe();
+            //if (storyDescriptionText.GetComponent<SiddhantaFixer>() != null)
+            //storyDescriptionText.GetComponent<SiddhantaFixer>().FixTexts();
 
             buttonsGroupSizeFitter.enabled = true;
 
@@ -293,15 +300,19 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             episodesSpawner.storiesDBItem = _storiesDBItem;
 
             storyTitleText.text = _storyTitle;
-            if (storyTitleText.GetComponent<SiddhantaFixer>() != null)
-                storyTitleText.GetComponent<SiddhantaFixer>().FixTexts();
+            if (storyTitleText.GetComponent<CharReplacerHindi>() != null)
+                storyTitleText.GetComponent<CharReplacerHindi>().UpdateMe();
+            //if (storyTitleText.GetComponent<SiddhantaFixer>() != null)
+            //storyTitleText.GetComponent<SiddhantaFixer>().FixTexts();
 
             buttonsGroupSizeFitter.enabled = false;
             buttonsGroupSizeFitter.SetLayoutVertical();
-            storyDescriptionText.text = _storyDescription;
 
-            if (storyDescriptionText.GetComponent<SiddhantaFixer>() != null)
-                storyDescriptionText.GetComponent<SiddhantaFixer>().FixTexts();
+            storyDescriptionText.text = _storyDescription;
+            if (storyDescriptionText.GetComponent<CharReplacerHindi>() != null)
+                storyDescriptionText.GetComponent<CharReplacerHindi>().UpdateMe();
+            //if (storyDescriptionText.GetComponent<SiddhantaFixer>() != null)
+            //storyDescriptionText.GetComponent<SiddhantaFixer>().FixTexts();
 
             LayoutRebuilder.ForceRebuildLayoutImmediate(buttonsVerticalGroup);
             buttonsGroupSizeFitter.enabled = true;
@@ -442,7 +453,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
                 }
             }
 
-            float totalEpisodesItems = episodeContainer.childCount - 1;            
+            float totalEpisodesItems = episodeContainer.childCount - 1;
 
             float newYPos = (totalEpisodesItems * 100f) + 1000f;
             newYPos *= -1f;
@@ -542,7 +553,13 @@ public class UIStoriesDetailsPanel : MonoBehaviour
         {
             SDKEventStringData eventStoryCompleteData;
             eventStoryCompleteData.eventParameterName = SDKEventsNames.storyParameterName;
-            eventStoryCompleteData.eventParameterData = storyItem.storyTitle;
+
+            string storyTitleMain = storyItem.storyTitleEnglish;
+            storyTitleMain = storyTitleMain.Replace(":", "");
+            storyTitleMain = storyTitleMain.Replace(".", "");
+            storyTitleMain = storyTitleMain.Replace(" ", "");
+
+            eventStoryCompleteData.eventParameterData = storyTitleMain;
 
             SDKManager.instance.SendEvent(SDKEventsNames.numUsersPerStoryEventName, eventStoryCompleteData);
         }
@@ -676,6 +693,12 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     private void OnNextEpisodeTicketButton()
     {
         if (nextEpAskPanelCanvasGroup == null)
+            return;
+
+        if (FirebaseFirestoreHandler.instance == null)
+            return;
+
+        if (FirebaseFirestoreHandler.instance.GetUserTicketsAmountInt() < 1)
             return;
 
         nextEpAskPanelCanvasGroup.interactable = false;

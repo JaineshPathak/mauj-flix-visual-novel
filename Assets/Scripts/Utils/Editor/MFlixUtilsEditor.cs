@@ -26,6 +26,11 @@ public class MFlixUtilsEditor : Editor
     private SerializedProperty sayDialogueInSceneSerialized;
     private SerializedProperty sayDialoguePrefabSerialized;
 
+    //Say Dialogue Replace In Scene
+    private SerializedProperty sayDialogueDestroyOldSerialized;
+    private SerializedProperty sayDialogueSceneOldSerialized;
+    private SerializedProperty sayDialogueSceneNewSerialized;
+
     //Menu Dialog Mode
     private SerializedProperty menuDialogueDestroyOriginalSerialized;
     private SerializedProperty menuDialogueInSceneSerialized;
@@ -80,6 +85,10 @@ public class MFlixUtilsEditor : Editor
         sayDialogueDestroyOriginalSerialized = serializedObject.FindProperty("destroyOriginalSayDialogue");
         sayDialogueInSceneSerialized = serializedObject.FindProperty("sayDialogueInScene");
         sayDialoguePrefabSerialized = serializedObject.FindProperty("sayDialoguePrefab");
+
+        sayDialogueDestroyOldSerialized = serializedObject.FindProperty("destroyOldSayDialogue");
+        sayDialogueSceneOldSerialized = serializedObject.FindProperty("sayDialogueInSceneOld");
+        sayDialogueSceneNewSerialized = serializedObject.FindProperty("sayDialogueInSceneNew");
 
         menuDialogueDestroyOriginalSerialized = serializedObject.FindProperty("destroyOriginalMenuDialogue");
         menuDialogueInSceneSerialized = serializedObject.FindProperty("menuDialogueInScene");
@@ -228,6 +237,31 @@ public class MFlixUtilsEditor : Editor
                         //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
                         Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Say Replace");
                         flixReplacer.ReplaceSayDialogue();
+                    }
+                }
+
+                break;
+
+            case MFlixUtils.WhatToReplace.SayDialogueReplace:
+
+                GUIContent sayDialogueDestroyOldContent = new GUIContent("Destroy Old", "Destroy Old Say Dialogue from Prefab");
+                EditorGUILayout.PropertyField(sayDialogueDestroyOldSerialized, sayDialogueDestroyOldContent, GUILayout.ExpandHeight(false));
+
+                GUIContent sayDialogueSceneOldContent = new GUIContent("Say Dialogue Old", "Say Dialogue Old from Scene");
+                EditorGUILayout.PropertyField(sayDialogueSceneOldSerialized, sayDialogueSceneOldContent, GUILayout.ExpandHeight(false));
+
+                GUIContent sayDialogueNewContent = new GUIContent("Say Dialogue New", "Say Dialogue New from Scene");
+                EditorGUILayout.PropertyField(sayDialogueSceneNewSerialized, sayDialogueNewContent, GUILayout.ExpandHeight(false));
+
+                EditorGUILayout.Space(10f);
+
+                if (flixReplacer.sayDialogueInSceneOld != null && flixReplacer.sayDialogueInSceneNew != null)
+                {
+                    if (DrawButtonColored("Replace Say Dialogue Here".ToUpper(), "#3c8b50", Color.white))
+                    {
+                        //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
+                        Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Say Replace Here");
+                        flixReplacer.ReplaceSayDialogueScene();
                     }
                 }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 //Modified version of DailyRewardUI from Niobium Studios
 public class MflixDailyRewardItemSmall : MonoBehaviour
@@ -15,7 +16,8 @@ public class MflixDailyRewardItemSmall : MonoBehaviour
     }
 
     [Header("Texts")]
-    public Text textDay;
+    //public Text textDay;
+    public TextMeshProUGUI textDay;
 
     [Header("UI")]
     public Image backgroundBg;
@@ -58,7 +60,9 @@ public class MflixDailyRewardItemSmall : MonoBehaviour
         if (textDay)
         {
             textDay.text = string.Format("दिन {0}", MflixDailyRewards.GetHindiNumber( (day).ToString()));
-            textDay.GetComponent<SiddhantaFixer>().FixTexts();
+            if(textDay.GetComponent<CharReplacerHindi>() != null)
+                textDay.GetComponent<CharReplacerHindi>().UpdateMe();
+            //textDay.GetComponent<SiddhantaFixer>().FixTexts();
         }
 
         if(reward.hasDiamondReward)

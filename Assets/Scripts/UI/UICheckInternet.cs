@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class UICheckInternet : MonoBehaviour
 {
@@ -9,22 +6,22 @@ public class UICheckInternet : MonoBehaviour
 
     private bool isShown;
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         CheckInternetConnection.BroadcastInternetConnectionStatus += GetInternetStatus;
     }
 
-    private void OnDisable()
+    protected virtual void OnDisable()
     {
         CheckInternetConnection.BroadcastInternetConnectionStatus -= GetInternetStatus;
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         CheckInternetConnection.BroadcastInternetConnectionStatus -= GetInternetStatus;
     }
 
-    private void GetInternetStatus(bool internetConnected)
+    protected virtual void GetInternetStatus(bool internetConnected)
     {
         if (checkInternetCanvas == null)
             return;

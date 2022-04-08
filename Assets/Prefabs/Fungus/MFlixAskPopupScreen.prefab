@@ -606,7 +606,8 @@ GameObject:
   - component: {fileID: 5833244329151045877}
   - component: {fileID: 5833244329151045876}
   m_Layer: 5
-  m_Name: TMP SubMeshUI [Noto Sans Devanagari SDF Material + LiberationSans SDF Atlas]
+  m_Name: TMP SubMeshUI [Noto Sans Devanagari SDF Bold Slight + LiberationSans SDF
+    Atlas]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -646,7 +647,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5833244329151045866}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
   m_Name: 
@@ -663,7 +664,7 @@ MonoBehaviour:
   m_material: {fileID: 0}
   m_sharedMaterial: {fileID: 0}
   m_isDefaultMaterial: 0
-  m_padding: 1.25
+  m_padding: 1.475
   m_canvasRenderer: {fileID: 5833244329151045877}
   m_TextComponent: {fileID: 5833244329821491461}
   m_materialReferenceIndex: 1
@@ -685,7 +686,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5833244329821491460
 RectTransform:
   m_ObjectHideFlags: 0
@@ -704,8 +705,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 9.6}
+  m_SizeDelta: {x: 0, y: -19.133179}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5833244329821491462
 CanvasRenderer:
@@ -734,18 +735,18 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "\u0915\u0939\u093E\u0928\u0940 \u092C\u0902\u0926 \u0915\u0930\u0928\u093E
+    \u091A\u093E\u0939\u0924\u0947 \u0939\u0948\u0902?"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e748469943340b54bb3b8b7cf7b05ce5, type: 2}
-  m_sharedMaterial: {fileID: -3468323150492546538, guid: e748469943340b54bb3b8b7cf7b05ce5,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 44495068322e7b44e96093410eb3ae17, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -763,14 +764,14 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 70
-  m_fontSizeBase: 70
+  m_fontSize: 65
+  m_fontSizeBase: 65
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_textAlignment: 258
+  m_textAlignment: 4098
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
@@ -804,14 +805,14 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 5833244329821491461}
-    characterCount: 0
+    characterCount: 25
     spriteCount: 0
-    spaceCount: 0
-    wordCount: 0
+    spaceCount: 4
+    wordCount: 8
     linkCount: 0
-    lineCount: 0
-    pageCount: 0
-    materialCount: 1
+    lineCount: 1
+    pageCount: 1
+    materialCount: 2
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -978,8 +979,8 @@ MonoBehaviour:
   dialogCanvas: {fileID: 5833244330047670317}
   nameText: {fileID: 0}
   nameTextGO: {fileID: 0}
-  storyText: {fileID: 5781106671077292674}
-  storyTextGO: {fileID: 0}
+  storyText: {fileID: 0}
+  storyTextGO: {fileID: 5833244329821491707}
   characterImage: {fileID: 0}
   fitTextWithImage: 1
   closeOtherDialogs: 0
@@ -995,7 +996,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a676940fce6344af1a70043b089a6c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetTextObject: {fileID: 8678708706306367404}
+  targetTextObject: {fileID: 5833244329821491707}
   punchObject: {fileID: 5833244329068440949}
   writingSpeed: 60
   punctuationPause: 0.25
@@ -1004,6 +1005,8 @@ MonoBehaviour:
   forceRichText: 1
   instantComplete: 0
   doReadAheadText: 1
+  charReplacerFixer: {fileID: 8938042682140328591}
+  siddhantaFixer: {fileID: 0}
   currentContent: 
 --- !u!114 &5686263997657467967
 MonoBehaviour:
@@ -1017,7 +1020,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 905552b4c540f924f99d4ec24e11c19b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  languageCorrectorType: 2
+  languageCorrectorType: 0
   waitDelay: 0.05
   charReplacerHindi: {fileID: 8938042682140328591}
   textObject: {fileID: 5833244329821491461}
@@ -1178,7 +1181,7 @@ MonoBehaviour:
   sayDialog: {fileID: 5833244330047670305}
   sayText: "\u0915\u0939\u093E\u0928\u0940 \u092C\u0902\u0926 \u0915\u0930\u0928\u093E
     \u091A\u093E\u0939\u0924\u0947 \u0939\u0948\u0902?"
-  storyText: {fileID: 5781106671077292674}
+  storyText: {fileID: 5833244329821491461}
 --- !u!1 &5908904996284062839
 GameObject:
   m_ObjectHideFlags: 0
@@ -1342,7 +1345,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &744857386296949665
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1456,7 +1459,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8793190912128992326}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 058cba836c1846c3aa1c5fd2e28aea77, type: 3}
   m_Name: 

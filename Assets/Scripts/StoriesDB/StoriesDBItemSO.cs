@@ -114,14 +114,14 @@ public class StoriesDBItemSO : ScriptableObject
 
         try
         {
-            Array.Resize(ref item.storyBranchEpisodesKeys, this.storyEpisodesBranchkeys.Length);
+            Array.Resize(ref item.storyBranchEpisodesKeys, this.storyEpisodesBranchkeys.Length);            
         }
         catch(NullReferenceException e)
         {
             Debug.LogError("Array Problem in: item.storyBranchEpisodesKeys + [" + e.Message + "]");
         }
 
-        if(this.storyEpisodesBranchkeys.Length > 0)
+        if (this.storyEpisodesBranchkeys.Length > 0)
         {
             for (int i = 0; i < storyEpisodesBranchkeys.Length; i++)
             {

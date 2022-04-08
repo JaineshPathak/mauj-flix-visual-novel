@@ -13,17 +13,28 @@ public class FirebaseStarterEngine : MonoBehaviour
             {
                 if (task.Result == DependencyStatus.Available)
                 {
-                    Debug.Log("Firebase App available: " + task.Result);
+                    Debug.Log("Firebase Starter Engine: App available: " + task.Result);
+                    StartCoroutine(LoadSceneAtIndex(1));
                 }
                 else
                 {
-                    Debug.LogError(string.Format("Could not resolve all Firebase dependencies: {0}", task.Result));
+                    Debug.LogError(string.Format("Firebase Starter Engine: Could not resolve all Firebase dependencies: {0}", task.Result));
                 }
             }
         });
 
+#if UNITY_EDITOR
         yield return new WaitForSeconds(3f);
-
         SceneManager.LoadScene(1);
-    }    
+#endif
+
+        yield return null;        
+    }
+
+    private IEnumerator LoadSceneAtIndex(int index)
+    {
+        yield return new WaitForSeconds(2f);
+
+        SceneManager.LoadScene(index);
+    }
 }

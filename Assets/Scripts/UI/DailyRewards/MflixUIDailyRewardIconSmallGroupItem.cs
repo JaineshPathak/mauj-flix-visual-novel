@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class MflixUIDailyRewardIconSmallGroupItem : MonoBehaviour
 {
     public Image rewardIcon;
-    public Text rewardName;
+    public TextMeshProUGUI rewardName;
+    //public Text rewardName;
 
     private Sprite availableSprite;
     private Sprite unavailableSprite;
@@ -15,6 +17,8 @@ public class MflixUIDailyRewardIconSmallGroupItem : MonoBehaviour
         unavailableSprite = _unavailableSprite;
 
         rewardName.text = _rewardName;
+        if (rewardName.GetComponent<CharReplacerHindi>() != null)
+            rewardName.GetComponent<CharReplacerHindi>().UpdateMe();
 
         if (scalingRequired && rewardIcon)
             rewardIcon.transform.localScale = new Vector3(0.8f, 0.8f, 0.8f);

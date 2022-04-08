@@ -76,9 +76,15 @@ public class FirebaseAuthHandler : MonoBehaviour
         if (isFirebaseAuthInitialized)
             return;
 
-        //if(FirebaseApp.DefaultInstance != null)
-            //InitFirebaseAuth();        
-        FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
+        if (FirebaseApp.DefaultInstance != null)
+        {
+            Debug.Log("Firebase Auth: FirebaseApp Default Instance Found. Initialising...");
+            InitFirebaseAuth();
+        }
+        else
+            Debug.LogError("Firebase Auth: FirebaseApp Default Instance Not Found!");
+        
+        /*FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
             var dependencyStatus = task.Result;
             if (dependencyStatus == DependencyStatus.Available)
@@ -91,7 +97,7 @@ public class FirebaseAuthHandler : MonoBehaviour
             {
                 Debug.LogError(string.Format("Firebase Auth: Could not resolve all Firebase Database dependencies: {0}", dependencyStatus));                
             }
-        });
+        });*/
     }
 
     private void InitFirebaseAuth()

@@ -68,7 +68,7 @@ public class UITopPanel : MonoBehaviour
         }
 
         if (GameController.instance != null && devModeIcon)
-            devModeIcon.gameObject.SetActive(GameController.instance.devMode);
+            devModeIcon.gameObject.SetActive(GameController.instance.DevMode);
     }
 
     //----------------------------------------------------------------------------------------------------
