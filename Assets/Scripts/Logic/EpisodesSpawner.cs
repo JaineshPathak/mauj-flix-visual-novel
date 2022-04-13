@@ -30,6 +30,11 @@ public class EpisodesSpawner : MonoBehaviour
     public Image storyloadingTitleImage;
     public Image storyPercentBar;
 
+    [Space(15)]
+
+    public Image storyLoadingPercentBarFake;
+    public TextMeshProUGUI percentDownloadedTextFake;
+
     [Header("Player Data")]
     public Player_Data playerData;
 
@@ -215,6 +220,9 @@ public class EpisodesSpawner : MonoBehaviour
         storyPercentBar.fillAmount = 0;
         percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 
+        storyLoadingPercentBarFake.fillAmount = 0;
+        percentDownloadedTextFake.gameObject.SetActive(false);
+
         LeanTween.alphaCanvas(percentCanvasGroup, 1f, 1f).setOnComplete( () => 
         {
             StartCoroutine(StartLoadingStorySceneAsync());
@@ -227,7 +235,7 @@ public class EpisodesSpawner : MonoBehaviour
         percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 
         AsyncOperation sceneOperation = SceneManager.LoadSceneAsync(3);
-        sceneOperation.completed += OnStorySceneLoadedComplete;
+        sceneOperation.completed += OnStorySceneLoadedComplete;                
 
         while(!sceneOperation.isDone)
         {
@@ -242,6 +250,13 @@ public class EpisodesSpawner : MonoBehaviour
 
     private void OnStorySceneLoadedComplete(AsyncOperation obj)
     {
+        storyPercentBar.fillAmount = 0;
+        percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
+
+        storyLoadingPercentBarFake.fillAmount = 0;
+        percentDownloadedTextFake.gameObject.SetActive(true);
+        percentDownloadedTextFake.text = (storyLoadingPercentBarFake.fillAmount * 100f).ToString("0") + "%";
+
         StartLoadingEpisode();
     }
 
@@ -257,7 +272,7 @@ public class EpisodesSpawner : MonoBehaviour
 
         if (storyData != null)
         {
-            DownloadEpisodeTask();
+            DownloadEpisodeTask(UnityEngine.Random.Range(0.13f, 0.2f));
             //StartCoroutine(DownloadEpisodeRoutine());
         }
     }
@@ -275,7 +290,39 @@ public class EpisodesSpawner : MonoBehaviour
         return storyData;
     }
 
-    private async void DownloadEpisodeTask()
+    private IEnumerator FakeDownloadBarLoad(float randomStartFakeVal)
+    {
+        storyLoadingPercentBarFake.fillAmount = randomStartFakeVal;
+        percentDownloadedTextFake.text = (storyLoadingPercentBarFake.fillAmount * 100f).ToString("0") + "%";
+
+        yield return new WaitForSeconds(0.5f);
+
+        /*storyLoadingPercentBarFake.fillAmount += 0.11f;
+        percentDownloadedTextFake.text = (storyLoadingPercentBarFake.fillAmount * 100f).ToString("0") + "%";
+
+        yield return new WaitForSeconds(1f);
+
+        storyLoadingPercentBarFake.fillAmount += 0.06f;
+        percentDownloadedTextFake.text = (storyLoadingPercentBarFake.fillAmount * 100f).ToString("0") + "%";*/
+
+        /*do
+        {
+            storyLoadingPercentBarFake.fillAmount += 0.11f;
+            percentDownloadedTextFake.text = (storyLoadingPercentBarFake.fillAmount * 100f).ToString("0") + "%";
+
+            yield return new WaitForSeconds(1f);
+        } while (storyLoadingPercentBarFake.fillAmount == 0.9f);*/
+
+        for (float i = randomStartFakeVal; i <= 0.9f; i += UnityEngine.Random.Range(0.11f, 0.14f))
+        {
+            storyLoadingPercentBarFake.fillAmount = i;
+            percentDownloadedTextFake.text = (storyLoadingPercentBarFake.fillAmount * 100f).ToString("0") + "%";
+
+            yield return new WaitForSeconds(1f);
+        }
+    }
+
+    private async void DownloadEpisodeTask(float randomStartFakeVal)
     {
         var totalDownloadSizeKb = BToKb(await Addressables.GetDownloadSizeAsync(storyData.currentEpisodeKey).Task);
 
@@ -285,21 +332,45 @@ public class EpisodesSpawner : MonoBehaviour
 
         if (totalDownloadSizeKb > 0)
         {
+            StartCoroutine("FakeDownloadBarLoad", randomStartFakeVal);
             while (!keyDownloadOperation.IsDone)
             {
                 await System.Threading.Tasks.Task.Yield();
 
                 var acquiredKb = downloadedKb + (keyDownloadOperation.PercentComplete * totalDownloadSizeKb);
-                var totalProgressPercentage = (acquiredKb / totalDownloadSizeKb);
+                var totalProgressPercentage = (acquiredKb / totalDownloadSizeKb);                
 
-                storyPercentBar.fillAmount = totalProgressPercentage;
-                percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
+                //storyPercentBar.fillAmount = totalProgressPercentage;
+                //percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
+
+                if(/*storyPercentBar.fillAmount > 0*/ totalProgressPercentage >= 1f)
+                {
+                    percentDownloadedText.gameObject.SetActive(true);
+                    
+                    storyPercentBar.fillAmount = totalProgressPercentage;
+                    percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
+
+                    storyLoadingPercentBarFake.gameObject.SetActive(false);
+                    percentDownloadedTextFake.gameObject.SetActive(false);
+                }
+                else
+                {
+                    percentDownloadedText.gameObject.SetActive(false);
+
+                    storyLoadingPercentBarFake.gameObject.SetActive(true);
+                    percentDownloadedTextFake.gameObject.SetActive(true);
+                }
 
                 //Debug.Log("Download progress: " + (totalProgressPercentage * 100).ToString("0.00") + "% - " + acquiredKb + "kb /" + totalDownloadSizeKb + "kb");
             }
         }
         else
         {
+            percentDownloadedText.gameObject.SetActive(true);
+
+            storyLoadingPercentBarFake.gameObject.SetActive(false);
+            percentDownloadedTextFake.gameObject.SetActive(false);
+
             storyPercentBar.fillAmount = 1f;
             percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
         }
@@ -587,4 +658,6 @@ public class EpisodesSpawner : MonoBehaviour
 
         LeanTween.alphaCanvas(firstTimeRewardCanvasGroup, 0, 0.5f).setEaseInOutSine();
     }
+
+    //=========================================================================================================        
 }

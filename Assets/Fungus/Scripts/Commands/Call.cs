@@ -49,6 +49,12 @@ namespace Fungus
         [Tooltip("Select if the calling block should stop or continue executing commands, or wait until the called block finishes.")]
         [SerializeField] protected CallMode callMode;
 
+        public CallMode CallMode
+        {
+            get { return callMode; }
+            set { callMode = value; }
+        }
+
         #region Public members
 
         public override void OnEnter()

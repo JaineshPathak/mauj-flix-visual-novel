@@ -177,6 +177,9 @@ public class MenuDialogMflix : MenuDialog
         var buttonDiamondCostText = cachedButtonsDiamondsCostText[nextOptionIndex];
         var buttonShineAim = cachedShineEffectAnim[nextOptionIndex];
 
+        if (buttonShineAim)
+            buttonShineAim.enabled = false;
+
         if (hasDiamondCost)
         {
             buttonImage.sprite = costSprite;

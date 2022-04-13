@@ -1,6 +1,7 @@
 ﻿[System.Serializable]
 public class StoriesDBItem
 {
+    public bool isNewStory;
     public bool isStoryEnabled = true;
     public bool isShortStory;
 

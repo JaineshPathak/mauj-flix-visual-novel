@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -55,6 +56,8 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
     private bool isTriggered;
     private bool debitTicketsNextEpisode;
     private LTSeq endSeq;
+
+    public static event Action OnNextEpisodePanelOpened;
 
     private void Awake()
     {
@@ -260,6 +263,8 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         seqPart2.append(3f);
         seqPart2.append(LeanTween.alphaCanvas(noThanksButtonCanvasGrp, 1f, 1f).setOnStart(() =>
         {
+            OnNextEpisodePanelOpened?.Invoke();
+
             noThanksButton.interactable = true;
             noThanksButtonCanvasGrp.interactable = true;
             noThanksButtonCanvasGrp.blocksRaycasts = true;

@@ -16,6 +16,7 @@ public class UIStoriesItemSmall : MonoBehaviour
     public Image thumbnailSmallImage;
     public Button storyButton;
     public Image comingSoonImage;
+    public Image storyIsNewImage;
 
     [Space(15)]
 
@@ -56,14 +57,18 @@ public class UIStoriesItemSmall : MonoBehaviour
         if(comingSoonImage != null)
             comingSoonImage.gameObject.SetActive(false);
 
+        if (storyIsNewImage)
+            storyIsNewImage.gameObject.SetActive(false);
+
         //if (storyCountsParent != null)
-            //storyCountsParent.SetActive(false);
+        //storyCountsParent.SetActive(false);
     }
 
     public void LoadThumbnailAsset(StoriesDBItem _storiesDBItem, UIStoriesDetailsPanel _storiesDetailsPanel, GameController _gameController)
     {        
         storyButton.interactable = false;
         comingSoonImage.gameObject.SetActive(false);
+        storyIsNewImage.gameObject.SetActive(false);
 
         storyProgressBarBg.gameObject.SetActive(false);
         storyProgressBarActual.gameObject.SetActive(false);
@@ -282,6 +287,7 @@ public class UIStoriesItemSmall : MonoBehaviour
             storyButton.onClick.AddListener(OnStoryButtonClick);
 
             comingSoonImage.gameObject.SetActive(false);
+            storyIsNewImage.gameObject.SetActive(storyItem.isNewStory);
         }
         else
         {
@@ -294,6 +300,7 @@ public class UIStoriesItemSmall : MonoBehaviour
             storyButton.onClick.AddListener(OnStoryButtonClickEmpty);
 
             comingSoonImage.gameObject.SetActive(true);
+            storyIsNewImage.gameObject.SetActive(false);
         }
 
         if(checkRoutine)

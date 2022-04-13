@@ -40,7 +40,7 @@ public class EpisodesHandler : MonoBehaviour
         if(episodeFlowchart != null)        
             BlockSignals.OnBlockStart += OnBlockStarted;
 
-        UIEpisodeEndPanel.OnNextEpisodePanelOpened += OnNextEpisodePanelOpened;
+        UIEpisodeEndPanelMk2.OnNextEpisodePanelOpened += OnNextEpisodePanelOpened;
     }
 
     private void OnDisable()
@@ -48,7 +48,7 @@ public class EpisodesHandler : MonoBehaviour
         if (episodeFlowchart != null)        
             BlockSignals.OnBlockStart -= OnBlockStarted;
 
-        UIEpisodeEndPanel.OnNextEpisodePanelOpened -= OnNextEpisodePanelOpened;
+        UIEpisodeEndPanelMk2.OnNextEpisodePanelOpened -= OnNextEpisodePanelOpened;
     }
 
     private void OnDestroy()
@@ -56,7 +56,7 @@ public class EpisodesHandler : MonoBehaviour
         if (episodeFlowchart != null)        
             BlockSignals.OnBlockStart -= OnBlockStarted;
 
-        UIEpisodeEndPanel.OnNextEpisodePanelOpened -= OnNextEpisodePanelOpened;
+        UIEpisodeEndPanelMk2.OnNextEpisodePanelOpened -= OnNextEpisodePanelOpened;
     }    
 
     private void OnBlockStarted(Block block)
@@ -112,6 +112,15 @@ public class EpisodesHandler : MonoBehaviour
 
         if (FungusManager.Instance != null)
             musicManager = FungusManager.Instance.MusicManager;
+
+        if(episodeFlowchart)
+        {
+            foreach(Call callCommand in episodeFlowchart.GetComponentsInChildren<Call>())
+            {
+                if(callCommand)                
+                    callCommand.CallMode = CallMode.Stop;                
+            }
+        }
 
         if (episodesSpawner.saveOrLoadData)
         {

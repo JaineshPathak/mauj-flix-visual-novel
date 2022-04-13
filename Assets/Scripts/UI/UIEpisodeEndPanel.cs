@@ -39,7 +39,7 @@ public class UIEpisodeEndPanel : MonoBehaviour
 
     [HideInInspector] public EpisodesHandler episodesHandler;
 
-    public static event Action OnNextEpisodePanelOpened;
+    //public static event Action OnNextEpisodePanelOpened;
 
     private void Awake()
     {
@@ -231,7 +231,7 @@ public class UIEpisodeEndPanel : MonoBehaviour
     {
         yield return new WaitForSeconds(1f);
 
-        OnNextEpisodePanelOpened?.Invoke();
+        //OnNextEpisodePanelOpened?.Invoke();
     }
 
     private void OnNextEpisodeTimerUp()

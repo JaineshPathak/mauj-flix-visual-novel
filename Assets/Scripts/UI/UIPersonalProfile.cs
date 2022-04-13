@@ -202,4 +202,20 @@ public class UIPersonalProfile : MonoBehaviour
         if (playerData.StoriesCompletedList.Count <= 0 && sectionLoadedList[2] != null)
             sectionLoadedList[2].gameObject.SetActive(false);
     }
+
+    public void OpenURLLink(string _url)
+    {
+        if (detailsPanel)
+            detailsPanel.PlayButtonClickSound();
+
+        Application.OpenURL(_url);
+    }
+
+    public void OpenRateUsWindow()
+    {
+        if (EpisodesSpawner.instance == null)
+            return;
+
+        EpisodesSpawner.instance.OpenRateUsWindow();
+    }
 }

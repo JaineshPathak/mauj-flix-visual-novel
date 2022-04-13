@@ -4,6 +4,7 @@ using UnityEngine;
 using Firebase;
 using Firebase.RemoteConfig;
 using Firebase.Extensions;
+using HtmlAgilityPack;
 
 public class FirebaseRemoteConfigHandler : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
     public static FirebaseRemoteConfigHandler instance;
 
     private const string gameAppVersionSetting = "GameAppVersion";
+    private const string versionCheckTypeSetting = "VersionCheckType";
+
+    private const string PLAYSTOREURL = "https://play.google.com/store/apps/details?id=com.culttales.maujflix";
 
     public static event Action OnAppVersionCorrect;
     public static event Action OnAppVersionIncorrect;
@@ -191,27 +195,113 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
 
     private void CheckGameAppVersion()
     {
-        string remoteAppVersion = FirebaseRemoteConfig.DefaultInstance.GetValue(gameAppVersionSetting).StringValue;
+        string remoteAppVersion = string.Empty;
+        
+        int checkVersionType = (int)FirebaseRemoteConfig.DefaultInstance.GetValue(versionCheckTypeSetting).LongValue;
+        switch(checkVersionType)
+        {
+            case 0:     //Check using Remote Config
 
-#if UNITY_EDITOR
-        Debug.Log("Firebase Remote Config: APP VERSION: " + Application.version);
-        Debug.Log("Firebase Remote Config: REMOTE APP VERSION: " + remoteAppVersion);
-#endif
+                GetVersionUsingRemoteConfig(remoteAppVersion);
 
-        if (Application.version.Equals(remoteAppVersion))        //Version match
+                break;
+
+            case 1:     //Check using HTML Parser
+
+                GetVersionUsingHTMLParser(remoteAppVersion);
+
+                break;
+        }        
+    }
+
+    private void GetVersionUsingRemoteConfig(string remoteAppVersion)
+    {
+        remoteAppVersion = FirebaseRemoteConfig.DefaultInstance.GetValue(gameAppVersionSetting).StringValue;
+
+        if (remoteAppVersion.Length > 0)
         {
 #if UNITY_EDITOR
-            Debug.Log("Firebase Remote Config: VERSION MATCH! GO AHEAD!");
+            Debug.Log("Firebase Remote Config: [ 0 - Using Remote Config ]");
+            Debug.Log("Firebase Remote Config: APP VERSION: " + Application.version);
+            Debug.Log("Firebase Remote Config: REMOTE APP VERSION: " + remoteAppVersion);
 #endif
-            OnAppVersionCorrect?.Invoke();
+
+            if (Application.version.Equals(remoteAppVersion))        //Version match
+            {
+#if UNITY_EDITOR
+                Debug.Log("Firebase Remote Config: VERSION MATCH! GO AHEAD!");
+#endif
+                OnAppVersionCorrect?.Invoke();
+            }
+            else
+            {
+#if UNITY_EDITOR
+                Debug.Log("Firebase Remote Config: VERSION MISMATCH! SHOW UPDATE POPUP!");      //Version mismatch
+#endif
+                OnAppVersionIncorrect?.Invoke();
+            }
+        }
+    }
+
+    private void GetVersionUsingHTMLParser(string remoteAppVersion)
+    {
+        remoteAppVersion = GetVersionFromURL();
+
+        if (remoteAppVersion.Length > 0)
+        {
+#if UNITY_EDITOR
+            Debug.Log("Firebase Remote Config: [ 1 - Using HTML Parser Config ]");
+            Debug.Log("Firebase Remote Config: APP VERSION: " + Application.version);
+            Debug.Log("Firebase Remote Config: REMOTE APP VERSION: " + remoteAppVersion);
+#endif
+
+            if (Application.version.Equals(remoteAppVersion))        //Version match
+            {
+#if UNITY_EDITOR
+                Debug.Log("Firebase Remote Config: VERSION MATCH! GO AHEAD!");
+#endif
+                OnAppVersionCorrect?.Invoke();
+            }
+            else
+            {
+#if UNITY_EDITOR
+                Debug.Log("Firebase Remote Config: VERSION MISMATCH! SHOW UPDATE POPUP!");      //Version mismatch
+#endif
+                OnAppVersionIncorrect?.Invoke();
+            }
         }
         else
+            GetVersionUsingRemoteConfig(remoteAppVersion);      //If HTML Parser doesn't work then fallback to Remote Config method
+    }
+
+    private string GetVersionFromURL()
+    {
+        string currentVersion = string.Empty;
+
+        if (PLAYSTOREURL.Length <= 0)
+            return currentVersion;
+
+        HtmlWeb playStoreWeb = new HtmlWeb();
+        HtmlDocument playStoreDoc = playStoreWeb.Load(PLAYSTOREURL);
+
+        if(playStoreDoc != null)
         {
-#if UNITY_EDITOR
-            Debug.Log("Firebase Remote Config: VERSION MISMATCH! SHOW UPDATE POPUP!");      //Version mismatch
-#endif
-            OnAppVersionIncorrect?.Invoke();
+            var playStoreBody = playStoreDoc.DocumentNode.SelectSingleNode("//body");            
+
+            //As long as Google dont change their Play Store webpage we are fine. Otherwise switch the CheckType to Remote Config Type
+            foreach (var node in playStoreBody.Descendants())
+            {
+                if (node.NodeType == HtmlNodeType.Element)
+                {                    
+                    if (node.InnerText.Equals("Current Version"))
+                    {
+                        return node.NextSibling.InnerText;
+                    }
+                }
+            }
         }
+
+        return currentVersion;
     }
     
     private void CheckGameAppVersionTestMode()

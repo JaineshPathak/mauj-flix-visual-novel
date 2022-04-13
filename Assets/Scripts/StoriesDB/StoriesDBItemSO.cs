@@ -8,6 +8,7 @@ using UnityEditor;
 public class StoriesDBItemSO : ScriptableObject
 {
     [Header("Story Type")]
+    public bool isNewStory;
     public bool isStoryEnabled = true;
     public bool isShortStory;
 
@@ -83,6 +84,7 @@ public class StoriesDBItemSO : ScriptableObject
     {
         StoriesDBItem item = new StoriesDBItem();
 
+        item.isNewStory = isNewStory;
         item.isStoryEnabled = isStoryEnabled;
         item.isShortStory = isShortStory;
 
@@ -112,15 +114,16 @@ public class StoriesDBItemSO : ScriptableObject
             }
         }
 
-        try
+        /*try
         {
             Array.Resize(ref item.storyBranchEpisodesKeys, this.storyEpisodesBranchkeys.Length);            
         }
         catch(NullReferenceException e)
         {
             Debug.LogError("Array Problem in: item.storyBranchEpisodesKeys + [" + e.Message + "]");
-        }
+        }*/
 
+        Array.Resize(ref item.storyBranchEpisodesKeys, this.storyEpisodesBranchkeys.Length);
         if (this.storyEpisodesBranchkeys.Length > 0)
         {
             for (int i = 0; i < storyEpisodesBranchkeys.Length; i++)
@@ -139,6 +142,7 @@ public class StoriesDBItemSOEditor : Editor
 {
     private StoriesDBItemSO item;
 
+    private SerializedProperty isNewStorySerial;
     private SerializedProperty storyEnabledSerial;
     private SerializedProperty storyTypeSerial;
 
@@ -181,6 +185,7 @@ public class StoriesDBItemSOEditor : Editor
 
     private void OnEnable()
     {
+        isNewStorySerial = serializedObject.FindProperty("isNewStory");
         storyEnabledSerial = serializedObject.FindProperty("isStoryEnabled");
         storyTypeSerial = serializedObject.FindProperty("isShortStory");
 
@@ -210,6 +215,7 @@ public class StoriesDBItemSOEditor : Editor
 
         serializedObject.Update();
 
+        AddPropertyLabel(isNewStorySerial, "Is New Story", "Check if Story is new so in order to add 'New' stamp banner in Thumbnails");
         AddPropertyLabel(storyEnabledSerial, "Story Enabled", "Is Story Enabled? Helpful when you want to disable a story for any changes or issues found.");
         AddPropertyLabel(storyTypeSerial, "Short Story", "Is it a short story? False: Normal 9-10 episodes story");
 
