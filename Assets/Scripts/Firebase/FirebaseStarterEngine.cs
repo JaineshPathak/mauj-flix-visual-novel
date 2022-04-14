@@ -25,7 +25,7 @@ public class FirebaseStarterEngine : MonoBehaviour
 
 #if UNITY_EDITOR
         Caching.ClearCache();
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
         SceneManager.LoadScene(1);
 #endif
 

@@ -449,7 +449,18 @@ namespace Fungus
             if (NameText != null)
             {
                 var subbedName = stringSubstituter.SubstituteStrings(name);
-                NameText = subbedName;
+
+                var hindiSubbedName = string.Empty;
+                CharReplacerHindi charReplacer = GetWriter().CharReplacerFixer;
+                
+                if (charReplacer)
+                {
+                    hindiSubbedName = charReplacer.GetFixedText(subbedName);
+                    NameText = hindiSubbedName;
+                }
+                else
+                    NameText = subbedName;
+
                 nameTextAdapter.SetTextColor(color);
             }
         }

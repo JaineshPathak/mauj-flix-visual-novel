@@ -65,6 +65,11 @@ namespace Fungus
         [SerializeField] protected CharReplacerHindi charReplacerFixer;
         [SerializeField] protected SiddhantaFixer siddhantaFixer;
 
+        public CharReplacerHindi CharReplacerFixer
+        {
+            get { return charReplacerFixer; }
+        }
+
         // This property is true when the writer is waiting for user input to continue
         protected bool isWaitingForInput;
 

@@ -272,6 +272,9 @@ public class EpisodesSpawner : MonoBehaviour
 
         if (storyData != null)
         {
+            //storyPercentBar.fillAmount = 0;
+            //percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
+
             DownloadEpisodeTask(UnityEngine.Random.Range(0.13f, 0.2f));
             //StartCoroutine(DownloadEpisodeRoutine());
         }
@@ -383,7 +386,7 @@ public class EpisodesSpawner : MonoBehaviour
 
     private IEnumerator DownloadEpisodeRoutine()
     {
-        var isDone = false;
+        //var isDone = false;
 
         storyPercentBar.fillAmount = 0;
         percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
@@ -391,16 +394,22 @@ public class EpisodesSpawner : MonoBehaviour
         AsyncOperationHandle<GameObject> downloadEpisode = Addressables.LoadAssetAsync<GameObject>(storyData.currentEpisodeKey);
         downloadEpisode.Completed += EpisodeDownloadComplete;
 
-        while(!isDone)
-        {            
-            downloadProgressCurrent = downloadEpisode.PercentComplete;
+        while(!downloadEpisode.IsDone)
+        {
+            /*downloadProgressCurrent = downloadEpisode.PercentComplete;
             storyPercentBar.fillAmount = downloadProgressCurrent;
+            percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";*/
+
+            var status = downloadEpisode.GetDownloadStatus();
+            float progress = status.Percent;
+
+            storyPercentBar.fillAmount = progress;
             percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 
             yield return null;
         }
 
-        yield return new WaitUntil(() => isDone);
+        //yield return new WaitUntil(() => isDone);
 
         //Download Complete
         storyPercentBar.fillAmount = 1f;
@@ -429,7 +438,7 @@ public class EpisodesSpawner : MonoBehaviour
 
                 GameObject episodeDownloaded = Instantiate(obj.Result);
                 episodesHandler = episodeDownloaded.GetComponent<EpisodesHandler>();
-                episodesHandler.Init(this);
+                episodesHandler.Init(this);                               
                 break;
 
             case AsyncOperationStatus.Failed:
