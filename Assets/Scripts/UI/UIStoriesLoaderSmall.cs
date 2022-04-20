@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Firebase.RemoteConfig;
 
 public class UIStoriesLoaderSmall : MonoBehaviour
 {
@@ -79,7 +80,12 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
         for (int i = 0; i < storyDB.storiesCategories[categoryIndex].storiesDBItems.Length; i++)
         {
-            if(storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isStoryEnabled)
+            string storyTitleRaw = storyDB.storiesCategories[categoryIndex].storiesDBItems[i].storyTitleEnglish;
+            string storyTitleFresh = storyTitleRaw.Replace(" ", "");
+
+            bool storyEnabled = FirebaseRemoteConfig.DefaultInstance.GetValue("ST_" + storyTitleFresh + "_Status").BooleanValue;
+
+            if (/*storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isStoryEnabled*/storyEnabled)
             {
                 UIStoriesItemSmall storyItemSmallInstance;
 
@@ -122,11 +128,19 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
         for (int i = 0; i < _storiesDBItems.Length; i++)
         {
-            UIStoriesItemSmall storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
-            storyItemSmallInstance.transform.name = _storiesDBItems[i].storyTitleEnglish;
-            storyItemSmallInstance.LoadThumbnailAsset(_storiesDBItems[i], storiesDetailsPanel, GameController.instance);
+            string storyTitleRaw = _storiesDBItems[i].storyTitleEnglish;
+            string storyTitleFresh = storyTitleRaw.Replace(" ", "");
 
-            storiesItemSmallList.Add(storyItemSmallInstance);
+            bool storyEnabled = FirebaseRemoteConfig.DefaultInstance.GetValue("ST_" + storyTitleFresh + "_Status").BooleanValue;
+
+            if (storyEnabled)
+            {
+                UIStoriesItemSmall storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+                storyItemSmallInstance.transform.name = _storiesDBItems[i].storyTitleEnglish;
+                storyItemSmallInstance.LoadThumbnailAsset(_storiesDBItems[i], storiesDetailsPanel, GameController.instance);
+
+                storiesItemSmallList.Add(storyItemSmallInstance);
+            }
         }
 
         if (categoryCountText != null)
@@ -148,11 +162,19 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
         for (int i = 0; i < _storyDB.storiesCategories[_databaseIndex].storiesDBItems.Length; i++)
         {
-            UIStoriesItemSmall storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
-            storyItemSmallInstance.transform.name = _storyDB.storiesCategories[_databaseIndex].storiesDBItems[i].storyTitleEnglish;
-            storyItemSmallInstance.LoadThumbnailAsset(_storyDB.storiesCategories[_databaseIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance);
+            string storyTitleRaw = _storyDB.storiesCategories[_databaseIndex].storiesDBItems[i].storyTitleEnglish;
+            string storyTitleFresh = storyTitleRaw.Replace(" ", "");
 
-            storiesItemSmallList.Add(storyItemSmallInstance);
+            bool storyEnabled = FirebaseRemoteConfig.DefaultInstance.GetValue("ST_" + storyTitleFresh + "_Status").BooleanValue;
+
+            if (storyEnabled)
+            {
+                UIStoriesItemSmall storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+                storyItemSmallInstance.transform.name = _storyDB.storiesCategories[_databaseIndex].storiesDBItems[i].storyTitleEnglish;
+                storyItemSmallInstance.LoadThumbnailAsset(_storyDB.storiesCategories[_databaseIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance);
+
+                storiesItemSmallList.Add(storyItemSmallInstance);
+            }
         }
 
         if (categoryCountText != null)

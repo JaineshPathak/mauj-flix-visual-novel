@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using Firebase.RemoteConfig;
 
 public class UISectionLoader : MonoBehaviour
 {
@@ -36,7 +34,9 @@ public class UISectionLoader : MonoBehaviour
         //Starting from index 1. 0th index is reserved for top big thumbnails ones
         for (int i = 1; i < storiesDB.storiesCategories.Length; i++)
         {
-            if (storiesDB.storiesCategories[i].isEnabled)       //Useful if you want to disable unwanted categories
+            bool isCategoryEnabled = FirebaseRemoteConfig.DefaultInstance.GetValue("Category" + i + "_Status").BooleanValue;
+
+            if (/*storiesDB.storiesCategories[i].isEnabled*/ isCategoryEnabled)       //Useful if you want to Enable/Disable categories on the fly
             {
                 UIStoriesLoaderSmall uIStoriesLoaderSmallInstance;
 

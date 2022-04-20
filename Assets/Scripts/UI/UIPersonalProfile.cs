@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Firebase.RemoteConfig;
 
 [System.Serializable]
 public struct PersonalCategoryData
@@ -181,8 +182,13 @@ public class UIPersonalProfile : MonoBehaviour
             {
                 UIStoriesLoaderSmall uIStoriesLoaderSmallInstance = Instantiate(sectionLoaderPrefab, sectionContentParent);
 
-                if(i == personalCategoryDatas.Length - 1)
-                    uIStoriesLoaderSmallInstance.PopulateCategory(personalCategoryDatas[i].categoryTitle, storiesDB.storiesCategories.Length - 1, storiesDB);
+                if (i == personalCategoryDatas.Length - 1)       //All Stories Category
+                {
+                    if (FirebaseRemoteConfig.DefaultInstance.GetValue("Category8_Status").BooleanValue)
+                        uIStoriesLoaderSmallInstance.PopulateCategory(personalCategoryDatas[i].categoryTitle, storiesDB.storiesCategories.Length - 1, storiesDB);
+                    else
+                        uIStoriesLoaderSmallInstance.gameObject.SetActive(false);
+                }
                 else
                     uIStoriesLoaderSmallInstance.PopulateCategory(personalCategoryDatas[i].categoryTitle, personalCategoryDatas[i].storiesDBItemList.ToArray());
 
@@ -201,6 +207,10 @@ public class UIPersonalProfile : MonoBehaviour
 
         if (playerData.StoriesCompletedList.Count <= 0 && sectionLoadedList[2] != null)
             sectionLoadedList[2].gameObject.SetActive(false);
+
+        //All Stories Category
+        //if(sectionLoadedList[3] != null)
+            //sectionLoadedList[3].gameObject.SetActive(FirebaseRemoteConfig.DefaultInstance.GetValue("Category8_Status").BooleanValue);
     }
 
     public void OpenURLLink(string _url)

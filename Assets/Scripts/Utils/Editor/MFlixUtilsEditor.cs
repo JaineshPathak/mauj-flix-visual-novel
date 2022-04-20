@@ -5,7 +5,7 @@ using UnityEditor;
 
 
 #if UNITY_EDITOR
-[CustomEditor(typeof(MFlixUtils))]
+[CustomEditor(typeof(MFlixUtils)), CanEditMultipleObjects]
 public class MFlixUtilsEditor : Editor
 {
     private SerializedProperty whatToReplaceSerialized;
@@ -67,6 +67,10 @@ public class MFlixUtilsEditor : Editor
     private SerializedProperty charNameScreenInSceneSerialized;
     private SerializedProperty charNameScreenPrefabSerialized;
 
+    //Play Sound
+    private SerializedProperty originalSoundSerialized;
+    private SerializedProperty newSoundSerialized;
+
     private MFlixUtils flixReplacer;
 
     private void OnEnable()
@@ -118,6 +122,9 @@ public class MFlixUtilsEditor : Editor
         destoryOriginalCharNameScreenSerialized = serializedObject.FindProperty("destoryOriginalCharNameScreen");
         charNameScreenInSceneSerialized = serializedObject.FindProperty("charNameScreenInScene");
         charNameScreenPrefabSerialized = serializedObject.FindProperty("charNameScreenPrefab");
+
+        originalSoundSerialized = serializedObject.FindProperty("originalSound");
+        newSoundSerialized = serializedObject.FindProperty("newSound");
     }
 
     public override void OnInspectorGUI()
@@ -453,6 +460,40 @@ public class MFlixUtilsEditor : Editor
                         //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
                         Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Replace Character Name");
                         flixReplacer.ReplaceCharacterNameScreen();
+                    }
+                }
+
+                break;
+
+            case MFlixUtils.WhatToReplace.ReplacePlaySound:
+
+                EditorGUILayout.HelpBox("Total PlaySound Commands Found: " + flixReplacer.GetPlaySoundCount(), MessageType.Info);
+                List<AudioClip> soundsCommandList = flixReplacer.GetPlaySoundDetails();
+                if(soundsCommandList.Count > 0)
+                {
+                    for (int i = 0; i < soundsCommandList.Count; i++)
+                    {
+                        EditorGUILayout.HelpBox("Sound Clips Used: " + soundsCommandList[i].name, MessageType.Info);
+                    }
+                }
+
+                EditorGUILayout.Space(10f);
+
+                GUIContent originalSoundContent = new GUIContent("Original Sound", "Original Sound");
+                EditorGUILayout.PropertyField(originalSoundSerialized, originalSoundContent, GUILayout.ExpandHeight(false));
+
+                GUIContent newSoundContent = new GUIContent("New Sound", "New Sound which will replace original sound");
+                EditorGUILayout.PropertyField(newSoundSerialized, newSoundContent, GUILayout.ExpandHeight(false));
+
+                EditorGUILayout.Space(10f);
+
+                if (flixReplacer.originalSound != null && flixReplacer.newSound != null)
+                {
+                    if (DrawButtonColored("Replace Sound".ToUpper(), "#3c8b50", Color.white))
+                    {
+                        //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
+                        Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Replace Sound");
+                        flixReplacer.ReplaceSoundClip();
                     }
                 }
 

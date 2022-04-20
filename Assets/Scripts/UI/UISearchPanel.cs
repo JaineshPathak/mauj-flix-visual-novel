@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using FuzzyString;
+using Firebase.RemoteConfig;
 
 public class UISearchPanel : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class UISearchPanel : MonoBehaviour
     private List<FuzzyStringComparisonOptions> searchOptions = new List<FuzzyStringComparisonOptions>();
     private FuzzyStringComparisonTolerance searchTolerance = FuzzyStringComparisonTolerance.Strong;
 
+    private FirebaseRemoteConfig remoteConfigInstance;
+
     private void Awake()
     {
         searchOptions.Add(FuzzyStringComparisonOptions.UseOverlapCoefficient);
@@ -51,6 +54,11 @@ public class UISearchPanel : MonoBehaviour
     private void OnDestroy()
     {
         GameController.OnStoryDBLoaded -= OnStoriesDBLoaded;
+    }
+
+    private void Start()
+    {
+        remoteConfigInstance = FirebaseRemoteConfig.DefaultInstance;
     }
 
     private void OnStoriesDBLoaded(StoriesDB _storiesDB)
@@ -127,7 +135,12 @@ public class UISearchPanel : MonoBehaviour
             {
                 StoriesDBItem item = de.Value as StoriesDBItem;
 
-                if (item.isStoryEnabled)
+                string storyTitleRaw = item.storyTitleEnglish;
+                string storyTitleFresh = storyTitleRaw.Replace(" ", "");
+
+                bool storyEnabled = remoteConfigInstance.GetValue("ST_" + storyTitleFresh + "_Status").BooleanValue;
+
+                if (/*item.isStoryEnabled*/ storyEnabled)
                 {
                     UIStoriesItemSmall storyItemSmallInstance = Instantiate(storyItemSmallPrefab, searchContentParent);
                     storyItemSmallInstance.transform.name = de.Key.ToString();

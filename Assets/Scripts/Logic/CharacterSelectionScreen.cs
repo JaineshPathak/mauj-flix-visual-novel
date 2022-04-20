@@ -188,9 +188,30 @@ public class CharacterSelectionScreen : MonoBehaviour
     }
 
     public void OnCharacterSubmit()
-    {        
+    {
         if (episodesHandler == null)
             return;
+
+        if (EpisodesSpawner.instance && EpisodesSpawner.instance.testModeSingle)
+        {
+            StopCoroutine("SelectUpdateRoutine");
+
+            episodesHandler.SelectCharacter(characterGender, characterDataAssets[currentCharacterIndex], characterVariableRef, currentCharacterIndex, true);
+
+            MessageReceivedMFlix[] messageReceiversMaujflixTest = episodesHandler.episodeFlowchart.GetComponentsInChildren<MessageReceivedMFlix>();
+            if (messageReceiversMaujflixTest.Length > 0)
+            {
+                for (int i = 0; i < messageReceiversMaujflixTest.Length; i++)
+                {
+                    if (messageReceiversMaujflixTest[i] != null)
+                        messageReceiversMaujflixTest[i].OnFungusMessageReceivedForCharacter("CharacterSelected", this);
+                }
+            }
+
+            EpisodesSpawner.instance.topPanel.HideTopPanel(0.3f, 0.7f);
+
+            return;
+        }
 
         if ( /*FirebaseFirestoreHandler.instance == null*/ FirebaseFirestoreOffline.instance == null)
             return;
@@ -215,7 +236,6 @@ public class CharacterSelectionScreen : MonoBehaviour
             {
                 if (episodesSpawner == null && EpisodesSpawner.instance != null)
                     episodesSpawner = EpisodesSpawner.instance;
-
 
                 if (episodesSpawner != null)
                     episodesSpawner.topPanel.HideTopPanel(0.3f, 0.7f);

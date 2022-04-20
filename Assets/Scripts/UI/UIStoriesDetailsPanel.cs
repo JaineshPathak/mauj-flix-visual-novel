@@ -144,10 +144,10 @@ public class UIStoriesDetailsPanel : MonoBehaviour
         {
             storyTitleText.text = episodesSpawner.storyTitle;
             if (storyTitleText.GetComponent<CharReplacerHindi>() != null)
-                storyTitleText.GetComponent<CharReplacerHindi>().UpdateMe();
+                storyTitleText.text = storyTitleText.GetComponent<CharReplacerHindi>().GetFixedText(episodesSpawner.storyTitle);
 
             //if (storyTitleText.GetComponent<SiddhantaFixer>() != null)
-                //storyTitleText.GetComponent<SiddhantaFixer>().FixTexts();
+            //storyTitleText.GetComponent<SiddhantaFixer>().FixTexts();
 
             buttonsGroupSizeFitter.enabled = false;
             buttonsGroupSizeFitter.SetLayoutVertical();
@@ -299,9 +299,12 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             episodesSpawner.storyData = _storyData;
             episodesSpawner.storiesDBItem = _storiesDBItem;
 
+            //storyTitleText.text = _storyTitle;
             storyTitleText.text = _storyTitle;
             if (storyTitleText.GetComponent<CharReplacerHindi>() != null)
-                storyTitleText.GetComponent<CharReplacerHindi>().UpdateMe();
+                storyTitleText.text = storyTitleText.GetComponent<CharReplacerHindi>().GetFixedText(_storyTitle);
+            //if (storyTitleText.GetComponent<CharReplacerHindi>() != null)
+            //storyTitleText.GetComponent<CharReplacerHindi>().UpdateMe();
             //if (storyTitleText.GetComponent<SiddhantaFixer>() != null)
             //storyTitleText.GetComponent<SiddhantaFixer>().FixTexts();
 

@@ -31,6 +31,12 @@ namespace Fungus
 
         #region Public members
 
+        public AudioClip SoundClip
+        {
+            get { return soundClip; }
+            set { soundClip = value; }
+        }
+
         public override void OnEnter()
         {
             if (soundClip == null)

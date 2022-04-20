@@ -303,7 +303,7 @@ public class UIStoriesItemSmall : MonoBehaviour
             storyIsNewImage.gameObject.SetActive(false);
         }
 
-        if(checkRoutine)
+        if (checkRoutine)
             StartCoroutine(CheckAgainSmall());
     }
 

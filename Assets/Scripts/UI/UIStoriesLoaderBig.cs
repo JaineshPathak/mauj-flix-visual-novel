@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using NestedScroll.ScrollElement;
+using Firebase.RemoteConfig;
 
 public class UIStoriesLoaderBig : MonoBehaviour
 {
@@ -47,8 +48,16 @@ public class UIStoriesLoaderBig : MonoBehaviour
 
         for (int i = 0; i < storyDB.storiesCategories[categoryIndex].storiesDBItems.Length; i++)
         {
-            UIStoriesItemBig storyItemBigInstance = Instantiate(storiesItemBigPrefab, scrollContent);
-            storyItemBigInstance.LoadThumbnailAssets(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel);
+            string storyTitleRaw = storyDB.storiesCategories[categoryIndex].storiesDBItems[i].storyTitleEnglish;
+            string storyTitleFresh = storyTitleRaw.Replace(" ", "");
+
+            bool storyEnabled = FirebaseRemoteConfig.DefaultInstance.GetValue("ST_" + storyTitleFresh + "_Status").BooleanValue;
+
+            if (storyEnabled)
+            {
+                UIStoriesItemBig storyItemBigInstance = Instantiate(storiesItemBigPrefab, scrollContent);
+                storyItemBigInstance.LoadThumbnailAssets(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel);
+            }
         }
 
         snapScroller.UpdateScroll();

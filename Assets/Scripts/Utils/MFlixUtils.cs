@@ -29,7 +29,8 @@ public class MFlixUtils : MonoBehaviour
         StoryBranchEndScreen,
         AskYesNoPopupScreen,
         CharacterSelectionScreen,
-        CharacterNameDialogueScreen
+        CharacterNameDialogueScreen,
+        ReplacePlaySound
     };
 
     public WhatToReplace whatToReplace;
@@ -89,6 +90,10 @@ public class MFlixUtils : MonoBehaviour
     public bool destoryOriginalCharNameScreen;    
     public GameObject charNameScreenInScene;
     public GameObject charNameScreenPrefab;
+
+    //Replace Sound
+    public AudioClip originalSound;
+    public AudioClip newSound;
 
     private void OnValidate()
     {
@@ -738,6 +743,63 @@ public class MFlixUtils : MonoBehaviour
 
         PrefabUtility.RecordPrefabInstancePropertyModifications(instancedObject);
         PrefabUtility.RecordPrefabInstancePropertyModifications(transform);
+    }
+
+    public int GetPlaySoundCount()
+    {
+        int count = 0;
+
+        if (episodeFlowchart == null)
+            return 0;
+
+        foreach (PlaySound playSoundCommand in episodeFlowchart.GetComponentsInChildren<PlaySound>())
+            if (playSoundCommand)
+                count++;
+
+        return count;
+    }
+
+    public List<AudioClip> GetPlaySoundDetails()
+    {
+        List<AudioClip> playSoundsList = new List<AudioClip>();
+
+        if(GetPlaySoundCount() > 0)
+        {
+            foreach (PlaySound playSoundCommand in episodeFlowchart.GetComponentsInChildren<PlaySound>())
+                if (playSoundCommand)
+                    playSoundsList.Add(playSoundCommand.SoundClip);
+        }
+
+        return playSoundsList;
+    }
+
+    public void ReplaceSoundClip()
+    {
+        if (PrefabStageUtility.GetCurrentPrefabStage() == null)
+        {
+            Debug.LogError("MFlix Replacer: You need to be in Prefab Mode");
+            return;
+        }
+
+        if (episodeFlowchart == null || originalSound == null || newSound == null)
+            return;
+
+        int count = 0;
+        foreach(PlaySound playSoundCommand in episodeFlowchart.GetComponentsInChildren<PlaySound>())
+        {
+            if(playSoundCommand != null)
+            {
+                if(playSoundCommand.SoundClip == originalSound)
+                {
+                    Debug.Log("Mflix Replacer: Replaced Sound OLD: " + originalSound + " NEW: " + newSound);
+                    playSoundCommand.SoundClip = newSound;
+                    count++;
+                }
+            }
+        }
+
+        if (count == 0)
+            Debug.Log("MFlix Replacer: No PlaySound commands were found!");
     }
 }
 #endif

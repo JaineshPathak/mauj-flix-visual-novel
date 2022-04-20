@@ -97,13 +97,41 @@ public class MenuDialogMflix : MenuDialog
             /*if (EpisodesSpawner.instance != null)
                 EpisodesSpawner.instance.ShowHideDiamondPanel(true);*/
 
-            action = delegate
+            if(EpisodesSpawner.instance && EpisodesSpawner.instance.testModeSingle)
             {
+                action = delegate
+                {
 #if UNITY_EDITOR
-                Debug.Log("Firebase Firestore Offline: No instance found. Control Returned!");
+                    Debug.Log("Firebase Firestore Offline: Test Mode so Lets GO!");
 #endif
-                return;
-            };
+
+                    EpisodesSpawner.instance.topPanel.HideTopPanel();
+
+                    EventSystem.current.SetSelectedGameObject(null);
+                    StopAllCoroutines();
+                    // Stop timeout
+                    Clear();
+                    HideSayDialog();
+                    if (block != null)
+                    {
+                        var flowchart = block.GetFlowchart();
+                        gameObject.SetActive(false);
+                        // Use a coroutine to call the block on the next frame
+                        // Have to use the Flowchart gameobject as the MenuDialog is now inactive
+                        flowchart.StartCoroutine(CallBlockExecute(block));
+                    }
+                };
+            }
+            else
+            {
+                action = delegate
+                {
+#if UNITY_EDITOR
+                    Debug.Log("Firebase Firestore Offline: No instance found. Control Returned!");
+#endif
+                    return;
+                };
+            }            
         }
         else
         {

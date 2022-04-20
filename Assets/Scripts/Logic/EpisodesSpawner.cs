@@ -16,7 +16,9 @@ public class EpisodesSpawner : MonoBehaviour
     public static EpisodesSpawner instance;
 
     [Header("Episodes Reference")]
+    public bool hideTopPanelAtStart;
     public bool testMode;
+    public bool testModeSingle;
     public bool saveOrLoadData;
     public bool immediateOpenDetailsPanel = false;
     public string storyDataKey;
@@ -187,6 +189,9 @@ public class EpisodesSpawner : MonoBehaviour
 
         if (askToQuitNoButton)
             askToQuitNoButton.onClick.AddListener(OnAskNoButton);
+
+        if (hideTopPanelAtStart && topPanel)
+            topPanel.HideTopPanel();
     }
 
     public void FadeOutBlackScreen()
