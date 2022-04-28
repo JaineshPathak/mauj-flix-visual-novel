@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Fungus;
-using System;
 using underDOGS.SDKEvents;
 
 public class EpisodesHandler : MonoBehaviour
@@ -380,7 +379,7 @@ public class EpisodesHandler : MonoBehaviour
         //Check if this is last episode. If not then copy data to next Episode Data
         if (storyData.currentEpisodeIndex < storyData.episodeDataList.Count - 1)
         {
-            if (!endPanel.nextEpisodeBarTimer.gameObject.activeSelf)
+            if (endPanel != null && !endPanel.nextEpisodeBarTimer.gameObject.activeSelf)
                 endPanel.nextEpisodeBarTimer.gameObject.SetActive(true);
 
             storyData.currentEpisodeIndex++;
@@ -410,7 +409,7 @@ public class EpisodesHandler : MonoBehaviour
         }
         else //All Episodes are completed
         {
-            if(endPanel.nextEpisodeBarTimer.gameObject.activeSelf)
+            if(endPanel != null && endPanel.nextEpisodeBarTimer.gameObject.activeSelf)
                 endPanel.nextEpisodeBarTimer.gameObject.SetActive(false);
 
             //For UIPersonalProfile Section

@@ -58,8 +58,9 @@ public class EpisodesTesting : MonoBehaviour
     public GameObject backButton;
     public GameObject choicesButton;
     public Transform episodeButtonGroupLayout;
-        
+
     [Header("Episodes List")]
+    public bool goByObjectName;
     public GameObject[] episodesToTest;
 
     [Header("Episode Prefab Current")]
@@ -95,7 +96,7 @@ public class EpisodesTesting : MonoBehaviour
         for (int i = 0; i < episodesToTest.Length; i++)
         {
             EpisodesLoadButton buttonGameObject = Instantiate(episodeLoadButtonPrefab, episodeButtonGroupLayout);
-            buttonGameObject.episodeText.text = "Episode " + (i + 1);
+            buttonGameObject.episodeText.text = goByObjectName ? episodesToTest[i].transform.name : "Episode " + (i + 1);
             buttonGameObject.episodesTesting = this;
             buttonGameObject.episodePrefab = episodesToTest[i];
         }
