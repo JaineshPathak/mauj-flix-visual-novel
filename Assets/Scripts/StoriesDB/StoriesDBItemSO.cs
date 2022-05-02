@@ -123,7 +123,6 @@ public class StoriesDBItemSO : ScriptableObject
             Debug.LogError("Array Problem in: item.storyBranchEpisodesKeys + [" + e.Message + "]");
         }*/
 
-
         //item.storyBranchEpisodesKeys = new string[0];
         Array.Resize(ref item.storyBranchEpisodesKeys, this.storyEpisodesBranchkeys.Length);
         if (this.storyEpisodesBranchkeys.Length > 0)
