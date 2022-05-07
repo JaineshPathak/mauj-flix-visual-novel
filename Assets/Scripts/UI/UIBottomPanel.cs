@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 [System.Serializable]
 public class BottomButton
@@ -7,6 +8,12 @@ public class BottomButton
     public Image buttonMain;
     public Sprite buttonOn;
     public Sprite buttonOff;
+    public TextMeshProUGUI buttonText;
+
+    [Space(10)]
+
+    public Color buttonTextColorOn = Color.white;
+    public Color buttonTextColorOff;
 
     public void SetButtonOn()
     {
@@ -14,6 +21,9 @@ public class BottomButton
             return;
 
         buttonMain.sprite = buttonOn;
+
+        if (buttonText)
+            buttonText.color = buttonTextColorOn;
     }
 
     public void SetButtonOff()
@@ -22,6 +32,9 @@ public class BottomButton
             return;
 
         buttonMain.sprite = buttonOff;
+
+        if (buttonText)
+            buttonText.color = buttonTextColorOff;
     }
 }
 
