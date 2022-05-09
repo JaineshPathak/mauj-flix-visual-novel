@@ -22,6 +22,7 @@ public class UIEpisodeEndPanel : MonoBehaviour
     [Space(15f)]
 
     public Image nextEpisodeBarTimer;
+    public Image nextEpisodeImage;
     public Image nextEpisodePanel;
 
     [Space(15f)]
@@ -38,6 +39,7 @@ public class UIEpisodeEndPanel : MonoBehaviour
     private bool isTriggered;
 
     [HideInInspector] public EpisodesHandler episodesHandler;
+    [HideInInspector] public Sprite nextEpisodeImageSprite;
 
     //public static event Action OnNextEpisodePanelOpened;
 

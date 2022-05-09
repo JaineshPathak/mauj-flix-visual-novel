@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UI;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -87,8 +88,13 @@ public class EpisodesSpawner : MonoBehaviour
 
     public static event Action OnRateUsWindowOpened;
     public static event Action OnRateUsWindowClosed;
+    public static event Action<SpriteAtlas> OnCharactersAtlasLoaded;
+    public static event Action<SpriteAtlas> OnBackgroundAtlasLoaded;
+    public static event Action<SpriteAtlas> OnNextEpsAtlasLoaded;
 
-    private StoriesDB storiesDB;    
+    private StoriesDB storiesDB;
+
+    private AsyncOperationHandle<GameObject> atlasDBHandle;
 
     private void Awake()
     {
@@ -239,7 +245,9 @@ public class EpisodesSpawner : MonoBehaviour
         storyPercentBar.fillAmount = 0;
         percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 
-        AsyncOperation sceneOperation = SceneManager.LoadSceneAsync(3);
+        int sceneIndex = (storiesDBItem.isReworked) ? 3 : 4;        //[3] - Reworked Scene, [4] - Non-reworked Scene
+
+        AsyncOperation sceneOperation = SceneManager.LoadSceneAsync(sceneIndex);
         sceneOperation.completed += OnStorySceneLoadedComplete;                
 
         while(!sceneOperation.isDone)
@@ -255,14 +263,73 @@ public class EpisodesSpawner : MonoBehaviour
 
     private void OnStorySceneLoadedComplete(AsyncOperation obj)
     {
-        storyPercentBar.fillAmount = 0;
-        percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
+        if (!storiesDBItem.isReworked)
+        {
+            storyPercentBar.fillAmount = 0;
+            percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 
-        storyLoadingPercentBarFake.fillAmount = 0;
-        percentDownloadedTextFake.gameObject.SetActive(true);
-        percentDownloadedTextFake.text = (storyLoadingPercentBarFake.fillAmount * 100f).ToString("0") + "%";
+            storyLoadingPercentBarFake.fillAmount = 0;
+            percentDownloadedTextFake.gameObject.SetActive(true);
+            percentDownloadedTextFake.text = (storyLoadingPercentBarFake.fillAmount * 100f).ToString("0") + "%";
 
-        StartLoadingEpisode();
+            StartLoadingEpisode();
+        }
+        else
+        {
+            StartCoroutine(LoadSoundsBucketRoutine());
+        }
+    }
+
+    private IEnumerator LoadSoundsBucketRoutine()
+    {
+        //Debug.Log("Step 3 - Loading Sounds Bucket - Initialized");
+        AsyncOperationHandle<GameObject> loadSoundsBucketHandle = Addressables.LoadAssetAsync<GameObject>(storiesDBItem.soundsBucketKey);
+
+        while (!loadSoundsBucketHandle.IsDone)
+        {
+            float progress = loadSoundsBucketHandle.PercentComplete;
+
+            storyPercentBar.fillAmount = progress;
+            percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
+
+            yield return null;
+        }
+
+        yield return loadSoundsBucketHandle;
+
+        if (loadSoundsBucketHandle.Status == AsyncOperationStatus.Succeeded)
+        {
+            //Debug.Log("Step 4 - Loading Sounds Bucket - Complete");
+
+            Instantiate(loadSoundsBucketHandle.Result);
+            StartCoroutine(StartLoadingAtlases());
+            //StartLoadingEpisode();
+        }
+    }
+
+    private IEnumerator StartLoadingAtlases()
+    {
+        //Debug.Log("Step 5 - Loading Atlas - Initialized");
+
+        atlasDBHandle = Addressables.LoadAssetAsync<GameObject>(storiesDBItem.atlasDBKey);
+
+        while (!atlasDBHandle.IsDone)
+        {
+            float progress = atlasDBHandle.PercentComplete;
+
+            storyPercentBar.fillAmount = progress;
+            percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
+
+            yield return null;
+        }
+
+        yield return new WaitUntil(() => atlasDBHandle.IsDone);
+
+        Instantiate(atlasDBHandle.Result, Vector3.zero, Quaternion.identity);
+
+        //Debug.Log("Step 6 - Loading Atlas - Complete");
+
+        StartLoadingEpisode();        
     }
 
     private void StartLoadingEpisode()

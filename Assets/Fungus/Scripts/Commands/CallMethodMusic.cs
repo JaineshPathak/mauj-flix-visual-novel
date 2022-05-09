@@ -16,5 +16,11 @@ namespace Fungus
         {
             targetObject.SendMessage(methodName, musicIndex);
         }
+
+        public override Color GetButtonColor()
+        {
+            //return new Color32(235, 191, 217, 255);
+            return Color.green;
+        }
     }
 }

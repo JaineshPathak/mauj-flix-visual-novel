@@ -3,6 +3,8 @@
 
 using UnityEditor;
 using UnityEngine;
+using UnityEditor.Experimental.GraphView;
+using System;
 
 namespace Fungus.EditorUtils
 {
@@ -17,6 +19,16 @@ namespace Fungus.EditorUtils
         protected SerializedProperty descriptionProp;
         protected SerializedProperty setSayDialogProp;
 
+        //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+        protected SerializedProperty characterAtlasProp;
+        protected SerializedProperty portraitsNamesListProp;
+
+        private Sprite[] atlasSpritesList;
+        private string[] atlasSpritesNamesList;
+
+        private StringListSearchProvider searchProvider;
+        //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+
         protected virtual void OnEnable()
         {
             nameTextProp = serializedObject.FindProperty ("nameText");
@@ -26,6 +38,11 @@ namespace Fungus.EditorUtils
             portraitsFaceProp = serializedObject.FindProperty ("portraitsFace");
             descriptionProp = serializedObject.FindProperty ("description");
             setSayDialogProp = serializedObject.FindProperty("setSayDialog");
+
+            //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+            characterAtlasProp = serializedObject.FindProperty("characterAtlas");
+            portraitsNamesListProp = serializedObject.FindProperty("portraitsNamesList");
+            //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
         }
 
         public override void OnInspectorGUI() 
@@ -40,6 +57,39 @@ namespace Fungus.EditorUtils
             EditorGUILayout.PropertyField(soundEffectProp, new GUIContent("Sound Effect", "Sound to play when the character is talking. Overrides the setting in the Dialog."));
             EditorGUILayout.PropertyField(setSayDialogProp);
             EditorGUILayout.PropertyField(descriptionProp, new GUIContent("Description", "Notes about this story character (personality, attibutes, etc.)"));
+
+            //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+            EditorGUILayout.Separator();
+
+            EditorGUILayout.PropertyField(characterAtlasProp);
+
+            if (t.CharacterAtlas != null)
+            {
+                EditorGUILayout.BeginHorizontal();
+                AddLabel("Select Portrait", "Select Portrait from Atlas");
+                if (GUILayout.Button("Add Portrait", EditorStyles.popup, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(false)))
+                {
+                    searchProvider = ScriptableObject.CreateInstance<StringListSearchProvider>();
+                    searchProvider.Init(atlasSpritesNamesList, (index) =>
+                    {
+                        t.PortraitsNamesList.Add(atlasSpritesNamesList[index]);
+                    });
+                    //searchProvider = new StringListSearchProvider(atlasSpritesNamesList);
+                    SearchWindow.Open(new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)), searchProvider);
+                }
+                //imageLoader.currentTextureIndexToLoad = EditorGUILayout.Popup(imageLoader.currentTextureIndexToLoad, atlasSpritesNamesList);
+                EditorGUILayout.EndHorizontal();
+
+                EditorGUILayout.Separator();
+            }
+
+            EditorGUILayout.PropertyField(portraitsNamesListProp);
+
+            if (GUILayout.Button("Get Portraits Names"))
+                t.FillupPortraitsNamesList();
+
+            EditorGUILayout.Separator();
+            //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
 
             if (t.Portraits != null &&
                 t.Portraits.Count > 0)
@@ -82,5 +132,10 @@ namespace Fungus.EditorUtils
             serializedObject.ApplyModifiedProperties();
         }
 
+        private void AddLabel(string label, string labelToolTip)
+        {
+            GUIContent newContent = new GUIContent(label, labelToolTip);
+            EditorGUILayout.LabelField(newContent, GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
+        }
     }
 }

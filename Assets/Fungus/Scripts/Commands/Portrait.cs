@@ -75,6 +75,8 @@ namespace Fungus
         /// </summary>
         public virtual Sprite _Portrait { get { return portrait; } set { portrait = value; } }
 
+        public string _PortraitName;
+
         /// <summary>
         /// Move the portrait from/to this offset position.
         /// </summary>
@@ -110,8 +112,23 @@ namespace Fungus
         /// </summary>
         public virtual bool ShiftIntoPlace { get { return shiftIntoPlace; } set { shiftIntoPlace = value; } }
 
+        public override void OnValidate()
+        {
+            if (portrait)
+                _PortraitName = portrait.name;
+        }
+
+        public override void OnCommandUpdated()
+        {
+            if (character != null)
+                portrait = character.GetPortrait(_PortraitName);
+        }
+
         public override void OnEnter()
         {
+            //if (character != null)
+                //portrait = character.GetPortrait(portrait.name);
+
             // Selected "use default Portrait Stage"
             if (stage == null)
             {

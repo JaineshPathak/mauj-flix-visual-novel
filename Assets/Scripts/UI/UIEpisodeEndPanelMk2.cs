@@ -10,7 +10,7 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
 {
     public static UIEpisodeEndPanelMk2 instance;
 
-    [Header("Main Canvas")]
+    [Header("Main Canvas")]    
     public CanvasGroup endScreenCanvasGroup;
     public Image congratulationsImage;
     public ParticleSystem congratsParticles;
@@ -25,6 +25,7 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
     public Button collectDiamondsButton;
 
     [Header("Part 2")]
+    public Image nextEpisodeImage;
     public RectTransform middlePanelPart2;
     public RectTransform nextEpisodeButtonGroups;
     public CanvasGroup storyTextPart2;
@@ -49,6 +50,7 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
     public Button noTicketsOkButton;
 
     [HideInInspector] public EpisodesHandler episodesHandler;
+    [HideInInspector] public Sprite nextEpisodeImageSprite;
     private EpisodesSpawner episodesSpawner;
 
     private CanvasGroup noThanksButtonCanvasGrp;
@@ -176,6 +178,9 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
             return;
 
         isTriggered = true;
+
+        if (nextEpisodeImage && nextEpisodeImageSprite)
+            nextEpisodeImage.sprite = nextEpisodeImageSprite;
 
         if (!endScreenCanvasGroup.gameObject.activeSelf)
             endScreenCanvasGroup.gameObject.SetActive(true);

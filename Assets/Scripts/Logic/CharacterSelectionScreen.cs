@@ -9,6 +9,7 @@ using System;
 
 public enum CharacterGender
 {
+    Gender_None,
     Gender_Male,
     Gender_Female
 };
@@ -22,6 +23,7 @@ public class CharacterDataAssets
 
     [Header("Characters Data")]
     public Character fungusCharacter;
+    public string characterSpriteName;
     public List<Sprite> fungusCharacterPortraits = new List<Sprite>();    
     //public List<string> fungusPortraitsStrings = new List<string>();
 
@@ -72,15 +74,7 @@ public class CharacterSelectionScreen : MonoBehaviour
             snapRect = GetComponentInChildren<ScrollSnapRect>();
 
         if (episodesHandler == null)
-            GetEpisodeHandler();
-
-        if(characterDataAssets.Count > 0)
-        {
-            for (int i = 0; i < characterDataAssets.Count; i++)
-            {
-                characterDataAssets[i].PopulatePortraitsList();
-            }
-        }        
+            GetEpisodeHandler();        
     }
 
     private void Start()
@@ -88,9 +82,31 @@ public class CharacterSelectionScreen : MonoBehaviour
         if (EpisodesSpawner.instance != null)
             episodesSpawner = EpisodesSpawner.instance;
 
+        if (!episodesSpawner.storiesDBItem.isReworked)
+        {
+            if (characterDataAssets.Count > 0)
+            {
+                for (int i = 0; i < characterDataAssets.Count; i++)
+                {
+                    characterDataAssets[i].PopulatePortraitsList();
+                }
+            }
+        }
+
         StartCoroutine("SelectUpdateRoutine");
 
         SelectCharacter(0);
+    }
+
+    public void PopulateCharactersData()
+    {
+        if (characterDataAssets.Count <= 0)
+            return;
+
+        for (int i = 0; i < characterDataAssets.Count; i++)
+        {
+            characterDataAssets[i].PopulatePortraitsList();
+        }
     }
 
     public void GetEpisodeHandler()
@@ -308,4 +324,41 @@ public class CharacterSelectionScreen : MonoBehaviour
             yield return null;
         }
     }
+
+    //=======================================================================================================================================
+
+    public void ShowSelectionScreen(string _topText)
+    {
+        if (UICharacterSelection.instance == null)
+            return;
+
+        if (AtlasDB.instance == null)
+            return;
+
+        List<Sprite> characterSprites = new List<Sprite>();
+        for (int i = 0; i < characterDataAssets.Count && (characterDataAssets.Count > 0); i++)
+        {
+            if (characterDataAssets[i].characterSpriteName.Length > 0)
+                characterSprites.Add(AtlasDB.instance.charactersAtlas.GetSprite(characterDataAssets[i].characterSpriteName));
+        }
+
+        IntegerVariable integerVariable = characterVariableRef.variable as IntegerVariable;
+        UICharacterSelection.instance.ShowSelectionScreen(_topText, characterSprites.ToArray(), characterDataAssets, integerVariable, (int index) =>
+        {
+            currentCharacterIndex = index;
+            OnCharacterSubmit();
+
+            /*MessageReceivedMFlix[] messageReceiversMaujflixTest = episodesHandler.episodeFlowchart.GetComponentsInChildren<MessageReceivedMFlix>();
+            if (messageReceiversMaujflixTest.Length > 0)
+            {
+                for (int i = 0; i < messageReceiversMaujflixTest.Length; i++)
+                {
+                    if (messageReceiversMaujflixTest[i] != null)
+                        messageReceiversMaujflixTest[i].OnFungusMessageReceivedForCharacter("CharacterSelected", this);
+                }
+            }*/
+        });
+    }
+
+    //=======================================================================================================================================
 }

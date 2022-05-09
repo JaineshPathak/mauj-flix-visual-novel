@@ -7,6 +7,9 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "StoryDBItem", menuName = "Stories/Create Story Item", order = 0)]
 public class StoriesDBItemSO : ScriptableObject
 {
+    [Header("Reworked or Not?")]
+    public bool isReworked;
+
     [Header("Story Type")]
     public bool isNewStory;
     public bool isStoryEnabled = true;
@@ -18,12 +21,16 @@ public class StoriesDBItemSO : ScriptableObject
 
     [Header("Description")]
     [TextArea]
-    public string storyDescription = "Coming Soon";
-
-    [Header("Branches")]
+    public string storyDescription = "Coming Soon";    
 
     [Header("Total Blocks")]
     public int storyTotalBlocksCount;
+
+    [Header("Sounds Bucket")]
+    public AssetReferenceGameObject soundsBucketKey;            //if isReworked = true
+
+    [Header("Art Atlas")]
+    public AssetReference atlasDBKey;                           //if isReworked = true
 
     [Header("Images Keys")]
     public AssetReferenceSprite storyThumbnailSmallKey;    
@@ -94,7 +101,11 @@ public class StoriesDBItemSO : ScriptableObject
         item.storyDescription = storyDescription;
 
         item.storyTotalBlocksCount = storyTotalBlocksCount;
-        
+
+        item.atlasDBKey = (atlasDBKey != null) ? atlasDBKey.RuntimeKey.ToString() : string.Empty;
+
+        item.soundsBucketKey = (soundsBucketKey != null) ? soundsBucketKey.RuntimeKey.ToString() : string.Empty;
+
         item.storyThumbnailSmallKey = (storyThumbnailSmallKey != null) ? storyThumbnailSmallKey.RuntimeKey.ToString() : string.Empty;
         item.storyThumbnailBigKey = (storyThumbnailBigKey != null) ? storyThumbnailBigKey.RuntimeKey.ToString() : string.Empty;
         item.storyThumbnailLoadingKey = (storyThumbnailLoadingKey != null) ? storyThumbnailLoadingKey.RuntimeKey.ToString() : string.Empty;
@@ -143,6 +154,8 @@ public class StoriesDBItemSOEditor : Editor
 {
     private StoriesDBItemSO item;
 
+    private SerializedProperty isReworkedSerial;
+
     private SerializedProperty isNewStorySerial;
     private SerializedProperty storyEnabledSerial;
     private SerializedProperty storyTypeSerial;
@@ -153,6 +166,10 @@ public class StoriesDBItemSOEditor : Editor
     private SerializedProperty storyDescriptionSerial;
 
     private SerializedProperty storyTotalBlocksCountSerial;
+
+    private SerializedProperty soundsBucketKeySerial;
+
+    private SerializedProperty atlasDBKeySerial;
 
     private SerializedProperty storyThumbnailSmallKeySerial;
     private SerializedProperty storyThumbnailBigKeySerial;
@@ -186,6 +203,8 @@ public class StoriesDBItemSOEditor : Editor
 
     private void OnEnable()
     {
+        isReworkedSerial = serializedObject.FindProperty("isReworked");
+
         isNewStorySerial = serializedObject.FindProperty("isNewStory");
         storyEnabledSerial = serializedObject.FindProperty("isStoryEnabled");
         storyTypeSerial = serializedObject.FindProperty("isShortStory");
@@ -196,6 +215,10 @@ public class StoriesDBItemSOEditor : Editor
         storyDescriptionSerial = serializedObject.FindProperty("storyDescription");
 
         storyTotalBlocksCountSerial = serializedObject.FindProperty("storyTotalBlocksCount");
+
+        atlasDBKeySerial = serializedObject.FindProperty("atlasDBKey");
+
+        soundsBucketKeySerial = serializedObject.FindProperty("soundsBucketKey");
 
         storyThumbnailSmallKeySerial = serializedObject.FindProperty("storyThumbnailSmallKey");
         storyThumbnailBigKeySerial = serializedObject.FindProperty("storyThumbnailBigKey");
@@ -216,6 +239,8 @@ public class StoriesDBItemSOEditor : Editor
 
         serializedObject.Update();
 
+        AddPropertyLabel(isReworkedSerial, "Is Reworked?", "If this story is reworked, then assign Sounds Bucket and Atlas DB");
+
         AddPropertyLabel(isNewStorySerial, "Is New Story", "Check if Story is new so in order to add 'New' stamp banner in Thumbnails");
         AddPropertyLabel(storyEnabledSerial, "Story Enabled", "Is Story Enabled? Helpful when you want to disable a story for any changes or issues found.");
         AddPropertyLabel(storyTypeSerial, "Short Story", "Is it a short story? False: Normal 9-10 episodes story");
@@ -230,6 +255,12 @@ public class StoriesDBItemSOEditor : Editor
         AddPropertyTextArea(storyDescriptionSerial);
 
         AddPropertyLabel(storyTotalBlocksCountSerial, "Story Total Blocks Count", "Total Blocks Count. Get it from 'MaujFlix-Episodes-DB' Excel sheet");
+
+        if (item.isReworked)
+        {
+            AddPropertyLabel(soundsBucketKeySerial, "Sounds Bucket Key", "Sounds Bucket Asset Ref");
+            AddPropertyLabel(atlasDBKeySerial, "Atlas DB", "Sprite Atlas DB");
+        }
 
         AddPropertyLabel(storyThumbnailSmallKeySerial, "Story Image Small", "Story Thumbnail Small from Addressable (Eg: Thumbnail_Padosan_S.png)");
         AddPropertyLabel(storyThumbnailBigKeySerial, "Story Image Big", "Story Thumbnail Big from Addressable (Eg: Thumbnail_Padosan_B.png)");

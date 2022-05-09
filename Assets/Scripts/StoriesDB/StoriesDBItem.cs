@@ -1,6 +1,8 @@
 ﻿[System.Serializable]
 public class StoriesDBItem
 {
+    public bool isReworked;
+
     public bool isNewStory;
     public bool isStoryEnabled = true;
     public bool isShortStory;
@@ -11,6 +13,10 @@ public class StoriesDBItem
     public string storyDescription;
 
     public int storyTotalBlocksCount;
+
+    public string atlasDBKey;
+
+    public string soundsBucketKey;
 
     public string storyTitleImageKey;
     public string storyThumbnailSmallKey;

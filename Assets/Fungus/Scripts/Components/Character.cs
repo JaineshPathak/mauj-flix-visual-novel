@@ -1,10 +1,12 @@
 // This code is part of the Fungus library (https://github.com/snozbot/fungus)
 // It is released for free under the MIT open source license (https://github.com/snozbot/fungus/blob/master/LICENSE)
 
+using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 using System.Collections.Generic;
 using System.Globalization;
+using UnityEngine.U2D;
 
 namespace Fungus
 {
@@ -22,6 +24,11 @@ namespace Fungus
 
         [Tooltip("Sound effect to play when this character is speaking.")]
         [SerializeField] protected AudioClip soundEffect;
+
+        //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+        [SerializeField] protected SpriteAtlas characterAtlas;
+        [SerializeField] protected List<string> portraitsNamesList;
+        //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
 
         [Tooltip("List of portrait images that can be displayed for this character.")]
         [SerializeField] protected List<Sprite> portraits;
@@ -77,6 +84,11 @@ namespace Fungus
         /// <value>The sound effect.</value>
         public virtual AudioClip SoundEffect { get { return soundEffect; } }
 
+        //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+        public virtual SpriteAtlas CharacterAtlas { get { return characterAtlas; } set { characterAtlas = value; } }
+        public virtual List<string> PortraitsNamesList { get { return portraitsNamesList; } set { portraitsNamesList = value; } }
+        //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+
         /// <summary>
         /// List of portrait images that can be displayed for this character.
         /// </summary>
@@ -122,6 +134,58 @@ namespace Fungus
                 || nameText.StartsWith(matchString, true, System.Globalization.CultureInfo.CurrentCulture);
 #endif
         }
+
+        //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
+
+        public void SetupPortraitsFromAtlas(SpriteAtlas _atlas)
+        {
+            if (_atlas == null)
+                return;
+
+            characterAtlas = _atlas;
+            if (portraitsNamesList.Count > 0 && characterAtlas)
+            {
+                for (int i = 0; i < portraitsNamesList.Count; i++)
+                {
+                    portraits.Add(characterAtlas.GetSprite(portraitsNamesList[i]));
+                }
+            }
+
+            for (int i = 0; i < portraits.Count; i++)
+            {
+                string name = portraits[i].name;
+                name = name.Replace("(Clone)", "");
+
+                portraits[i].name = name;
+            }
+        }
+
+        public Sprite[] GetSpritesList()
+        {
+            if (characterAtlas == null)
+                return null;
+
+            Sprite[] spritesList = null;
+
+            Array.Resize(ref spritesList, characterAtlas.spriteCount);
+            characterAtlas.GetSprites(spritesList);
+
+            return spritesList;
+        }
+
+        public void FillupPortraitsNamesList()
+        {
+            if (portraits.Count <= 0)
+                return;
+
+            for (int i = 0; i < portraits.Count; i++)
+            {
+                if (portraits[i] != null && !portraitsNamesList.Contains(portraits[i].texture.name))
+                    portraitsNamesList.Add(portraits[i].texture.name);
+            }
+        }
+
+        //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
 
         /// <summary>
         /// Returns true if the character name is a complete match to the specified string. Case insensitive.

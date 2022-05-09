@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using Fungus;
@@ -12,6 +13,9 @@ public class EpisodesHandler : MonoBehaviour
 
     [Header("Characters")]
     public CharacterSelectionScreen[] characterSelectionScreens;
+
+    [Header("Characters List")]
+    public List<Character> charactersList = new List<Character>();
 
     [Header("Music")]
     public AudioClip[] musicsList;
@@ -33,6 +37,14 @@ public class EpisodesHandler : MonoBehaviour
 
     private MusicManager musicManager;
 
+#if UNITY_EDITOR
+    private void OnValidate()
+    {
+        charactersList.Clear();
+        if (charactersList.Count <= 0)
+            charactersList = GetComponentsInChildren<Character>().ToList();
+    }
+#endif
 
     private void OnEnable()
     {
@@ -108,6 +120,22 @@ public class EpisodesHandler : MonoBehaviour
         episodesSpawner = spawner;
 
         mainCamera = Camera.main;
+
+        //Characters Setup
+        if (episodesSpawner.storiesDBItem.isReworked)
+        {
+            if (AtlasDB.instance != null && charactersList.Count > 0)
+            {
+                for (int i = 0; i < charactersList.Count; i++)
+                {
+                    if (charactersList[i] != null)
+                        charactersList[i].SetupPortraitsFromAtlas(AtlasDB.instance.charactersAtlas);
+                }
+
+                for (int i = 0; i < characterSelectionScreens.Length && (characterSelectionScreens.Length > 0); i++)
+                    characterSelectionScreens[i].PopulateCharactersData();
+            }
+        }
 
         if (FungusManager.Instance != null)
             musicManager = FungusManager.Instance.MusicManager;
@@ -213,9 +241,25 @@ public class EpisodesHandler : MonoBehaviour
         //Play Last saved music index
         if (episodeData.allowMusic)
         {
-            if (musicsList.Length > 0)
-                if (musicsList[episodeData.currentMusicIndex] != null)
-                    musicManager.PlayMusic(musicsList[episodeData.currentMusicIndex], true, 1f, 0);
+            if (!episodesSpawner.storiesDBItem.isReworked)
+            {
+                if (musicsList.Length > 0)
+                {
+                    if (musicsList[episodeData.currentMusicIndex] != null)
+                        musicManager.PlayMusic(musicsList[episodeData.currentMusicIndex], true, 1f, 0);
+                }
+            }
+            else
+            {
+                if (SoundsBucket.instance != null)
+                {
+                    SoundsBucket.instance.GetMusicAtIndex(episodeData.currentMusicIndex, (AudioClip musicClip) =>
+                    {
+                        PlayMusicAtIndex(musicClip, episodeData.currentMusicIndex);
+
+                    }, false);
+                }
+            }
         }
     }
 
@@ -1034,6 +1078,23 @@ public class EpisodesHandler : MonoBehaviour
 
         episodeData.currentMusicIndex = index;
         musicManager.PlayMusic(musicsList[index], true, 1f, 0);
+
+        SaveStoryData();
+    }
+
+    public void PlayMusicAtIndex(AudioClip musicClip, int index)
+    {
+        if (episodeData == null)
+            return;
+
+        if (!episodeData.allowMusic)
+            return;
+
+        if (musicManager == null)
+            return;
+
+        episodeData.currentMusicIndex = index;
+        musicManager.PlayMusic(musicClip, true, 1f, 0);
 
         SaveStoryData();
     }

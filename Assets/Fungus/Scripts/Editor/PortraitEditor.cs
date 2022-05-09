@@ -14,6 +14,7 @@ namespace Fungus.EditorUtils
         protected SerializedProperty characterProp;
         protected SerializedProperty replacedCharacterProp;
         protected SerializedProperty portraitProp;
+        protected SerializedProperty portraitNameProp;
         protected SerializedProperty offsetProp;
         protected SerializedProperty fromPositionProp;
         protected SerializedProperty toPositionProp;
@@ -35,6 +36,7 @@ namespace Fungus.EditorUtils
             characterProp = serializedObject.FindProperty("character");
             replacedCharacterProp = serializedObject.FindProperty("replacedCharacter");
             portraitProp = serializedObject.FindProperty("portrait");
+            portraitNameProp = serializedObject.FindProperty("_PortraitName");
             offsetProp = serializedObject.FindProperty("offset");
             fromPositionProp = serializedObject.FindProperty("fromPosition");
             toPositionProp = serializedObject.FindProperty("toPosition");
@@ -68,6 +70,8 @@ namespace Fungus.EditorUtils
             // Format Enum names
             string[] displayLabels = StringFormatter.FormatEnumNames(t.Display,"<None>");
             displayProp.enumValueIndex = EditorGUILayout.Popup("Display", (int)displayProp.enumValueIndex, displayLabels);
+
+            EditorGUILayout.PropertyField(portraitNameProp);
 
             string characterLabel = "Character";
             if (t.Display == DisplayType.Replace)

@@ -12,6 +12,7 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
     private EpisodesSpawner episodesSpawner;
 
     [Header("Branch Screen Mk2")]
+    public CanvasGroup storyByMaujflixCanvas;
     public string endBranchDiamondsText = "कहानी की एक एंडिंग खेलने के लिए आपने जीते हैं कुछ डायमंड!";
     public string endBranchMultipleEndingsText = "हर कहानी के एक से ज्यादा एंडिंग्स हैं, तो कहानी दोबारा खेलकर सारी एंडिंग्स जरूर खेलिएगा।";
     public string endBranchMultipleEndingsAsk = "क्या आप दूसरी एंडिंग खेलना चाहेंगे?";
@@ -153,8 +154,15 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
 
         endScreenBranchCanvasGroup.interactable = true;
         endScreenBranchCanvasGroup.blocksRaycasts = true;
-
+        
         endSeq = LeanTween.sequence();
+        if ( (episodesSpawner != null && episodesSpawner.storiesDBItem != null) && episodesSpawner.storiesDBItem.isReworked)
+        {
+            endSeq.append(LeanTween.alphaCanvas(storyByMaujflixCanvas, 1f, 1f));
+            endSeq.append(3f);
+            endSeq.append(LeanTween.alphaCanvas(storyByMaujflixCanvas, 0, 1f));
+            endSeq.append(0.5f);
+        }
         endSeq.append(LeanTween.alphaCanvas(endScreenBranchCanvasGroup, 1f, 1f));
         endSeq.append(LeanTween.scale(congralutionsImage.gameObject, Vector3.one, 0.5f).setDelay(0.5f).setEase(LeanTweenType.easeOutBack).setOnComplete(() =>
         {

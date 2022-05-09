@@ -189,6 +189,9 @@ namespace Fungus
         public virtual void OnCommandAdded(Block parentBlock)
         {}
 
+        public virtual void OnCommandUpdated()
+        {}
+
         /// <summary>
         /// Called when the command is deleted from a block in the editor.
         /// </summary>
