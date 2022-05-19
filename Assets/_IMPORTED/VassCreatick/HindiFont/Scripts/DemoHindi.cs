@@ -24,6 +24,7 @@ public class DemoHindi : MonoBehaviour
     public void GetInputText()
     {
         Hindi.text= HindiInput.Convertedvalue;
+
     }
 
     public void GetOriginalText()

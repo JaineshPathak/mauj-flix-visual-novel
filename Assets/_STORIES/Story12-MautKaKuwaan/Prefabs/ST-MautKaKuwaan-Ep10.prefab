@@ -46,6 +46,8 @@ MonoBehaviour:
   nameText: '{$MalePlayerName}'
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 24b4cf6d084e6f44688c087c1dcdaee2, type: 3}
   - {fileID: 21300000, guid: b2eff6d9e4c6daf47853ef6927ab33a1, type: 3}
@@ -90,7 +92,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 816340558534208871}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2187404682226916621
 MonoBehaviour:
@@ -113,6 +115,7 @@ MonoBehaviour:
     \u0916\u0947\u0932\u093F\u090F \u0905\u0917\u0932\u093E \u090F\u092A\u093F\u0938\u094B\u0921\u0964"
   congralutionsImage: {fileID: 1315938476911771455}
   nextEpisodeBarTimer: {fileID: 32703599263934895}
+  nextEpisodeImage: {fileID: 0}
   nextEpisodePanel: {fileID: 0}
   endParticleEffect: {fileID: 1858961580964201000}
   playButton: {fileID: 6082922578454698624}
@@ -120,6 +123,7 @@ MonoBehaviour:
   nextEpisodeButton: {fileID: 5938937476867403129}
   playAgainEpisodeButton: {fileID: 1420834928565155185}
   episodesHandler: {fileID: 0}
+  nextEpisodeImageSprite: {fileID: 0}
 --- !u!1 &195470997786664966
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,6 +533,8 @@ MonoBehaviour:
   nameText: '{$FemalePlayerName}'
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: aadad3820ec54f34fa390bc9d6401715, type: 3}
   - {fileID: 21300000, guid: ef3abf2e40726f541a226be2f0b8cb45, type: 3}
@@ -589,7 +595,7 @@ Transform:
   - {fileID: 5483302554438543398}
   - {fileID: 4768119043354339048}
   m_Father: {fileID: 816340558534208871}
-  m_RootOrder: 17
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &816340558534208870
 GameObject:
@@ -627,7 +633,6 @@ Transform:
   - {fileID: 816340557753691602}
   - {fileID: 1942693546266649525}
   - {fileID: 8638415812146708799}
-  - {fileID: 2450431589276808836}
   - {fileID: 5536425047529687869}
   - {fileID: 1464237541915999793}
   - {fileID: 4378791014567565314}
@@ -661,6 +666,16 @@ MonoBehaviour:
   episodeGameStartBlock: 01 - Game Start
   characterSelectionScreens:
   - {fileID: 7801491607112563077}
+  charactersList:
+  - {fileID: 8699930950260491462}
+  - {fileID: 12904059211020033}
+  - {fileID: 2080084427853493861}
+  - {fileID: 1755228009358464802}
+  - {fileID: 9090766955828746559}
+  - {fileID: 6034531046458180944}
+  - {fileID: 7805393056440168103}
+  - {fileID: 367273683632838949}
+  - {fileID: 1879883188391596844}
   musicsList:
   - {fileID: 8300000, guid: 1c5fe171258aee141a415d120605cbba, type: 3}
   - {fileID: 8300000, guid: 22dc20e7f01fc3b42852fb1f1d217b08, type: 3}
@@ -743,7 +758,7 @@ Transform:
   - {fileID: 6407305153612879722}
   - {fileID: 4908065014132267025}
   m_Father: {fileID: 816340558534208871}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &816340559127974786
 GameObject:
@@ -2265,6 +2280,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &5784549709500489406
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2406,6 +2422,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &7258213813007356896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2558,6 +2575,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &4586383005506233534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2796,6 +2814,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &6205596228077495072
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2873,6 +2892,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &6961326534580747562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3025,6 +3045,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &8828323646225672340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3122,6 +3143,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &2520969025387963066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3169,6 +3191,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &4337709347184393356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3267,6 +3290,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &3171692986262627603
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3314,6 +3338,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &661119967265547641
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3411,6 +3436,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &7247582020553875505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3483,6 +3509,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Govind_D1_Phone-Art
 --- !u!114 &8229032934616025752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3562,6 +3589,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Govind_D1_Phone-Art
 --- !u!114 &8569633666195808535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3609,6 +3637,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Confuse
 --- !u!114 &7765216612849869569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3705,6 +3734,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &7127298516454433613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3752,6 +3782,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Manohar_D2_Happy
 --- !u!114 &1730253271012481409
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3829,6 +3860,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Manohar_D2_Happy
 --- !u!114 &6484688349755678157
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3876,6 +3908,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &1418926658078421600
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3954,6 +3987,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &6725151042899184105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4001,6 +4035,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: MKK_Mathur_D1_Angry
 --- !u!114 &1057439099246214742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4097,6 +4132,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: MKK_Mathur_D1_Angry
 --- !u!114 &8705073136097595464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4277,6 +4313,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Boy_D1_Phone Art
 --- !u!114 &5426212228049749622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4356,6 +4393,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Boy_D1_Phone Art
 --- !u!114 &4261918562989454442
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4403,6 +4441,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Girl_H1_D1_Phone Art
 --- !u!114 &6379708184126707516
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4480,6 +4519,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Girl_H1_D1_Phone Art
 --- !u!114 &5803772381088191971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4548,6 +4588,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka Kuwaan_Boy_D2_Confuse
 --- !u!114 &4094185288493268128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4625,6 +4666,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka Kuwaan_Boy_D2_Confuse
 --- !u!114 &2555058448692063454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4672,6 +4714,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D2_Sad
 --- !u!114 &3011073854168538853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4769,6 +4812,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D2_Sad
 --- !u!114 &5911937448526962699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4816,6 +4860,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &657983688116726043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4916,6 +4961,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &3027279040508829058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4963,6 +5009,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &6946495588352394989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5061,6 +5108,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &7827233406970882892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5108,6 +5156,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &5483293886492236792
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5209,6 +5258,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &9184916688734031151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5256,6 +5306,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &6231451554037144121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5353,6 +5404,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &5475203627190562278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5400,6 +5452,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &8762643879774214246
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5500,6 +5553,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &1873171750586231928
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5547,6 +5601,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &8311773134347969887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5644,6 +5699,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &3634854178304349589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5691,6 +5747,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &4158419970016888368
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5791,6 +5848,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &8814318661380626128
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5838,6 +5896,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &8457919341410147966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5934,6 +5993,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &4916572125370103365
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6030,6 +6090,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &6120500528871752161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6126,6 +6187,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &2285281448026365435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6173,6 +6235,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &2145123324328643850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6269,6 +6332,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &3787524475533245578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6316,6 +6380,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &4048694241889195925
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6414,6 +6479,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &8359309013438576325
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6461,6 +6527,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &6709710588644796227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6557,6 +6624,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &7654430911856984477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6604,6 +6672,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &6891066782101361530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6702,6 +6771,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &7518492617226184777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6749,6 +6819,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: MKK_Mathur_D1_Happy
 --- !u!114 &7880690747846496313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6846,6 +6917,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: MKK_Mathur_D1_Happy
 --- !u!114 &1692921536947679892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6893,6 +6965,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &7999817645604707301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6992,6 +7065,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &2333992191169511228
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7039,6 +7113,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &5019753921112649806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7136,6 +7211,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &6049978308167317331
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7249,6 +7325,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &2779617348308314572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7345,6 +7422,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &7246009868611741904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7392,6 +7470,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &5797101140769822579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7489,6 +7568,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &1958849833588856121
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7536,6 +7616,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &1581399363450687885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7632,6 +7713,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &8135846784300091830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7679,6 +7761,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &4542132963612438579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7776,6 +7859,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &5986020149414378220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7823,6 +7907,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Confuse
 --- !u!114 &3601238837628771501
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7919,6 +8004,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Confuse
 --- !u!114 &1927467833101790105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7966,6 +8052,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: MKK_Mathur_D1_Angry
 --- !u!114 &1015213920447195926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8066,6 +8153,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: MKK_Mathur_D1_Angry
 --- !u!114 &6948296079890257101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8113,6 +8201,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &2263032571636230271
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8211,6 +8300,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &7214061149380155279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8258,6 +8348,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &8749258732754669755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8357,6 +8448,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &492009140986032109
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8425,6 +8517,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &7217811743543834879
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8524,6 +8617,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &105823095066833555
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8571,6 +8665,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &2968696983887292594
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8672,6 +8767,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &6730570693528966882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8719,6 +8815,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &6753260310855974635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8815,6 +8912,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &4691754948776536566
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8862,6 +8960,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &7428533307972475819
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8959,6 +9058,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &1224853537161513290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9006,6 +9106,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &1201220283463201533
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9106,6 +9207,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &7574447809373957351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9153,6 +9255,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &783753983989329655
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9250,6 +9353,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &395015087324379233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9297,6 +9401,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &8164244321801381388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9394,6 +9499,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &4528853696577412768
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10314,6 +10420,7 @@ MonoBehaviour:
   move: 0
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &2505480341685239100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10502,6 +10609,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Manohar_D2_Angry
 --- !u!114 &8746811030586709642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10603,6 +10711,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Manohar_D2_Angry
 --- !u!114 &8985056569690332309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10650,6 +10759,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &2134448531950467251
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10748,6 +10858,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &810038830685117741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10896,6 +11007,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Boy_D1_Phone Art
 --- !u!114 &5528511782266523734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10971,6 +11083,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Boy_D1_Phone Art
 --- !u!114 &2714036505014913554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11018,6 +11131,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Girl_H1_D1_Phone Art
 --- !u!114 &818176733795053508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11094,6 +11208,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Girl_H1_D1_Phone Art
 --- !u!114 &5971484618860523550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11141,6 +11256,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Boy_D1_Phone Art
 --- !u!114 &2896729999781340814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11216,6 +11332,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Boy_D1_Phone Art
 --- !u!114 &6314626215739692057
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11263,6 +11380,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Girl_H1_D1_Phone Art
 --- !u!114 &9044768345275437846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11339,6 +11457,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Girl_H1_D1_Phone Art
 --- !u!114 &3516613354724354715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11386,6 +11505,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Boy_D1_Phone Art
 --- !u!114 &4044528631559438705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11461,6 +11581,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Boy_D1_Phone Art
 --- !u!114 &5061966077804883215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11666,6 +11787,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka Kuwaan_Boy_D2_Happy
 --- !u!114 &4783142708027001178
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11762,6 +11884,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka Kuwaan_Boy_D2_Happy
 --- !u!114 &6882143483863236854
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11809,6 +11932,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D2_Sad
 --- !u!114 &275053509160102025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11905,6 +12029,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D2_Sad
 --- !u!114 &2972940344210299762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11952,6 +12077,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka Kuwaan_Boy_D2_Happy
 --- !u!114 &6373293535553598019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12051,6 +12177,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka Kuwaan_Boy_D2_Happy
 --- !u!114 &642982363576839605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12098,6 +12225,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D2_Sad
 --- !u!114 &5023999070837367438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12194,6 +12322,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D2_Sad
 --- !u!114 &5684967496217083546
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12241,6 +12370,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka Kuwaan_Boy_D2_Happy
 --- !u!114 &980928171555903038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12339,6 +12469,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka Kuwaan_Boy_D2_Happy
 --- !u!114 &727664815781335151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12386,6 +12517,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D2_Angry
 --- !u!114 &2496009065829504534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12482,6 +12614,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D2_Angry
 --- !u!114 &126950920362142708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12529,6 +12662,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka Kuwaan_Boy_D2_Confuse
 --- !u!114 &7563600080846032722
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12625,6 +12759,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka Kuwaan_Boy_D2_Confuse
 --- !u!114 &3904068298870333765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12672,6 +12807,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D2_Happy
 --- !u!114 &9103111823636374783
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12770,6 +12906,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D2_Happy
 --- !u!114 &32556572073934701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12817,6 +12954,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka Kuwaan_Boy_D2_Happy
 --- !u!114 &6442322500473753400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12913,6 +13051,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka Kuwaan_Boy_D2_Happy
 --- !u!114 &7503786269793494289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13521,6 +13660,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Mathur_D1Phone-Art
 --- !u!114 &4019126344958776820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13599,6 +13739,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Mathur_D1Phone-Art
 --- !u!114 &174579181827889979
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13663,6 +13804,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Girl_H1_D1_Phone Art
 --- !u!114 &6464266123825617474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13739,6 +13881,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Girl_H1_D1_Phone Art
 --- !u!114 &763092553597339951
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13937,6 +14080,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &2356303681758225707
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14012,6 +14156,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Maut_Ka_Kuwaan_Dhruv (Male)_D1_Confuse
 --- !u!114 &4625674161349706937
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14137,6 +14282,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &1932674724848535407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14234,6 +14380,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: Girl_H1_D1_Angry
 --- !u!114 &7823440628283767290
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14281,6 +14428,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &2542308068726690690
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14382,6 +14530,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: MKK_Mathur_D1_Confuse
 --- !u!114 &2541803157817887522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15161,7 +15310,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 816340558534208871}
-  m_RootOrder: 20
+  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &816340559231918158
 MonoBehaviour:
@@ -15214,7 +15363,7 @@ Transform:
   - {fileID: 596475839663245893}
   - {fileID: 7361522506372240432}
   m_Father: {fileID: 816340558534208871}
-  m_RootOrder: 18
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &944612337546136372
 GameObject:
@@ -15262,6 +15411,8 @@ MonoBehaviour:
   nameText: "\u092E\u0928\u094B\u0939\u0930"
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 8df41e0b61710ce45ba71e2acf81a003, type: 3}
   - {fileID: 21300000, guid: ab0c9bf7f9b171b4aaa638b3aafce07e, type: 3}
@@ -15388,6 +15539,8 @@ MonoBehaviour:
   nameText: "\u0917\u094B\u0935\u093F\u0902\u0926"
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 4d6f598193e5bdf4587c4b05689b0baa, type: 3}
   - {fileID: 21300000, guid: 86965d7ec5eb6df4ea562d4a34c876f1, type: 3}
@@ -16504,7 +16657,7 @@ RectTransform:
   m_Children:
   - {fileID: 4273237713327130451}
   m_Father: {fileID: 816340558534208871}
-  m_RootOrder: 21
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -17173,6 +17326,8 @@ MonoBehaviour:
   nameText: "\u092E\u093E\u0925\u0941\u0930"
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 650af6e76e59ca84ba9f74aa9ee21779, type: 3}
   - {fileID: 21300000, guid: ad4247e62a9bf8d4e9e3361fd643dd1d, type: 3}
@@ -17228,6 +17383,8 @@ MonoBehaviour:
   nameText: '{$FemalePlayerName}'
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: aadad3820ec54f34fa390bc9d6401715, type: 3}
   - {fileID: 21300000, guid: ef3abf2e40726f541a226be2f0b8cb45, type: 3}
@@ -17287,6 +17444,8 @@ MonoBehaviour:
   nameText: '{$FemalePlayerName}'
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: aadad3820ec54f34fa390bc9d6401715, type: 3}
   - {fileID: 21300000, guid: ef3abf2e40726f541a226be2f0b8cb45, type: 3}
@@ -17793,6 +17952,8 @@ MonoBehaviour:
   nameText: "\u0921\u0949\u0915\u094D\u091F\u0930"
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 81ea4fefe0ae2ab46936cd2e07329e14, type: 3}
   portraitsFace: 2
@@ -17955,7 +18116,7 @@ Transform:
   m_Children:
   - {fileID: 3446368951838208079}
   m_Father: {fileID: 816340558534208871}
-  m_RootOrder: 19
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2622726756205919493
 MonoBehaviour:
@@ -18154,6 +18315,8 @@ MonoBehaviour:
   nameText: "\u0927\u094D\u0930\u0941\u0935"
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 4332904ed113768419f191a75e57305d, type: 3}
   - {fileID: 21300000, guid: 9eb3c758311801c429c8183dfbb21f4b, type: 3}
@@ -18272,7 +18435,7 @@ PrefabInstance:
     - target: {fileID: 5253950271934798359, guid: 1445a90bada5d79409c326b4ed5dc329,
         type: 3}
       propertyPath: m_RootOrder
-      value: 12
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5253950271934798359, guid: 1445a90bada5d79409c326b4ed5dc329,
         type: 3}
@@ -18386,15 +18549,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1445a90bada5d79409c326b4ed5dc329, type: 3}
---- !u!225 &3498399309436725098 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 3854658966491071604, guid: 1445a90bada5d79409c326b4ed5dc329,
-    type: 3}
-  m_PrefabInstance: {fileID: 428598749691585310}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &5556166117064882441 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5253950271934798359, guid: 1445a90bada5d79409c326b4ed5dc329,
+    type: 3}
+  m_PrefabInstance: {fileID: 428598749691585310}
+  m_PrefabAsset: {fileID: 0}
+--- !u!225 &3498399309436725098 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 3854658966491071604, guid: 1445a90bada5d79409c326b4ed5dc329,
     type: 3}
   m_PrefabInstance: {fileID: 428598749691585310}
   m_PrefabAsset: {fileID: 0}
@@ -18459,7 +18622,7 @@ PrefabInstance:
     - target: {fileID: 5833244330047670318, guid: fd2c67d64572c0949bf14a80173799e6,
         type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 5833244330047670318, guid: fd2c67d64572c0949bf14a80173799e6,
         type: 3}
@@ -18591,6 +18754,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnterMaleNameInputField
       objectReference: {fileID: 0}
+    - target: {fileID: 2975156556109187500, guid: 97235a03366399d4da853b5717ff03b5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5361982102965132587, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}
       propertyPath: m_Enabled
@@ -18610,6 +18778,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5644760381804957553, guid: 97235a03366399d4da853b5717ff03b5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6777568667784069044, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}
@@ -18655,6 +18828,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.characterCount
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7478841279869611416, guid: 97235a03366399d4da853b5717ff03b5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7810427143122577221, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}
@@ -19372,6 +19550,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnterFemaleNameInputField
       objectReference: {fileID: 0}
+    - target: {fileID: 2975156556109187500, guid: 97235a03366399d4da853b5717ff03b5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5361982102965132587, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}
       propertyPath: m_Enabled
@@ -19391,6 +19574,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5644760381804957553, guid: 97235a03366399d4da853b5717ff03b5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6777568667784069044, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}
@@ -19436,6 +19624,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.characterCount
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7478841279869611416, guid: 97235a03366399d4da853b5717ff03b5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7810427143122577221, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}
@@ -19545,7 +19738,7 @@ PrefabInstance:
     - target: {fileID: 8988363887921012302, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8988363887921012302, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}
@@ -19750,7 +19943,7 @@ PrefabInstance:
     - target: {fileID: 5685880780640888043, guid: 8a4628ed4cb2587418dbe6f4635cbcfb,
         type: 3}
       propertyPath: m_RootOrder
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 5685880780640888043, guid: 8a4628ed4cb2587418dbe6f4635cbcfb,
         type: 3}
@@ -20565,6 +20758,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0996729e8ccea28448415422ddb52c22, type: 3}
+--- !u!1 &1942693546266649515 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6160885730073484645, guid: 0996729e8ccea28448415422ddb52c22,
+    type: 3}
+  m_PrefabInstance: {fileID: 5731404001915141838}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &6106132141139547617 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1961140918712052527, guid: 0996729e8ccea28448415422ddb52c22,
@@ -20592,12 +20791,6 @@ MonoBehaviour:
 --- !u!224 &1942693546266649525 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6160885730073484667, guid: 0996729e8ccea28448415422ddb52c22,
-    type: 3}
-  m_PrefabInstance: {fileID: 5731404001915141838}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1942693546266649515 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6160885730073484645, guid: 0996729e8ccea28448415422ddb52c22,
     type: 3}
   m_PrefabInstance: {fileID: 5731404001915141838}
   m_PrefabAsset: {fileID: 0}
@@ -20658,7 +20851,7 @@ PrefabInstance:
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
       propertyPath: characterGender
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
@@ -20888,7 +21081,7 @@ PrefabInstance:
     - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
@@ -21203,6 +21396,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: LoadStoryEpisodesMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 487153299455232507, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1146127971373605823, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -21221,6 +21419,11 @@ PrefabInstance:
     - target: {fileID: 1146127971373605823, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1349693945826462060, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1575863005531392656, guid: 52aa275c784f5e649ac32858fd89e977,
@@ -21282,6 +21485,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_HorizontalAlignment
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608616942586556595, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2692637510578713868, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
@@ -21364,6 +21572,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 2c69366aa0ed52a4eb6005661cdfa9e1,
         type: 3}
+    - target: {fileID: 5439755055420686482, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5575213593842729560, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6090472432391441659, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -21402,6 +21620,11 @@ PrefabInstance:
     - target: {fileID: 6326695477726627172, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6849523943217375489, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7107813847784712360, guid: 52aa275c784f5e649ac32858fd89e977,
@@ -21477,7 +21700,7 @@ PrefabInstance:
     - target: {fileID: 8368748757215393321, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8368748757215393321, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
@@ -21661,33 +21884,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52aa275c784f5e649ac32858fd89e977, type: 3}
---- !u!114 &2420961851212944520 stripped
+--- !u!114 &6082922578454698624 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8368748757215393318, guid: 52aa275c784f5e649ac32858fd89e977,
-    type: 3}
-  m_PrefabInstance: {fileID: 6177600985419047598}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a0bbe22c246e4c78ad8e9816cbae9d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1315938476911771455 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5185921699481738641, guid: 52aa275c784f5e649ac32858fd89e977,
-    type: 3}
-  m_PrefabInstance: {fileID: 6177600985419047598}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5270098807768266061 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2060425056655103971, guid: 52aa275c784f5e649ac32858fd89e977,
+  m_CorrespondingSourceObject: {fileID: 131130533710116910, guid: 52aa275c784f5e649ac32858fd89e977,
     type: 3}
   m_PrefabInstance: {fileID: 6177600985419047598}
   m_PrefabAsset: {fileID: 0}
@@ -21695,6 +21894,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &32703599263934895 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6183179083069885185, guid: 52aa275c784f5e649ac32858fd89e977,
+    type: 3}
+  m_PrefabInstance: {fileID: 6177600985419047598}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &1420834928565155185 stripped
@@ -21721,27 +21932,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &32703599263934895 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6183179083069885185, guid: 52aa275c784f5e649ac32858fd89e977,
+--- !u!225 &2420961851212944522 stripped
+CanvasGroup:
+  m_CorrespondingSourceObject: {fileID: 8368748757215393316, guid: 52aa275c784f5e649ac32858fd89e977,
     type: 3}
   m_PrefabInstance: {fileID: 6177600985419047598}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &2420961851212944519 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8368748757215393321, guid: 52aa275c784f5e649ac32858fd89e977,
     type: 3}
   m_PrefabInstance: {fileID: 6177600985419047598}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6082922578454698624 stripped
+--- !u!114 &2420961851212944520 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 131130533710116910, guid: 52aa275c784f5e649ac32858fd89e977,
+  m_CorrespondingSourceObject: {fileID: 8368748757215393318, guid: 52aa275c784f5e649ac32858fd89e977,
+    type: 3}
+  m_PrefabInstance: {fileID: 6177600985419047598}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a0bbe22c246e4c78ad8e9816cbae9d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5270098807768266061 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2060425056655103971, guid: 52aa275c784f5e649ac32858fd89e977,
     type: 3}
   m_PrefabInstance: {fileID: 6177600985419047598}
   m_PrefabAsset: {fileID: 0}
@@ -21751,605 +21968,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!225 &2420961851212944522 stripped
-CanvasGroup:
-  m_CorrespondingSourceObject: {fileID: 8368748757215393316, guid: 52aa275c784f5e649ac32858fd89e977,
+--- !u!114 &1315938476911771455 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5185921699481738641, guid: 52aa275c784f5e649ac32858fd89e977,
     type: 3}
   m_PrefabInstance: {fileID: 6177600985419047598}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!198 &1858961580964201000 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 5509983619935445126, guid: 52aa275c784f5e649ac32858fd89e977,
     type: 3}
   m_PrefabInstance: {fileID: 6177600985419047598}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &7153228820671864927
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 816340558534208871}
-    m_Modifications:
-    - target: {fileID: 205634546260557692, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 205634546260557692, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 205634546260557692, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 663292557114148941, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 30dbce9429d1d6a4abe7d40c538dffcf,
-        type: 3}
-    - target: {fileID: 1120853473026112420, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1120853473026112420, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1120853473026112420, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_sharedMaterial
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3243301972958391803, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: bdacb44b599ab3549a619fc7d6912891,
-        type: 3}
-    - target: {fileID: 3740772744398283134, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_BlocksRaycasts
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterGender
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: episodesHandler
-      value: 
-      objectReference: {fileID: 7669446753870504321}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterFungus.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterFungus.Array.data[0]
-      value: 
-      objectReference: {fileID: 7138779800083442554, guid: ebe0db74ab0d7e14d9a33b18493a76b0,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterFungus.Array.data[1]
-      value: 
-      objectReference: {fileID: 9214966887222127134, guid: ebe0db74ab0d7e14d9a33b18493a76b0,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterFungus.Array.data[2]
-      value: 
-      objectReference: {fileID: 1982585840310671549, guid: ebe0db74ab0d7e14d9a33b18493a76b0,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterVariableRef.variable
-      value: 
-      objectReference: {fileID: 2986650514888883596}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusCharacter
-      value: 
-      objectReference: {fileID: 9090766955828746559}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusCharacter
-      value: 
-      objectReference: {fileID: 2080084427853493861}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusCharacter
-      value: 
-      objectReference: {fileID: 8699930950260491462}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusPortraitsStrings.Array.size
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusPortraitsStrings.Array.size
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusPortraitsStrings.Array.size
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusCharacterPortraits.Array.size
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusCharacterPortraits.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusCharacterPortraits.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusPortraitsStrings.Array.data[0]
-      value: Confuse
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusPortraitsStrings.Array.data[1]
-      value: Happy
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusPortraitsStrings.Array.data[2]
-      value: Idle
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusPortraitsStrings.Array.data[3]
-      value: Sad
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusPortraitsStrings.Array.data[4]
-      value: Topless_C
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusPortraitsStrings.Array.data[5]
-      value: Topless_H
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusPortraitsStrings.Array.data[6]
-      value: Topless_I
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusPortraitsStrings.Array.data[7]
-      value: Topless_S
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusPortraitsStrings.Array.data[0]
-      value: Confuse
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusPortraitsStrings.Array.data[1]
-      value: Happy
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusPortraitsStrings.Array.data[2]
-      value: Idle
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusPortraitsStrings.Array.data[3]
-      value: Sad
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusPortraitsStrings.Array.data[4]
-      value: Topless_C
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusPortraitsStrings.Array.data[5]
-      value: Topless_H
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusPortraitsStrings.Array.data[6]
-      value: Topless_I
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusPortraitsStrings.Array.data[7]
-      value: Topless_S
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusPortraitsStrings.Array.data[0]
-      value: Confuse
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusPortraitsStrings.Array.data[1]
-      value: Happy
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusPortraitsStrings.Array.data[2]
-      value: Idle
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusPortraitsStrings.Array.data[3]
-      value: Sad
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusPortraitsStrings.Array.data[4]
-      value: Topless_C
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusPortraitsStrings.Array.data[5]
-      value: Topless_H
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusPortraitsStrings.Array.data[6]
-      value: Topless_I
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusPortraitsStrings.Array.data[7]
-      value: Topless_S
-      objectReference: {fileID: 0}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusCharacterPortraits.Array.data[0]
-      value: 
-      objectReference: {fileID: 21300000, guid: 3c31dd6fe28cec54389a1a68eb253728,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusCharacterPortraits.Array.data[1]
-      value: 
-      objectReference: {fileID: 21300000, guid: 71dc70e995611b24891ccdb4e8e0c3ba,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusCharacterPortraits.Array.data[2]
-      value: 
-      objectReference: {fileID: 21300000, guid: c3f8f3d70d942e14d962abe4dae62a93,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[0].fungusCharacterPortraits.Array.data[3]
-      value: 
-      objectReference: {fileID: 21300000, guid: 8dad25502b3e59c48afa3ef19839eaa9,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusCharacterPortraits.Array.data[0]
-      value: 
-      objectReference: {fileID: 21300000, guid: 3c31dd6fe28cec54389a1a68eb253728,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusCharacterPortraits.Array.data[1]
-      value: 
-      objectReference: {fileID: 21300000, guid: 71dc70e995611b24891ccdb4e8e0c3ba,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusCharacterPortraits.Array.data[2]
-      value: 
-      objectReference: {fileID: 21300000, guid: c3f8f3d70d942e14d962abe4dae62a93,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[1].fungusCharacterPortraits.Array.data[3]
-      value: 
-      objectReference: {fileID: 21300000, guid: 8dad25502b3e59c48afa3ef19839eaa9,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusCharacterPortraits.Array.data[0]
-      value: 
-      objectReference: {fileID: 21300000, guid: e544de0139e6795439764d39298878d7,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusCharacterPortraits.Array.data[1]
-      value: 
-      objectReference: {fileID: 21300000, guid: 43cadd7547493b0489fa061e25d44120,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusCharacterPortraits.Array.data[2]
-      value: 
-      objectReference: {fileID: 21300000, guid: bdacb44b599ab3549a619fc7d6912891,
-        type: 3}
-    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: characterDataAssets.Array.data[2].fungusCharacterPortraits.Array.data[3]
-      value: 
-      objectReference: {fileID: 21300000, guid: 8dad25502b3e59c48afa3ef19839eaa9,
-        type: 3}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_Pivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_Pivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5516349290570962845, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5837139181449325885, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textAlignment
-      value: 65535
-      objectReference: {fileID: 0}
-    - target: {fileID: 5837139181449325885, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_TextStyleHashCode
-      value: -1183493901
-      objectReference: {fileID: 0}
-    - target: {fileID: 5837139181449325885, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_VerticalAlignment
-      value: 4096
-      objectReference: {fileID: 0}
-    - target: {fileID: 5837139181449325885, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textInfo.lineCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5837139181449325885, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textInfo.pageCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5837139181449325885, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5837139181449325885, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_HorizontalAlignment
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5837139181449325885, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textInfo.spaceCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5837139181449325885, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textInfo.materialCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5837139181449325885, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 6477411723772856411, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_Name
-      value: MaleCharacterSelectionScreen
-      objectReference: {fileID: 0}
-    - target: {fileID: 6477411723772856411, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6613890348233636808, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_Name
-      value: SelectMaleCharacterButton
-      objectReference: {fileID: 0}
-    - target: {fileID: 6791353702529067353, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textAlignment
-      value: 65535
-      objectReference: {fileID: 0}
-    - target: {fileID: 6791353702529067353, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_TextStyleHashCode
-      value: -1183493901
-      objectReference: {fileID: 0}
-    - target: {fileID: 6791353702529067353, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_VerticalAlignment
-      value: 4096
-      objectReference: {fileID: 0}
-    - target: {fileID: 6791353702529067353, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textInfo.lineCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6791353702529067353, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textInfo.pageCount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6791353702529067353, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6791353702529067353, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_HorizontalAlignment
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6791353702529067353, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textInfo.materialCount
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 6791353702529067353, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8236647870373272202, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: c3f8f3d70d942e14d962abe4dae62a93,
-        type: 3}
-    - target: {fileID: 8523840777784714589, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_textAlignment
-      value: 65535
-      objectReference: {fileID: 0}
-    - target: {fileID: 8523840777784714589, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_TextStyleHashCode
-      value: -1183493901
-      objectReference: {fileID: 0}
-    - target: {fileID: 8523840777784714589, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_VerticalAlignment
-      value: 512
-      objectReference: {fileID: 0}
-    - target: {fileID: 8523840777784714589, guid: 892e0f6e4e53de14787723f574d87aa4,
-        type: 3}
-      propertyPath: m_HorizontalAlignment
-      value: 2
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 892e0f6e4e53de14787723f574d87aa4, type: 3}
---- !u!224 &2450431589276808836 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 4703149145178167003, guid: 892e0f6e4e53de14787723f574d87aa4,
-    type: 3}
-  m_PrefabInstance: {fileID: 7153228820671864927}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7281924579029989184
 PrefabInstance:
@@ -22661,7 +22296,7 @@ PrefabInstance:
     - target: {fileID: 4095939459022405888, guid: a46818ec57568a74caa9d422e02c1377,
         type: 3}
       propertyPath: m_RootOrder
-      value: 13
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4095939459022405888, guid: a46818ec57568a74caa9d422e02c1377,
         type: 3}

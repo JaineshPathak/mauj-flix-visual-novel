@@ -32,6 +32,13 @@ public class CharReplacerHindi : MonoBehaviour
         if (_DropDown == null) _DropDown = GetComponent<TMP_Dropdown>();
     }
 
+    void Update()
+    {
+
+    }
+
+
+
     void LoadAttributes()
     {
         TextAsset textAsset = Resources.Load<TextAsset>(FontFile);
@@ -46,7 +53,7 @@ public class CharReplacerHindi : MonoBehaviour
     /// </summary>
    
     public void UpdateTextRuntime(string text)
-    {
+     {
         if (_Text != null)
         {
              _Text.text= text;
@@ -67,7 +74,7 @@ public class CharReplacerHindi : MonoBehaviour
     {
         string Value = _text;
         string AppendString = "";
-        string AppendString2 = "";        
+        string AppendString2 = "";
 
         for (int i = 0; i < _CharacterAttributes.Count; i++)
         {
@@ -125,7 +132,11 @@ public class CharReplacerHindi : MonoBehaviour
                                           _CharacterAttributes[i].Character == "shki" ||
                                           _CharacterAttributes[i].Character == "kriy" ||
                                           _CharacterAttributes[i].Character == "iksii"
-                                           || _CharacterAttributes[i].Character == "dhrii" || _CharacterAttributes[i].Character == "sthree")
+                                           || _CharacterAttributes[i].Character == "dhrii" ||
+                                           _CharacterAttributes[i].Character == "sthree" ||
+                                             _CharacterAttributes[i].Character == "skriya" ||
+                                               _CharacterAttributes[i].Character == "nkriy"
+                                                || _CharacterAttributes[i].Character == "ktrii")
                                     {
                                         int appenddot = Convert.ToInt32(_CharacterAttributes[i].CharRetain2, 16);
                                         string dot = Convert.ToChar(appenddot).ToString();
@@ -183,7 +194,6 @@ public class CharReplacerHindi : MonoBehaviour
         return Value;
     }
 
-   
     public void UpdateMe()
     {
         string Value = "";
@@ -259,7 +269,11 @@ public class CharReplacerHindi : MonoBehaviour
                                           _CharacterAttributes[i].Character == "shki" || 
                                           _CharacterAttributes[i].Character == "kriy" || 
                                           _CharacterAttributes[i].Character == "iksii"
-                                           || _CharacterAttributes[i].Character == "dhrii" || _CharacterAttributes[i].Character == "sthree")
+                                           || _CharacterAttributes[i].Character == "dhrii" || 
+                                           _CharacterAttributes[i].Character == "sthree"||
+                                             _CharacterAttributes[i].Character == "skriya"||
+                                               _CharacterAttributes[i].Character == "nkriy"
+                                                || _CharacterAttributes[i].Character == "ktrii")
                                     {
                                         int appenddot = Convert.ToInt32(_CharacterAttributes[i].CharRetain2, 16);
                                         string dot = Convert.ToChar(appenddot).ToString();

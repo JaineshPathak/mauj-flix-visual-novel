@@ -56,7 +56,10 @@ public class MenuDialogMflix : MenuDialog
     }    
 
     public bool AddOptionWithCost(string text, bool interactable, bool hideOption, Block targetBlock, bool hasDiamondCost, float diamondCost)
-    {        
+    {
+        if (!gameObject.activeSelf)
+            gameObject.SetActive(true);
+
         //Debug.LogFormat("MenuDialogMflix : [1] - Called from MenuMflix with Details: text: {0} || Interactable: {1} || hideOptions: {2} || Block Name: {3} || HasDiamondCost: {4} || DiamondCost: {5}", text, interactable, hideOption, targetBlock.BlockName, hasDiamondCost, diamondCost);
         
         var block = targetBlock;

@@ -423,6 +423,8 @@ MonoBehaviour:
   nameText: "\u092A\u0942\u091C\u093E"
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 0077d918bdb6c51408b1eb07ea75da89, type: 3}
   - {fileID: 21300000, guid: 209916b511a374e4489d4094e39b2d93, type: 3}
@@ -527,6 +529,8 @@ MonoBehaviour:
   nameText: '{$MalePlayerName}'
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 958b9bc421c352049a0e0e9886cc468c, type: 3}
   - {fileID: 21300000, guid: 8d179fb29f6d37d40b44f2fa4f621081, type: 3}
@@ -585,6 +589,8 @@ MonoBehaviour:
   nameText: '{$MalePlayerName}'
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 82735a0463f42a84fa642c118de8751e, type: 3}
   - {fileID: 21300000, guid: 691e00e4b47c5cf4a9fe5fed958a56c4, type: 3}
@@ -1742,6 +1748,8 @@ MonoBehaviour:
   nameText: '{$FemalePlayerName}'
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 0e780212e550b2649bc582c4ebf9581a, type: 3}
   - {fileID: 21300000, guid: 987874d0776d9334abb92ff91b834fad, type: 3}
@@ -2093,6 +2101,8 @@ MonoBehaviour:
   nameText: '{$FemalePlayerName}'
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: a5642a45e99c4a540a515450ff8ff88d, type: 3}
   - {fileID: 21300000, guid: 87fca631cce747242b595eeb72936eb1, type: 3}
@@ -2522,6 +2532,8 @@ MonoBehaviour:
   nameText: "\u092E\u092E\u094D\u092E\u0940"
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 8fe45cb354ed3474b8e16f69d9a09623, type: 3}
   - {fileID: 21300000, guid: 76d18258c8ed4a44589e316daf12775b, type: 3}
@@ -2581,6 +2593,7 @@ MonoBehaviour:
     \u0916\u0947\u0932\u093F\u090F \u0905\u0917\u0932\u093E \u090F\u092A\u093F\u0938\u094B\u0921\u0964"
   congralutionsImage: {fileID: 8177680787043509060}
   nextEpisodeBarTimer: {fileID: 7155091209568597460}
+  nextEpisodeImage: {fileID: 0}
   nextEpisodePanel: {fileID: 0}
   endParticleEffect: {fileID: 8859576619281653331}
   playButton: {fileID: 3987149741160204027}
@@ -2588,6 +2601,7 @@ MonoBehaviour:
   nextEpisodeButton: {fileID: 0}
   playAgainEpisodeButton: {fileID: 0}
   episodesHandler: {fileID: 0}
+  nextEpisodeImageSprite: {fileID: 0}
 --- !u!1 &7141697468865731567
 GameObject:
   m_ObjectHideFlags: 0
@@ -2634,6 +2648,8 @@ MonoBehaviour:
   nameText: '{$FemalePlayerName}'
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 53523757aec34b14da2253fd296c2fc7, type: 3}
   - {fileID: 21300000, guid: d9e2c993ca6cce84297c8e283d3672cc, type: 3}
@@ -2696,6 +2712,8 @@ MonoBehaviour:
   nameText: "\u092A\u0941\u0937\u094D\u092A\u093E"
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 31a8312b5cd84d6459387e192080f86d, type: 3}
   portraitsFace: 0
@@ -2860,6 +2878,16 @@ MonoBehaviour:
   characterSelectionScreens:
   - {fileID: 4118559204480232779}
   - {fileID: 1115666769050691070}
+  charactersList:
+  - {fileID: 7746998225934450509}
+  - {fileID: 3593146869061320231}
+  - {fileID: 1515416294}
+  - {fileID: 7138779800083442554}
+  - {fileID: 9214966887222127134}
+  - {fileID: 1982585840310671549}
+  - {fileID: 8891232494288587609}
+  - {fileID: 2096203705762432324}
+  - {fileID: 3941864902904294701}
   musicsList:
   - {fileID: 8300000, guid: ae5cc9feec11d454e8c0b30f91b0a5d6, type: 3}
   endPanel: {fileID: 9035604809900786038}
@@ -4131,6 +4159,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy
 --- !u!114 &6995004500613600883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4192,6 +4221,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &3589153547527934694
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4238,6 +4268,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Aunty
 --- !u!114 &4120624319208500061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4298,6 +4329,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &7513798869297182421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4344,6 +4376,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &749507630516617407
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4401,6 +4434,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &7620095697613080470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4447,6 +4481,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Boy1_D1_Happy_Hair1
 --- !u!114 &8753755926166927212
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4505,6 +4540,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &7246467077027258595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4651,6 +4687,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy_Confuse
 --- !u!114 &35791734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4709,6 +4746,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &35791748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4739,6 +4777,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &35791747
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4984,6 +5023,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &35791757
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5042,6 +5082,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &35791755
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5100,6 +5141,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1669116142330322191
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5185,6 +5227,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy_Angry
 --- !u!114 &1669116142330322187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5243,6 +5286,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1669116142330322185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5273,6 +5317,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Confuse
 --- !u!114 &1669116142330322184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5330,6 +5375,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1669116142330322182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5543,6 +5589,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy_Angry
 --- !u!114 &1669116142330322194
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5601,6 +5648,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1669116142330322192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5690,6 +5738,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Sad
 --- !u!114 &1669116142330322205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5747,6 +5796,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1669116142330322219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5815,6 +5865,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy_Angry
 --- !u!114 &1669116142330322216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5872,6 +5923,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1669116142330322227
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5940,6 +5992,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &1669116142330322224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5998,6 +6051,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1669116142330322222
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6028,6 +6082,7 @@ MonoBehaviour:
   move: 0
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Angry
 --- !u!114 &1669116142330322221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6096,6 +6151,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy_Angry
 --- !u!114 &1669116142330322213
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6154,6 +6210,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1669116142330322232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6222,6 +6279,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Confuse
 --- !u!114 &1669116142330322229
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6279,6 +6337,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1669116142330322241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6330,6 +6389,7 @@ MonoBehaviour:
   move: 0
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Angry
 --- !u!114 &1669116142330322239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6398,6 +6458,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy_Confuse
 --- !u!114 &1669116142330322236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6455,6 +6516,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1669116142330322257
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6523,6 +6585,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Sad
 --- !u!114 &1669116142330322254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6580,6 +6643,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1669116142330322252
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6648,6 +6712,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy_Angry
 --- !u!114 &1669116142330322249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6706,6 +6771,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1669116142330322247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6774,6 +6840,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Confuse
 --- !u!114 &1669116142330322244
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6831,6 +6898,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1669116142330322242
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6920,6 +6988,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy_Angry
 --- !u!114 &1566811959
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6978,6 +7047,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1566811957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7046,6 +7116,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &1566811954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7105,6 +7176,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1566811952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7173,6 +7245,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy_Angry
 --- !u!114 &1566811949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7232,6 +7305,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1566811967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7378,6 +7452,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Sad
 --- !u!114 &1566811970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7436,6 +7511,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1566811968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7521,6 +7597,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy
 --- !u!114 &1566811975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7580,6 +7657,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &6829808160256027004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7648,6 +7726,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Confuse
 --- !u!114 &6829808160256027001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7705,6 +7784,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &6829808160256027013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7773,6 +7853,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy
 --- !u!114 &6829808160256027010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7833,6 +7914,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &6829808160256027018
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7901,6 +7983,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &6829808160256027015
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7960,6 +8043,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &6829808160256027024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8028,6 +8112,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy
 --- !u!114 &6829808160256027021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8090,6 +8175,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &6829808160256027029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8158,6 +8244,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &6829808160256027026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8219,6 +8306,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &6829808160256027034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8287,6 +8375,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy
 --- !u!114 &6829808160256027031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8346,6 +8435,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &6829808160256027039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8414,6 +8504,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &6829808160256027036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8474,6 +8565,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &6829808160256027044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8542,6 +8634,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Mummy
 --- !u!114 &6829808160256027041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8600,6 +8693,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &6829808160256027046
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8948,6 +9042,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &651880551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9006,6 +9101,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: 
 --- !u!114 &651880554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9061,6 +9157,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Aunty
 --- !u!114 &651880562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9120,6 +9217,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: 
 --- !u!114 &651880560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9209,6 +9307,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &651880565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9268,6 +9367,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: 
 --- !u!114 &651880573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9340,6 +9440,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girls_Aunty
 --- !u!114 &651880570
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9398,6 +9499,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 1
+  _PortraitName: 
 --- !u!114 &651880558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9500,6 +9602,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &651880575
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9557,6 +9660,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &651880583
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9954,6 +10058,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Boy1_Towel_Confuse
 --- !u!114 &1083387473
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10011,6 +10116,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10151,6 +10257,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &1083387483
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10208,6 +10315,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387489
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10276,6 +10384,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Boy1_Towel_Confuse
 --- !u!114 &1083387486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10335,6 +10444,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10403,6 +10513,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &1083387492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10460,6 +10571,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10528,6 +10640,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Boy1_Towel_Confuse
 --- !u!114 &1083387497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10587,6 +10700,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10655,6 +10769,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &1083387502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10715,6 +10830,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387510
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10783,6 +10899,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Boy1_Towel_Confuse
 --- !u!114 &1083387507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10841,6 +10958,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10909,6 +11027,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &1083387512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10968,6 +11087,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11036,6 +11156,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Boy1_Towel_Confuse
 --- !u!114 &1083387517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11094,6 +11215,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11162,6 +11284,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Confuse
 --- !u!114 &1083387527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11219,6 +11342,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11287,6 +11411,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Boy1_Towel_Confuse
 --- !u!114 &1083387522
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11347,6 +11472,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11415,6 +11541,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &1083387532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11473,6 +11600,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11541,6 +11669,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Boy1_Towel_Confuse
 --- !u!114 &1083387542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11598,6 +11727,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387540
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11666,6 +11796,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &1083387537
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11726,6 +11857,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11794,6 +11926,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Boy1_Towel_Confuse
 --- !u!114 &1083387547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11851,6 +11984,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11919,6 +12053,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &1083387554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11976,6 +12111,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387552
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12006,6 +12142,7 @@ MonoBehaviour:
   move: 0
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Sad
 --- !u!114 &1083387551
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12103,6 +12240,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Boy1_Towel_Happy
 --- !u!114 &1083387559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12163,6 +12301,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387567
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12231,6 +12370,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl1_D1_Happy
 --- !u!114 &1083387564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12291,6 +12431,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1083387569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12743,6 +12884,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Happy
 --- !u!114 &2011730839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12800,6 +12942,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12868,6 +13011,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Happy
 --- !u!114 &2011730847
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12898,6 +13042,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12976,6 +13121,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Happy
 --- !u!114 &2011730852
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13035,6 +13181,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13082,6 +13229,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Happy
 --- !u!114 &2011730856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13141,6 +13289,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13188,6 +13337,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Happy
 --- !u!114 &2011730860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13245,6 +13395,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &335240401982363002
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13292,6 +13443,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Happy
 --- !u!114 &2011730836
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13351,6 +13503,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &3773830146374411480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13398,6 +13551,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Happy
 --- !u!114 &2011730844
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13456,6 +13610,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &4165806413359515610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13503,6 +13658,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Happy
 --- !u!114 &8625671714785180610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13561,6 +13717,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &3411956776395940638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13608,6 +13765,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Happy
 --- !u!114 &1242006199178798820
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13666,6 +13824,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &5999179021630772355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13713,6 +13872,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Happy
 --- !u!114 &2970068781401646971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13770,6 +13930,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2530312988795750054
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13817,6 +13978,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Happy
 --- !u!114 &7095799985617747426
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13998,6 +14160,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730880
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14045,6 +14208,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Happy
 --- !u!114 &2011730878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14103,6 +14267,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14274,6 +14439,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14321,6 +14487,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Angry
 --- !u!114 &2011730872
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14379,6 +14546,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14426,6 +14594,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Happy
 --- !u!114 &2011730882
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14483,6 +14652,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14572,6 +14742,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Happy
 --- !u!114 &2011730888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14629,6 +14800,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730898
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14676,6 +14848,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Confuse
 --- !u!114 &2011730896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14733,6 +14906,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14780,6 +14954,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Happy
 --- !u!114 &2011730892
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14839,6 +15014,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730902
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14886,6 +15062,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Confuse
 --- !u!114 &2011730900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14944,6 +15121,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14991,6 +15169,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Happy
 --- !u!114 &2011730904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15051,6 +15230,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15098,6 +15278,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Confuse
 --- !u!114 &2011730908
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15155,6 +15336,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730914
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15202,6 +15384,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Happy
 --- !u!114 &2011730912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15263,6 +15446,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15310,6 +15494,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Confuse
 --- !u!114 &2011730916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15368,6 +15553,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &4429727670988366436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15415,6 +15601,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Happy
 --- !u!114 &5962236087481413584
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15475,6 +15662,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &8899062416730838030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15522,6 +15710,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Happy
 --- !u!114 &8936788122217023448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15579,6 +15768,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &5818474047397495129
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15609,6 +15799,7 @@ MonoBehaviour:
   move: 0
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Confuse
 --- !u!114 &2011730842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15683,6 +15874,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Confuse
 --- !u!114 &4622916381952234258
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15740,6 +15932,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &7771784246336201394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15787,6 +15980,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Confuse
 --- !u!114 &4953135265236182352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15844,6 +16038,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &8268117522155822198
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15891,6 +16086,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Confuse
 --- !u!114 &6788792595386560825
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15949,6 +16145,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2011730863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15996,6 +16193,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Confuse
 --- !u!114 &6643855546870437238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16053,6 +16251,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &8229154179721362485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16100,6 +16299,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Angry
 --- !u!114 &4235421611404507450
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16160,6 +16360,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1860942883210236248
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16207,6 +16408,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Confuse
 --- !u!114 &1740107634639690657
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16264,6 +16466,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &3519240080257476189
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16311,6 +16514,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Angry
 --- !u!114 &7568760697654805042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16369,6 +16573,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &8436564194609829997
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16416,6 +16621,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Confuse
 --- !u!114 &42235487888232572
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16473,6 +16679,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &8497065789012113185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16520,6 +16727,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Confuse
 --- !u!114 &3196355233966378867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16577,6 +16785,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &4030683230722875859
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16624,6 +16833,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Confuse
 --- !u!114 &8091170414040005052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16681,6 +16891,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &4675032309132296292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16728,6 +16939,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Confuse
 --- !u!114 &1511395938938646850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16787,6 +16999,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &7796177247523865795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16834,6 +17047,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Confuse
 --- !u!114 &761903110969937370
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16892,6 +17106,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &1069005109429996646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16939,6 +17154,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Confuse
 --- !u!114 &2663913791367340991
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16996,6 +17212,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &98251949307047727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17043,6 +17260,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Sad
 --- !u!114 &4566670444086908038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17104,6 +17322,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &8546103968473682294
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17151,6 +17370,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Confuse
 --- !u!114 &6498165968903946263
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17208,6 +17428,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &5061835219339099512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17255,6 +17476,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Girl5_D2_Call_Happy
 --- !u!114 &35489293657229145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17312,6 +17534,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &2289536949717562135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17359,6 +17582,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: Pooja2_Call_Confuse
 --- !u!114 &8080693790933037672
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17416,6 +17640,7 @@ MonoBehaviour:
   move: 1
   shiftIntoPlace: 0
   waitUntilFinished: 0
+  _PortraitName: 
 --- !u!114 &3998306507070240224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18174,6 +18399,8 @@ MonoBehaviour:
   nameText: '{$MalePlayerName}'
   nameColor: {r: 1, g: 1, b: 1, a: 1}
   soundEffect: {fileID: 0}
+  characterAtlas: {fileID: 0}
+  portraitsNamesList: []
   portraits:
   - {fileID: 21300000, guid: 0ee9e3d98e0dcd747b2dbecd2cc3c15a, type: 3}
   - {fileID: 21300000, guid: e7ed0381565825d4eb41cd29378ca6f2, type: 3}
@@ -18863,6 +19090,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
+      propertyPath: characterGender
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
+        type: 3}
       propertyPath: episodesHandler
       value: 
       objectReference: {fileID: 671189707104894458}
@@ -18929,17 +19161,17 @@ PrefabInstance:
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
       propertyPath: characterDataAssets.Array.data[0].fungusCharacterPortraits.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
       propertyPath: characterDataAssets.Array.data[1].fungusCharacterPortraits.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
       propertyPath: characterDataAssets.Array.data[2].fungusCharacterPortraits.Array.size
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
@@ -19065,19 +19297,18 @@ PrefabInstance:
         type: 3}
       propertyPath: characterDataAssets.Array.data[0].fungusCharacterPortraits.Array.data[0]
       value: 
-      objectReference: {fileID: 21300000, guid: 3de3df0f8617ecb45b5eaa1d7bb9b2e0,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
       propertyPath: characterDataAssets.Array.data[0].fungusCharacterPortraits.Array.data[1]
       value: 
-      objectReference: {fileID: 21300000, guid: 61e0bb91cc0e246459deff3397a459ad,
+      objectReference: {fileID: 21300000, guid: ce099d6046b2d74408f077064aa2a25d,
         type: 3}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
       propertyPath: characterDataAssets.Array.data[0].fungusCharacterPortraits.Array.data[2]
       value: 
-      objectReference: {fileID: 21300000, guid: 282a247ba3153424997427abed878ae8,
+      objectReference: {fileID: 21300000, guid: ce099d6046b2d74408f077064aa2a25d,
         type: 3}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
@@ -19089,19 +19320,18 @@ PrefabInstance:
         type: 3}
       propertyPath: characterDataAssets.Array.data[1].fungusCharacterPortraits.Array.data[0]
       value: 
-      objectReference: {fileID: 21300000, guid: 509c56d3fdcbfc44da5a16487d1f03f9,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
       propertyPath: characterDataAssets.Array.data[1].fungusCharacterPortraits.Array.data[1]
       value: 
-      objectReference: {fileID: 21300000, guid: 937debdd3300d8e4a8794d1e83f0c090,
+      objectReference: {fileID: 21300000, guid: a7998b3600867304d881e4e325bfba9c,
         type: 3}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
       propertyPath: characterDataAssets.Array.data[1].fungusCharacterPortraits.Array.data[2]
       value: 
-      objectReference: {fileID: 21300000, guid: 058d5ebba7ddfdd43ac67d725b35a67e,
+      objectReference: {fileID: 21300000, guid: a7998b3600867304d881e4e325bfba9c,
         type: 3}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
@@ -19113,19 +19343,18 @@ PrefabInstance:
         type: 3}
       propertyPath: characterDataAssets.Array.data[2].fungusCharacterPortraits.Array.data[0]
       value: 
-      objectReference: {fileID: 21300000, guid: fa2511a552e553d42b74a44120367ecd,
-        type: 3}
+      objectReference: {fileID: 0}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
       propertyPath: characterDataAssets.Array.data[2].fungusCharacterPortraits.Array.data[1]
       value: 
-      objectReference: {fileID: 21300000, guid: 9bdeaeadcca1d4447b33d59ddcba6b38,
+      objectReference: {fileID: 21300000, guid: 6ccba89613401f04fb09ec8c84653de2,
         type: 3}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
       propertyPath: characterDataAssets.Array.data[2].fungusCharacterPortraits.Array.data[2]
       value: 
-      objectReference: {fileID: 21300000, guid: e4aa4784d57ebe14991c88d1618ed9a5,
+      objectReference: {fileID: 21300000, guid: 6ccba89613401f04fb09ec8c84653de2,
         type: 3}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
@@ -19785,7 +20014,7 @@ PrefabInstance:
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
       propertyPath: characterGender
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4130507001062347119, guid: 892e0f6e4e53de14787723f574d87aa4,
         type: 3}
@@ -20327,6 +20556,11 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: LoadStoryEpisodesMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 487153299455232507, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1146127971373605823, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -20345,6 +20579,11 @@ PrefabInstance:
     - target: {fileID: 1146127971373605823, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1349693945826462060, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1575863005531392656, guid: 52aa275c784f5e649ac32858fd89e977,
@@ -20406,6 +20645,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_HorizontalAlignment
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608616942586556595, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2692637510578713868, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
@@ -20503,6 +20747,16 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5439755055420686482, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5575213593842729560, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6090472432391441659, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -20541,6 +20795,11 @@ PrefabInstance:
     - target: {fileID: 6326695477726627172, guid: 52aa275c784f5e649ac32858fd89e977,
         type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6849523943217375489, guid: 52aa275c784f5e649ac32858fd89e977,
+        type: 3}
+      propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7107813847784712360, guid: 52aa275c784f5e649ac32858fd89e977,
@@ -20875,6 +21134,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnterFemaleNameInputField
       objectReference: {fileID: 0}
+    - target: {fileID: 2975156556109187500, guid: 97235a03366399d4da853b5717ff03b5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5361982102965132587, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}
       propertyPath: m_Enabled
@@ -20894,6 +21158,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_sharedMaterial
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5644760381804957553, guid: 97235a03366399d4da853b5717ff03b5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6777568667784069044, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}
@@ -20939,6 +21208,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.characterCount
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7478841279869611416, guid: 97235a03366399d4da853b5717ff03b5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7810427143122577221, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}
@@ -21175,6 +21449,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnterMaleNameInputField
       objectReference: {fileID: 0}
+    - target: {fileID: 2975156556109187500, guid: 97235a03366399d4da853b5717ff03b5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5361982102965132587, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}
       propertyPath: m_Enabled
@@ -21195,6 +21474,11 @@ PrefabInstance:
       propertyPath: m_sharedMaterial
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 5644760381804957553, guid: 97235a03366399d4da853b5717ff03b5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6777568667784069044, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}
       propertyPath: m_textAlignment
@@ -21214,6 +21498,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_HorizontalAlignment
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7478841279869611416, guid: 97235a03366399d4da853b5717ff03b5,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7810427143122577221, guid: 97235a03366399d4da853b5717ff03b5,
         type: 3}

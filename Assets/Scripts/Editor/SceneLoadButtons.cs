@@ -43,6 +43,14 @@ public class SceneLoadButtons
             loadScene1Content.text = "2";
             loadScene1Content.tooltip = "Loads MenuIndex Scene";
 
+            GUIContent loadScene2Content = new GUIContent();
+            loadScene2Content.text = "3";
+            loadScene2Content.tooltip = "Loads Story Scene (Reworked)";
+
+            GUIContent loadScene3Content = new GUIContent();
+            loadScene3Content.text = "4";
+            loadScene3Content.tooltip = "Loads Story Scene (Non-Reworked)";
+
             GUIStyle style = new GUIStyle(EditorStyles.toolbarButton);
             style.fontStyle = FontStyle.Bold;
             style.alignment = TextAnchor.MiddleCenter;
@@ -79,6 +87,28 @@ public class SceneLoadButtons
                     return;
 
                 EditorSceneManager.OpenScene("Assets/Scenes/02_MenuIndex.unity");
+            }
+
+            GUILayout.Space(5);
+
+            if (GUILayout.Button(loadScene2Content, style))
+            {
+                if (EditorApplication.isPlaying || EditorApplication.isPaused ||
+                EditorApplication.isCompiling || EditorApplication.isPlayingOrWillChangePlaymode)
+                    return;
+
+                EditorSceneManager.OpenScene("Assets/Scenes/03_StoryScene.unity");
+            }
+
+            GUILayout.Space(5);
+
+            if (GUILayout.Button(loadScene3Content, style))
+            {
+                if (EditorApplication.isPlaying || EditorApplication.isPaused ||
+                EditorApplication.isCompiling || EditorApplication.isPlayingOrWillChangePlaymode)
+                    return;
+
+                EditorSceneManager.OpenScene("Assets/Scenes/04_StoryScene_NonReworked.unity");
             }
         });
     }

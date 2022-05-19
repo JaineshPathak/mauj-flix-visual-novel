@@ -47,7 +47,8 @@ public class MflixPickName : MonoBehaviour
             //if(nameVariableRef.variable && nameVariableRef.variable.GetType() == typeof(StringVariable))
             //nameVariableRef.variable.Apply(SetOperator.Assign, nameInputField.text);
 
-            nameVariableRef.Value = nameInputField.text;
+            if(nameVariableRef)
+                nameVariableRef.Value = nameInputField.text;
 
             switch (characterGender)
             {
