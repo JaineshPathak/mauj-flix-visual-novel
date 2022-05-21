@@ -30,7 +30,9 @@ public class MFlixUtils : MonoBehaviour
         AskYesNoPopupScreen,
         CharacterSelectionScreen,
         CharacterNameDialogueScreen,
-        ReplacePlaySound
+        ReplacePlaySound,
+        ReplaceSayCommands,
+        UpdateCallCommands
     };
 
     public WhatToReplace whatToReplace;
@@ -94,6 +96,9 @@ public class MFlixUtils : MonoBehaviour
     //Replace Sound
     public AudioClip originalSound;
     public AudioClip newSound;
+
+    //Call Mode
+    public CallMode callModeNew;
 
     private void OnValidate()
     {
@@ -800,6 +805,122 @@ public class MFlixUtils : MonoBehaviour
 
         if (count == 0)
             Debug.Log("MFlix Replacer: No PlaySound commands were found!");
+    }
+
+    public void ReplaceSayCommands()
+    {
+        if (PrefabStageUtility.GetCurrentPrefabStage() == null)
+        {
+            Debug.LogError("MFlix Replacer: You need to be in Prefab Mode");
+            return;
+        }
+
+        if (episodeFlowchart == null)
+            return;
+
+        foreach (Say sayCommand in episodeFlowchart.GetComponentsInChildren<Say>())
+        {
+            if ((sayCommand != null) && sayCommand.enabled && sayCommand.GetType() == typeof(Say))
+            {
+                Block block = sayCommand.ParentBlock;
+
+                SayMflix sayCommandMFlix = episodeFlowchart.gameObject.AddComponent<SayMflix>();
+                sayCommandMFlix.ParentBlock = block;
+                sayCommandMFlix.ItemId = episodeFlowchart.NextItemId();
+
+                sayCommandMFlix._Character = sayCommand._Character;
+                sayCommandMFlix.Portrait = sayCommand.Portrait;
+                sayCommandMFlix.StoryText = sayCommand.StoryText;
+                sayCommandMFlix.Description = sayCommand.Description;
+                sayCommandMFlix.VoiceOverClip = sayCommand.VoiceOverClip;
+                sayCommandMFlix.ShowAlways = sayCommand.ShowAlways;
+                sayCommandMFlix.ShowCount = sayCommand.ShowCount;
+                sayCommandMFlix.ExtendPrevious = sayCommand.ExtendPrevious;
+                sayCommandMFlix.FadeWhenDone = sayCommand.FadeWhenDone;
+                sayCommandMFlix.WaitForClick = sayCommand.WaitForClick;
+                sayCommandMFlix.WaitForVO = sayCommand.WaitForVO;
+                sayCommandMFlix.StopVoiceOver = sayCommand.StopVoiceOver;
+
+                if (sayCommand.setSayDialog != null)
+                {
+                    sayCommandMFlix.setSayDialog = null;
+                    switch (sayCommand.setSayDialog.transform.name)
+                    {
+                        case "MFlixNarrativeDialog":
+                            sayCommandMFlix.sayDialogStyle = SayMflix.SayDialogStyle.Type_Narrative;
+                            break;
+
+                        case "MFlixNarrativeTutorialDialog":
+                            sayCommandMFlix.sayDialogStyle = SayMflix.SayDialogStyle.Type_NarrativeTutorial;
+                            break;
+
+                        case "MFlixCharacterSayDialog":
+                        case "MFlixCharacterSayDialogx2":
+                            sayCommandMFlix.sayDialogStyle = SayMflix.SayDialogStyle.Type_CharacterSay;
+                            break;
+
+                        case "MFlixCharacterSayDialogWithMenu":
+                            sayCommandMFlix.sayDialogStyle = SayMflix.SayDialogStyle.Type_CharacterSayWithMenu;
+                            break;
+
+                        case string s when s.Contains("Black"):
+                            sayCommandMFlix.sayDialogStyle = SayMflix.SayDialogStyle.Type_NarrativeBlack;
+                            break;
+
+                        case string s when s.Contains("PickNameDialogue"):
+                            sayCommandMFlix.sayDialogStyle = SayMflix.SayDialogStyle.Type_CharacterName;
+                            break;
+                    }
+                }
+
+                PrefabUtility.RecordPrefabInstancePropertyModifications(sayCommandMFlix);
+
+                //block.CommandList.Add(sayCommandMFlix);
+                int index = block.CommandList.IndexOf(sayCommand);
+                if (index >= 0)
+                {
+                    block.CommandList[index] = sayCommandMFlix;
+                    block.CommandList.Remove(sayCommand);
+                    DestroyImmediate(sayCommand);
+
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(block);            
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(episodeFlowchart);
+                }
+
+                //block.CommandList.RemoveAt(sayCommand.CommandIndex);
+                //DestroyImmediate(sayCommand);
+            }
+        }
+
+        PrefabUtility.RecordPrefabInstancePropertyModifications(episodeFlowchart);
+        PrefabUtility.RecordPrefabInstancePropertyModifications(transform);
+    }
+
+    public void UpdateCallCommands()
+    {
+        if (PrefabStageUtility.GetCurrentPrefabStage() == null)
+        {
+            Debug.LogError("MFlix Replacer: You need to be in Prefab Mode");
+            return;
+        }
+
+        if (episodeFlowchart == null)
+            return;
+
+        foreach(Call callCmd in episodeFlowchart.GetComponentsInChildren<Call>())
+        {
+            if(callCmd != null && callCmd.enabled)
+            {
+                callCmd.CallMode = callModeNew;
+
+                PrefabUtility.RecordPrefabInstancePropertyModifications(callCmd);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(callCmd.ParentBlock);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(episodeFlowchart);
+            }
+        }
+
+        PrefabUtility.RecordPrefabInstancePropertyModifications(episodeFlowchart);
+        PrefabUtility.RecordPrefabInstancePropertyModifications(transform);
     }
 }
 #endif

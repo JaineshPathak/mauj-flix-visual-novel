@@ -91,6 +91,8 @@ public class StoriesDBItemSO : ScriptableObject
     {
         StoriesDBItem item = new StoriesDBItem();
 
+        item.isReworked = isReworked;
+
         item.isNewStory = isNewStory;
         item.isStoryEnabled = isStoryEnabled;
         item.isShortStory = isShortStory;

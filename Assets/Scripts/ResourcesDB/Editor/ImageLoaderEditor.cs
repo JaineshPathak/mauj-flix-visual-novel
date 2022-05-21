@@ -10,7 +10,7 @@ using UnityEditor.Experimental.GraphView;
 [CustomEditor(typeof(ImageLoader)), CanEditMultipleObjects]
 public class ImageLoaderEditor : Editor
 {
-    private float textureScale;
+    private float textureScale = 2f;
 
     private float buttonWidth = 120f;
     private float buttonHeight = 60f;
@@ -20,11 +20,20 @@ public class ImageLoaderEditor : Editor
 
     private StringListSearchProvider searchProvider;
 
+    private ImageLoader imageLoader;
+
+    public void OnSceneGUI()
+    {
+        imageLoader = target as ImageLoader;
+
+        Handles.Label(imageLoader.transform.position, imageLoader.currentTextureNameToLoad);
+    }
+
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        ImageLoader imageLoader = target as ImageLoader;
+        imageLoader = target as ImageLoader;
 
         serializedObject.Update();
 

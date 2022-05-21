@@ -88,6 +88,9 @@ namespace Fungus.EditorUtils
             if (GUILayout.Button("Get Portraits Names"))
                 t.FillupPortraitsNamesList();
 
+            if (GUILayout.Button("Clear Portraits Lists"))
+                t.Portraits.Clear();
+
             EditorGUILayout.Separator();
             //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
 

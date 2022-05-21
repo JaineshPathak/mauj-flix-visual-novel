@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.U2D;
 
 [DisallowMultipleComponent]
+[RequireComponent(typeof(SpriteRenderer))]
 public class ImageLoader : MonoBehaviour
 {
     [Header("Images DB")]
@@ -10,15 +11,18 @@ public class ImageLoader : MonoBehaviour
     public SpriteAtlas bgSpriteAtlas;    
 
     [Header("Sprite Renderer")]
-    [HideInInspector] public int currentTextureIndexToLoad;
-    [HideInInspector] public string currentTextureNameToLoad;
-    public SpriteRenderer spriteRenderer;    
+    public SpriteRenderer spriteRenderer;
+
+    [Space(15)]
+
+    public int currentTextureIndexToLoad;
+    public string currentTextureNameToLoad;
 
     private void Awake()
     {
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();        
-    }
+    }    
 
     public Sprite[] GetSpritesList()
     {
@@ -60,6 +64,9 @@ public class ImageLoader : MonoBehaviour
     {
         if (spriteRenderer == null)
             spriteRenderer = GetComponent<SpriteRenderer>();
+
+        if( (spriteRenderer) && spriteRenderer.sprite && string.IsNullOrEmpty(currentTextureNameToLoad))
+            currentTextureNameToLoad = spriteRenderer.sprite.texture.name;        
 
         //if (imagesDB == null)
             //imagesDB = GetComponentInParent<ImagesDB>();

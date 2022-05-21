@@ -67,7 +67,7 @@ public class CharacterSelectionScreen : MonoBehaviour
     {
         canvasGroup = GetComponent<CanvasGroup>();
 
-        if (charactersListFromUI.Count == 0)
+        if (charactersListFromUI.Count == 0 && characterSelectionContent)
             charactersListFromUI = characterSelectionContent.GetComponentsInChildren<Image>().ToList();
 
         if (snapRect == null)
@@ -82,7 +82,7 @@ public class CharacterSelectionScreen : MonoBehaviour
         if (EpisodesSpawner.instance != null)
             episodesSpawner = EpisodesSpawner.instance;
 
-        if (!episodesSpawner.storiesDBItem.isReworked)
+        /*if (!episodesSpawner.storiesDBItem.isReworked)
         {
             if (characterDataAssets.Count > 0)
             {
@@ -91,11 +91,11 @@ public class CharacterSelectionScreen : MonoBehaviour
                     characterDataAssets[i].PopulatePortraitsList();
                 }
             }
-        }
+        }*/
 
         StartCoroutine("SelectUpdateRoutine");
 
-        SelectCharacter(0);
+        //SelectCharacter(0);
     }
 
     public void PopulateCharactersData()
@@ -187,10 +187,10 @@ public class CharacterSelectionScreen : MonoBehaviour
             return;
 
         if (episodeFlowchart.HasVariable(characterVariableRef.variable.Key))
-        {
-            int keyValue = episodeFlowchart.GetIntegerVariable(characterVariableRef.variable.Key);
-            CharacterDataAssets characterDataAsset = GetCharacterDataAssetsFromIndex(keyValue);
-
+        {            
+            int keyValue = episodeFlowchart.GetIntegerVariable(characterVariableRef.variable.Key);            
+            currentCharacterIndex = keyValue;
+            CharacterDataAssets characterDataAsset = GetCharacterDataAssetsFromIndex(keyValue);            
             episodesHandler.SelectCharacter(characterGender, characterDataAsset, characterVariableRef, keyValue, false);
         }
     }

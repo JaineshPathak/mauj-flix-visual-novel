@@ -120,14 +120,19 @@ namespace Fungus
 
         public override void OnCommandUpdated()
         {
-            if (character != null)
-                portrait = character.GetPortrait(_PortraitName);
+            if (character == null)
+                return;
+
+            if (string.IsNullOrEmpty(_PortraitName))
+                return;
+
+            portrait = character.GetPortrait(_PortraitName);
         }
 
         public override void OnEnter()
         {
-            //if (character != null)
-                //portrait = character.GetPortrait(portrait.name);
+            if (character != null && display == DisplayType.Show)
+                portrait = character.GetPortrait(portrait.name);
 
             // Selected "use default Portrait Stage"
             if (stage == null)

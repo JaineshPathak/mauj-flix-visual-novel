@@ -134,7 +134,18 @@ public class EpisodesHandler : MonoBehaviour
 
                 for (int i = 0; i < characterSelectionScreens.Length && (characterSelectionScreens.Length > 0); i++)
                     characterSelectionScreens[i].PopulateCharactersData();
+
+                /*foreach(Portrait portrait in episodeFlowchart.GetComponentsInChildren<Portrait>())
+                {
+                    if (portrait != null && portrait.enabled && !string.IsNullOrEmpty(portrait._PortraitName))
+                        portrait.OnCommandUpdated();
+                }*/
             }
+        }
+        else
+        {
+            for (int i = 0; i < characterSelectionScreens.Length && (characterSelectionScreens.Length > 0); i++)
+                characterSelectionScreens[i].PopulateCharactersData();
         }
 
         if (FungusManager.Instance != null)
@@ -978,12 +989,36 @@ public class EpisodesHandler : MonoBehaviour
 
                             for (int i = 0; i < selectedCharacterDataAsset.fungusCharacterPortraits.Count; i++)
                             {
-                                if (portraitCommand._Portrait == portraitCommand._Character.Portraits[i])
+                                if(episodesSpawner != null && episodesSpawner.storiesDBItem != null)
                                 {
-                                    portraitCommand._Character = selectedCharacterDataAsset.fungusCharacter;
-                                    portraitCommand._Portrait = selectedCharacterDataAsset.fungusCharacterPortraits[i];
+                                    if(episodesSpawner.storiesDBItem.isReworked)
+                                    {
+                                        if (portraitCommand._PortraitName == portraitCommand._Character.Portraits[i].name)
+                                        {
+                                            portraitCommand._Character = selectedCharacterDataAsset.fungusCharacter;
+                                            portraitCommand._PortraitName = selectedCharacterDataAsset.fungusCharacterPortraits[i].name;
+
+                                            portraitCommand.OnCommandUpdated();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (portraitCommand._Portrait == portraitCommand._Character.Portraits[i])
+                                        {
+                                            portraitCommand._Character = selectedCharacterDataAsset.fungusCharacter;
+                                            portraitCommand._Portrait = selectedCharacterDataAsset.fungusCharacterPortraits[i];
+                                        }
+                                    }
                                 }
-                            }                            
+                                else
+                                {
+                                    if (portraitCommand._Portrait == portraitCommand._Character.Portraits[i])
+                                    {
+                                        portraitCommand._Character = selectedCharacterDataAsset.fungusCharacter;
+                                        portraitCommand._Portrait = selectedCharacterDataAsset.fungusCharacterPortraits[i];
+                                    }
+                                }
+                            }
                         }
                         else if(portraitCommand.Display == DisplayType.Hide)
                             portraitCommand._Character = selectedCharacterDataAsset.fungusCharacter;
@@ -996,6 +1031,7 @@ public class EpisodesHandler : MonoBehaviour
             case CharacterGender.Gender_Female:
                 //femaleCharacter = selectedCharacter;
 
+                //print("Female: Step 1");
                 foreach (var portraitCommand in episodeFlowchart.GetComponentsInChildren<Portrait>())
                 {
                     if (portraitCommand.enabled && portraitCommand._Character != null && portraitCommand._Character.NameMatch(selectedCharacterDataAsset.fungusCharacter.NameText /*"{$FemalePlayerName}"*/))
@@ -1018,14 +1054,50 @@ public class EpisodesHandler : MonoBehaviour
                         }*/
                         #endregion
 
+                        //print("Female: Step 2");
                         if (portraitCommand.Display == DisplayType.Show)
                         {
+                            //print("Female: Step 3 - Show Command");
+                            //print("Female: Step 4 - Character" + selectedCharacterDataAsset.fungusCharacter.name);
+                            //print("Female: Step 5 - Count" + selectedCharacterDataAsset.fungusCharacterPortraits.Count);
                             for (int i = 0; i < selectedCharacterDataAsset.fungusCharacterPortraits.Count; i++)
                             {
-                                if (portraitCommand._Portrait == portraitCommand._Character.Portraits[i])
+                                //print($"Female: Portrait Cmd - {portraitCommand._Portrait.name} == {portraitCommand._Character.Portraits[i]}");
+                                /*if (portraitCommand._Portrait == portraitCommand._Character.Portraits[i])
                                 {
+                                    //print($"Female: Portrait Cmd - {portraitCommand._Portrait.name} == {portraitCommand._Character.Portraits[i]} MATCH!");
                                     portraitCommand._Character = selectedCharacterDataAsset.fungusCharacter;
                                     portraitCommand._Portrait = selectedCharacterDataAsset.fungusCharacterPortraits[i];
+                                }*/
+
+                                if (episodesSpawner != null && episodesSpawner.storiesDBItem != null)
+                                {
+                                    if (episodesSpawner.storiesDBItem.isReworked)
+                                    {
+                                        if (portraitCommand._PortraitName == portraitCommand._Character.Portraits[i].name)
+                                        {
+                                            portraitCommand._Character = selectedCharacterDataAsset.fungusCharacter;
+                                            portraitCommand._PortraitName = selectedCharacterDataAsset.fungusCharacterPortraits[i].name;
+
+                                            portraitCommand.OnCommandUpdated();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (portraitCommand._Portrait == portraitCommand._Character.Portraits[i])
+                                        {
+                                            portraitCommand._Character = selectedCharacterDataAsset.fungusCharacter;
+                                            portraitCommand._Portrait = selectedCharacterDataAsset.fungusCharacterPortraits[i];
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (portraitCommand._Portrait == portraitCommand._Character.Portraits[i])
+                                    {
+                                        portraitCommand._Character = selectedCharacterDataAsset.fungusCharacter;
+                                        portraitCommand._Portrait = selectedCharacterDataAsset.fungusCharacterPortraits[i];
+                                    }
                                 }
                             }
                         }

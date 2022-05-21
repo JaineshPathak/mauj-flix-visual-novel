@@ -71,6 +71,9 @@ public class MFlixUtilsEditor : Editor
     private SerializedProperty originalSoundSerialized;
     private SerializedProperty newSoundSerialized;
 
+    //Call Mode
+    private SerializedProperty callModeNewSerialized;
+
     private MFlixUtils flixReplacer;
 
     private void OnEnable()
@@ -125,6 +128,8 @@ public class MFlixUtilsEditor : Editor
 
         originalSoundSerialized = serializedObject.FindProperty("originalSound");
         newSoundSerialized = serializedObject.FindProperty("newSound");
+
+        callModeNewSerialized = serializedObject.FindProperty("callModeNew");
     }
 
     public override void OnInspectorGUI()
@@ -494,6 +499,47 @@ public class MFlixUtilsEditor : Editor
                         //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
                         Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Replace Sound");
                         flixReplacer.ReplaceSoundClip();
+                    }
+                }
+
+                break;
+
+            case MFlixUtils.WhatToReplace.ReplaceSayCommands:
+
+                if (flixReplacer.episodeFlowchart != null)
+                {
+                    EditorGUILayout.HelpBox("This will update the default Say Commands to Maujflix modified ones.\n NOTE: Be careful in this step and check properly!", MessageType.Warning);
+
+                    EditorGUILayout.Space(10f);
+
+                    if (DrawButtonColored("Update Say Commands".ToUpper(), "#FF0000", Color.white))
+                    {
+                        //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
+                        Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Say Update");
+                        flixReplacer.ReplaceSayCommands();
+                    }
+                }
+
+                break;
+
+            case MFlixUtils.WhatToReplace.UpdateCallCommands:
+
+                if (flixReplacer.episodeFlowchart != null)
+                {
+                    EditorGUILayout.HelpBox("This will set all the 'Call' commands CallMode to desired CallMode given below.", MessageType.Warning);
+
+                    EditorGUILayout.Space(10f);
+
+                    GUIContent callModeContent = new GUIContent("Call Mode (New)", "New Call Mode to all 'Call' Commands");
+                    EditorGUILayout.PropertyField(callModeNewSerialized, callModeContent, GUILayout.ExpandHeight(false));
+
+                    EditorGUILayout.Space(10f);
+
+                    if (DrawButtonColored("Update Call Commands".ToUpper(), "#FF0000", Color.white))
+                    {
+                        //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
+                        Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Call Update");
+                        flixReplacer.UpdateCallCommands();
                     }
                 }
 

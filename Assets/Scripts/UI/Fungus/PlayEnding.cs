@@ -9,10 +9,10 @@ using UnityEngine.U2D;
 public class PlayEnding : Command
 {
     public EndScreenType endScreenType;
-    public SpriteAtlas nextEpisodesSpriteAtlas;
+    public SpriteAtlas nextEpisodesSpriteAtlas;    
 
-    [HideInInspector] public int currentTextureIndexToLoad;
-    [HideInInspector] public string currentTextureNameToLoad;
+    public int currentTextureIndexToLoad;
+    public string currentTextureNameToLoad;
 
     public override void OnEnter()
     {

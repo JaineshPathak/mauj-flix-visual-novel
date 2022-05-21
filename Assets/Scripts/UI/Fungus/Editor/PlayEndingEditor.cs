@@ -9,8 +9,10 @@ public class PlayEndingEditor : CommandEditor
 {
     protected SerializedProperty endScreenTypeSerial;
     protected SerializedProperty nextEpisodeAtlasSerial;
+    protected SerializedProperty currentTextureIndexToLoadSerial;
+    protected SerializedProperty currentTextureNameToLoadSerial;
 
-    private float textureScale;
+    private float textureScale = 2f;
 
     private float buttonWidth = 120f;
     private float buttonHeight = 60f;
@@ -26,6 +28,8 @@ public class PlayEndingEditor : CommandEditor
 
         endScreenTypeSerial = serializedObject.FindProperty("endScreenType");
         nextEpisodeAtlasSerial = serializedObject.FindProperty("nextEpisodesSpriteAtlas");
+        currentTextureIndexToLoadSerial = serializedObject.FindProperty("currentTextureIndexToLoad");
+        currentTextureNameToLoadSerial = serializedObject.FindProperty("currentTextureNameToLoad");
     }
 
     private void OnDisable()
@@ -51,6 +55,13 @@ public class PlayEndingEditor : CommandEditor
         }
 
         EditorGUILayout.PropertyField(endScreenTypeSerial, new GUIContent("End Screen Type"));
+
+        EditorGUILayout.Space(10f);
+
+        EditorGUILayout.PropertyField(currentTextureIndexToLoadSerial, new GUIContent("Current Texture Index Load"));
+        EditorGUILayout.PropertyField(currentTextureNameToLoadSerial, new GUIContent("Current Texture Name Load"));
+        
+        EditorGUILayout.Space(10f);
 
         if(playEnding.endScreenType == EndScreenType.EpisodeEndScreen)
         {
