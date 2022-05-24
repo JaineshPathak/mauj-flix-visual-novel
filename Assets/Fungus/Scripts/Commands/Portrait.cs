@@ -112,6 +112,36 @@ namespace Fungus
         /// </summary>
         public virtual bool ShiftIntoPlace { get { return shiftIntoPlace; } set { shiftIntoPlace = value; } }
 
+        private bool coded = false;
+        private bool ShowHide = true;
+
+        public void PortraitInit(bool newShow, Character newCharacter, Sprite newPortrait, bool newLeft, bool newMove, RectTransform newFromPosition, RectTransform newToPosition, bool newDefaultSettings, float newFadeDuration)
+        {
+            coded = true;
+            ShowHide = newShow;
+
+            if (newShow)
+            {
+                if (newLeft)
+                    facing = FacingDirection.Left;
+                else
+                    facing = FacingDirection.Right;
+                portrait = newPortrait;
+            }
+            else
+            {
+                facing = FacingDirection.None;
+                portrait = null;
+            }
+
+            character = newCharacter;
+            move = newMove;
+            fromPosition = newFromPosition;
+            toPosition = newToPosition;
+            useDefaultSettings = newDefaultSettings;
+            fadeDuration = newFadeDuration;
+        }
+
         public override void OnValidate()
         {
             if (portrait)
@@ -274,7 +304,17 @@ namespace Fungus
         public override void OnCommandAdded(Block parentBlock)
         {
             //Default to display type: show
-            display = DisplayType.Show;
+            //display = DisplayType.Show;
+
+            if (coded)
+            {
+                if (ShowHide)
+                    display = DisplayType.Show;
+                else
+                    display = DisplayType.Hide;
+            }
+            else
+                display = DisplayType.Show;
         }
 
         #endregion

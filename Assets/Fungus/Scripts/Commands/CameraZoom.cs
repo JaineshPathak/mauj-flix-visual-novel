@@ -27,6 +27,13 @@ namespace Fungus
         [Tooltip("Camera Zoom Tween Type")]
         [SerializeField] protected LeanTweenType zoomTweenType = LeanTweenType.easeInOutQuad;
 
+        public void ZoomInit(float newStartdelay, float newDuration, float newTargetZoom)
+        {
+            startDelay = newStartdelay;
+            duration = newDuration;
+            targetZoom = newTargetZoom;
+        }
+
         protected virtual void Start()
         {
             AcquireCamera();

@@ -25,6 +25,12 @@ namespace Fungus
         [Tooltip("Delay (in seconds) before the method will be called")]
         [SerializeField] protected float delay;
 
+        public void CallMethodInit(GameObject TargetObject, string MethodName)
+        {
+            targetObject = TargetObject;
+            methodName = MethodName;
+        }
+
         protected virtual void CallTheMethod()
         {
             targetObject.SendMessage(methodName, SendMessageOptions.DontRequireReceiver);

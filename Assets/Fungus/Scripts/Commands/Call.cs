@@ -57,6 +57,13 @@ namespace Fungus
 
         #region Public members
 
+        public void CallInit(Flowchart flowChart, Block newBlock)
+        {
+            targetFlowchart = flowChart;
+            targetBlock = newBlock;
+            callMode = CallMode.Continue;
+        }
+
         public override void OnEnter()
         {
             if (targetBlock != null)

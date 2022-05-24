@@ -31,6 +31,13 @@ namespace Fungus
         [SerializeField] protected LeanTweenType posTweenType = LeanTweenType.easeInOutQuad;
         [SerializeField] protected LeanTweenType rotTweenType = LeanTweenType.easeInOutQuad;
 
+        public void MoveToViewInit(float newDuration, View viewName, bool waitFinish)
+        {
+            duration = newDuration;
+            targetView = viewName;
+            waitUntilFinished = waitFinish;
+        }
+
         protected virtual void AcquireCamera()
         {
             if (targetCamera != null)

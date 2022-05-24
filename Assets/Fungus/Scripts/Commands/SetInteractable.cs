@@ -23,6 +23,12 @@ namespace Fungus
 
         #region Public members
 
+        public void SetInteractableInit(GameObject newTargetGameobject, bool interactState)
+        {
+            targetObjects.Add(newTargetGameobject);
+            interactableState = new BooleanData(interactState);
+        }
+
         public List<GameObject> TargetObjects
         {
             get { return targetObjects; }

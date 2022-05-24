@@ -40,6 +40,13 @@ namespace Fungus
         [SerializeField] protected LeanTweenType posTweenType = LeanTweenType.easeInOutQuad;
         [SerializeField] protected LeanTweenType rotTweenType = LeanTweenType.easeInOutQuad;
 
+        public void FadeToViewInit(float newDuration, bool fadeout, View viewName)
+        {
+            duration = newDuration;
+            fadeOut = fadeout;
+            targetView = viewName;
+        }
+
         protected virtual void Start()
         {
             AcquireCamera();

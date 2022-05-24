@@ -86,6 +86,15 @@ namespace Fungus
         public bool StopVoiceOver { get { return stopVoiceover; } set { stopVoiceover = value; } }
         public bool WaitForVO { get { return waitForVO; } set { waitForVO = value; } }
 
+        public void SayInit(string dialogue, Character actor, SayDialog sayDialogue, bool fadeDone, bool waitClick)
+        {
+            storyText = dialogue;
+            character = actor;
+            setSayDialog = sayDialogue;
+            fadeWhenDone = fadeDone;
+            waitForClick = waitClick;
+        }
+
         public override void OnEnter()
         {
             if (!showAlways && executionCount >= showCount)

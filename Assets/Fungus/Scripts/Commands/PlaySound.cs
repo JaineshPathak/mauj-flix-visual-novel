@@ -24,6 +24,12 @@ namespace Fungus
         [Tooltip("Wait until the sound has finished playing before continuing execution.")]
         [SerializeField] protected bool waitUntilFinished;
 
+        public void PlaySoundInit(AudioClip newSoundClip, bool waitFinish)
+        {
+            soundClip = newSoundClip;
+            waitUntilFinished = waitFinish;
+        }
+
         protected virtual void DoWait()
         {
             Continue();

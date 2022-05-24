@@ -10,7 +10,20 @@ public class MenuMflix : Menu
     [SerializeField] protected bool hasDiamondCost = false;
 
     [Tooltip("Actual cost of Diamonds")]
-    [SerializeField] protected float diamondCost = 0;    
+    [SerializeField] protected float diamondCost = 0;
+
+    public void MenuInit(string menuText, Block newTargetBlock, MenuDialog newSetMenuDialogue, int newDiamondCost = 0)
+    {
+        text = menuText;
+        targetBlock = newTargetBlock;
+        setMenuDialog = newSetMenuDialogue;
+
+        if (newDiamondCost > 0)
+        {
+            hasDiamondCost = true;
+            diamondCost = newDiamondCost;
+        }
+    }
 
     public override void OnEnter()
     {

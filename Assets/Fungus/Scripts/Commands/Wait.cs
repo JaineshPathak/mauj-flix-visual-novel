@@ -19,6 +19,12 @@ namespace Fungus
         [Tooltip("Duration to wait for")]
         [SerializeField] protected FloatData _duration = new FloatData(1);
 
+        public void WaitInit(float newDuration)
+        {
+            FloatData floatDataDuration = new FloatData(newDuration);
+            _duration = floatDataDuration;
+        }
+
         protected virtual void OnWaitComplete()
         {
             Continue();

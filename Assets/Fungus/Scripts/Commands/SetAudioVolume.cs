@@ -27,6 +27,13 @@ namespace Fungus
 
         #region Public members
 
+        public void SetAudioVolumeInit(float newVolume, float newFadeDuration, bool waitFinish)
+        {
+            volume = newVolume;
+            fadeDuration = newFadeDuration;
+            waitUntilFinished = waitFinish;
+        }
+
         public override void OnEnter()
         {
             var musicManager = FungusManager.Instance.MusicManager;

@@ -23,6 +23,12 @@ namespace Fungus
 
         #region Public members
 
+        public void CommentInit(string newName, string newText)
+        {
+            commenterName = newName;
+            commentText = newText;
+        }
+
         public override void OnEnter()
         {
             Continue();

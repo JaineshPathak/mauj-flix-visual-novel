@@ -25,6 +25,11 @@ namespace Fungus
 
         #region Public members
 
+        public void GetTextInit(GameObject newTargetObject)
+        {
+            targetTextObject = newTargetObject;
+        }
+
         public GameObject TargetTextObject
         {
             get { return targetTextObject; }

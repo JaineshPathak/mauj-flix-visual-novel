@@ -21,8 +21,18 @@ namespace Fungus
 
         [Tooltip("Set to true to enable the game object")]
         [SerializeField] protected BooleanData activeState;
-    
+
+
         #region Public members
+
+        public void SetActiveInit(GameObject target, bool isActive)
+        {
+            GameObjectData targetObject = new GameObjectData(target);
+            BooleanData active = new BooleanData(isActive);
+
+            _targetGameObject = targetObject;
+            activeState = active;
+        }
 
         public GameObject TargetGameObject 
         { 

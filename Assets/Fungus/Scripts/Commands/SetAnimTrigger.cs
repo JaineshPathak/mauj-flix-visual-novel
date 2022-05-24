@@ -24,6 +24,12 @@ namespace Fungus
 
         #region Public members
 
+        public void SetAnimTriggerInit(Animator newAnimator, string newParameterName)
+        {
+            _animator = new AnimatorData(newAnimator);
+            _parameterName = new StringData(newParameterName);
+        }
+
         public override void OnEnter()
         {
             if (_animator.Value != null)

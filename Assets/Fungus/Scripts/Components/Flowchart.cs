@@ -48,7 +48,7 @@ namespace Fungus
         [SerializeField] protected List<Command> selectedCommands = new List<Command>();
 
         [HideInInspector]
-        [SerializeField] protected List<Variable> variables = new List<Variable>();
+        [SerializeField] protected List<Variable> variables = new List<Variable>();        
 
         [TextArea(3, 5)]
         [Tooltip("Description text displayed in the Flowchart editor window")]

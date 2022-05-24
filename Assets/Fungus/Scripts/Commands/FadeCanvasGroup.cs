@@ -24,6 +24,13 @@ namespace Fungus
         [Tooltip("Time for the tween to complete")]
         [SerializeField] protected FloatData duration = new FloatData(1f);
 
+        public void FadeCanvasGroupInit(CanvasGroup newCanvas, bool blockRaycast, float newTargetAlpha)
+        {
+            targetCanvasGroups.Add(newCanvas);
+            targetBlocksRaycast = new BooleanData(blockRaycast);
+            targetAlpha = new FloatData(newTargetAlpha);
+        }
+
         protected virtual void ApplyTween()
         {
             for (int i = 0; i < targetCanvasGroups.Count; i++)

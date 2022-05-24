@@ -151,7 +151,7 @@ namespace Fungus
                 }
             }
 
-            for (int i = 0; i < portraits.Count; i++)
+            for (int i = 0; i < portraits.Count && (portraits.Count > 0); i++)
             {
                 string name = portraits[i].name;
                 name = name.Replace("(Clone)", "");

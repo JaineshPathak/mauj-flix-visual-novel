@@ -12,6 +12,14 @@ namespace Fungus
     {
         [SerializeField] private int musicIndex;
 
+        public void CallMethodMusicInit(GameObject TargetObject, string MethodName, float newDelay, int MIndex)
+        {
+            targetObject = TargetObject;
+            methodName = MethodName;
+            delay = newDelay;
+            musicIndex = MIndex;
+        }
+
         protected override void CallTheMethod()
         {
             targetObject.SendMessage(methodName, musicIndex);

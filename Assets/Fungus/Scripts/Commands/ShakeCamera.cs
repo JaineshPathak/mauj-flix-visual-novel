@@ -38,6 +38,13 @@ namespace Fungus
 
         #region Public members
 
+        public void CameraShakeInit(float newDuration, float amountX, float amountY, bool newWait)
+        {
+            duration = newDuration;
+            amount = new Vector2(amountX, amountY);
+            waitUntilFinished = newWait;
+        }
+
         public override void OnEnter()
         {
             Vector3 v = new Vector3();
