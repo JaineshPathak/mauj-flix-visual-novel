@@ -953,6 +953,9 @@ public class EpisodesHandler : MonoBehaviour
         if (episodeFlowchart == null)
             return;
 
+        if (episodesSpawner == null && EpisodesSpawner.instance != null)
+            episodesSpawner = EpisodesSpawner.instance;
+
         switch (characterGender)
         {
             case CharacterGender.Gender_Male:
@@ -1029,7 +1032,7 @@ public class EpisodesHandler : MonoBehaviour
                 break;
 
             case CharacterGender.Gender_Female:
-                //femaleCharacter = selectedCharacter;
+                //femaleCharacter = selectedCharacter;                
 
                 //print("Female: Step 1");
                 foreach (var portraitCommand in episodeFlowchart.GetComponentsInChildren<Portrait>())
@@ -1069,6 +1072,17 @@ public class EpisodesHandler : MonoBehaviour
                                     portraitCommand._Character = selectedCharacterDataAsset.fungusCharacter;
                                     portraitCommand._Portrait = selectedCharacterDataAsset.fungusCharacterPortraits[i];
                                 }*/
+
+                                if(episodesSpawner != null && episodesSpawner.testModeSingle)
+                                {
+                                    if (portraitCommand._Portrait == portraitCommand._Character.Portraits[i])
+                                    {
+                                        portraitCommand._Character = selectedCharacterDataAsset.fungusCharacter;
+                                        portraitCommand._Portrait = selectedCharacterDataAsset.fungusCharacterPortraits[i];
+                                    }
+
+                                    continue;
+                                }
 
                                 if (episodesSpawner != null && episodesSpawner.storiesDBItem != null)
                                 {

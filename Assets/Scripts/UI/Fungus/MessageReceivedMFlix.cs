@@ -3,7 +3,7 @@ using Fungus;
 
 [EventHandlerInfo("Scene",
                       "Message Received (Maujflix)",
-                      "The block will execute when the specified message is received from a Send Message command. **--> Modified for Character Selection Screen with Diamond Integration <--**")]
+                      "The block will execute when the specified message is received from a Send Message command.\n\n **--> Modified for Character Selection Screen with Diamond Integration <--**")]
 public class MessageReceivedMFlix : MessageReceived
 {
     [SerializeField] protected CharacterSelectionScreen characterSelectionScreen;

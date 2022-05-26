@@ -82,6 +82,9 @@ public class CharacterSelectionScreen : MonoBehaviour
         if (EpisodesSpawner.instance != null)
             episodesSpawner = EpisodesSpawner.instance;
 
+        if (episodesSpawner != null && episodesSpawner.testModeSingle)
+            PopulateCharactersData();
+
         /*if (!episodesSpawner.storiesDBItem.isReworked)
         {
             if (characterDataAssets.Count > 0)
