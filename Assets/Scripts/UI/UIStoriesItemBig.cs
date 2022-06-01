@@ -53,12 +53,20 @@ public class UIStoriesItemBig : MonoBehaviour
         {
             AsyncOperationHandle<GameObject> flowchartLoading = Addressables.LoadAssetAsync<GameObject>(storyItem.storyFlowchartKey);
             flowchartLoading.Completed += OnFlowchartLoadingDone;
+        }        
+
+        if (ThumbnailsBucket.instance != null)
+        {
+            thumbnailSmallSprite = ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailSmallName, ThumbnailType.Small);
+            thumbnailBigImage.sprite = ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailBigName, ThumbnailType.Big);
+            thumbnailLoadingSprite = ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailLoadingName, ThumbnailType.Loading);
+            thumbnailTitleImage.sprite = ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailTitleName, ThumbnailType.Title);
         }
 
-        if(FirebaseDBHandler.instance != null)
+        if (FirebaseDBHandler.instance != null)
             viewCountRef = FirebaseDBHandler.instance.GetReferenceFromStoryTitle(storyItem.storyTitleEnglish, FirebaseDBHandler.viewCountKeyEnd);     //Eg: Udaan-View-Count
 
-        AsyncOperationHandle<Sprite> smallThumbnailHandle = Addressables.LoadAssetAsync<Sprite>(storyItem.storyThumbnailSmallKey);
+        /*AsyncOperationHandle<Sprite> smallThumbnailHandle = Addressables.LoadAssetAsync<Sprite>(storyItem.storyThumbnailSmallKey);
         smallThumbnailHandle.Completed += OnThumbnailSmallLoaded;
 
         AsyncOperationHandle<Sprite> handleBig = Addressables.LoadAssetAsync<Sprite>(storyItem.storyThumbnailBigKey);
@@ -68,7 +76,7 @@ public class UIStoriesItemBig : MonoBehaviour
         handleTitle.Completed += OnThumbnailTitleLoaded;
 
         AsyncOperationHandle<Sprite> handleLoading = Addressables.LoadAssetAsync<Sprite>(storyItem.storyThumbnailLoadingKey);
-        handleLoading.Completed += OnThumbnailLoadingDone;
+        handleLoading.Completed += OnThumbnailLoadingDone;*/
     }
 
     private void OnFlowchartLoadingDone(AsyncOperationHandle<GameObject> obj)

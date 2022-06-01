@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +9,24 @@ using UnityEditor;
 
 public class SaveStoriesLoadImagesDB : MonoBehaviour
 {
+    public StoriesDBItemSO[] storiesDBItems;
+
+    [Space(15)]
+
     public StoriesLoadImagesDB storiesLoadImagesDB;
 
+    private void OnValidate()
+    {
+        if(storiesDBItems.Length > 0)
+        {
+            Array.Resize(ref storiesLoadImagesDB.storiesLoadKeys, storiesDBItems.Length);
+            for (int i = 0; i < storiesDBItems.Length && (storiesDBItems.Length > 0); i++)
+            {
+                if(storiesDBItems[i] != null)
+                    storiesLoadImagesDB.storiesLoadKeys[i] = storiesDBItems[i].storyThumbnailLoadingName;
+            }
+        }        
+    }
 
     public void SaveStoryLoadImagesDB()
     {

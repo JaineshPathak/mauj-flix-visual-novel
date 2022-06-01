@@ -230,6 +230,9 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
 
     private void OnEndDiamondCollected()
     {
+        if (episodesHandler == null)
+            episodesHandler = FindObjectOfType<EpisodesHandler>();
+
         LTSeq seqPart2 = LeanTween.sequence();
 
         seqPart2.append(0.5f);

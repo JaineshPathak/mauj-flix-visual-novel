@@ -174,7 +174,7 @@ public class UISplashScreen : MonoBehaviour
 
             case AsyncOperationStatus.Succeeded:
 
-#if FCM_DEBUG
+#if UNITY_EDITOR
                 Debug.Log("SPLASH SCREEN: Stories Load Images DB Successfully loaded!");
 #endif
 
@@ -182,10 +182,40 @@ public class UISplashScreen : MonoBehaviour
                 storiesLoadImagesDB = JsonUtility.FromJson<StoriesLoadImagesDB>(dataString);
 
                 //3. Download the images from Keys once DB is downloaded
-                if(storiesLoadImagesDB != null)
+                if(storiesLoadImagesDB != null && ThumbnailsBucket.instance != null)
                 {
-                    loadNewFillAmount = 1f / (float)storiesLoadImagesDB.storiesLoadKeys.Length;
+                    //ADDED FROM v0.4.2
+                    ThumbnailsBucket.instance.StartLoadingAtlas((bool status) => 
+                    {
+                        if(status)
+                        {
+                            string randomLoadImage = storiesLoadImagesDB.storiesLoadKeys[Random.Range(0, storiesLoadImagesDB.storiesLoadKeys.Length)];
 
+                            Image thumbnailLoading = Instantiate(thumbnailLoadingImagePrefab, thumbnailsLoadingContainer);
+                            thumbnailLoading.color = whiteTransparent;
+                            thumbnailLoading.sprite = ThumbnailsBucket.instance.GetThumbnailSprite(randomLoadImage, ThumbnailType.Loading);
+                            thumbnailLoading.transform.name = thumbnailLoading.sprite.texture.name;
+
+                            thumbnailImagesLoadedList.Add(thumbnailLoading);
+
+                            imageLoadingBarActual.fillAmount = 1f;
+                            imageLoadingStatusText.text = "DONE";
+                            LeanTween.alphaCanvas(imageLoadingCanvasGroup, 0, 0.3f).setDelay(0.3f).setOnComplete(() =>
+                            {
+                                StartSplashSequence();
+                            });
+                        }
+                        else
+                        {
+                            imageLoadingStatusText.text = "Atlas Loading Error!";
+                            imageLoadingBarActual.fillAmount = 0.1f;
+                        }
+                    });
+
+                    //REMOVED FROM v0.4.2
+                    //loadNewFillAmount = 1f / (float)storiesLoadImagesDB.storiesLoadKeys.Length;
+
+                    #region REMOVED - OLD CODE
                     /*var loadResLoc = Addressables.LoadResourceLocationsAsync(storiesLoadImagesDB.storiesLoadKeys, Addressables.MergeMode.Union);
                     yield return loadResLoc;
 
@@ -201,6 +231,7 @@ public class UISplashScreen : MonoBehaviour
                     dSizeKb = BToKb(dSize);
                     dSizeMb = KbToMb(dSizeKb);
                     print("DOWNLOAD SIZE: " + dSizeMb + "Mb");*/
+                    #endregion
 
                     #region IMAGE LOADING REMOVED
                     /*for (int i = 0; i < storiesLoadImagesDB.storiesLoadKeys.Length; i++)
@@ -225,7 +256,8 @@ public class UISplashScreen : MonoBehaviour
                         }
                     }*/
 
-                    string randomImageKey = storiesLoadImagesDB.storiesLoadKeys[Random.Range(0, storiesLoadImagesDB.storiesLoadKeys.Length)];
+                    //REMOVED FROM v0.4.2
+                    /*string randomImageKey = storiesLoadImagesDB.storiesLoadKeys[Random.Range(0, storiesLoadImagesDB.storiesLoadKeys.Length)];
                     AsyncOperationHandle<Sprite> spriteImageFromKeyHandle = Addressables.LoadAssetAsync<Sprite>(randomImageKey);
 
                     yield return spriteImageFromKeyHandle;
@@ -240,16 +272,29 @@ public class UISplashScreen : MonoBehaviour
                         thumbnailImagesLoadedList.Add(thumbnailLoading);
 
                         imageLoadingBarActual.fillAmount = 1f;
-                    }
+                    }*/
+
+                    //ADDED FROM v0.4.2
                     #endregion
 
-                    yield return new WaitForSeconds(0.3f);
+                    #region REMOVED FROM v0.4.2 ONWARDS
+                    //yield return new WaitForSeconds(0.3f);
 
-                    imageLoadingStatusText.text = "DONE";
+                    /*imageLoadingStatusText.text = "DONE";
                     LeanTween.alphaCanvas(imageLoadingCanvasGroup, 0, 0.3f).setOnComplete( () => 
                     {
                         StartSplashSequence();
-                    });
+                    });*/
+                    #endregion
+                }
+                else
+                {
+                    imageLoadingStatusText.text = "Atlas Instance Error!";
+                    imageLoadingBarActual.fillAmount = 0.1f;
+
+#if UNITY_EDITOR
+                    Debug.LogError("SPLASH SCREEN: Stories Load Images DB failed!");
+#endif
                 }
 
                 break;
@@ -258,7 +303,8 @@ public class UISplashScreen : MonoBehaviour
 
                 imageLoadingStatusText.text = "Something Went Wrong...";
                 imageLoadingBarActual.fillAmount = 0.1f;
-#if FCM_DEBUG
+
+#if UNITY_EDITOR
                 Debug.LogError("SPLASH SCREEN: Stories Load Images DB failed!");
 #endif
                 break;
@@ -316,19 +362,27 @@ public class UISplashScreen : MonoBehaviour
         splashSeq.append(1f);
         splashSeq.append(LeanTween.alphaCanvas(disclaimerCanvas, 0, 0.5f));
         //splashSeq.append(0.5f);
-        splashSeq.append(LeanTween.alphaCanvas(thumbnailLoadingCanvas, 1f, 0.5f).setOnStart( () => 
+        splashSeq.append(LeanTween.alphaCanvas(thumbnailLoadingCanvas, 1f, 0.5f).setOnStart(() =>
         {
-            LeanTween.alpha(thumbnailImagesLoadedList[currentIndex].rectTransform, 1f, 0.5f).setOnComplete( () => 
+            LeanTween.alpha(thumbnailImagesLoadedList[currentIndex].rectTransform, 1f, 0.5f).setOnComplete(() =>
             {
                 //StartCoroutine(UpdateFadeRoutine());
             });
-        }).setOnComplete( () => 
+        }));/*.setOnComplete( () => 
         {
             if(thumbnailKeysList.Length > 0)
                 StartCoroutine(EndSequenceRoutine());
-        }));
+        })*/
+        splashSeq.append(1f);
+        splashSeq.append(LeanTween.alphaCanvas(thumbnailLoadingCanvas, 0, 0.5f).setEaseInOutSine());        
+        splashSeq.append(() => 
+        {
+            LeanTween.cancelAll();
+            SceneManager.LoadScene(2);      //Menu Index screen
+        });
     }
 
+    //USELESS - REMOVED FROM v0.4.2
     private IEnumerator EndSequenceRoutine()
     {
         /*AsyncOperationHandle<IList<Sprite>> loadImagesKeysHandle = Addressables.LoadAssetsAsync<Sprite>(thumbnailKeysList, obj => 
@@ -343,6 +397,9 @@ public class UISplashScreen : MonoBehaviour
 
         Addressables.Release(loadImagesKeysHandle);*/
 
+        //-------------------------------------------------------------------------
+        //REMOVED FROM v0.4.2
+
         for (int i = 0; i < thumbnailKeysList.Length; i++)
         {
             AsyncOperationHandle<Sprite> loadImageFromKeyHandle = Addressables.LoadAssetAsync<Sprite>(thumbnailKeysList[i]);
@@ -355,6 +412,7 @@ public class UISplashScreen : MonoBehaviour
                 loadingProgressText.text = (loadingProgressBar.fillAmount * 100f).ToString("0") + "%";
             }
         }
+        //-------------------------------------------------------------------------
 
         LeanTween.alphaCanvas(thumbnailLoadingCanvas, 0, 0.5f).setOnComplete( () => 
         {

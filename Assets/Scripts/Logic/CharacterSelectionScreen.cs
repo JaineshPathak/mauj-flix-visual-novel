@@ -269,6 +269,9 @@ public class CharacterSelectionScreen : MonoBehaviour
                             messageReceiversMaujflix[i].OnFungusMessageReceivedForCharacter("CharacterSelected", this);
                     }
                 }
+
+                if(UICharacterSelection.instance != null)
+                    UICharacterSelection.instance.HideSelectionScreen();
             }, 200f, Color.red);
 
             //FirebaseFirestoreOffline.instance.DebitDiamondsAmount(characterDataAssets[currentCharacterIndex].diamondCost);
@@ -292,6 +295,9 @@ public class CharacterSelectionScreen : MonoBehaviour
                         messageReceiversMaujflix[i].OnFungusMessageReceivedForCharacter("CharacterSelected", this);
                 }
             }
+
+            if (UICharacterSelection.instance != null)
+                UICharacterSelection.instance.HideSelectionScreen();
         }
 
         StopCoroutine("SelectUpdateRoutine");
@@ -346,8 +352,9 @@ public class CharacterSelectionScreen : MonoBehaviour
         }
 
         IntegerVariable integerVariable = characterVariableRef.variable as IntegerVariable;
-        UICharacterSelection.instance.ShowSelectionScreen(_topText, characterSprites.ToArray(), characterDataAssets, integerVariable, (int index) =>
+        UICharacterSelection.instance.ShowSelectionScreen(_topText, characterSprites.ToArray(), characterDataAssets, integerVariable, (int index, Transform diamondPanel) =>
         {
+            diamondCostPanel = diamondPanel;
             currentCharacterIndex = index;
             OnCharacterSubmit();
 

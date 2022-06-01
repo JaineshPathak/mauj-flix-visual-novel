@@ -119,7 +119,15 @@ public class UIStoriesItemSmall : MonoBehaviour
             flowchartLoading.Completed += OnFlowchartLoadingDone;
         }
 
-        if (storyItem.storyThumbnailSmallKey.Length > 0)
+        if(ThumbnailsBucket.instance != null)
+        {
+            thumbnailSmallImage.sprite = ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailSmallName, ThumbnailType.Small);
+            thumbnailBigSprite = ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailBigName, ThumbnailType.Big);
+            thumbnailLoadingSprite = ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailLoadingName, ThumbnailType.Loading);
+            thumbnailTitleSprite = ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailTitleName, ThumbnailType.Title);
+        }
+
+        /*if (storyItem.storyThumbnailSmallKey.Length > 0)
         {
             AsyncOperationHandle<Sprite> smallThumbnailHandle = Addressables.LoadAssetAsync<Sprite>(storyItem.storyThumbnailSmallKey);
             smallThumbnailHandle.Completed += OnThumbnailSmallLoaded;
@@ -141,7 +149,7 @@ public class UIStoriesItemSmall : MonoBehaviour
         {
             AsyncOperationHandle<Sprite> handleSmall = Addressables.LoadAssetAsync<Sprite>(storyItem.storyThumbnailLoadingKey);
             handleSmall.Completed += OnThumbnailLoadingDone;
-        }
+        }*/
     }
 
     private void CheckForStoryCounts()

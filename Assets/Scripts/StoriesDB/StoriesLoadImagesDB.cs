@@ -1,5 +1,5 @@
 ﻿[System.Serializable]
 public class StoriesLoadImagesDB
 {
-    public string[] storiesLoadKeys;
+    public string[] storiesLoadKeys;    
 }

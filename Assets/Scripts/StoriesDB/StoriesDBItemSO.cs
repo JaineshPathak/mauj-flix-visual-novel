@@ -38,6 +38,13 @@ public class StoriesDBItemSO : ScriptableObject
     public AssetReferenceSprite storyThumbnailLoadingKey;
     public AssetReferenceSprite storyTitleImageKey;
 
+    [Space(15)]
+
+    public string storyThumbnailSmallName;
+    public string storyThumbnailBigName;
+    public string storyThumbnailLoadingName;
+    public string storyThumbnailTitleName;
+
     [Header("Flowchart Keys")]
     public AssetReferenceGameObject storyFlowchartKey;
 
@@ -87,6 +94,14 @@ public class StoriesDBItemSO : ScriptableObject
         }
     }
 
+    private void OnValidate()
+    {
+        storyThumbnailSmallName = storyThumbnailSmallKey.editorAsset != null ? storyThumbnailSmallKey.editorAsset.name : "";
+        storyThumbnailBigName = storyThumbnailBigKey.editorAsset != null ? storyThumbnailBigKey.editorAsset.name : "";
+        storyThumbnailLoadingName = storyThumbnailLoadingKey.editorAsset != null ? storyThumbnailLoadingKey.editorAsset.name : "";
+        storyThumbnailTitleName = storyTitleImageKey.editorAsset != null ? storyTitleImageKey.editorAsset.name : "";
+    }
+
     public StoriesDBItem GetStoriesDBItem()
     {
         StoriesDBItem item = new StoriesDBItem();
@@ -112,6 +127,11 @@ public class StoriesDBItemSO : ScriptableObject
         item.storyThumbnailBigKey = (storyThumbnailBigKey != null) ? storyThumbnailBigKey.RuntimeKey.ToString() : string.Empty;
         item.storyThumbnailLoadingKey = (storyThumbnailLoadingKey != null) ? storyThumbnailLoadingKey.RuntimeKey.ToString() : string.Empty;
         item.storyTitleImageKey = (storyTitleImageKey != null) ? storyTitleImageKey.RuntimeKey.ToString() : string.Empty;
+
+        item.storyThumbnailSmallName = storyThumbnailSmallName;
+        item.storyThumbnailBigName = storyThumbnailBigName;
+        item.storyThumbnailLoadingName = storyThumbnailLoadingName;
+        item.storyThumbnailTitleName = storyThumbnailTitleName;
 
         item.storyFlowchartKey = (storyFlowchartKey != null) ? storyFlowchartKey.RuntimeKey.ToString() : string.Empty;
 
@@ -178,6 +198,11 @@ public class StoriesDBItemSOEditor : Editor
     private SerializedProperty storyThumbnailLoadingKeySerial;
     private SerializedProperty storyThumbnailTitleKeySerial;
 
+    private SerializedProperty storyThumbnailSmallNameSerial;
+    private SerializedProperty storyThumbnailBigNameSerial;
+    private SerializedProperty storyThumbnailLoadingNameSerial;
+    private SerializedProperty storyThumbnailTitleNameSerial;
+
     private SerializedProperty storyFlowchartKeySerial;
 
     private SerializedProperty storyProgressFileNameSerial;
@@ -227,6 +252,11 @@ public class StoriesDBItemSOEditor : Editor
         storyThumbnailLoadingKeySerial = serializedObject.FindProperty("storyThumbnailLoadingKey");
         storyThumbnailTitleKeySerial = serializedObject.FindProperty("storyTitleImageKey");
 
+        storyThumbnailSmallNameSerial = serializedObject.FindProperty("storyThumbnailSmallName");
+        storyThumbnailBigNameSerial = serializedObject.FindProperty("storyThumbnailBigName");
+        storyThumbnailLoadingNameSerial = serializedObject.FindProperty("storyThumbnailLoadingName");
+        storyThumbnailTitleNameSerial = serializedObject.FindProperty("storyThumbnailTitleName");
+
         storyFlowchartKeySerial = serializedObject.FindProperty("storyFlowchartKey");
 
         storyProgressFileNameSerial = serializedObject.FindProperty("storyProgressFileName");
@@ -268,6 +298,11 @@ public class StoriesDBItemSOEditor : Editor
         AddPropertyLabel(storyThumbnailBigKeySerial, "Story Image Big", "Story Thumbnail Big from Addressable (Eg: Thumbnail_Padosan_B.png)");
         AddPropertyLabel(storyThumbnailLoadingKeySerial, "Story Image Loading", "Story Thumbnail Loading from Addressable (Eg: Thumbnail_Padosan_L.png)");
         AddPropertyLabel(storyThumbnailTitleKeySerial, "Story Image Title", "Story Title Image from Addressable (Eg: Thumbnail_Padosan_Title.png)");
+
+        AddPropertyLabel(storyThumbnailSmallNameSerial, "Story Image Small Name", "Story Thumbnail Small from Addressable (Eg: Thumbnail_Padosan_S.png)");
+        AddPropertyLabel(storyThumbnailBigNameSerial, "Story Image Big Name", "Story Thumbnail Big from Addressable (Eg: Thumbnail_Padosan_B.png)");
+        AddPropertyLabel(storyThumbnailLoadingNameSerial, "Story Image Loading Name", "Story Thumbnail Loading from Addressable (Eg: Thumbnail_Padosan_L.png)");
+        AddPropertyLabel(storyThumbnailTitleNameSerial, "Story Image Title Name", "Story Title Image from Addressable (Eg: Thumbnail_Padosan_Title.png)");
 
         AddPropertyLabel(storyFlowchartKeySerial, "Story Flowchart", "Story Flowchart GameObject prefab (Eg: ST-Padosan-Flowchart)");
         

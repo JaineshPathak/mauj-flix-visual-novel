@@ -95,6 +95,7 @@ public class EpisodesSpawner : MonoBehaviour
     private StoriesDB storiesDB;
 
     private AsyncOperationHandle<GameObject> atlasDBHandle;
+    private AsyncOperationHandle<GameObject> episodeLoadHandle;
 
     private void Awake()
     {

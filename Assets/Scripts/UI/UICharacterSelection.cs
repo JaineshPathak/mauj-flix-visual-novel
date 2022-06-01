@@ -38,7 +38,7 @@ public class UICharacterSelection : MonoBehaviour
     public EpisodesHandler episodesHandler;
     public IntegerVariable integerVariableRef;    
 
-    private Action<int> callback;
+    private Action<int, Transform> callback;
 
     private EpisodesSpawner episodesSpawner;
 
@@ -75,7 +75,7 @@ public class UICharacterSelection : MonoBehaviour
             submitCharacterButton.onClick.AddListener(OnCharacterSubmit);
     }
 
-    public void ShowSelectionScreen(string _topText, Sprite[] _characterSprites, List<CharacterDataAssets> _characterDataAssets, IntegerVariable _integerVarRef, Action<int> _callback)
+    public void ShowSelectionScreen(string _topText, Sprite[] _characterSprites, List<CharacterDataAssets> _characterDataAssets, IntegerVariable _integerVarRef, Action<int, Transform> _callback)
     {
         characterDataAssets.Clear();
         characterDataAssets = _characterDataAssets;
@@ -84,7 +84,7 @@ public class UICharacterSelection : MonoBehaviour
         {
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
-            LeanTween.alphaCanvas(canvasGroup, 1f, 0.5f).setEaseInOutSine();
+            LeanTween.alphaCanvas(canvasGroup, 1f, 1f).setEaseInOutSine();
 
             StartCoroutine("SelectUpdateRoutine");
         }
@@ -108,9 +108,14 @@ public class UICharacterSelection : MonoBehaviour
         if (canvasGroup == null)
             return;
 
+        if (canvasGroup.alpha <= 0)
+            return;
+
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
-        LeanTween.alphaCanvas(canvasGroup, 0, 0.5f).setEaseInOutSine();
+        LeanTween.alphaCanvas(canvasGroup, 0, 1f).setEaseInOutSine();
+
+        StopCoroutine("SelectUpdateRoutine");
     }
 
     private void NextCharacter()
@@ -166,8 +171,8 @@ public class UICharacterSelection : MonoBehaviour
 
     private void OnCharacterSubmit()
     {
-        callback?.Invoke(currentCharacterIndex);
-        HideSelectionScreen();
+        callback?.Invoke(currentCharacterIndex, diamondCostPanel);
+        //HideSelectionScreen();
     }
 
     private IEnumerator SelectUpdateRoutine()

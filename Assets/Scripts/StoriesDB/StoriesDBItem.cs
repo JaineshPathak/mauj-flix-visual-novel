@@ -22,7 +22,12 @@ public class StoriesDBItem
     public string storyThumbnailSmallKey;
     public string storyThumbnailBigKey;
     public string storyThumbnailLoadingKey;
-    
+
+    public string storyThumbnailSmallName;
+    public string storyThumbnailBigName;
+    public string storyThumbnailLoadingName;
+    public string storyThumbnailTitleName;
+
     public string storyFlowchartKey;
     public string storyProgressFileName;
     
