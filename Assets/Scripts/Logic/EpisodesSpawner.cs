@@ -95,7 +95,12 @@ public class EpisodesSpawner : MonoBehaviour
     private StoriesDB storiesDB;
 
     private AsyncOperationHandle<GameObject> atlasDBHandle;
+    private AsyncOperationHandle<GameObject> loadSoundsBucketHandle;
     private AsyncOperationHandle<GameObject> episodeLoadHandle;
+
+    private GameObject currentEpisodePrefab;
+    private GameObject currentSoundBucketPrefab;
+    private GameObject currentAtlasDBPrefab;
 
     private void Awake()
     {
@@ -221,6 +226,19 @@ public class EpisodesSpawner : MonoBehaviour
         handle.Completed += EpisodeLoadingDone;
     }*/
 
+    public StoryData GetStoryData()
+    {
+        string filePath = DataPaths.loadProgressPath + storyDataKey + DataPaths.loadProgressFileExtension;
+        if (SerializationManager.FileExists(filePath))
+        {
+            string saveString = SerializationManager.LoadFromTextFile(filePath);
+            if (saveString != null)
+                storyData = JsonUtility.FromJson<StoryData>(saveString);
+        }
+
+        return storyData;
+    }
+
     public void StartLoadingStoryScene()
     {
         percentCanvasGroup.interactable = true;
@@ -238,7 +256,7 @@ public class EpisodesSpawner : MonoBehaviour
         LeanTween.alphaCanvas(percentCanvasGroup, 1f, 1f).setOnComplete( () => 
         {
             StartCoroutine(StartLoadingStorySceneAsync());
-        });        
+        });
     }
 
     private IEnumerator StartLoadingStorySceneAsync()
@@ -284,11 +302,12 @@ public class EpisodesSpawner : MonoBehaviour
     private IEnumerator LoadSoundsBucketRoutine()
     {
         //Debug.Log("Step 3 - Loading Sounds Bucket - Initialized");
-        AsyncOperationHandle<GameObject> loadSoundsBucketHandle = Addressables.LoadAssetAsync<GameObject>(storiesDBItem.soundsBucketKey);
+        loadSoundsBucketHandle = Addressables.LoadAssetAsync<GameObject>(storiesDBItem.soundsBucketKey);
 
         while (!loadSoundsBucketHandle.IsDone)
         {
-            float progress = loadSoundsBucketHandle.PercentComplete;
+            var status = loadSoundsBucketHandle.GetDownloadStatus();
+            float progress = status.Percent;
 
             storyPercentBar.fillAmount = progress;
             percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
@@ -302,7 +321,7 @@ public class EpisodesSpawner : MonoBehaviour
         {
             //Debug.Log("Step 4 - Loading Sounds Bucket - Complete");
 
-            Instantiate(loadSoundsBucketHandle.Result);
+            currentSoundBucketPrefab = Instantiate(loadSoundsBucketHandle.Result);
             StartCoroutine(StartLoadingAtlases());
             //StartLoadingEpisode();
         }
@@ -316,7 +335,8 @@ public class EpisodesSpawner : MonoBehaviour
 
         while (!atlasDBHandle.IsDone)
         {
-            float progress = atlasDBHandle.PercentComplete;
+            var status = atlasDBHandle.GetDownloadStatus();
+            float progress = status.Percent;
 
             storyPercentBar.fillAmount = progress;
             percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
@@ -326,10 +346,9 @@ public class EpisodesSpawner : MonoBehaviour
 
         yield return new WaitUntil(() => atlasDBHandle.IsDone);
 
-        Instantiate(atlasDBHandle.Result, Vector3.zero, Quaternion.identity);
-
         //Debug.Log("Step 6 - Loading Atlas - Complete");
 
+        currentAtlasDBPrefab = Instantiate(atlasDBHandle.Result);
         StartLoadingEpisode();        
     }
 
@@ -348,23 +367,10 @@ public class EpisodesSpawner : MonoBehaviour
             //storyPercentBar.fillAmount = 0;
             //percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 
-            DownloadEpisodeTask(UnityEngine.Random.Range(0.13f, 0.2f));
-            //StartCoroutine(DownloadEpisodeRoutine());
+            //DownloadEpisodeTask(UnityEngine.Random.Range(0.13f, 0.2f));
+            StartCoroutine(DownloadEpisodeRoutine());
         }
-    }
-
-    public StoryData GetStoryData()
-    {
-        string filePath = DataPaths.loadProgressPath + storyDataKey + DataPaths.loadProgressFileExtension;
-        if (SerializationManager.FileExists(filePath))
-        {
-            string saveString = SerializationManager.LoadFromTextFile(filePath);
-            if (saveString != null)
-                storyData = JsonUtility.FromJson<StoryData>(saveString);
-        }
-
-        return storyData;
-    }
+    }    
 
     private IEnumerator FakeDownloadBarLoad(float randomStartFakeVal)
     {
@@ -404,7 +410,7 @@ public class EpisodesSpawner : MonoBehaviour
 
         var downloadedKb = 0f;
         var keyDownloadOperation = Addressables.LoadAssetAsync<GameObject>(storyData.currentEpisodeKey);
-        keyDownloadOperation.Completed += EpisodeDownloadComplete;
+        //keyDownloadOperation.Completed += EpisodeDownloadComplete;
 
         if (totalDownloadSizeKb > 0)
         {
@@ -464,16 +470,18 @@ public class EpisodesSpawner : MonoBehaviour
         storyPercentBar.fillAmount = 0;
         percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 
-        AsyncOperationHandle<GameObject> downloadEpisode = Addressables.LoadAssetAsync<GameObject>(storyData.currentEpisodeKey);
-        downloadEpisode.Completed += EpisodeDownloadComplete;
+        //AsyncOperationHandle<GameObject> downloadEpisode = Addressables.LoadAssetAsync<GameObject>(storyData.currentEpisodeKey);
+        //downloadEpisode.Completed += EpisodeDownloadComplete;
+        
+        episodeLoadHandle = Addressables.LoadAssetAsync<GameObject>(storyData.currentEpisodeKey);
 
-        while(!downloadEpisode.IsDone)
+        while (!episodeLoadHandle.IsDone)
         {
             /*downloadProgressCurrent = downloadEpisode.PercentComplete;
             storyPercentBar.fillAmount = downloadProgressCurrent;
             percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";*/
 
-            var status = downloadEpisode.GetDownloadStatus();
+            var status = episodeLoadHandle.GetDownloadStatus();
             float progress = status.Percent;
 
             storyPercentBar.fillAmount = progress;
@@ -482,19 +490,25 @@ public class EpisodesSpawner : MonoBehaviour
             yield return null;
         }
 
+        yield return episodeLoadHandle;
+
         //yield return new WaitUntil(() => isDone);
 
         //Download Complete
         storyPercentBar.fillAmount = 1f;
         percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
-    }
 
-    /*private void Update()
-    {
-        //percentDownloadedText.text = (int)(downloadProgressCurrent * 100f) + "%";
-        if(storyPercentBar != null)
-            storyPercentBar.fillAmount = downloadProgressCurrent;
-    }*/
+        if (episodeLoadHandle.Status == AsyncOperationStatus.Succeeded)
+        {
+            percentCanvasGroup.interactable = false;
+            percentCanvasGroup.blocksRaycasts = false;
+            LeanTween.alphaCanvas(percentCanvasGroup, 0, 1f);
+
+            currentEpisodePrefab = Instantiate(episodeLoadHandle.Result);
+            episodesHandler = currentEpisodePrefab.GetComponent<EpisodesHandler>();
+            episodesHandler.Init(this);
+        }
+    }
 
     private void EpisodeDownloadComplete(AsyncOperationHandle<GameObject> obj)
     {        
@@ -511,12 +525,34 @@ public class EpisodesSpawner : MonoBehaviour
 
                 GameObject episodeDownloaded = Instantiate(obj.Result);
                 episodesHandler = episodeDownloaded.GetComponent<EpisodesHandler>();
-                episodesHandler.Init(this);                               
+                episodesHandler.Init(this);
+
                 break;
 
             case AsyncOperationStatus.Failed:
                 break;
         }
+    }
+    
+    public void LoadNextEpisode()
+    {        
+        if (topPanel)
+            topPanel.HideTopPanel();
+
+        storyPercentBar.fillAmount = 0;
+        percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
+
+        percentCanvasGroup.interactable = true;
+        percentCanvasGroup.blocksRaycasts = true;
+        LeanTween.alphaCanvas(percentCanvasGroup, 1f, 1f).setOnComplete(() =>
+        {
+            Addressables.Release(episodeLoadHandle);
+
+            if(currentEpisodePrefab)
+                Destroy(currentEpisodePrefab);
+
+            StartCoroutine(DownloadEpisodeRoutine());
+        });
     }
 
     public void LoadEpisodesMainMenu()
@@ -532,6 +568,18 @@ public class EpisodesSpawner : MonoBehaviour
         blackScreenCanvasGroup.blocksRaycasts = true;
         LeanTween.alphaCanvas(blackScreenCanvasGroup, 1f, 1f).setOnComplete( () => 
         {
+            Addressables.Release(atlasDBHandle);
+            if (currentAtlasDBPrefab)
+                Destroy(currentAtlasDBPrefab);
+
+            Addressables.Release(loadSoundsBucketHandle);
+            if (currentSoundBucketPrefab)
+                Destroy(currentSoundBucketPrefab);
+
+            Addressables.Release(episodeLoadHandle);
+            if (currentEpisodePrefab)
+                Destroy(currentEpisodePrefab);
+
             SceneManager.LoadScene(2);
         });
     }
@@ -549,7 +597,19 @@ public class EpisodesSpawner : MonoBehaviour
         blackScreenCanvasGroup.blocksRaycasts = true;
         LeanTween.alphaCanvas(blackScreenCanvasGroup, 1f, 1f).setOnComplete(() =>
         {
-            SceneManager.LoadScene(2);
+            Addressables.Release(atlasDBHandle);
+            if (currentAtlasDBPrefab)
+                Destroy(currentAtlasDBPrefab);
+
+            Addressables.Release(loadSoundsBucketHandle);
+            if (currentSoundBucketPrefab)
+                Destroy(currentSoundBucketPrefab);
+
+            Addressables.Release(episodeLoadHandle);
+            if (currentEpisodePrefab)
+                Destroy(currentEpisodePrefab);
+
+            SceneManager.LoadScene(2);      //Main Menu Screen
         });
     }
 

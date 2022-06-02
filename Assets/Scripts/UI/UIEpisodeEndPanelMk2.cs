@@ -68,6 +68,11 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         else
             Destroy(gameObject);
 
+        ResetStuffs();
+    }
+
+    public void ResetStuffs()
+    {
         if (endScreenCanvasGroup)
         {
             endScreenCanvasGroup.alpha = 0;
@@ -75,7 +80,7 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
             endScreenCanvasGroup.blocksRaycasts = false;
         }
 
-        if(noTicketsPanel)
+        if (noTicketsPanel)
         {
             noTicketsPanel.alpha = 0;
             noTicketsPanel.interactable = false;
@@ -83,9 +88,13 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         }
 
         if (noTicketsOkButton)
+        {
+            noTicketsOkButton.interactable = true;
+            noTicketsOkButton.onClick.RemoveAllListeners();
             noTicketsOkButton.onClick.AddListener(OnNoTicketsOkButton);
+        }
 
-        if(congratulationsImage)
+        if (congratulationsImage)
             congratulationsImage.transform.localScale = Vector3.zero;
 
         if (middlePanelPart1)
@@ -94,7 +103,7 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         if (middlePanelPart2)
             middlePanelPart2.anchoredPosition = new Vector2(-1000f, middlePanelPart2.anchoredPosition.y);
 
-        if(nextEpisodeButtonGroups)
+        if (nextEpisodeButtonGroups)
             nextEpisodeButtonGroups.anchoredPosition = new Vector2(-1000f, nextEpisodeButtonGroups.anchoredPosition.y);
 
         if (storyTextPart1)
@@ -111,24 +120,35 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
 
         if (collectDiamondsButton)
         {
-            collectDiamondsButton.transform.localScale = Vector3.zero;
+            collectDiamondsButton.interactable = true;
+            collectDiamondsButton.onClick.RemoveAllListeners();
             collectDiamondsButton.onClick.AddListener(OnEndDiamondCollectButton);
+            
+            collectDiamondsButton.transform.localScale = Vector3.zero;
         }
 
-        if(nextEpisodeButton)
+        if (nextEpisodeButton)
         {
-            nextEpisodeButton.transform.localScale = Vector3.zero;
+            nextEpisodeButton.interactable = true;
+            nextEpisodeButton.onClick.RemoveAllListeners();
             nextEpisodeButton.onClick.AddListener(OnNextEpisodeButton);
+            
+            nextEpisodeButton.transform.localScale = Vector3.zero;
         }
 
-        if(nextEpisodeAdButton)
+        if (nextEpisodeAdButton)
         {
-            nextEpisodeAdButton.transform.localScale = Vector3.zero;
+            nextEpisodeAdButton.interactable = true;
+            nextEpisodeAdButton.onClick.RemoveAllListeners();
             nextEpisodeAdButton.onClick.AddListener(OnNextEpisodeAdButton);
+            
+            nextEpisodeAdButton.transform.localScale = Vector3.zero;
         }
 
         if (noThanksButton)
         {
+            noThanksButton.interactable = true;
+            noThanksButton.onClick.RemoveAllListeners();
             noThanksButton.onClick.AddListener(OnNoThanksButton);
 
             noThanksButtonCanvasGrp = noThanksButton.GetComponent<CanvasGroup>();
@@ -174,10 +194,7 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
 
     public void PlayEndingScreen()
     {
-        if (isTriggered)
-            return;
-
-        isTriggered = true;
+        ResetStuffs();
 
         if (nextEpisodeImage && nextEpisodeImageSprite)
             nextEpisodeImage.sprite = nextEpisodeImageSprite;
@@ -293,7 +310,7 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
 
         noThanksButton.interactable = false;
         nextEpisodeButton.interactable = false;
-        nextEpisodeAdButton.interactable = false;
+        nextEpisodeAdButton.interactable = false;        
 
         if (debitTicketsNextEpisode)
         {
@@ -304,19 +321,29 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
             }
 
             episodesSpawner.diamondsPool.PlayTicketsAnimationDebit(nextEpisodeButton.transform, episodesSpawner.topPanel.ticketsPanelIcon, 1, 1, () =>
-            {
+            {                
                 StartCoroutine(OnNextEpisodeButtonRoutine());
             }, 200f, Color.red);
         }
         else
         {
+            endScreenCanvasGroup.interactable = false;
+            endScreenCanvasGroup.blocksRaycasts = false;
+            LeanTween.alphaCanvas(endScreenCanvasGroup, 0, 1f).setEaseInOutSine();
+
             episodesSpawner.topPanel.HideTopPanel(0.3f, 0.7f);
-            episodesSpawner.StartLoadingStoryScene();
+            episodesSpawner.LoadNextEpisode();
+
+            //episodesSpawner.StartLoadingStoryScene();
         }
     }
 
     private IEnumerator OnNextEpisodeButtonRoutine()
     {
+        endScreenCanvasGroup.interactable = false;
+        endScreenCanvasGroup.blocksRaycasts = false;
+        LeanTween.alphaCanvas(endScreenCanvasGroup, 0, 1f).setEaseInOutSine();
+
         noThanksButton.interactable = false;
         nextEpisodeButton.interactable = false;
         nextEpisodeAdButton.interactable = false;
@@ -330,8 +357,9 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         {
             episodesHandler.NextEpisodeData.isUnlocked = true;
             episodesHandler.SaveStoryData();
-            
-            episodesSpawner.StartLoadingStoryScene();
+
+            //episodesSpawner.StartLoadingStoryScene();
+            episodesSpawner.LoadNextEpisode();
         }
     }
 

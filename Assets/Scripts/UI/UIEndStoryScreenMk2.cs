@@ -58,7 +58,14 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
 
     protected override void Awake()
     {
-        if(noDiamondsPanel)
+        ResetStuffs();
+
+        base.Awake();
+    }
+
+    public void ResetStuffs()
+    {
+        if (noDiamondsPanel)
         {
             noDiamondsPanel.alpha = 0;
             noDiamondsPanel.interactable = false;
@@ -66,7 +73,11 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
         }
 
         if (noDiamondsOkButton)
+        {
+            noDiamondsOkButton.interactable = true;
+            noDiamondsOkButton.onClick.RemoveAllListeners();
             noDiamondsOkButton.onClick.AddListener(OnNoDiamondsOkButton);
+        }
 
         if (middlePanelPartOne)
             middlePanelPartOne.anchoredPosition = new Vector2(-1000f, middlePanelPartOne.anchoredPosition.y);
@@ -82,8 +93,11 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
 
         if (collectDiamondsTicketsButton)
         {
-            collectDiamondsTicketsButton.transform.localScale = Vector3.zero;
+            collectDiamondsTicketsButton.interactable = true;
+            collectDiamondsTicketsButton.onClick.RemoveAllListeners();
             collectDiamondsTicketsButton.onClick.AddListener(OnEndDiamondTicketsCollectButton);
+            
+            collectDiamondsTicketsButton.transform.localScale = Vector3.zero;
         }
 
         if (collectDiamondsText)
@@ -94,18 +108,26 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
 
         if (playEndingButton)
         {
-            playEndingButton.transform.localScale = Vector3.zero;
+            playEndingButton.interactable = true;
+            playEndingButton.onClick.RemoveAllListeners();
             playEndingButton.onClick.AddListener(OnPlayEndingButton);
+            
+            playEndingButton.transform.localScale = Vector3.zero;
         }
 
         if (playEndingButtonAd)
         {
-            playEndingButtonAd.transform.localScale = Vector3.zero;
+            playEndingButtonAd.interactable = true;
+            playEndingButtonAd.onClick.RemoveAllListeners();
             playEndingButtonAd.onClick.AddListener(OnPlayEndingButtonAd);
+            
+            playEndingButtonAd.transform.localScale = Vector3.zero;
         }
 
         if (noThanksButton)
         {
+            noThanksButton.interactable = true;
+            noThanksButton.onClick.RemoveAllListeners();
             noThanksButton.onClick.AddListener(OnNoThanksButton);
 
             noThanksButtonCanvasGrp = noThanksButton.GetComponent<CanvasGroup>();
@@ -113,8 +135,6 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
             noThanksButtonCanvasGrp.interactable = false;
             noThanksButtonCanvasGrp.blocksRaycasts = false;
         }
-
-        base.Awake();
     }
 
     private void OnEnable()
@@ -156,10 +176,7 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
     [ContextMenu("Play Story End Screen")]
     public override void PlayEndingStoryScreen()
     {
-        if (isTriggered)
-            return;
-
-        isTriggered = true;
+        ResetStuffs();
 
         if (!endScreenCanvasGroup.gameObject.activeSelf)
             endScreenCanvasGroup.gameObject.SetActive(true);
@@ -354,6 +371,13 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
         episodesSpawner.topPanel.HideTopPanel(0.3f, 0.7f);
 
         yield return new WaitForSeconds(0.5f);
+
+        endScreenCanvasGroup.interactable = false;
+        endScreenCanvasGroup.blocksRaycasts = false;
+        LeanTween.alphaCanvas(endScreenCanvasGroup, 0, 1f).setEaseInOutSine();
+
+        if (episodesHandler == null)
+            episodesHandler = FindObjectOfType<EpisodesHandler>();
 
         //episodesSpawner.StartLoadingStoryScene();
         if (episodesHandler != null)

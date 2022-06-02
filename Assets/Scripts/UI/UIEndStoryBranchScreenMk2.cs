@@ -54,6 +54,13 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
 
     protected override void Awake()
     {
+        ResetStuffs();
+
+        base.Awake();
+    }
+
+    public void ResetStuffs()
+    {
         if (noDiamondsPanel)
         {
             noDiamondsPanel.alpha = 0;
@@ -62,7 +69,11 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
         }
 
         if (noDiamondsOkButton)
+        {
+            noDiamondsOkButton.interactable = true;
+            noDiamondsOkButton.onClick.RemoveAllListeners();
             noDiamondsOkButton.onClick.AddListener(OnNoDiamondsOkButton);
+        }
 
         if (middlePanelPartOne)
             middlePanelPartOne.anchoredPosition = new Vector2(-1000f, middlePanelPartOne.anchoredPosition.y);
@@ -75,27 +86,38 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
 
         if (collectDiamondsButton)
         {
-            collectDiamondsButton.transform.localScale = Vector3.zero;
+            collectDiamondsButton.interactable = true;
+            collectDiamondsButton.onClick.RemoveAllListeners();
             collectDiamondsButton.onClick.AddListener(OnBranchedDiamondCollectButton);
+
+            collectDiamondsButton.transform.localScale = Vector3.zero;
         }
 
         if (collectDiamondsText)
             collectDiamondsText.text = "0";
 
-        if(playEndingButton)
+        if (playEndingButton)
         {
-            playEndingButton.transform.localScale = Vector3.zero;
+            playEndingButton.interactable = true;
+            playEndingButton.onClick.RemoveAllListeners();
             playEndingButton.onClick.AddListener(OnPlayEndingButton);
+
+            playEndingButton.transform.localScale = Vector3.zero;
         }
 
-        if(playEndingButtonAd)
+        if (playEndingButtonAd)
         {
-            playEndingButtonAd.transform.localScale = Vector3.zero;
+            playEndingButtonAd.interactable = true;
+            playEndingButtonAd.onClick.RemoveAllListeners();
             playEndingButtonAd.onClick.AddListener(OnPlayEndingButtonAd);
+
+            playEndingButtonAd.transform.localScale = Vector3.zero;
         }
 
-        if(noThanksButton)
+        if (noThanksButton)
         {
+            noThanksButton.interactable = true;
+            noThanksButton.onClick.RemoveAllListeners();
             noThanksButton.onClick.AddListener(OnNoThanksButton);
 
             noThanksButtonCanvasGrp = noThanksButton.GetComponent<CanvasGroup>();
@@ -103,8 +125,6 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
             noThanksButtonCanvasGrp.interactable = false;
             noThanksButtonCanvasGrp.blocksRaycasts = false;
         }
-
-        base.Awake();
     }
 
     private void OnEnable()
@@ -144,10 +164,7 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
     [ContextMenu("Play Branch End Screen")]
     public override void PlayEndingStoryBranchScreen()
     {
-        if (isTriggered)
-            return;
-
-        isTriggered = true;
+        ResetStuffs();
 
         if (!endScreenBranchCanvasGroup.gameObject.activeSelf)
             endScreenBranchCanvasGroup.gameObject.SetActive(true);
@@ -337,17 +354,25 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
     }
 
     private void OnBranchedDiamondDebitComplete()
-    {
+    {        
         StartCoroutine(OnBranchedDiamondDebitCompleteRoutine());
     }
 
     private IEnumerator OnBranchedDiamondDebitCompleteRoutine()
     {
+        if (episodesSpawner == null && EpisodesSpawner.instance)
+            episodesSpawner = EpisodesSpawner.instance;
+
         episodesSpawner.topPanel.HideTopPanel(0.3f, 0.7f);
         
         yield return new WaitForSeconds(0.5f);
 
-        episodesSpawner.StartLoadingStoryScene();
+        endScreenBranchCanvasGroup.interactable = false;
+        endScreenBranchCanvasGroup.blocksRaycasts = false;
+        LeanTween.alphaCanvas(endScreenBranchCanvasGroup, 0, 1f).setEaseInOutSine();
+
+        //episodesSpawner.StartLoadingStoryScene();
+        episodesSpawner.LoadNextEpisode();
     }
 
     private void OnPlayEndingButtonAd()
@@ -385,7 +410,7 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
         playEndingButton.interactable = false;
         playEndingButtonAd.interactable = false;
 
-        EpisodesSpawner.instance.LoadEpisodesMainMenu(false);
+        episodesSpawner.LoadEpisodesMainMenu(false);
     }
 
     //-------------------------------------------------------------------------------------------------------

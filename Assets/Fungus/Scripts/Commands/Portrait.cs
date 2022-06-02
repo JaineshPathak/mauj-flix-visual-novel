@@ -162,7 +162,7 @@ namespace Fungus
         public override void OnEnter()
         {
             if (character != null && display == DisplayType.Show)
-                portrait = character.GetPortrait(portrait.name);
+                portrait = character.GetPortrait(_PortraitName);
 
             // Selected "use default Portrait Stage"
             if (stage == null)

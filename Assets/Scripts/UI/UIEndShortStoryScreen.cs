@@ -31,6 +31,11 @@ public class UIEndShortStoryScreen : MonoBehaviour
 
     private void Awake()
     {
+        ResetStuffs();
+    }
+
+    public void ResetStuffs()
+    {
         if (mainCanvasGroup)
         {
             mainCanvasGroup.alpha = 0;
@@ -59,6 +64,8 @@ public class UIEndShortStoryScreen : MonoBehaviour
 
         if (collectDiamondsButton)
         {
+            collectDiamondsButton.interactable = true;
+            collectDiamondsButton.onClick.RemoveAllListeners();
             collectDiamondsButton.onClick.AddListener(OnCollectDiamondsButton);
             collectDiamondsButton.transform.localScale = Vector3.zero;
         }
@@ -76,10 +83,7 @@ public class UIEndShortStoryScreen : MonoBehaviour
     [ContextMenu("Play Short Story End Screen")]
     public void PlayEndingShortStoryScreen()
     {
-        if (isTriggered)
-            return;
-
-        isTriggered = true;
+        ResetStuffs();
 
         if (!mainCanvasGroup.gameObject.activeSelf)
             mainCanvasGroup.gameObject.SetActive(true);

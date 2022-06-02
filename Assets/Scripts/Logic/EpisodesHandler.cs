@@ -566,7 +566,8 @@ public class EpisodesHandler : MonoBehaviour
 
             SaveStoryData();
 
-            episodesSpawner.StartLoadingStoryScene();
+            //episodesSpawner.StartLoadingStoryScene();
+            episodesSpawner.LoadNextEpisode();
         }
     }
 

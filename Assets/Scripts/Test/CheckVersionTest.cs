@@ -32,7 +32,7 @@ public class CheckVersionTest : MonoBehaviour
                 if (node.NodeType == HtmlNodeType.Element)
                 {
                     //print(node.InnerText);
-                    if (node.InnerText.Equals("Current Version"))
+                    if (node.InnerText.Equals("Version"))
                     {
                         print(node.InnerText);
                         print(node.NextSibling.InnerText);

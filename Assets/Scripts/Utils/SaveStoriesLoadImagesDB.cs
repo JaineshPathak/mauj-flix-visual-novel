@@ -1,11 +1,10 @@
-﻿using System;
+﻿#if UNITY_EDITOR
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-#if UNITY_EDITOR
 using UnityEditor;
-#endif
 
 public class SaveStoriesLoadImagesDB : MonoBehaviour
 {
@@ -48,7 +47,6 @@ public class SaveStoriesLoadImagesDB : MonoBehaviour
     }
 }
 
-#if UNITY_EDITOR
 [CustomEditor(typeof(SaveStoriesLoadImagesDB))]
 public class SaveStoriesLoadImagesDBEditor : Editor
 {

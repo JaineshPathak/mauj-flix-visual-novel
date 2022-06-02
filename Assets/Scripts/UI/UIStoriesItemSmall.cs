@@ -113,15 +113,21 @@ public class UIStoriesItemSmall : MonoBehaviour
             }
         }
 
-        if (storyItem.storyFlowchartKey.Length > 0)
+        if (/*storyItem.storyFlowchartKey.Length > 0*/ !string.IsNullOrEmpty(storyItem.storyFlowchartKey))
         {
             AsyncOperationHandle<GameObject> flowchartLoading = Addressables.LoadAssetAsync<GameObject>(storyItem.storyFlowchartKey);
             flowchartLoading.Completed += OnFlowchartLoadingDone;
         }
+        else
+            PostSetupStuffs(true);
 
         if(ThumbnailsBucket.instance != null)
         {
             thumbnailSmallImage.sprite = ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailSmallName, ThumbnailType.Small);
+
+            if (thumbnailSmallImage.sprite != null && storyLoadingText)
+                storyLoadingText.SetActive(false);
+
             thumbnailBigSprite = ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailBigName, ThumbnailType.Big);
             thumbnailLoadingSprite = ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailLoadingName, ThumbnailType.Loading);
             thumbnailTitleSprite = ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailTitleName, ThumbnailType.Title);
@@ -287,7 +293,9 @@ public class UIStoriesItemSmall : MonoBehaviour
 
     private void PostSetupStuffs(bool checkRoutine = false)
     {
-        storyLoadingText.SetActive(false);
+        if(storyLoadingText)
+            storyLoadingText.SetActive(false);
+
         if (storyItem.storyEpisodesKeys.Length > 0)
         {
             storyButton.interactable = true;
