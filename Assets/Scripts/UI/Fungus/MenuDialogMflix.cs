@@ -40,6 +40,8 @@ public class MenuDialogMflix : MenuDialog
             cachedButtonsDiamondPanel[i] = cachedButtons[i].transform.Find("DiamondCostPanel");
 
             cachedShineEffectAnim[i] = cachedButtons[i].GetComponent<Animator>();
+            cachedShineEffectAnim[i].Rebind();
+            cachedShineEffectAnim[i].Update(0);
             cachedShineEffectAnim[i].enabled = false;
         }
 
@@ -216,8 +218,10 @@ public class MenuDialogMflix : MenuDialog
             buttonImage.sprite = costSprite;
             buttonDiamondPanel.gameObject.SetActive(true);
             buttonDiamondCostText.text = diamondCost.ToString();
-            buttonText.color = Color.black;
+            buttonText.color = Color.black;            
             buttonShineAim.enabled = true;
+            buttonShineAim.Rebind();
+            buttonShineAim.Update(0);
         }
         else
         {
@@ -226,6 +230,8 @@ public class MenuDialogMflix : MenuDialog
             buttonDiamondCostText.text = "";
             buttonText.color = Color.white;
             buttonShineAim.enabled = false;
+            buttonShineAim.Rebind();
+            buttonShineAim.Update(0);
         }
 
         /*

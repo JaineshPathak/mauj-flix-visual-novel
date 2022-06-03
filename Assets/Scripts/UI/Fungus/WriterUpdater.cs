@@ -6,15 +6,15 @@ using UnityEngine.UI;
 using Fungus;
 using TMPro;
 
-public class WriterUpdater : MonoBehaviour
+public enum HindiCorrectorType
 {
-    private enum HindiCorrectorType
-    {
-        Type_VassCreatick,
-        Type_ClumsyDev,
-        Type_Siddhanta
-    };
+    Type_VassCreatick,
+    Type_ClumsyDev,
+    Type_Siddhanta
+};
 
+public class WriterUpdater : MonoBehaviour
+{    
     [SerializeField] private HindiCorrectorType languageCorrectorType;
     [SerializeField] private float waitDelay = 0.05f;
 
@@ -61,7 +61,7 @@ public class WriterUpdater : MonoBehaviour
         {
             //Debug.Log("Writing started");
             //Invoke("CharReplacerDelayed", 0.1f);
-            StartCoroutine(CharReplacerDelayedRoutine());
+            //StartCoroutine(CharReplacerDelayedRoutine());
 
             if(playHandIcon && handIconPanel != null)
             {

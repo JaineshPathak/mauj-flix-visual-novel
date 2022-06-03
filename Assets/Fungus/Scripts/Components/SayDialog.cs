@@ -451,15 +451,37 @@ namespace Fungus
                 var subbedName = stringSubstituter.SubstituteStrings(name);
 
                 var hindiSubbedName = string.Empty;
-                CharReplacerHindi charReplacer = GetWriter().CharReplacerFixer;
-                
-                if (charReplacer)
+
+                switch (GetWriter().correctorType)
                 {
-                    hindiSubbedName = charReplacer.GetFixedText(subbedName);
-                    NameText = hindiSubbedName;
-                }
-                else
-                    NameText = subbedName;
+                    case HindiCorrectorType.Type_VassCreatick:
+                        
+                        CharReplacerHindi charReplacer = GetWriter().CharReplacerFixer;
+
+                        if (charReplacer)
+                        {
+                            hindiSubbedName = charReplacer.GetFixedText(subbedName);
+                            NameText = hindiSubbedName;
+                        }
+                        else
+                            NameText = subbedName;
+
+                        break;
+
+                    case HindiCorrectorType.Type_ClumsyDev:
+
+                        hindiSubbedName = HindiCorrector.GetCorrectedHindiText(subbedName);
+                        NameText = hindiSubbedName;
+
+                        break;
+
+                    case HindiCorrectorType.Type_Siddhanta:
+
+                        hindiSubbedName = HindiCorrector2.Correct(subbedName);
+                        NameText = hindiSubbedName;
+
+                        break;
+                }                
 
                 nameTextAdapter.SetTextColor(color);
             }

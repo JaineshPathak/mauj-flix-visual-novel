@@ -62,6 +62,7 @@ namespace Fungus
 
         [Space(15)]
 
+        public HindiCorrectorType correctorType;
         [SerializeField] protected CharReplacerHindi charReplacerFixer;
         [SerializeField] protected SiddhantaFixer siddhantaFixer;
 
@@ -980,7 +981,7 @@ namespace Fungus
             if(content.Length > 0)
             {
                 //currentContent = 
-                if(siddhantaFixer != null && charReplacerFixer == null)
+                /*if(siddhantaFixer != null && charReplacerFixer == null)
                 {
                     currentContent = HindiCorrector2.Correct(content);
                     content = currentContent;
@@ -989,6 +990,33 @@ namespace Fungus
                 {
                     currentContent = charReplacerFixer.GetFixedText(content);
                     content = currentContent;
+                }*/
+
+                switch (correctorType)
+                {
+                    case HindiCorrectorType.Type_VassCreatick:
+
+                        if (charReplacerFixer)
+                        {
+                            currentContent = charReplacerFixer.GetFixedText(content);
+                            content = currentContent;
+                        }
+                        
+                        break;
+
+                    case HindiCorrectorType.Type_ClumsyDev:
+
+                        currentContent = HindiCorrector.GetCorrectedHindiText(content);
+                        content = currentContent;
+
+                        break;
+
+                    case HindiCorrectorType.Type_Siddhanta:
+
+                        currentContent = HindiCorrector2.Correct(content);
+                        content = currentContent;
+
+                        break;
                 }
             }
 

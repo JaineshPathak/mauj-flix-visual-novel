@@ -37,6 +37,9 @@ public class EnglishInHindiFix : MonoBehaviour
 
     private void OnValidate()
     {
+        if (flowchart == null)
+            flowchart = GetComponentInChildren<Flowchart>();
+
         variableNamesProper.Clear();
 
         if (variableReferences.Length > 0)

@@ -151,7 +151,11 @@ public class UICharacterSelection : MonoBehaviour
             diamondCostText.text = Mathf.RoundToInt(characterDataAssets[currentCharacterIndex].diamondCost).ToString();
 
             if (buttonShineAnim != null)
+            {
                 buttonShineAnim.enabled = true;
+                buttonShineAnim.Rebind();
+                buttonShineAnim.Update(0);
+            }
         }
         else
         {
@@ -165,7 +169,11 @@ public class UICharacterSelection : MonoBehaviour
             diamondCostText.text = "";
 
             if (buttonShineAnim != null)
+            {
+                buttonShineAnim.Rebind();
+                buttonShineAnim.Update(0);
                 buttonShineAnim.enabled = false;
+            }
         }
     }
 
