@@ -31,13 +31,12 @@ public class CheckVersionTest : MonoBehaviour
             {
                 if (node.NodeType == HtmlNodeType.Element)
                 {
-                    //print(node.InnerText);
-                    if (node.InnerText.Equals("Version"))
+                    if (node.InnerText.Contains("Version"))
                     {
                         print(node.InnerText);
                         print(node.NextSibling.InnerText);
                     }
-                }
+                }                
             }
 
             /*var nodes = playStoreBody.Elements("div");

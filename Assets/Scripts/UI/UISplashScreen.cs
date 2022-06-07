@@ -10,6 +10,9 @@ using TMPro;
 
 public class UISplashScreen : MonoBehaviour
 {
+    [Header("Stories Database")]
+    public AssetReference storiesDBKey;
+
     [Header("Stories Load Images Database")]
     public string storiesLoadImagesKey;
     public CanvasGroup imageLoadingCanvasGroup;

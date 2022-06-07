@@ -331,7 +331,7 @@ public class UIEndStoryScreenMk2 : UIEndStoryScreen
         if (FirebaseFirestoreOffline.instance == null)
             return;
 
-        if(FirebaseFirestoreHandler.instance.GetUserDiamondsAmountInt() < 5)
+        if(FirebaseFirestoreOffline.instance.GetDiamondsAmountInt() < 5)
         {
             ShowNoDiamondsPopup();
             return;

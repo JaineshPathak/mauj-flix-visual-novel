@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 2754224763897394266}
   - component: {fileID: 3239092451118506933}
   - component: {fileID: 6777568667784069044}
+  - component: {fileID: 6052817134249935463}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: SubmitNameText(TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -68,8 +69,7 @@ MonoBehaviour:
   m_text: "\u091A\u0941\u0928\u0947"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e748469943340b54bb3b8b7cf7b05ce5, type: 2}
-  m_sharedMaterial: {fileID: -3468323150492546538, guid: e748469943340b54bb3b8b7cf7b05ce5,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 7ae452304b44d294793bc152c1d22b3e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -93,13 +93,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 60
-  m_fontSizeBase: 60
+  m_fontSize: 65
+  m_fontSizeBase: 65
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -135,6 +135,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6052817134249935463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100433859636072129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06b80e40639e5ae4d934db20e6b0012b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Convertedvalue: 
+  OriginalText: 
 --- !u!1 &331241350042700068
 GameObject:
   m_ObjectHideFlags: 0
@@ -1952,6 +1966,7 @@ MonoBehaviour:
   forceRichText: 1
   instantComplete: 0
   doReadAheadText: 1
+  correctorType: 0
   charReplacerFixer: {fileID: 7052908691141250132}
   siddhantaFixer: {fileID: 0}
   currentContent: 
@@ -2013,7 +2028,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickMode: 0
   nextClickDelay: 0
-  cancelEnabled: 1
+  cancelEnabled: 0
   ignoreMenuClicks: 1
 --- !u!82 &8988363887921012293
 AudioSource:

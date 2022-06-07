@@ -2,6 +2,7 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Diagnostics;
+using System;
 
 public class SaveLoadGame : MonoBehaviour
 {
@@ -51,6 +52,28 @@ public class SaveLoadGame : MonoBehaviour
         }
         else
             UnityEngine.Debug.Log(configFilePath + " - No such File Found!");
+    }
+
+    public static void DeleteAllProgress()
+    {
+        string progressPath = Path.Combine(Application.persistentDataPath, "progress");
+
+        DirectoryInfo progressDirInfo = new DirectoryInfo(progressPath);
+        
+        if(progressDirInfo.GetFiles().Length <= 0)
+        {
+            UnityEngine.Debug.Log(progressPath + " - Directory is Empty!");
+            return;
+        }
+
+        int count = 0;
+        foreach (FileInfo file in progressDirInfo.GetFiles())
+        {
+            file.Delete();
+            count++;
+        }
+
+        UnityEngine.Debug.Log(progressPath + (count > 0 ? " - Directory Cleared with Total : " + count : "- Directory is Empty!"));
     }
 
     public static bool CheckForFile()

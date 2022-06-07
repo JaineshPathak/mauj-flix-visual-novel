@@ -15,6 +15,10 @@ public class BottomButton
     public Color buttonTextColorOn = Color.white;
     public Color buttonTextColorOff;
 
+    [Space(10)]
+
+    public GameObject selectedIcon;
+
     public void SetButtonOn()
     {
         if (buttonMain == null || buttonOn == null)
@@ -24,6 +28,9 @@ public class BottomButton
 
         if (buttonText)
             buttonText.color = buttonTextColorOn;
+
+        if (selectedIcon)
+            selectedIcon.SetActive(true);
     }
 
     public void SetButtonOff()
@@ -35,6 +42,9 @@ public class BottomButton
 
         if (buttonText)
             buttonText.color = buttonTextColorOff;
+
+        if (selectedIcon)
+            selectedIcon.SetActive(false);
     }
 }
 

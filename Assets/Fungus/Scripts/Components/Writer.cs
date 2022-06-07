@@ -992,6 +992,7 @@ namespace Fungus
                     content = currentContent;
                 }*/
 
+                currentContent = content;
                 switch (correctorType)
                 {
                     case HindiCorrectorType.Type_VassCreatick:
@@ -1006,8 +1007,8 @@ namespace Fungus
 
                     case HindiCorrectorType.Type_ClumsyDev:
 
-                        currentContent = HindiCorrector.GetCorrectedHindiText(content);
-                        content = currentContent;
+                        //currentContent = HindiCorrector.GetCorrectedHindiText(content);                       
+                        //content = currentContent;                        
 
                         break;
 
@@ -1033,8 +1034,10 @@ namespace Fungus
 
             // If this clip is null then WriterAudio will play the default sound effect (if any)
             NotifyStart(audioClip);
-
-            string tokenText = TextVariationHandler.SelectVariations(content);
+            
+            string tokenText = string.Empty;
+            if (!string.IsNullOrEmpty(content))
+                tokenText = TextVariationHandler.SelectVariations(content);
             
             if (waitForInput)
             {

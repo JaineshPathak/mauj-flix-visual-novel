@@ -35,9 +35,15 @@ public class WriterUpdater : MonoBehaviour
     public CanvasGroup handIconPanel;
 
     private int handSeqId;
-    //private LTSeq handSeq;    
+    private static WaitForSeconds waitDelayed;
+    //private LTSeq handSeq;
 
-    void OnEnable()
+    private void Awake()
+    {
+        waitDelayed = new WaitForSeconds(waitDelay);
+    }
+
+    private void OnEnable()
     {
         // Register as listener for Writer state change events
         WriterSignals.OnWriterState += OnWriterState;        
@@ -49,11 +55,11 @@ public class WriterUpdater : MonoBehaviour
         }*/
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         // Unregister as listener for Writer state change events
         WriterSignals.OnWriterState -= OnWriterState;        
-    }
+    }    
 
     void OnWriterState(Writer writer, WriterState writerState)
     {
@@ -61,7 +67,7 @@ public class WriterUpdater : MonoBehaviour
         {
             //Debug.Log("Writing started");
             //Invoke("CharReplacerDelayed", 0.1f);
-            //StartCoroutine(CharReplacerDelayedRoutine());
+            StartCoroutine(CharReplacerDelayedRoutine());
 
             if(playHandIcon && handIconPanel != null)
             {
@@ -85,7 +91,7 @@ public class WriterUpdater : MonoBehaviour
 
     private IEnumerator CharReplacerDelayedRoutine()
     {
-        yield return new WaitForSeconds(waitDelay);
+        yield return waitDelayed;
 
         CharReplacerDelayed();
     }
@@ -102,10 +108,11 @@ public class WriterUpdater : MonoBehaviour
 
             case HindiCorrectorType.Type_ClumsyDev:
 
-                textObject.SetHindiTMPro(textObject.text);
+                if(textObject)
+                    textObject.SetHindiTMPro(textObject.text);               
 
-                //if (characterNameTextObject != null)
-                    //characterNameTextObject.SetHindiTMPro(characterNameTextObject.text);
+                if (characterNameTextObject)
+                    characterNameTextObject.SetHindiTMPro(characterNameTextObject.text);
 
                 break;
 

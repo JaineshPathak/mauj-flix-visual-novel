@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.U2D;
 using TMPro;
 using underDOGS.SDKEvents;
+using System.Linq;
 
 public class UIStoriesDetailsPanel : MonoBehaviour
 {
@@ -26,9 +28,10 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     public Image storyThumbnailTitleImage;
     [HideInInspector] public Sprite storyThumbnailLoadingImage;
 
-    [Space(15)]
-
+    [Header("Share")]
     public UIShareButton shareButton;
+    public Image storyThumbnailBigShareImage;
+    public Image storyThumbnailTitleShareImage;
 
     [Header("Episodes Section")]
     public UIEpisodeItem episodeItemPrefab;
@@ -161,10 +164,19 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             buttonsGroupSizeFitter.enabled = true;
 
             if (shareButton && episodesSpawner)
+            {
                 shareButton.Setup(episodesSpawner.storyTitle, episodesSpawner.storyTitleEnglish, episodesSpawner.storyThumbnailSmallSprite);
+                //shareButton.Setup(episodesSpawner.storyTitle, episodesSpawner.storyTitleEnglish, ThumbnailsBucket.instance.GetThumbnailSprite(episodesSpawner.storiesDBItem.storyThumbnailSmallName, ThumbnailType.Small));
+
+                //Sprite thumbnailSpriteShare = Sprite.Create(episodesSpawner.storyThumbnailSmallSprite.texture, new Rect(0, 0, episodesSpawner.storyThumbnailSmallSprite.texture.width, episodesSpawner.storyThumbnailSmallSprite.texture.height), new Vector2(0.5f, 0.5f), 100f);
+                //shareButton.Setup(episodesSpawner.storyTitle, episodesSpawner.storyTitleEnglish, thumbnailSpriteShare);
+            }
 
             storyThumbnailBigImage.sprite = episodesSpawner.storyThumbnailBigSprite;
             storyThumbnailTitleImage.sprite = episodesSpawner.storyloadingTitleImage.sprite;
+
+            storyThumbnailBigShareImage.sprite = episodesSpawner.storyThumbnailBigSprite;
+            storyThumbnailTitleShareImage.sprite = episodesSpawner.storyloadingTitleImage.sprite;
 
             storyItem = episodesSpawner.storiesDBItem;
             storyData = episodesSpawner.storyData;
@@ -286,8 +298,15 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
         if (isShown)
         {
-            if(shareButton)
+            if (shareButton)
+            {
                 shareButton.Setup(_storyTitle, _storyTitleEng, _thumbnailSmallSprite);
+                
+                //Sprite thumbnailSpriteShare = Sprite.Create(_thumbnailSmallSprite.texture, new Rect(0, 0, _thumbnailSmallSprite.texture.width, _thumbnailSmallSprite.texture.height), new Vector2(0.5f, 0.5f), 100f);
+                //shareButton.Setup(_storyTitle, _storyTitleEng, thumbnailSpriteShare);
+                
+                //print("NEW SHARE NAME: " + thumbnailSpriteShare.texture.name);
+            }
 
             episodesSpawner.storyTitle = _storyTitle;
             episodesSpawner.storyTitleEnglish = _storyTitleEng;
@@ -324,7 +343,23 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             storyThumbnailTitleImage.sprite = _thumbnailTitleSprite;
             storyThumbnailLoadingImage = _thumbnailLoadingSprite;
 
-            if(episodesSpawner.playerData.HasStoryLiked(_storyTitleEng))
+            storyThumbnailBigShareImage.sprite = _thumbnailBigSprite;
+            storyThumbnailTitleShareImage.sprite = _thumbnailTitleSprite;
+
+            /*print("NEW SHARE 1: " + storyThumbnailBigImage.mainTexture.name);
+            print("NEW SHARE 2: " + storyThumbnailBigImage.sprite.name);
+            print("NEW SHARE 3: " + storyThumbnailBigImage.sprite.rect.width + ", " + storyThumbnailBigImage.sprite.rect.height);
+            print("NEW SHARE 4: " + storyThumbnailBigImage.sprite.texture.width + ", " + storyThumbnailBigImage.sprite.texture.height);
+
+            Texture2D texBigFromSprite = TextureFromSpriteAtlas(storyThumbnailBigImage.sprite);
+            texBigFromSprite.name = "TEST(CLONE)";
+            print($"TEXTURE SHARE 1: {texBigFromSprite.name}, {texBigFromSprite.width}, {texBigFromSprite.height}");
+
+            Sprite thumbnailSpriteShare = Sprite.Create(texBigFromSprite, new Rect(0, 0, texBigFromSprite.width, texBigFromSprite.height), new Vector2(0.5f, 0.5f), 100f);
+            thumbnailSpriteShare.name = "YO(CLONE)";
+            storyThumbnailBigImage.sprite = thumbnailSpriteShare;*/
+
+            if (episodesSpawner.playerData.HasStoryLiked(_storyTitleEng))
             {
                 likeImage.gameObject.SetActive(true);
                 likeOutlineImage.gameObject.SetActive(false);
@@ -760,4 +795,57 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     }
 
     //===============================================================================================================
+
+    /*public static Texture2D ConvertSpriteToTexture(Sprite sprite)
+    {
+        try
+        {
+            if (sprite.rect.width != sprite.texture.width)
+            {
+                Texture2D newText = new Texture2D((int)sprite.rect.width, (int)sprite.rect.height);
+                Color[] colors = newText.GetPixels();
+                Color[] newColors = sprite.texture.GetPixels((int)System.Math.Ceiling(sprite.textureRect.x),
+                                                             (int)System.Math.Ceiling(sprite.textureRect.y),
+                                                             (int)System.Math.Ceiling(sprite.textureRect.width),
+                                                             (int)System.Math.Ceiling(sprite.textureRect.height));
+                Debug.Log(colors.Length + "_" + newColors.Length);
+                newText.SetPixels(newColors);
+                newText.Apply();
+                return newText;
+            }
+            else
+                return sprite.texture;
+        }
+        catch
+        {
+            return sprite.texture;
+        }
+    }
+
+    public static Texture2D TextureFromSpriteAtlas(Sprite sprite)
+    {
+        if (sprite.rect.width != sprite.texture.width)
+        {
+            int texWid = (int)sprite.rect.width;
+            int texHei = (int)sprite.rect.height;
+            
+            Texture2D newTex = new Texture2D(texWid, texHei);
+            Color[] defaultPixels = Enumerable.Repeat<Color>(new Color(1, 1, 1, 1), texWid * texHei).ToArray();
+            Color[] pixels = sprite.texture.GetPixels(Mathf.CeilToInt(sprite.textureRect.x)
+            , Mathf.CeilToInt(sprite.textureRect.y)
+            , Mathf.CeilToInt(sprite.textureRect.width)
+            , Mathf.CeilToInt(sprite.textureRect.height));
+
+            newTex.name = "TEST(Clone)";
+            //newTex.SetPixels(defaultPixels);
+            newTex.SetPixels(Mathf.CeilToInt(sprite.textureRectOffset.x), Mathf.CeilToInt(sprite.textureRectOffset.y), Mathf.CeilToInt(sprite.textureRect.width), Mathf.CeilToInt(sprite.textureRect.height), pixels);
+            newTex.Apply();
+            
+            return newTex;
+        }
+        else
+        {
+            return sprite.texture;
+        }
+    }*/
 }

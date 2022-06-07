@@ -111,11 +111,26 @@ public class UICharacterSelection : MonoBehaviour
         if (canvasGroup.alpha <= 0)
             return;
 
+        StopCoroutine("SelectUpdateRoutine");
+
         canvasGroup.interactable = false;
         canvasGroup.blocksRaycasts = false;
         LeanTween.alphaCanvas(canvasGroup, 0, 1f).setEaseInOutSine();
+    }
+
+    public void HideSelectionScreen(Action onComplete)
+    {
+        if (canvasGroup == null)
+            return;
+
+        if (canvasGroup.alpha <= 0)
+            return;
 
         StopCoroutine("SelectUpdateRoutine");
+
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+        LeanTween.alphaCanvas(canvasGroup, 0, 1f).setEaseInOutSine().setOnComplete( () => onComplete?.Invoke() );
     }
 
     private void NextCharacter()

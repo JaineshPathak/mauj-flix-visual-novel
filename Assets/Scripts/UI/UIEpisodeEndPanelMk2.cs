@@ -265,9 +265,14 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         seqPart2.append(LeanTween.alphaCanvas(storyTextPart2, 1f, 0.5f));
         seqPart2.append(LeanTween.scale(nextEpisodeButton.gameObject, Vector3.one, 0.4f).setOnStart( () => 
         {
+            OnNextEpisodePanelOpened?.Invoke();
+
+            if (episodesSpawner)
+                episodesSpawner.topPanel.ShowTopPanel();
+
             //If the next episode is already unlocked i.e If User is playing the already unlocked episode again, then don't debit the tickets
             //If not unlocked then do debit the tickets and unlock the episode
-            if(episodesHandler != null && episodesHandler.NextEpisodeData != null)
+            if (episodesHandler != null && episodesHandler.NextEpisodeData != null)
                 debitTicketsNextEpisode = episodesHandler.NextEpisodeData.isUnlocked ? false : true;
 
             if (nextEpisodeTicketIcon && nextEpisodeText)
@@ -287,16 +292,14 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
         }).setEase(outBackMore));
         seqPart2.append(3f);
         seqPart2.append(LeanTween.alphaCanvas(noThanksButtonCanvasGrp, 1f, 1f).setOnStart(() =>
-        {
-            OnNextEpisodePanelOpened?.Invoke();
-
+        {            
             noThanksButton.interactable = true;
             noThanksButtonCanvasGrp.interactable = true;
             noThanksButtonCanvasGrp.blocksRaycasts = true;
         }).setEase(LeanTweenType.easeInOutSine).setOnComplete( () => 
         {
-            if (episodesSpawner)
-                episodesSpawner.topPanel.ShowTopPanel();
+            //if (episodesSpawner)
+                //episodesSpawner.topPanel.ShowTopPanel();
         }));
     }
 
@@ -314,14 +317,14 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
 
         if (debitTicketsNextEpisode)
         {
-            if ( (FirebaseFirestoreHandler.instance != null) && FirebaseFirestoreOffline.instance.GetTicketsAmountInt() < 1)
+            if ( (FirebaseFirestoreOffline.instance != null) && FirebaseFirestoreOffline.instance.GetTicketsAmountInt() < 1)
             {
                 ShowNoTicketsPopup();
                 return;
             }
 
             episodesSpawner.diamondsPool.PlayTicketsAnimationDebit(nextEpisodeButton.transform, episodesSpawner.topPanel.ticketsPanelIcon, 1, 1, () =>
-            {                
+            {
                 StartCoroutine(OnNextEpisodeButtonRoutine());
             }, 200f, Color.red);
         }

@@ -90,7 +90,7 @@ public class GameController : MonoBehaviour
 
             case AsyncOperationStatus.Failed:
                 detailsPanel?.SetStoryBufferingImageStatus(false);
-                Debug.LogError("GAMECONTROLLER: Failed to load Stories Database. Please make sure that Json file exists and it is set as Addressables and it is stored in Cloud Server (CDN).");
+                Debug.LogError("GAMECONTROLLER: Failed to load Stories Database. Please make sure that JSON file exists and it is set as Addressables and it is stored in Cloud Server (CDN).");
                 break;
         }
     }

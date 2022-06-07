@@ -210,8 +210,15 @@ public class MenuDialogMflix : MenuDialog
         var buttonDiamondCostText = cachedButtonsDiamondsCostText[nextOptionIndex];
         var buttonShineAim = cachedShineEffectAnim[nextOptionIndex];
 
-        if (buttonShineAim)
-            buttonShineAim.enabled = false;
+        //if (buttonShineAim)
+        //buttonShineAim.enabled = false;
+
+        for (int i = 0; i < cachedShineEffectAnim.Length && (cachedShineEffectAnim.Length > 0); i++)
+        {
+            cachedShineEffectAnim[i].enabled = false;
+            cachedShineEffectAnim[i].Rebind();
+            cachedShineEffectAnim[i].Update(0);
+        }
 
         if (hasDiamondCost)
         {

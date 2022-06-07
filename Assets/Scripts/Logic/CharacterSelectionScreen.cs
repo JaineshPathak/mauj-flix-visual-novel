@@ -261,17 +261,33 @@ public class CharacterSelectionScreen : MonoBehaviour
 
                 episodesHandler.SelectCharacter(characterGender, characterDataAssets[currentCharacterIndex], characterVariableRef, currentCharacterIndex, true);
 
-                if(messageReceiversMaujflix.Length > 0)
+                if(UICharacterSelection.instance != null)
                 {
-                    for (int i = 0; i < messageReceiversMaujflix.Length; i++)
+                    UICharacterSelection.instance.HideSelectionScreen( () => 
                     {
-                        if (messageReceiversMaujflix[i] != null)
-                            messageReceiversMaujflix[i].OnFungusMessageReceivedForCharacter("CharacterSelected", this);
+                        if (messageReceiversMaujflix.Length > 0)
+                        {
+                            for (int i = 0; i < messageReceiversMaujflix.Length; i++)
+                            {
+                                if (messageReceiversMaujflix[i] != null)
+                                    messageReceiversMaujflix[i].OnFungusMessageReceivedForCharacter("CharacterSelected", this);
+                            }
+                        }
+                    });
+                }
+                else
+                {
+                    if (messageReceiversMaujflix.Length > 0)
+                    {
+                        for (int i = 0; i < messageReceiversMaujflix.Length; i++)
+                        {
+                            if (messageReceiversMaujflix[i] != null)
+                                messageReceiversMaujflix[i].OnFungusMessageReceivedForCharacter("CharacterSelected", this);
+                        }
                     }
                 }
-
-                if(UICharacterSelection.instance != null)
-                    UICharacterSelection.instance.HideSelectionScreen();
+                //if(UICharacterSelection.instance != null)
+                    //UICharacterSelection.instance.HideSelectionScreen();
             }, 200f, Color.red);
 
             //FirebaseFirestoreOffline.instance.DebitDiamondsAmount(characterDataAssets[currentCharacterIndex].diamondCost);
@@ -287,17 +303,43 @@ public class CharacterSelectionScreen : MonoBehaviour
 
             episodesHandler.SelectCharacter(characterGender, characterDataAssets[currentCharacterIndex], characterVariableRef, currentCharacterIndex, true);
 
-            if (messageReceiversMaujflix.Length > 0)
+            /*if (messageReceiversMaujflix.Length > 0)
             {
                 for (int i = 0; i < messageReceiversMaujflix.Length; i++)
                 {
                     if (messageReceiversMaujflix[i] != null)
                         messageReceiversMaujflix[i].OnFungusMessageReceivedForCharacter("CharacterSelected", this);
                 }
-            }
+            }*/
 
             if (UICharacterSelection.instance != null)
-                UICharacterSelection.instance.HideSelectionScreen();
+            {
+                UICharacterSelection.instance.HideSelectionScreen(() =>
+                {
+                    if (messageReceiversMaujflix.Length > 0)
+                    {
+                        for (int i = 0; i < messageReceiversMaujflix.Length; i++)
+                        {
+                            if (messageReceiversMaujflix[i] != null)
+                                messageReceiversMaujflix[i].OnFungusMessageReceivedForCharacter("CharacterSelected", this);
+                        }
+                    }
+                });
+            }
+            else
+            {
+                if (messageReceiversMaujflix.Length > 0)
+                {
+                    for (int i = 0; i < messageReceiversMaujflix.Length; i++)
+                    {
+                        if (messageReceiversMaujflix[i] != null)
+                            messageReceiversMaujflix[i].OnFungusMessageReceivedForCharacter("CharacterSelected", this);
+                    }
+                }
+            }
+
+            //if (UICharacterSelection.instance != null)
+            //UICharacterSelection.instance.HideSelectionScreen();
         }
 
         StopCoroutine("SelectUpdateRoutine");

@@ -221,6 +221,27 @@ public class UIPersonalProfile : MonoBehaviour
         Application.OpenURL(_url);
     }
 
+    public void OpenURLSocial(int index)
+    {
+        string url = string.Empty;
+        switch(index)
+        {
+            case 0:         //FB
+                
+                url = FirebaseRemoteConfig.DefaultInstance.GetValue("Social_Link_FB").StringValue;
+                Application.OpenURL(url);
+                
+                break;
+
+            case 1:         //Insta
+
+                url = FirebaseRemoteConfig.DefaultInstance.GetValue("Social_Link_Insta").StringValue;
+                Application.OpenURL(url);
+
+                break;
+        }
+    }
+
     public void OpenRateUsWindow()
     {
         if (EpisodesSpawner.instance == null)

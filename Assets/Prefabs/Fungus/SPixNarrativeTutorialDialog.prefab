@@ -201,6 +201,7 @@ GameObject:
   - component: {fileID: 7059805046921390230}
   - component: {fileID: 7059805046921390228}
   - component: {fileID: 7059805046921390231}
+  - component: {fileID: 9120586967237207954}
   m_Layer: 5
   m_Name: StoryText(TMP)
   m_TagString: Untagged
@@ -259,16 +260,15 @@ MonoBehaviour:
     \u092E\u0947\u0902 \u092E\u0947\u0930\u0947 \u092B\u093E\u0907\u0928\u0932 \u090F\u0915\u094D\u091C\u093E\u092E\u094D\u0938
     \u0906\u0928\u0947 \u0935\u093E\u0932\u0947 \u0939\u0948\u0964 + English"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 6e2c597f7f1034dd6bd73c1190f723fc, type: 2}
-  m_sharedMaterial: {fileID: 21982865064343680, guid: 6e2c597f7f1034dd6bd73c1190f723fc,
-    type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e748469943340b54bb3b8b7cf7b05ce5, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 44495068322e7b44e96093410eb3ae17, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281348144
-  m_fontColor: {r: 0.18867922, g: 0.18867922, b: 0.18867922, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -285,8 +285,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 55
+  m_fontSizeBase: 55
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -327,6 +327,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &9120586967237207954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7059805046921390185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06b80e40639e5ae4d934db20e6b0012b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Convertedvalue: 
+  OriginalText: 
 --- !u!1 &7059805047216779702
 GameObject:
   m_ObjectHideFlags: 0
@@ -489,8 +503,8 @@ MonoBehaviour:
   forceRichText: 1
   instantComplete: 1
   doReadAheadText: 1
-  correctorType: 1
-  charReplacerFixer: {fileID: 0}
+  correctorType: 0
+  charReplacerFixer: {fileID: 9120586967237207954}
   siddhantaFixer: {fileID: 0}
   currentContent: 
 --- !u!114 &8658480965616446983
@@ -505,9 +519,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 905552b4c540f924f99d4ec24e11c19b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  languageCorrectorType: 1
-  waitDelay: 0.05
-  charReplacerHindi: {fileID: 0}
+  languageCorrectorType: 0
+  waitDelay: 0.01
+  charReplacerHindi: {fileID: 9120586967237207954}
   textObject: {fileID: 7059805046921390231}
   characterNameTextObject: {fileID: 0}
   characterNameText: {fileID: 0}
@@ -551,7 +565,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clickMode: 1
   nextClickDelay: 0
-  cancelEnabled: 1
+  cancelEnabled: 0
   ignoreMenuClicks: 1
 --- !u!82 &7059805047216779703
 AudioSource:
