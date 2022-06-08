@@ -87,12 +87,40 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
             if (/*storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isStoryEnabled*/storyEnabled)
             {
-                UIStoriesItemSmall storyItemSmallInstance;
+                UIStoriesItemSmall storyItemSmallInstance = null;
 
                 if (storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isShortStory)
-                    storyItemSmallInstance = Instantiate(storiesItemShortsPrefab, scrollContent);
+                {
+                    if(ThumbnailItemsPool.instance != null)
+                    {
+                        storyItemSmallInstance = ThumbnailItemsPool.instance.GetThumbnailItem(2)?.GetComponent<UIStoriesItemSmall>();
+                        if(storyItemSmallInstance)
+                        {
+                            storyItemSmallInstance.gameObject.SetActive(true);
+                            storyItemSmallInstance.transform.parent = scrollContent;
+                        }
+                        else
+                            storyItemSmallInstance = Instantiate(storiesItemShortsPrefab, scrollContent);
+                    }
+                    else
+                        storyItemSmallInstance = Instantiate(storiesItemShortsPrefab, scrollContent);
+                }
                 else
-                    storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+                {
+                    if (ThumbnailItemsPool.instance != null)
+                    {
+                        storyItemSmallInstance = ThumbnailItemsPool.instance.GetThumbnailItem(1)?.GetComponent<UIStoriesItemSmall>();
+                        if (storyItemSmallInstance)
+                        {
+                            storyItemSmallInstance.gameObject.SetActive(true);
+                            storyItemSmallInstance.transform.parent = scrollContent;
+                        }
+                        else
+                            storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+                    }
+                    else
+                        storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);                    
+                }
 
                 storyItemSmallInstance.transform.name = storyDB.storiesCategories[categoryIndex].storiesDBItems[i].storyTitleEnglish;
                 storyItemSmallInstance.LoadThumbnailAsset(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance);
@@ -135,7 +163,21 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
             if (storyEnabled)
             {
-                UIStoriesItemSmall storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+                UIStoriesItemSmall storyItemSmallInstance = null;
+                if (ThumbnailItemsPool.instance != null)
+                {
+                    storyItemSmallInstance = ThumbnailItemsPool.instance.GetThumbnailItem(1)?.GetComponent<UIStoriesItemSmall>();
+                    if(storyItemSmallInstance != null)
+                    {
+                        storyItemSmallInstance.gameObject.SetActive(true);
+                        storyItemSmallInstance.transform.parent = scrollContent;
+                    }
+                    else
+                        storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+                }
+                else
+                    storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+
                 storyItemSmallInstance.transform.name = _storiesDBItems[i].storyTitleEnglish;
                 storyItemSmallInstance.LoadThumbnailAsset(_storiesDBItems[i], storiesDetailsPanel, GameController.instance);
 
@@ -169,7 +211,21 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
             if (storyEnabled)
             {
-                UIStoriesItemSmall storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+                UIStoriesItemSmall storyItemSmallInstance = null;
+                if (ThumbnailItemsPool.instance != null)
+                {
+                    storyItemSmallInstance = ThumbnailItemsPool.instance.GetThumbnailItem(1)?.GetComponent<UIStoriesItemSmall>();
+                    if (storyItemSmallInstance != null)
+                    {
+                        storyItemSmallInstance.gameObject.SetActive(true);
+                        storyItemSmallInstance.transform.parent = scrollContent;
+                    }
+                    else
+                        storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+                }
+                else
+                    storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+
                 storyItemSmallInstance.transform.name = _storyDB.storiesCategories[_databaseIndex].storiesDBItems[i].storyTitleEnglish;
                 storyItemSmallInstance.LoadThumbnailAsset(_storyDB.storiesCategories[_databaseIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance);
 
@@ -186,7 +242,21 @@ public class UIStoriesLoaderSmall : MonoBehaviour
         if (ContainsStoryItemSmall(_storiesDBItem.storyTitleEnglish))
             return;
 
-        UIStoriesItemSmall storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+        UIStoriesItemSmall storyItemSmallInstance = null;
+        if (ThumbnailItemsPool.instance != null)
+        {
+            storyItemSmallInstance = ThumbnailItemsPool.instance.GetThumbnailItem(1)?.GetComponent<UIStoriesItemSmall>();
+            if (storyItemSmallInstance != null)
+            {
+                storyItemSmallInstance.gameObject.SetActive(true);
+                storyItemSmallInstance.transform.parent = scrollContent;
+            }
+            else
+                storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+        }
+        else
+            storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+
         storyItemSmallInstance.transform.name = _storiesDBItem.storyTitleEnglish;
         storyItemSmallInstance.LoadThumbnailAsset(_storiesDBItem, storiesDetailsPanel, GameController.instance);
 

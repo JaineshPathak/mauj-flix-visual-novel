@@ -365,7 +365,7 @@ public class UIDiamondsPoolEditor : Editor
 
         DrawDefaultInspector();
 
-        EditorGUILayout.Space(15f);                
+        EditorGUILayout.Space(15f);
 
         GUILayout.BeginHorizontal();
         {

@@ -7,9 +7,9 @@ using TMPro;
  * - When app starts, fetch the current diamonds/tickets amount from FirestoreHandler and copy it in this.diamondsAmount and this.ticketsAmount
  * - When app shutsdown (OnApplicationQuit), push the this.diamondsAmount and this.ticketsAmount to FirestoreHandler and update the Firestore Database
 */
-public class FirebaseFirestoreOffline : MonoBehaviour
+public class FirebaseFirestoreOffline : MonoBehaviourSingletonPersistent<FirebaseFirestoreOffline>
 {
-    public static FirebaseFirestoreOffline instance;
+    //public static FirebaseFirestoreOffline instance;
 
     [Header("Diamonds and Tickets")]
     [SerializeField] private float diamondsAmount;
@@ -80,7 +80,7 @@ public class FirebaseFirestoreOffline : MonoBehaviour
         }
     }
 
-    private void Awake()
+    /*private void Awake()
     {
         if (instance == null)
             instance = this;
@@ -88,7 +88,7 @@ public class FirebaseFirestoreOffline : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
-    }
+    }*/
 
     private void OnApplicationFocus(bool focus)
     {

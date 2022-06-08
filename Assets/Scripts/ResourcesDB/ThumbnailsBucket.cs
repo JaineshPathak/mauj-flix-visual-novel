@@ -14,9 +14,9 @@ public enum ThumbnailType
     Title
 }
 
-public class ThumbnailsBucket : MonoBehaviour
+public class ThumbnailsBucket : MonoBehaviourSingletonPersistent<ThumbnailsBucket>
 {
-    public static ThumbnailsBucket instance;
+    //public static ThumbnailsBucket instance;
 
     public AssetReference thumbnailsSmallAtlasRef;
     public AssetReference thumbnailsBigAtlasRef;
@@ -30,7 +30,7 @@ public class ThumbnailsBucket : MonoBehaviour
 
     private int successCount = 0;   //If 4 - Means all Atlas fully loaded. Less than 4, then something went wrong downloading
 
-    private void Awake()
+    /*private void Awake()
     {
         if (instance == null)
             instance = this;
@@ -38,7 +38,7 @@ public class ThumbnailsBucket : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
-    }
+    }*/
 
     public void StartLoadingAtlas(Action<bool> callback)
     {

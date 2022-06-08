@@ -10,9 +10,6 @@ using TMPro;
 
 public class UISplashScreen : MonoBehaviour
 {
-    [Header("Stories Database")]
-    public AssetReference storiesDBKey;
-
     [Header("Stories Load Images Database")]
     public string storiesLoadImagesKey;
     public CanvasGroup imageLoadingCanvasGroup;
@@ -160,7 +157,7 @@ public class UISplashScreen : MonoBehaviour
         imageLoadingStatusText.text = "Checking Additional Resources...";
 
         StartCoroutine(StepTwoAdditionalResourcesRoutine());
-    }
+    }    
 
     private IEnumerator StepTwoAdditionalResourcesRoutine()
     {

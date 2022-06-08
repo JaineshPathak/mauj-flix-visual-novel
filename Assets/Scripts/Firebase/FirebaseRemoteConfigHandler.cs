@@ -6,13 +6,13 @@ using Firebase.RemoteConfig;
 using Firebase.Extensions;
 using HtmlAgilityPack;
 
-public class FirebaseRemoteConfigHandler : MonoBehaviour
+public class FirebaseRemoteConfigHandler : MonoBehaviourSingletonPersistent<FirebaseRemoteConfigHandler>
 {
     public bool testMode;
     public string testAppVersion = "0.1.4.2.2";
     public bool doVersionCheck;    
 
-    public static FirebaseRemoteConfigHandler instance;
+    //public static FirebaseRemoteConfigHandler instance;
 
     private const string gameAppVersionSetting = "GameAppVersion";
     private const string versionCheckTypeSetting = "VersionCheckType";
@@ -28,7 +28,7 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
 
     private UISplashScreen splashScreen;
 
-    private void Awake()
+    /*private void Awake()
     {
         if (instance == null)
             instance = this;
@@ -36,7 +36,7 @@ public class FirebaseRemoteConfigHandler : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
-    }
+    }*/
 
     private void OnApplicationFocus(bool focus)
     {

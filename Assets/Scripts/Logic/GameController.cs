@@ -6,9 +6,9 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using Fungus;
 
-public class GameController : MonoBehaviour
+public class GameController : MonoBehaviourSingleton<GameController>
 {
-    public static GameController instance;
+    //public static GameController instance;
 
     [Header("Flags")]
     [SerializeField] private bool devMode = false;
@@ -52,19 +52,30 @@ public class GameController : MonoBehaviour
     {
         Application.targetFrameRate = 60;
 
-        if (instance == null)
+        /*if (instance == null)
             instance = this;
         else
-            Destroy(gameObject);
+            Destroy(gameObject);*/
     }
 
     private void Start()
     {
         detailsPanel = FindObjectOfType<UIStoriesDetailsPanel>();
-        detailsPanel?.SetStoryBufferingImageStatus(true);        
+        detailsPanel?.SetStoryBufferingImageStatus(true);
 
-        AsyncOperationHandle<TextAsset> storiesDBHandle = Addressables.LoadAssetAsync<TextAsset>(storiesDBKey);
-        storiesDBHandle.Completed += OnStoriesDBLoaded;        
+        //AsyncOperationHandle<TextAsset> storiesDBHandle = Addressables.LoadAssetAsync<TextAsset>(storiesDBKey);
+        //storiesDBHandle.Completed += OnStoriesDBLoaded;
+
+        if (StoriesDBLoader.instance != null && StoriesDBLoader.instance.storiesDB != null)
+        {
+            storiesDB = StoriesDBLoader.instance.storiesDB;
+            OnStoryDBLoaded?.Invoke(storiesDB);
+            Debug.Log("GAMECONTROLLER: Stories Database successfully loaded!");
+
+            detailsPanel?.SetStoryBufferingImageStatus(false);
+        }
+        else
+            Debug.LogError("GAMECONTROLLER: Stories DB Instance Not Found! Make sure an instance exists!");
     }
 
     private void OnStoriesDBLoaded(AsyncOperationHandle<TextAsset> obj)

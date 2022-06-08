@@ -19,7 +19,8 @@ public class UIStoriesLoaderBig : MonoBehaviour
 
     public Transform scrollContent;
 
-    private UIStoriesDetailsPanel storiesDetailsPanel;    
+    private UIStoriesDetailsPanel storiesDetailsPanel;
+    private StoriesDB storyDB;
 
     private void Awake()
     {
@@ -41,8 +42,10 @@ public class UIStoriesLoaderBig : MonoBehaviour
         GameController.OnStoryDBLoaded -= OnStoryDBLoaded;
     }
 
-    private void OnStoryDBLoaded(StoriesDB storyDB)
+    private void OnStoryDBLoaded(StoriesDB _storyDB)
     {
+        storyDB = _storyDB;
+
         if (categoryIndex >= storyDB.storiesCategories.Length)
             return;
 
@@ -55,7 +58,23 @@ public class UIStoriesLoaderBig : MonoBehaviour
 
             if (storyEnabled)
             {
-                UIStoriesItemBig storyItemBigInstance = Instantiate(storiesItemBigPrefab, scrollContent);
+                UIStoriesItemBig storyItemBigInstance = null;
+                if (ThumbnailItemsPool.instance != null)
+                {
+                    storyItemBigInstance = ThumbnailItemsPool.instance.GetThumbnailItem(0).GetComponent<UIStoriesItemBig>();
+                    if (storyItemBigInstance)
+                    {
+                        storyItemBigInstance.gameObject.SetActive(true);
+                        storyItemBigInstance.transform.parent = scrollContent;
+                        //storyItemBigInstance.LoadThumbnailAssets(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel);
+                    }
+                    else                    
+                        storyItemBigInstance = Instantiate(storiesItemBigPrefab, scrollContent);
+                        //storyItemBigInstance.LoadThumbnailAssets(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel);                    
+                }
+                else                
+                    storyItemBigInstance = Instantiate(storiesItemBigPrefab, scrollContent);
+                
                 storyItemBigInstance.LoadThumbnailAssets(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel);
             }
         }
@@ -63,5 +82,5 @@ public class UIStoriesLoaderBig : MonoBehaviour
         snapScroller.UpdateScroll();
         snapScroller.autoScrolling = autoScrolling;
         snapScroller.autoScrollingInterval = autoScrollInterval;
-    }
+    }    
 }

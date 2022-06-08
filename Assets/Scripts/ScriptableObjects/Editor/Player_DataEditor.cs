@@ -5,6 +5,8 @@ using UnityEditor;
 public class Player_DataEditor : Editor
 {
     private Color defaultGUIColor;
+    private float buttonWidth = 150f;
+    private float buttonHeight = 30f;
 
     private void OnEnable()
     {
@@ -21,40 +23,51 @@ public class Player_DataEditor : Editor
 
         GUIStyle buttonTextStyle = new GUIStyle(GUI.skin.button);
         buttonTextStyle.fontStyle = FontStyle.Bold;
+        buttonTextStyle.wordWrap = true;
         buttonTextStyle.normal.textColor = Color.white;
         buttonTextStyle.hover.textColor = Color.white;
 
         EditorGUILayout.BeginHorizontal();
-
-        GUI.backgroundColor = Color.yellow;
-        if (GUILayout.Button("Reset Data", buttonTextStyle, GUILayout.ExpandWidth(false)))
         {
-            Undo.RecordObject(target, "Player Data Hard Reset");
-            playerData.ResetPlayerData();
+            GUILayout.FlexibleSpace();
+            GUI.backgroundColor = Color.yellow;
+            if (GUILayout.Button("Reset Data", buttonTextStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+            {
+                Undo.RecordObject(target, "Player Data Hard Reset");
+                playerData.ResetPlayerData();
+            }
+            GUI.backgroundColor = defaultGUIColor;
+
+            //EditorGUILayout.Space(5f);
+
+            GUI.backgroundColor = Color.blue;
+            if (GUILayout.Button("Open File Location", buttonTextStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+                SaveLoadGame.OpenPlayerDataFileLocation();
+            GUI.backgroundColor = defaultGUIColor;
+
+            //EditorGUILayout.Space(5f);            
+            GUILayout.FlexibleSpace();
         }
-        GUI.backgroundColor = defaultGUIColor;
 
-        //EditorGUILayout.Space(5f);
+        EditorGUILayout.EndHorizontal();
 
-        GUI.backgroundColor = Color.blue;
-        if (GUILayout.Button("Open File Location", buttonTextStyle, GUILayout.ExpandWidth(false)))
-            SaveLoadGame.OpenPlayerDataFileLocation();
-        GUI.backgroundColor = defaultGUIColor;
+        EditorGUILayout.BeginHorizontal();
+        {
+            GUILayout.FlexibleSpace();
+            GUI.backgroundColor = Color.red;
+            if (GUILayout.Button("Delete Settings File", buttonTextStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+                SaveLoadGame.DeletePlayerData();
+            GUI.backgroundColor = defaultGUIColor;
 
-        //EditorGUILayout.Space(5f);
+            //EditorGUILayout.Space(5f);
 
-        GUI.backgroundColor = Color.red;
-        if (GUILayout.Button("Delete Settings File", buttonTextStyle, GUILayout.ExpandWidth(false)))
-            SaveLoadGame.DeletePlayerData();
-        GUI.backgroundColor = defaultGUIColor;
-        
-        //EditorGUILayout.Space(5f);
+            GUI.backgroundColor = Color.red;
+            if (GUILayout.Button("Delete All Progresses", buttonTextStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+                SaveLoadGame.DeleteAllProgress();
+            GUI.backgroundColor = defaultGUIColor;
+            GUILayout.FlexibleSpace();
 
-        GUI.backgroundColor = Color.red;
-        if (GUILayout.Button("Delete All Progresses", buttonTextStyle, GUILayout.ExpandWidth(false)))
-            SaveLoadGame.DeleteAllProgress();
-        GUI.backgroundColor = defaultGUIColor;
-
+        }
         EditorGUILayout.EndHorizontal();
     }
 }

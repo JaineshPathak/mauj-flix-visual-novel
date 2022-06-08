@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
 
-public class AdsManager : MonoBehaviour
+public class AdsManager : MonoBehaviourSingletonPersistent<AdsManager>
 {
-    public static AdsManager instance;
+    //public static AdsManager instance;
 
     public string currentAdPlacement;    
 
@@ -18,17 +18,15 @@ public class AdsManager : MonoBehaviour
     public struct userAttributes { };
     public struct appAttributes { };
 
-    private void Awake()
+    /*private void Awake()
     {
         if (instance == null)
             instance = this;
         else
             Destroy(gameObject);
 
-        DontDestroyOnLoad(gameObject);
-
-        //Application.targetFrameRate = 60;        
-    }    
+        DontDestroyOnLoad(gameObject);    
+    }*/
 
     private void OnApplicationPause(bool pause)
     {

@@ -4,13 +4,13 @@ using Firebase.Messaging;
 using System;
 using System.Threading.Tasks;
 
-public class FirebaseMessagingHandler : MonoBehaviour
+public class FirebaseMessagingHandler : MonoBehaviourSingletonPersistent<FirebaseMessagingHandler>
 {
-    public static FirebaseMessagingHandler instance;
+    //public static FirebaseMessagingHandler instance;
 
     private bool isFirebaseInitialized = false;
 
-    private void Awake()
+    /*private void Awake()
     {
         if (instance == null)
             instance = this;
@@ -18,7 +18,7 @@ public class FirebaseMessagingHandler : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
-    }
+    }*/
 
     public void InitFirebaseMessagingHandler()
     {

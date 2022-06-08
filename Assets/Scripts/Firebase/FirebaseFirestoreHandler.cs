@@ -4,9 +4,9 @@ using UnityEngine.SceneManagement;
 using Firebase.Firestore;
 using Firebase.Auth;
 
-public class FirebaseFirestoreHandler : MonoBehaviour
+public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<FirebaseFirestoreHandler>
 {
-    public static FirebaseFirestoreHandler instance;
+    //public static FirebaseFirestoreHandler instance;
 
     public FirebaseUser firebaseUser;
     public FirestoreUserData firestoreUserData;
@@ -22,14 +22,16 @@ public class FirebaseFirestoreHandler : MonoBehaviour
     private bool firstTimeUser;
     private string devicePlatformCollection;    
 
-    private void Awake()
+    public override void Awake()
     {
-        if (instance == null)
+        /*if (instance == null)
             instance = this;
         else
             Destroy(gameObject);
 
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);*/
+
+        base.Awake();
 
         firestoreOffline = GetComponent<FirebaseFirestoreOffline>();
 

@@ -12,9 +12,9 @@ using UnityEngine.SceneManagement;
 using Fungus;
 using TMPro;
 
-public class EpisodesSpawner : MonoBehaviour
+public class EpisodesSpawner : MonoBehaviourSingletonPersistent<EpisodesSpawner>
 {
-    public static EpisodesSpawner instance;
+    //public static EpisodesSpawner instance;
 
     [Header("Episodes Reference")]
     public bool hideTopPanelAtStart;
@@ -102,14 +102,16 @@ public class EpisodesSpawner : MonoBehaviour
     private GameObject currentSoundBucketPrefab;
     private GameObject currentAtlasDBPrefab;
 
-    private void Awake()
+    public override void Awake()
     {
-        if (instance == null)
+        /*if (instance == null)
             instance = this;
         else
             Destroy(gameObject);
 
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);*/
+
+        base.Awake();
 
         if(firstTimeRewardCanvasGroup)
         {
@@ -254,13 +256,15 @@ public class EpisodesSpawner : MonoBehaviour
         percentDownloadedTextFake.gameObject.SetActive(false);
 
         LeanTween.alphaCanvas(percentCanvasGroup, 1f, 1f).setOnComplete( () => 
-        {
+        {           
             StartCoroutine(StartLoadingStorySceneAsync());
         });
     }
 
     private IEnumerator StartLoadingStorySceneAsync()
     {
+        ThumbnailItemsPool.instance?.ResetThumbnailItems();
+
         storyPercentBar.fillAmount = 0;
         percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";
 

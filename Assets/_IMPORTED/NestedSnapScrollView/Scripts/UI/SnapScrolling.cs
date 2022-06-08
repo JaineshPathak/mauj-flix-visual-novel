@@ -263,13 +263,16 @@ namespace NestedScroll.ScrollElement
             if (_pansPosLocal == null || !IsShowHelpers)
                 return;
 
-            for (int i = 0; i < _pansPosLocal.Length; i++)
+            if (transform.childCount > 0)
             {
-                Gizmos.color = Color.blue;
-                Vector3 gloabalPos = transform.GetChild(i).GetComponent<RectTransform>().position;
-                Vector3 gloabalScale = transform.GetChild(i).GetComponent<RectTransform>().sizeDelta;
-                Vector3 panPos = new Vector3(gloabalPos.x - (gloabalScale.x / 2 * SnapPointOffset), gloabalPos.y);
-                Gizmos.DrawSphere(panPos, 30f);
+                for (int i = 0; i < _pansPosLocal.Length; i++)
+                {
+                    Gizmos.color = Color.blue;
+                    Vector3 gloabalPos = transform.GetChild(i).GetComponent<RectTransform>().position;
+                    Vector3 gloabalScale = transform.GetChild(i).GetComponent<RectTransform>().sizeDelta;
+                    Vector3 panPos = new Vector3(gloabalPos.x - (gloabalScale.x / 2 * SnapPointOffset), gloabalPos.y);
+                    Gizmos.DrawSphere(panPos, 30f);
+                }
             }
         }
 

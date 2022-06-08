@@ -4,9 +4,9 @@ using Firebase;
 using Firebase.Database;
 using Firebase.Extensions;
 
-public class FirebaseDBHandler : MonoBehaviour
+public class FirebaseDBHandler : MonoBehaviourSingletonPersistent<FirebaseDBHandler>
 {
-    public static FirebaseDBHandler instance;
+    //public static FirebaseDBHandler instance;
 
     private DatabaseReference databaseReference;
     private FirebaseDatabase firebaseDB;
@@ -16,7 +16,7 @@ public class FirebaseDBHandler : MonoBehaviour
     public const string viewCountKeyEnd = "-View-Count";
     public const string likeCountKeyEnd = "-Like-Count";
 
-    private void Awake()
+    /*private void Awake()
     {
         if (instance == null)
             instance = this;
@@ -24,7 +24,7 @@ public class FirebaseDBHandler : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
-    }
+    }*/
 
     public void InitFirebaseDBHandler()
     {

@@ -6,9 +6,9 @@ using UnityEngine.UI;
 using TMPro;
 using underDOGS.SDKEvents;
 
-public class UIEpisodeEndPanelMk2 : MonoBehaviour
+public class UIEpisodeEndPanelMk2 : MonoBehaviourSingleton<UIEpisodeEndPanelMk2>
 {
-    public static UIEpisodeEndPanelMk2 instance;
+    //public static UIEpisodeEndPanelMk2 instance;
 
     [Header("Main Canvas")]    
     public CanvasGroup endScreenCanvasGroup;
@@ -63,10 +63,10 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        /*if (instance == null)
             instance = this;
         else
-            Destroy(gameObject);
+            Destroy(gameObject);*/
 
         ResetStuffs();
     }

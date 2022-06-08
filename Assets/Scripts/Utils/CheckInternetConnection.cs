@@ -6,9 +6,9 @@ using UnityEngine.Networking;
 using System;
 using Firebase.RemoteConfig;
 
-public class CheckInternetConnection : MonoBehaviour
+public class CheckInternetConnection : MonoBehaviourSingleton<CheckInternetConnection>
 {
-    public static CheckInternetConnection instance;
+    //public static CheckInternetConnection instance;
 
     public bool isInternetConnected;
     public string websitePinging = "https://www.maujflix.com";
@@ -17,13 +17,13 @@ public class CheckInternetConnection : MonoBehaviour
 
     private const string websiteToCheckConfig = "WebsiteToPing";
 
-    private void Awake()
+    /*private void Awake()
     {
         if (instance == null)
             instance = this;
         else
             Destroy(gameObject);
-    }
+    }*/
 
     private void Start()
     {

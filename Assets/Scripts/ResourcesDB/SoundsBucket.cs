@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 
-public class SoundsBucket : MonoBehaviour
+public class SoundsBucket : MonoBehaviourSingleton<SoundsBucket>
 {
-    public static SoundsBucket instance;
+    //public static SoundsBucket instance;
 
     [SerializeField] private AssetReference[] musicLists;
     [SerializeField] private AssetReference[] soundsList;
@@ -17,13 +17,13 @@ public class SoundsBucket : MonoBehaviour
     private AsyncOperationHandle<AudioClip> musicHandle;
     private AsyncOperationHandle<AudioClip> soundHandle;
 
-    private void Awake()
+    /*private void Awake()
     {
         if (instance == null)
             instance = this;
         else
             Destroy(gameObject);
-    }
+    }*/
 
     public void GetMusicAtIndex(int index, Action<AudioClip> callback, bool unloadPrevious = false)
     {

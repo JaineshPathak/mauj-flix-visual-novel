@@ -40,15 +40,15 @@ namespace underDOGS.SDKEvents
         }
     }
 
-    public class SDKManager : MonoBehaviour
+    public class SDKManager : MonoBehaviourSingletonPersistent<SDKManager>
     {
-        public static SDKManager instance;
+        //public static SDKManager instance;
 
         public SDKEventHandler[] SDK_Events;
 
-        private void Awake()
+        public override void Awake()
         {
-            if (instance == null)
+            /*if (instance == null)
             {
                 instance = this;
                 foreach (SDKEventHandler eventHandler in SDK_Events)
@@ -60,7 +60,12 @@ namespace underDOGS.SDKEvents
             else
             {
                 Destroy(gameObject);
-            }
+            }*/
+
+            base.Awake();
+
+            foreach (SDKEventHandler eventHandler in SDK_Events)
+                eventHandler.InitSDK();
         }
 
         private void OnApplicationQuit()
@@ -132,20 +137,17 @@ namespace underDOGS.SDKEvents
 
         public string GetGender(int index)
         {
-            string val = "";
-
-            switch(index)
+            switch (index)
             {
                 case 0:
-                    val = "Male";
-                    break;
+                    return "Male";
 
                 case 1:
-                    val = "Female";
-                    break;
+                    return "Female";
+                
+                default:
+                    return string.Empty;
             }
-
-            return val;
         }
 
         /*public void SendEvent(string eventName)

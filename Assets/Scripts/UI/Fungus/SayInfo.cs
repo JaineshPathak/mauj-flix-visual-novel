@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using Fungus;
 
-public class SayInfo : MonoBehaviour
+public class SayInfo : MonoBehaviourSingleton<SayInfo>
 {
-    public static SayInfo instance;
+    //public static SayInfo instance;
 
     public SayDialog narrativeSayDialogue;
     public SayDialog narrativeTutorialSayDialogue;
@@ -13,13 +13,13 @@ public class SayInfo : MonoBehaviour
     public SayDialog characterNameDialogueMale;
     public SayDialog characterNameDialogueFemale;
 
-    private void Awake()
+    /*private void Awake()
     {
         if (instance == null)
             instance = this;
         else
             Destroy(gameObject);
-    }
+    }*/
 
     public SayDialog GetSayDialogueByType(SayMflix.SayDialogStyle sayDialogStyle)
     {

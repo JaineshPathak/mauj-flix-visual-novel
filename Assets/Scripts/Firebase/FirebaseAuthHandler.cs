@@ -8,9 +8,9 @@ using UnityEngine;
 using Firebase;
 using Firebase.Auth;
 
-public class FirebaseAuthHandler : MonoBehaviour
+public class FirebaseAuthHandler : MonoBehaviourSingletonPersistent<FirebaseAuthHandler>
 {
-    public static FirebaseAuthHandler instance;
+    //public static FirebaseAuthHandler instance;
 
     public FirebaseAuth auth;
     public FirebaseUser userCurrent;
@@ -25,14 +25,16 @@ public class FirebaseAuthHandler : MonoBehaviour
 
     private GoogleSignInConfiguration configuration;
 
-    private void Awake()
+    public override void Awake()
     {
-        if (instance == null)
+        /*if (instance == null)
             instance = this;
         else
             Destroy(gameObject);
 
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject);*/
+
+        base.Awake();
 
         configuration = new GoogleSignInConfiguration();
         configuration.RequestEmail = true;

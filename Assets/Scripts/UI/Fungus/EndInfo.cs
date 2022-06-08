@@ -8,22 +8,22 @@ public enum EndScreenType
     StoryShortEndScreen
 };
 
-public class EndInfo : MonoBehaviour
+public class EndInfo : MonoBehaviourSingleton<EndInfo>
 {
-    public static EndInfo instance;
+    //public static EndInfo instance;
 
     public UIEpisodeEndPanelMk2 endScreenNormal;
     public UIEndStoryBranchScreen endScreenStoryBranched;
     public UIEndStoryScreen endScreenStoryFull;
     public UIEndShortStoryScreen endShortStoryScreen;
 
-    private void Awake()
+    /*private void Awake()
     {
         if (instance == null)
             instance = this;
         else
             Destroy(gameObject);
-    }
+    }*/
 
     public void PlayEndingScreen(EndScreenType endScreenType, Sprite _nextEpSprite = null)
     {

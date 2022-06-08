@@ -6,9 +6,9 @@ using UnityEngine.UI;
 using Fungus;
 using TMPro;
 
-public class UICharacterSelection : MonoBehaviour
+public class UICharacterSelection : MonoBehaviourSingleton<UICharacterSelection>
 {
-    public static UICharacterSelection instance;
+    //public static UICharacterSelection instance;
 
     [Header("Top Texts")]
     public TextMeshProUGUI topText;
@@ -50,10 +50,10 @@ public class UICharacterSelection : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
+        /*if (instance == null)
             instance = this;
         else
-            Destroy(gameObject);
+            Destroy(gameObject);*/
 
         if(canvasGroup)
         {

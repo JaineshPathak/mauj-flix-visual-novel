@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 
-public class DataPathsManager : MonoBehaviour
+public class DataPathsManager : MonoBehaviourSingletonPersistent<DataPathsManager>
 {
-    public static DataPathsManager instance;
+    //public static DataPathsManager instance;
 
-    private void Awake()
+    /*private void Awake()
     {
         if (instance == null)
             instance = this;
@@ -12,7 +12,7 @@ public class DataPathsManager : MonoBehaviour
             Destroy(gameObject);
 
         DontDestroyOnLoad(gameObject);
-    }
+    }*/
 
     private void Start()
     {
