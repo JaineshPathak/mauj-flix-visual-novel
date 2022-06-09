@@ -24,6 +24,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     public TextMeshProUGUI storyTitleText;
     //public Text storyDescriptionText;
     public TextMeshProUGUI storyDescriptionText;
+    public Image storyThumbnailBigImageBg;
     public Image storyThumbnailBigImage;
     public Image storyThumbnailTitleImage;
     [HideInInspector] public Sprite storyThumbnailLoadingImage;
@@ -172,6 +173,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
                 //shareButton.Setup(episodesSpawner.storyTitle, episodesSpawner.storyTitleEnglish, thumbnailSpriteShare);
             }
 
+            storyThumbnailBigImageBg.sprite = episodesSpawner.storyThumbnailBigSprite;
             storyThumbnailBigImage.sprite = episodesSpawner.storyThumbnailBigSprite;
             storyThumbnailTitleImage.sprite = episodesSpawner.storyloadingTitleImage.sprite;
 
@@ -339,6 +341,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             LayoutRebuilder.ForceRebuildLayoutImmediate(buttonsVerticalGroup);
             buttonsGroupSizeFitter.enabled = true;
 
+            storyThumbnailBigImageBg.sprite = _thumbnailBigSprite;
             storyThumbnailBigImage.sprite = _thumbnailBigSprite;
             storyThumbnailTitleImage.sprite = _thumbnailTitleSprite;
             storyThumbnailLoadingImage = _thumbnailLoadingSprite;
