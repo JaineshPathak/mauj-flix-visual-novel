@@ -32,7 +32,8 @@ public class MFlixUtils : MonoBehaviour
         CharacterNameDialogueScreen,
         ReplacePlaySound,
         ReplaceSayCommands,
-        UpdateCallCommands
+        UpdateCallCommands,
+        SayCommandDialogueReplace
     };
 
     public WhatToReplace whatToReplace;
@@ -99,6 +100,9 @@ public class MFlixUtils : MonoBehaviour
 
     //Call Mode
     public CallMode callModeNew;
+
+    //Say Command Dialogue Replace
+    public SayDialog sayDialogueReplace;
 
     private void OnValidate()
     {
@@ -918,6 +922,35 @@ public class MFlixUtils : MonoBehaviour
                 PrefabUtility.RecordPrefabInstancePropertyModifications(episodeFlowchart);
             }
         }
+
+        PrefabUtility.RecordPrefabInstancePropertyModifications(episodeFlowchart);
+        PrefabUtility.RecordPrefabInstancePropertyModifications(transform);
+    }
+
+    public void ReplaceSayCommandsSayDialogue()
+    {
+        if (PrefabStageUtility.GetCurrentPrefabStage() == null)
+        {
+            Debug.LogError("MFlix Replacer: You need to be in Prefab Mode");
+            return;
+        }
+
+        if (episodeFlowchart == null || sayDialogueReplace == null)
+            return;
+
+        int count = 0;
+        foreach (Say say in episodeFlowchart.GetComponentsInChildren<Say>())
+        {
+            if (say._Character != null && say.setSayDialog == null)
+            {
+                count++;
+
+                say.setSayDialog = sayDialogueReplace;
+                PrefabUtility.RecordPrefabInstancePropertyModifications(say);
+            }
+        }
+
+        Debug.Log("Replace Say Commands Say Dialogue Count: " + count);
 
         PrefabUtility.RecordPrefabInstancePropertyModifications(episodeFlowchart);
         PrefabUtility.RecordPrefabInstancePropertyModifications(transform);

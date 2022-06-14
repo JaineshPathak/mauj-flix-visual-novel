@@ -35,7 +35,9 @@ public class UIStoriesItemSmall : MonoBehaviour
 
     public GameObject storyCountsParent;
     public TextMeshProUGUI storyViewsCountText;
-    public TextMeshProUGUI storyLikesCountText;    
+    public TextMeshProUGUI storyLikesCountText;
+
+    [HideInInspector] public bool isFromPool;
 
     private StoriesDBItem storyItem;
     private UIStoriesDetailsPanel storiesDetailsPanel;

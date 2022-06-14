@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -29,6 +27,7 @@ public class ThumbnailItem
     [HideInInspector] public List<UIStoriesItemSmall> storiesItemShortsList = new List<UIStoriesItemSmall>();
     [HideInInspector] public List<UIStoriesItemBig> storiesItemBigList = new List<UIStoriesItemBig>();*/
 
+#if UNITY_EDITOR
     internal void LoadItems()
     {
         if (itemCount <= 0 || itemPrefab == null)
@@ -41,27 +40,33 @@ public class ThumbnailItem
             itemInstance.transform.parent = itemParent;
             itemInstance.SetActive(false);
 
-            itemPrefabList.Add(itemInstance);            
+            if (itemInstance.GetComponent<UIStoriesItemSmall>() != null)
+                itemInstance.GetComponent<UIStoriesItemSmall>().isFromPool = true;
 
+            itemPrefabList.Add(itemInstance);
+
+            #region OLDCODE
             /*switch (itemType)
-            {
-                case ThumbnailItemType.Small:
-                    storiesItemSmallList.Add(itemInstance.GetComponent<UIStoriesItemSmall>());
-                    break;
+                {
+                    case ThumbnailItemType.Small:
+                        storiesItemSmallList.Add(itemInstance.GetComponent<UIStoriesItemSmall>());
+                        break;
 
-                case ThumbnailItemType.Big:
-                    storiesItemBigList.Add(itemInstance.GetComponent<UIStoriesItemBig>());
-                    break;
+                    case ThumbnailItemType.Big:
+                        storiesItemBigList.Add(itemInstance.GetComponent<UIStoriesItemBig>());
+                        break;
 
-                case ThumbnailItemType.Top:
-                    break;
+                    case ThumbnailItemType.Top:
+                        break;
 
-                case ThumbnailItemType.Shorts:
-                    storiesItemShortsList.Add(itemInstance.GetComponent<UIStoriesItemSmall>());
-                    break;
-            }*/
+                    case ThumbnailItemType.Shorts:
+                        storiesItemShortsList.Add(itemInstance.GetComponent<UIStoriesItemSmall>());
+                        break;
+                }*/ 
+            #endregion
         }
     }
+#endif
 
     internal GameObject GetThumbnailItem()
     {
@@ -70,6 +75,15 @@ public class ThumbnailItem
                 return itemPrefabList[i].gameObject;
 
         return null;
+    }
+
+    internal void ResetItem(GameObject item)
+    {
+        if (!itemPrefabList.Contains(item) || item == null)
+            return;
+
+        item.SetActive(false);
+        item.transform.parent = itemParent;
     }
 
     internal void ResetItems()
@@ -89,6 +103,7 @@ public class ThumbnailItemsPool : MonoBehaviourSingletonPersistent<ThumbnailItem
 {
     public ThumbnailItem[] thumbnailItems;
 
+#if UNITY_EDITOR
     private void OnValidate()
     {
         if (thumbnailItems.Length <= 0)
@@ -136,6 +151,7 @@ public class ThumbnailItemsPool : MonoBehaviourSingletonPersistent<ThumbnailItem
 
         OnValidate();
     }
+#endif
 
     /// <summary>
     ///
@@ -150,6 +166,11 @@ public class ThumbnailItemsPool : MonoBehaviourSingletonPersistent<ThumbnailItem
             return null;
 
         return thumbnailItems[id].GetThumbnailItem();
+    }
+
+    public void ResetThumbnailItem(int id, GameObject item)
+    {
+        thumbnailItems[id].ResetItem(item);
     }
 
     public void ResetThumbnailItems()

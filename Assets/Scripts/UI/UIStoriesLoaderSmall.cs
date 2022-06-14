@@ -93,7 +93,10 @@ public class UIStoriesLoaderSmall : MonoBehaviour
                 {
                     if(ThumbnailItemsPool.instance != null)
                     {
-                        storyItemSmallInstance = ThumbnailItemsPool.instance.GetThumbnailItem(2)?.GetComponent<UIStoriesItemSmall>();
+                        GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(2);
+                        if(itemInstanceGO)
+                            storyItemSmallInstance = itemInstanceGO.GetComponent<UIStoriesItemSmall>();
+
                         if(storyItemSmallInstance)
                         {
                             storyItemSmallInstance.gameObject.SetActive(true);
@@ -109,7 +112,10 @@ public class UIStoriesLoaderSmall : MonoBehaviour
                 {
                     if (ThumbnailItemsPool.instance != null)
                     {
-                        storyItemSmallInstance = ThumbnailItemsPool.instance.GetThumbnailItem(1)?.GetComponent<UIStoriesItemSmall>();
+                        GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(1);
+                        if (itemInstanceGO)
+                            storyItemSmallInstance = itemInstanceGO.GetComponent<UIStoriesItemSmall>();
+
                         if (storyItemSmallInstance)
                         {
                             storyItemSmallInstance.gameObject.SetActive(true);
@@ -166,8 +172,11 @@ public class UIStoriesLoaderSmall : MonoBehaviour
                 UIStoriesItemSmall storyItemSmallInstance = null;
                 if (ThumbnailItemsPool.instance != null)
                 {
-                    storyItemSmallInstance = ThumbnailItemsPool.instance.GetThumbnailItem(1)?.GetComponent<UIStoriesItemSmall>();
-                    if(storyItemSmallInstance != null)
+                    GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(1);
+                    if (itemInstanceGO)
+                        storyItemSmallInstance = itemInstanceGO.GetComponent<UIStoriesItemSmall>();
+
+                    if (storyItemSmallInstance != null)
                     {
                         storyItemSmallInstance.gameObject.SetActive(true);
                         storyItemSmallInstance.transform.parent = scrollContent;
@@ -214,7 +223,10 @@ public class UIStoriesLoaderSmall : MonoBehaviour
                 UIStoriesItemSmall storyItemSmallInstance = null;
                 if (ThumbnailItemsPool.instance != null)
                 {
-                    storyItemSmallInstance = ThumbnailItemsPool.instance.GetThumbnailItem(1)?.GetComponent<UIStoriesItemSmall>();
+                    GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(1);
+                    if (itemInstanceGO)
+                        storyItemSmallInstance = itemInstanceGO.GetComponent<UIStoriesItemSmall>();
+
                     if (storyItemSmallInstance != null)
                     {
                         storyItemSmallInstance.gameObject.SetActive(true);
@@ -245,7 +257,10 @@ public class UIStoriesLoaderSmall : MonoBehaviour
         UIStoriesItemSmall storyItemSmallInstance = null;
         if (ThumbnailItemsPool.instance != null)
         {
-            storyItemSmallInstance = ThumbnailItemsPool.instance.GetThumbnailItem(1)?.GetComponent<UIStoriesItemSmall>();
+            GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(1);
+            if (itemInstanceGO)
+                storyItemSmallInstance = itemInstanceGO.GetComponent<UIStoriesItemSmall>();
+
             if (storyItemSmallInstance != null)
             {
                 storyItemSmallInstance.gameObject.SetActive(true);
@@ -289,7 +304,11 @@ public class UIStoriesLoaderSmall : MonoBehaviour
         {
             if (storiesItemSmallList[i].transform.name.Equals(_storyTitleEng))
             {
-                Destroy(storiesItemSmallList[i].gameObject);
+                if (storiesItemSmallList[i].isFromPool && ThumbnailItemsPool.instance != null)                                    
+                    ThumbnailItemsPool.instance.ResetThumbnailItem(1, storiesItemSmallList[i].gameObject);                
+                else
+                    Destroy(storiesItemSmallList[i].gameObject);
+
                 storiesItemSmallList.Remove(storiesItemSmallList[i]);
                 break;
             }

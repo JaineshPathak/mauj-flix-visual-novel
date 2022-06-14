@@ -46,8 +46,8 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
     [Header("Like Story Section")]
     public GameObject likeButtonParent;
-    public Image likeOutlineImage;
-    public Image likeImage;
+    public Image likedImageBg;
+    public Image likedImage;
     public TextMeshProUGUI likesCountText;
 
     [Header("Views Section")]
@@ -188,13 +188,17 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
             if (episodesSpawner.playerData.HasStoryLiked(storyItem.storyTitleEnglish))
             {
-                likeImage.gameObject.SetActive(true);
-                likeOutlineImage.gameObject.SetActive(false);
+                //likedImage.gameObject.SetActive(true);
+                //likedImageBg.gameObject.SetActive(false);
+
+                likedImage.transform.localScale = Vector3.one;
             }
             else
             {
-                likeImage.gameObject.SetActive(false);
-                likeOutlineImage.gameObject.SetActive(true);
+                //likedImage.gameObject.SetActive(false);
+                //likedImageBg.gameObject.SetActive(true);
+
+                likedImage.transform.localScale = Vector3.zero;
             }
 
             if (FirebaseDBHandler.instance != null)
@@ -364,13 +368,17 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
             if (episodesSpawner.playerData.HasStoryLiked(_storyTitleEng))
             {
-                likeImage.gameObject.SetActive(true);
-                likeOutlineImage.gameObject.SetActive(false);
+                //likedImage.gameObject.SetActive(true);
+                //likedImageBg.gameObject.SetActive(false);
+
+                likedImage.transform.localScale = Vector3.one;
             }
             else
             {
-                likeImage.gameObject.SetActive(false);
-                likeOutlineImage.gameObject.SetActive(true);
+                //likedImage.gameObject.SetActive(false);
+                //likedImageBg.gameObject.SetActive(true);
+
+                likedImage.transform.localScale = Vector3.zero;
             }
 
             if (FirebaseDBHandler.instance != null)
@@ -495,16 +503,14 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             }
 
             float totalEpisodesItems = episodeContainer.childCount - 1;
-
-            float newYPos = (totalEpisodesItems * 100f) + 1000f;
-            newYPos *= -1f;
-
+            float newYPos = ( (totalEpisodesItems * 100f) + /*1000f*/ 750f) * -1f;
+            //newYPos *= -1f;
             episodesContainerRect.anchoredPosition = new Vector2(episodesContainerRect.anchoredPosition.x, newYPos);
 
             float newHeight = totalEpisodesItems * 2f;
             newHeight += 3f;
             newHeight *= 100f;
-            newHeight += 1000f;
+            newHeight += 750f;
             storyEpisodesContainer.sizeDelta = new Vector2(storyEpisodesContainer.sizeDelta.x, newHeight);
 
             moreLikeThisSection.SetAsLastSibling();            
@@ -664,8 +670,9 @@ public class UIStoriesDetailsPanel : MonoBehaviour
         {
             FirebaseDBHandler.instance.LikesCountDecrement(FirebaseDBHandler.instance.GetReferenceFromStoryTitle(storyItem.storyTitleEnglish, FirebaseDBHandler.likeCountKeyEnd));
 
-            likeImage.gameObject.SetActive(false);
-            likeOutlineImage.gameObject.SetActive(true);
+            //likedImage.gameObject.SetActive(false);
+            //likedImageBg.gameObject.SetActive(true);
+            LeanTween.scale(likedImage.gameObject, Vector3.zero, 0.3f).setEase(LeanTweenType.easeInBack);
 
             episodesSpawner.playerData.RemoveStoryLiked(storyItem.storyTitleEnglish);
             SaveLoadGame.SavePlayerData(episodesSpawner.playerData);
@@ -676,11 +683,11 @@ public class UIStoriesDetailsPanel : MonoBehaviour
         {
             FirebaseDBHandler.instance.LikesCountIncrement(FirebaseDBHandler.instance.GetReferenceFromStoryTitle(storyItem.storyTitleEnglish, FirebaseDBHandler.likeCountKeyEnd));
 
-            likeImage.gameObject.SetActive(true);
-            likeImage.transform.localScale = Vector3.zero;
-            LeanTween.scale(likeImage.gameObject, Vector3.one, 0.3f).setEase(LeanTweenType.easeOutBack);
+            //likedImage.gameObject.SetActive(true);
+            likedImage.transform.localScale = Vector3.zero;
+            LeanTween.scale(likedImage.gameObject, Vector3.one, 0.3f).setEase(LeanTweenType.easeOutBack);
 
-            likeOutlineImage.gameObject.SetActive(false);
+            //likedImageBg.gameObject.SetActive(false);
 
             episodesSpawner.playerData.AddStoryLiked(storyItem.storyTitleEnglish);
             SaveLoadGame.SavePlayerData(episodesSpawner.playerData);

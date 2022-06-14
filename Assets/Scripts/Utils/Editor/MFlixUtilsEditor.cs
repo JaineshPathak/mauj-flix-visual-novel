@@ -74,6 +74,9 @@ public class MFlixUtilsEditor : Editor
     //Call Mode
     private SerializedProperty callModeNewSerialized;
 
+    //Say Commands Say Dialogue
+    private SerializedProperty sayDialogueReplaceSerialized;
+
     private MFlixUtils flixReplacer;
 
     private void OnEnable()
@@ -130,6 +133,8 @@ public class MFlixUtilsEditor : Editor
         newSoundSerialized = serializedObject.FindProperty("newSound");
 
         callModeNewSerialized = serializedObject.FindProperty("callModeNew");
+
+        sayDialogueReplaceSerialized = serializedObject.FindProperty("sayDialogueReplace");
     }
 
     public override void OnInspectorGUI()
@@ -540,6 +545,25 @@ public class MFlixUtilsEditor : Editor
                         //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
                         Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Call Update");
                         flixReplacer.UpdateCallCommands();
+                    }
+                }
+
+                break;
+
+            case MFlixUtils.WhatToReplace.SayCommandDialogueReplace:
+
+                if (flixReplacer.episodeFlowchart != null)
+                {
+                    GUIContent sayDialogueReplaceContent = new GUIContent("Say Dialogue In Scene", "Character Say Dialogue From Scene");
+                    EditorGUILayout.PropertyField(sayDialogueReplaceSerialized, sayDialogueReplaceContent, GUILayout.ExpandHeight(false));
+
+                    EditorGUILayout.Space(10f);
+
+                    if (DrawButtonColored("Update Say Commands".ToUpper(), "#FF0000", Color.white))
+                    {
+                        //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
+                        Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Say Replace Update");
+                        flixReplacer.ReplaceSayCommandsSayDialogue();
                     }
                 }
 

@@ -71,6 +71,9 @@ public class EpisodesTesting : MonoBehaviour
     public Transform episodeChoicesParent;
     public EpisodeMenuChoiceButton episodeChoiceButtonPrefab;
 
+    [Header("Slider")]
+    public GameObject speedSlider;
+
     private List<EpisodeMenuChoiceButton> menuChoiceButtonsList = new List<EpisodeMenuChoiceButton>();
 
     private void Start()
@@ -80,6 +83,8 @@ public class EpisodesTesting : MonoBehaviour
 
         choicesButton.SetActive(false);
         episodeChoicesScreen.SetActive(false);
+
+        speedSlider.SetActive(false);
 
         branchStartButton.onClick.AddListener(OnEpisodeBranchNormalStart);
         branchNormalEndButton.onClick.AddListener(OnEpisodeBranchNormalEnd);
@@ -121,6 +126,7 @@ public class EpisodesTesting : MonoBehaviour
                 branchEndingsScreen.SetActive(true);
                 titleObject.SetActive(false);
                 episodeButtonGroupLayout.gameObject.SetActive(false);
+                speedSlider.SetActive(false);
 
                 episodeCurrentData.WriteData(episodeBranches[i].episodeItem, episodeBranches[i].episodeStartBlock, episodeBranches[i].episodeNormalEndBlock, episodeBranches[i].episodeBranchEndBlock);
                 break;
@@ -136,6 +142,7 @@ public class EpisodesTesting : MonoBehaviour
             backButton.SetActive(true);
             choicesButton.SetActive(true);
             titleObject.SetActive(false);
+            speedSlider.SetActive(true);
             episodeButtonGroupLayout.gameObject.SetActive(false);
         }
 
@@ -182,6 +189,7 @@ public class EpisodesTesting : MonoBehaviour
 
         branchEndingsScreen.SetActive(false);
         titleObject.SetActive(true);
+        speedSlider.SetActive(false);
         episodeButtonGroupLayout.gameObject.SetActive(true);
     }
 
@@ -203,6 +211,7 @@ public class EpisodesTesting : MonoBehaviour
         backButton.SetActive(false);
         choicesButton.SetActive(false);
         titleObject.SetActive(true);
+        speedSlider.SetActive(false);
         episodeButtonGroupLayout.gameObject.SetActive(true);
 
         if(menuChoiceButtonsList.Count > 0)
@@ -242,6 +251,7 @@ public class EpisodesTesting : MonoBehaviour
 
         backButton.SetActive(true);
         branchEndingsScreen.SetActive(false);
+        speedSlider.SetActive(true);
         choicesButton.SetActive(true);
     }
 
@@ -254,6 +264,7 @@ public class EpisodesTesting : MonoBehaviour
 
         backButton.SetActive(true);
         branchEndingsScreen.SetActive(false);
+        speedSlider.SetActive(true);
         choicesButton.SetActive(true);
     }
 
@@ -266,6 +277,7 @@ public class EpisodesTesting : MonoBehaviour
 
         backButton.SetActive(true);
         branchEndingsScreen.SetActive(false);
+        speedSlider.SetActive(true);
         choicesButton.SetActive(true);
     }
 
@@ -305,5 +317,10 @@ public class EpisodesTesting : MonoBehaviour
 
         currentEpisodePrefab.GetComponentInChildren<Flowchart>().StopAllBlocks();
         currentEpisodePrefab.GetComponentInChildren<Flowchart>().ExecuteBlock(targetBlock);
+    }
+
+    public void SetTimeScale(float val)
+    {
+        Time.timeScale = val;
     }
 }

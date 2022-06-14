@@ -1035,7 +1035,7 @@ public class EpisodesHandler : MonoBehaviour
             case CharacterGender.Gender_Female:
                 //femaleCharacter = selectedCharacter;                
 
-                //print("Female: Step 1");
+                print("Female: Step 1");
                 foreach (var portraitCommand in episodeFlowchart.GetComponentsInChildren<Portrait>())
                 {
                     if (portraitCommand.enabled && portraitCommand._Character != null && portraitCommand._Character.NameMatch(selectedCharacterDataAsset.fungusCharacter.NameText /*"{$FemalePlayerName}"*/))
@@ -1058,12 +1058,12 @@ public class EpisodesHandler : MonoBehaviour
                         }*/
                         #endregion
 
-                        //print("Female: Step 2");
+                        print("Female: Step 2");
                         if (portraitCommand.Display == DisplayType.Show)
                         {
-                            //print("Female: Step 3 - Show Command");
-                            //print("Female: Step 4 - Character" + selectedCharacterDataAsset.fungusCharacter.name);
-                            //print("Female: Step 5 - Count" + selectedCharacterDataAsset.fungusCharacterPortraits.Count);
+                            print("Female: Step 3 - Show Command");
+                            print("Female: Step 4 - Character" + selectedCharacterDataAsset.fungusCharacter.name);
+                            print("Female: Step 5 - Count" + selectedCharacterDataAsset.fungusCharacterPortraits.Count);
                             for (int i = 0; i < selectedCharacterDataAsset.fungusCharacterPortraits.Count; i++)
                             {
                                 //print($"Female: Portrait Cmd - {portraitCommand._Portrait.name} == {portraitCommand._Character.Portraits[i]}");
@@ -1076,8 +1076,10 @@ public class EpisodesHandler : MonoBehaviour
 
                                 if(episodesSpawner != null && episodesSpawner.testModeSingle)
                                 {
+                                    print("Step 6 - Entered Here in Single Mode");
                                     if (portraitCommand._Portrait == portraitCommand._Character.Portraits[i])
                                     {
+                                        portraitCommand._PortraitName = selectedCharacterDataAsset.fungusCharacterPortraits[i].name;
                                         portraitCommand._Character = selectedCharacterDataAsset.fungusCharacter;
                                         portraitCommand._Portrait = selectedCharacterDataAsset.fungusCharacterPortraits[i];
                                     }

@@ -71,6 +71,9 @@ public class UIPersonalProfile : MonoBehaviour
         if (sectionLoadedList[0] == null)
             return;
 
+        if (playerData == null)
+            return;
+
         personalCategoryDatas[0].storiesDBItemList.Clear();
         if (playerData.StoriesLikedList.Count > 0)
         {            
@@ -98,6 +101,9 @@ public class UIPersonalProfile : MonoBehaviour
         if (!isDBLoaded)
             return;
 
+        if (playerData == null)
+            return;
+
         if (sectionLoadedList[0] == null)
             return;
 
@@ -118,7 +124,7 @@ public class UIPersonalProfile : MonoBehaviour
 
         personalCategoryDatas[0].countsDataText.text = playerData.StoriesLikedList.Count.ToString();
 
-        if (playerData.StoriesLikedList.Count <= 0 && sectionLoadedList[0] != null)
+        if (sectionLoadedList[0] != null && playerData.StoriesLikedList.Count <= 0)
             sectionLoadedList[0].gameObject.SetActive(false);               
     }
 
