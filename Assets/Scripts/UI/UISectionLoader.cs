@@ -38,7 +38,7 @@ public class UISectionLoader : MonoBehaviour
 
             if (/*storiesDB.storiesCategories[i].isEnabled*/ isCategoryEnabled)       //Useful if you want to Enable/Disable categories on the fly
             {
-                UIStoriesLoaderSmall uIStoriesLoaderSmallInstance;
+                UIStoriesLoaderSmall uIStoriesLoaderSmallInstance = null;
 
                 if (storiesDB.storiesCategories[i].isForShortStories)
                     uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderShortsPrefab, sectionLoaderContent);

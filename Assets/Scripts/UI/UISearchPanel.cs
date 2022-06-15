@@ -20,12 +20,16 @@ public class UISearchPanel : MonoBehaviour
     public UIStoriesItemSmall storyItemSmallPrefab;
     public UIStoriesDetailsPanel detailsPanel;
 
+    [Space(15)]    
+    public UIStoriesLoaderSmall storiesLoaderPrefab;
+    public UIStoriesLoaderSmall storiesLoaderShortsPrefab;
+
     [Header("Inputs")]
     public TMP_InputField searchInputField;
 
     private StoriesDB storiesDB;
     private Hashtable storiesDBHash = new Hashtable();
-    private Hashtable storiesItemsHash = new Hashtable();    
+    private Hashtable storiesItemsHash = new Hashtable();
 
     private static WaitForSeconds waitDelay = new WaitForSeconds(0.3f);
 
@@ -33,6 +37,8 @@ public class UISearchPanel : MonoBehaviour
     private FuzzyStringComparisonTolerance searchTolerance = FuzzyStringComparisonTolerance.Strong;
 
     private FirebaseRemoteConfig remoteConfigInstance;
+
+    private VerticalLayoutGroup verticalLayout;
 
     private void Awake()
     {
@@ -116,10 +122,14 @@ public class UISearchPanel : MonoBehaviour
         if (storiesDBHash.Count <= 0 || GameController.instance == null || detailsPanel == null)
             return;
 
-        StartCoroutine(PopulateContentRoutine());
+        bool whatLoadType = FirebaseRemoteConfig.DefaultInstance.GetValue("SearchLoadType").BooleanValue;
+        if(!whatLoadType)
+            StartCoroutine(PopulateContentRoutineV1());
+        else
+            StartCoroutine(PopulateContentRoutineV2());
     }
 
-    private IEnumerator PopulateContentRoutine()
+    private IEnumerator PopulateContentRoutineV1()
     {
         /*for (int i = 0; i < storiesDBHash.Count; i++)
         {
@@ -146,7 +156,7 @@ public class UISearchPanel : MonoBehaviour
                     storyItemSmallInstance.transform.name = de.Key.ToString();
                     storyItemSmallInstance.LoadThumbnailAsset((StoriesDBItem)de.Value, detailsPanel, GameController.instance);
 
-                    storiesItemsHash.Add(de.Key, storyItemSmallInstance);       //English Title, Item Instance
+                    storiesItemsHash.Add(de.Key, storyItemSmallInstance);       //English Title, Item Instance                    
                 }
             }
 
@@ -155,6 +165,52 @@ public class UISearchPanel : MonoBehaviour
 
         searchScrollRect.normalizedPosition = new Vector2(0, 1f);
         //searchContentParent.GetComponent<ContentSizeFitter>().enabled = false;
+    }
+
+    private IEnumerator PopulateContentRoutineV2()
+    {
+        //searchGridLayout.enabled = false;
+
+        if(searchGridLayout != null)
+            Destroy(searchGridLayout);
+
+        yield return new WaitForEndOfFrame();
+
+        verticalLayout = searchContentParent.gameObject.AddComponent<VerticalLayoutGroup>();
+        verticalLayout.padding.top = 0;
+        verticalLayout.padding.bottom = 0;
+        verticalLayout.spacing = 55f;
+        verticalLayout.childAlignment = TextAnchor.UpperLeft;
+        verticalLayout.childControlWidth = false;
+        verticalLayout.childControlHeight = false;
+        verticalLayout.childForceExpandWidth = false;
+        verticalLayout.childForceExpandHeight = false;
+
+        yield return new WaitForEndOfFrame();
+
+        for (int i = 1; i < storiesDB.storiesCategories.Length; i++)
+        {
+            bool isCategoryEnabled = FirebaseRemoteConfig.DefaultInstance.GetValue("Category" + i + "_Status").BooleanValue;
+
+            if(isCategoryEnabled)
+            {
+                UIStoriesLoaderSmall uIStoriesLoaderSmallInstance = null;
+
+                if (storiesDB.storiesCategories[i].isForShortStories)
+                    uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderShortsPrefab, searchContentParent);
+                else
+                    uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, searchContentParent);
+
+                uIStoriesLoaderSmallInstance.categoryIndex = i;
+                uIStoriesLoaderSmallInstance.OnStoryDBLoaded(storiesDB, ref storiesItemsHash);
+
+                yield return waitDelay;
+            }
+        }
+
+        yield return new WaitForEndOfFrame();
+
+        searchScrollRect.normalizedPosition = new Vector2(0, 1f);
     }
 
     public void OnSearchValueEdit(string val)
@@ -168,7 +224,9 @@ public class UISearchPanel : MonoBehaviour
                     itemMain.gameObject.SetActive(true);
             }
 
-            searchGridLayout.childAlignment = TextAnchor.UpperCenter;
+            if(searchGridLayout != null)
+                searchGridLayout.childAlignment = TextAnchor.UpperCenter;
+
             searchContentFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         }
         else if(val.Length > 0)
@@ -225,7 +283,10 @@ public class UISearchPanel : MonoBehaviour
             }
 
             searchScrollRect.normalizedPosition = new Vector2(0, 1f);
-            searchGridLayout.childAlignment = TextAnchor.UpperLeft;
+
+            if (searchGridLayout != null)
+                searchGridLayout.childAlignment = TextAnchor.UpperLeft;
+
             searchContentFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
         }
     }

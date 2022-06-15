@@ -147,6 +147,98 @@ public class UIStoriesLoaderSmall : MonoBehaviour
         }
     }
 
+    public void OnStoryDBLoaded(StoriesDB storyDB, ref Hashtable hashItemsDB)
+    {
+        if (GameController.instance == null)
+            return;
+
+        if (categoryIndex >= storyDB.storiesCategories.Length)
+            return;
+
+        //categoryTitleText.text = storyDB.storiesCategories[categoryIndex].categoryName + " (" + storyDB.storiesCategories[categoryIndex].storiesDBItems.Length + ")";
+        if (categoryTitleText != null && categoryTitleFontFixer != null)
+        {
+            categoryTitleText.text = storyDB.storiesCategories[categoryIndex].categoryName + " ";
+            categoryTitleFontFixer.UpdateMe();
+
+            //categoryTitleFontFixer.FixTexts();
+        }
+
+        if (categoryLayoutGroup)
+            LayoutRebuilder.ForceRebuildLayoutImmediate(categoryLayoutGroup);
+
+        for (int i = 0; i < storyDB.storiesCategories[categoryIndex].storiesDBItems.Length; i++)
+        {
+            string storyTitleRaw = storyDB.storiesCategories[categoryIndex].storiesDBItems[i].storyTitleEnglish;
+            string storyTitleFresh = storyTitleRaw.Replace(" ", "");
+
+            bool storyEnabled = FirebaseRemoteConfig.DefaultInstance.GetValue("ST_" + storyTitleFresh + "_Status").BooleanValue;
+
+            if (/*storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isStoryEnabled*/storyEnabled)
+            {
+                UIStoriesItemSmall storyItemSmallInstance = null;
+
+                if (storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isShortStory)
+                {
+                    if (ThumbnailItemsPool.instance != null)
+                    {
+                        GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(2);
+                        if (itemInstanceGO)
+                            storyItemSmallInstance = itemInstanceGO.GetComponent<UIStoriesItemSmall>();
+
+                        if (storyItemSmallInstance)
+                        {
+                            storyItemSmallInstance.gameObject.SetActive(true);
+                            storyItemSmallInstance.transform.parent = scrollContent;
+                        }
+                        else
+                            storyItemSmallInstance = Instantiate(storiesItemShortsPrefab, scrollContent);
+                    }
+                    else
+                        storyItemSmallInstance = Instantiate(storiesItemShortsPrefab, scrollContent);
+                }
+                else
+                {
+                    if (ThumbnailItemsPool.instance != null)
+                    {
+                        GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(1);
+                        if (itemInstanceGO)
+                            storyItemSmallInstance = itemInstanceGO.GetComponent<UIStoriesItemSmall>();
+
+                        if (storyItemSmallInstance)
+                        {
+                            storyItemSmallInstance.gameObject.SetActive(true);
+                            storyItemSmallInstance.transform.parent = scrollContent;
+                        }
+                        else
+                            storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+                    }
+                    else
+                        storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
+                }
+
+                storyItemSmallInstance.transform.name = storyDB.storiesCategories[categoryIndex].storiesDBItems[i].storyTitleEnglish;
+                storyItemSmallInstance.LoadThumbnailAsset(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance);
+
+                storiesItemSmallList.Add(storyItemSmallInstance);
+
+                if(!hashItemsDB.ContainsKey(storyItemSmallInstance.transform.name))
+                    hashItemsDB.Add(storyItemSmallInstance.transform.name, storyItemSmallInstance);
+            }
+        }
+
+        if (categoryCountText != null)
+            categoryCountText.text = "(" + storiesItemSmallList.Count + ")";
+
+        //Shuffle List if the Category is "New Stories"
+        if (categoryIndex == 1)
+        {
+            storiesItemSmallList = OtherUtils.Shuffle<UIStoriesItemSmall>(storiesItemSmallList);
+            for (int i = 0; i < storiesItemSmallList.Count; i++)
+                storiesItemSmallList[i].transform.SetSiblingIndex(i);
+        }
+    }
+
     //Called from UIPersonalProfile.cs
     public void PopulateCategory(string _categoryTitle, StoriesDBItem[] _storiesDBItems)
     {
