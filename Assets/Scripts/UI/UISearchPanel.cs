@@ -8,8 +8,23 @@ using TMPro;
 using FuzzyString;
 using Firebase.RemoteConfig;
 
-public class UISearchPanel : MonoBehaviour
+//When used in LoadType = true (from Firebase Remote Config)
+[Serializable]
+public class SearchableItem
 {
+    public string storyTitleName;
+    public UIStoriesItemSmall itemSmallInstance;
+    public UIStoriesLoaderSmall itemLoaderInstance;
+
+    /*public SearchableItem(string _storyTitleName, UIStoriesItemSmall _itemSmall)
+    {
+        storyTitleName = _storyTitleName;
+        itemSmallInstance = _itemSmall;
+    }*/
+}
+
+public class UISearchPanel : MonoBehaviour
+{    
     [Header("Components")]
     public float searchMatchPercent = 0.75f;
     public ScrollRect searchScrollRect;
@@ -38,13 +53,20 @@ public class UISearchPanel : MonoBehaviour
 
     private FirebaseRemoteConfig remoteConfigInstance;
 
+    private bool whatLoadType;
+
+    //When used in LoadType = true (from Firebase Remote Config)
     private VerticalLayoutGroup verticalLayout;
+    private List<SearchableItem> searchableItemsList;    
 
     private void Awake()
     {
         searchOptions.Add(FuzzyStringComparisonOptions.UseOverlapCoefficient);
         searchOptions.Add(FuzzyStringComparisonOptions.UseLongestCommonSubsequence);
         searchOptions.Add(FuzzyStringComparisonOptions.UseLongestCommonSubstring);
+
+        //True = Load Search Windows in Categories (Same as Home Screen), False = Load in default Grid Layout
+        whatLoadType = FirebaseRemoteConfig.DefaultInstance.GetValue("SearchLoadType").BooleanValue;
     }
 
     private void OnEnable()
@@ -122,7 +144,7 @@ public class UISearchPanel : MonoBehaviour
         if (storiesDBHash.Count <= 0 || GameController.instance == null || detailsPanel == null)
             return;
 
-        bool whatLoadType = FirebaseRemoteConfig.DefaultInstance.GetValue("SearchLoadType").BooleanValue;
+        
         if(!whatLoadType)
             StartCoroutine(PopulateContentRoutineV1());
         else
@@ -170,8 +192,9 @@ public class UISearchPanel : MonoBehaviour
     private IEnumerator PopulateContentRoutineV2()
     {
         //searchGridLayout.enabled = false;
+        searchableItemsList = new List<SearchableItem>();
 
-        if(searchGridLayout != null)
+        if (searchGridLayout != null)
             Destroy(searchGridLayout);
 
         yield return new WaitForEndOfFrame();
@@ -202,20 +225,43 @@ public class UISearchPanel : MonoBehaviour
                     uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, searchContentParent);
 
                 uIStoriesLoaderSmallInstance.categoryIndex = i;
-                uIStoriesLoaderSmallInstance.OnStoryDBLoaded(storiesDB, ref storiesItemsHash);
+                uIStoriesLoaderSmallInstance.transform.name += i;
+                uIStoriesLoaderSmallInstance.OnStoryDBLoaded(storiesDB, ref searchableItemsList);
 
                 yield return waitDelay;
             }
         }
+
+/*#if UNITY_EDITOR
+        DebugItemsHashTable();
+#endif*/
 
         yield return new WaitForEndOfFrame();
 
         searchScrollRect.normalizedPosition = new Vector2(0, 1f);
     }
 
+    [ContextMenu("Show Debug Items Hash")]
+    public void DebugItemsHashTable()
+    {
+        foreach (DictionaryEntry item in storiesItemsHash)
+        {
+            UIStoriesItemSmall itemMain = (UIStoriesItemSmall)item.Value;
+            Debug.Log($"{item.Key} - {item.Value}, In Parent - {itemMain.transform.parent.parent.parent.name}");
+        }
+    }
+
     public void OnSearchValueEdit(string val)
     {
-        if(val.Length <= 0)
+        if (!whatLoadType)
+            SearchWithLoadTypeV1(val);
+        else
+            SearchWithLoadTypeV2(val);
+    }
+
+    private void SearchWithLoadTypeV1(string val)
+    {
+        if (val.Length <= 0)
         {
             foreach (DictionaryEntry item in storiesItemsHash)
             {
@@ -224,30 +270,30 @@ public class UISearchPanel : MonoBehaviour
                     itemMain.gameObject.SetActive(true);
             }
 
-            if(searchGridLayout != null)
+            if (searchGridLayout != null)
                 searchGridLayout.childAlignment = TextAnchor.UpperCenter;
 
             searchContentFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         }
-        else if(val.Length > 0)
+        else if (val.Length > 0)
         {
-            searchTextReplacer.UpdateMe();
+            #region OLDCODES
             /*foreach (DictionaryEntry item in storiesItemsHash)
-            {
-                UIStoriesItemSmall itemMain = (UIStoriesItemSmall)item.Value;
+                {
+                    UIStoriesItemSmall itemMain = (UIStoriesItemSmall)item.Value;
 
-                double matchPercent = ComputeSimilarity.CalculateSimilarity(val, item.Key.ToString());
-                if(matchPercent >= searchMatchPercent)
-                {
-                    if (!itemMain.gameObject.activeSelf)
-                        itemMain.gameObject.SetActive(true);
-                }
-                else
-                {
-                    if (itemMain.gameObject.activeSelf)
-                        itemMain.gameObject.SetActive(false);
-                }                
-            }*/
+                    double matchPercent = ComputeSimilarity.CalculateSimilarity(val, item.Key.ToString());
+                    if(matchPercent >= searchMatchPercent)
+                    {
+                        if (!itemMain.gameObject.activeSelf)
+                            itemMain.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        if (itemMain.gameObject.activeSelf)
+                            itemMain.gameObject.SetActive(false);
+                    }                
+                }*/
 
             /*Hashtable matchingStories = ComputeSimilarity.Search(val, storiesItemsHash, searchMatchPercent);
             foreach(DictionaryEntry item in storiesItemsHash)
@@ -263,11 +309,14 @@ public class UISearchPanel : MonoBehaviour
                     if (itemMain.gameObject.activeSelf)
                         itemMain.gameObject.SetActive(false);
                 }
-            }*/
+            }*/ 
+            #endregion
+
+            searchTextReplacer.UpdateMe();
 
             foreach (DictionaryEntry item in storiesItemsHash)
             {
-                UIStoriesItemSmall itemMain = (UIStoriesItemSmall)item.Value;                
+                UIStoriesItemSmall itemMain = (UIStoriesItemSmall)item.Value;
 
                 bool result = val.ApproximatelyEquals(item.Key.ToString(), searchTolerance, searchOptions.ToArray());
                 if (result)
@@ -288,6 +337,50 @@ public class UISearchPanel : MonoBehaviour
                 searchGridLayout.childAlignment = TextAnchor.UpperLeft;
 
             searchContentFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+        }
+    }
+
+    private void SearchWithLoadTypeV2(string val)
+    {
+        if(val.Length <= 0)
+        {
+            foreach(SearchableItem item in searchableItemsList)
+            {
+                if (!item.itemLoaderInstance.gameObject.activeSelf)
+                    item.itemLoaderInstance.gameObject.SetActive(true);
+
+                if (!item.itemSmallInstance.gameObject.activeSelf)
+                    item.itemSmallInstance.gameObject.SetActive(true);                
+            }
+
+            searchScrollRect.normalizedPosition = new Vector2(0, 1f);
+        }
+        else
+        {
+            searchTextReplacer.UpdateMe();
+
+            foreach (SearchableItem item in searchableItemsList)
+            {
+                bool result = val.ApproximatelyEquals(item.storyTitleName, searchTolerance, searchOptions.ToArray());
+                if(result)
+                {
+                    if (!item.itemLoaderInstance.gameObject.activeSelf)
+                        item.itemLoaderInstance.gameObject.SetActive(true);
+
+                    if (!item.itemSmallInstance.gameObject.activeSelf)
+                        item.itemSmallInstance.gameObject.SetActive(true);
+                }
+                else
+                {
+                    if (item.itemSmallInstance.gameObject.activeSelf)
+                        item.itemSmallInstance.gameObject.SetActive(false);
+
+                    if (item.itemLoaderInstance.AllItemsInactive() && item.itemLoaderInstance.gameObject.activeSelf)
+                        item.itemLoaderInstance.gameObject.SetActive(false);
+                }
+            }
+
+            searchScrollRect.normalizedPosition = new Vector2(0, 1f);
         }
     }
 }

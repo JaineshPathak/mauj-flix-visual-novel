@@ -147,7 +147,7 @@ public class UIStoriesLoaderSmall : MonoBehaviour
         }
     }
 
-    public void OnStoryDBLoaded(StoriesDB storyDB, ref Hashtable hashItemsDB)
+    public void OnStoryDBLoaded(StoriesDB storyDB, ref List<SearchableItem> searchItemsList)
     {
         if (GameController.instance == null)
             return;
@@ -222,8 +222,16 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
                 storiesItemSmallList.Add(storyItemSmallInstance);
 
-                if(!hashItemsDB.ContainsKey(storyItemSmallInstance.transform.name))
-                    hashItemsDB.Add(storyItemSmallInstance.transform.name, storyItemSmallInstance);
+                //if(!searchItemsList.ContainsKey(storyItemSmallInstance.transform.name))
+                //searchItemsList.Add(storyItemSmallInstance.transform.name, storyItemSmallInstance);
+
+                SearchableItem item = new SearchableItem
+                {
+                    storyTitleName = storyItemSmallInstance.transform.name,
+                    itemSmallInstance = storyItemSmallInstance,
+                    itemLoaderInstance = this
+                };
+                searchItemsList.Add(item);
             }
         }
 
@@ -408,5 +416,23 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
         if (categoryCountText != null)
             categoryCountText.text = "(" + storiesItemSmallList.Count + ")";
+    }
+
+    public bool AllItemsInactive()
+    {
+        bool status = true;
+        if (storiesItemSmallList.Count <= 0)
+            return status;
+
+        for (int i = 0; i < storiesItemSmallList.Count; i++)
+        {
+            if (storiesItemSmallList[i].gameObject.activeSelf)
+            {
+                status = false;
+                break;
+            }
+        }
+
+        return status;
     }
 }
