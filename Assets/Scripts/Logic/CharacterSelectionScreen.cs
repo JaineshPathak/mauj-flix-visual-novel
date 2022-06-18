@@ -63,6 +63,12 @@ public class CharacterSelectionScreen : MonoBehaviour
 
     private CanvasGroup canvasGroup;
 
+    private void OnValidate()
+    {
+        if (episodesHandler == null)
+            GetEpisodeHandler();
+    }
+
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();

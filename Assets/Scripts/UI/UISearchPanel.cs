@@ -28,14 +28,22 @@ public class UISearchPanel : MonoBehaviour
     [Header("Components")]
     public float searchMatchPercent = 0.75f;
     public ScrollRect searchScrollRect;
-    public ContentSizeFitter searchContentFitter;
     public CharReplacerHindi searchTextReplacer;
+    
+    [Space(15)]
     public GridLayoutGroup searchGridLayout;
+    public ContentSizeFitter searchGridContentFitter;
+    public CanvasGroup searchGridCanvas;
+
+    public VerticalLayoutGroup searchVerticalLayout;
+    public CanvasGroup searchVerticalCanvas;
+
+    [Space(15)]
     public Transform searchContentParent;
     public UIStoriesItemSmall storyItemSmallPrefab;
     public UIStoriesDetailsPanel detailsPanel;
 
-    [Space(15)]    
+    [Space(15)]
     public UIStoriesLoaderSmall storiesLoaderPrefab;
     public UIStoriesLoaderSmall storiesLoaderShortsPrefab;
 
@@ -57,7 +65,7 @@ public class UISearchPanel : MonoBehaviour
 
     //When used in LoadType = true (from Firebase Remote Config)
     private VerticalLayoutGroup verticalLayout;
-    private List<SearchableItem> searchableItemsList;    
+    private List<SearchableItem> searchableItemsList;
 
     private void Awake()
     {
@@ -143,12 +151,9 @@ public class UISearchPanel : MonoBehaviour
     {
         if (storiesDBHash.Count <= 0 || GameController.instance == null || detailsPanel == null)
             return;
-
         
-        if(!whatLoadType)
-            StartCoroutine(PopulateContentRoutineV1());
-        else
-            StartCoroutine(PopulateContentRoutineV2());
+        StartCoroutine(PopulateContentRoutineV1());
+        StartCoroutine(PopulateContentRoutineV2());
     }
 
     private IEnumerator PopulateContentRoutineV1()
@@ -174,7 +179,7 @@ public class UISearchPanel : MonoBehaviour
 
                 if (/*item.isStoryEnabled*/ storyEnabled)
                 {
-                    UIStoriesItemSmall storyItemSmallInstance = Instantiate(storyItemSmallPrefab, searchContentParent);
+                    UIStoriesItemSmall storyItemSmallInstance = Instantiate(storyItemSmallPrefab, searchGridLayout.transform);
                     storyItemSmallInstance.transform.name = de.Key.ToString();
                     storyItemSmallInstance.LoadThumbnailAsset((StoriesDBItem)de.Value, detailsPanel, GameController.instance);
 
@@ -194,7 +199,7 @@ public class UISearchPanel : MonoBehaviour
         //searchGridLayout.enabled = false;
         searchableItemsList = new List<SearchableItem>();
 
-        if (searchGridLayout != null)
+        /*if (searchGridLayout != null)
             Destroy(searchGridLayout);
 
         yield return new WaitForEndOfFrame();
@@ -207,7 +212,7 @@ public class UISearchPanel : MonoBehaviour
         verticalLayout.childControlWidth = false;
         verticalLayout.childControlHeight = false;
         verticalLayout.childForceExpandWidth = false;
-        verticalLayout.childForceExpandHeight = false;
+        verticalLayout.childForceExpandHeight = false;*/
 
         yield return new WaitForEndOfFrame();
 
@@ -220,9 +225,9 @@ public class UISearchPanel : MonoBehaviour
                 UIStoriesLoaderSmall uIStoriesLoaderSmallInstance = null;
 
                 if (storiesDB.storiesCategories[i].isForShortStories)
-                    uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderShortsPrefab, searchContentParent);
+                    uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderShortsPrefab, searchVerticalLayout.transform);
                 else
-                    uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, searchContentParent);
+                    uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, searchVerticalLayout.transform);
 
                 uIStoriesLoaderSmallInstance.categoryIndex = i;
                 uIStoriesLoaderSmallInstance.transform.name += i;
@@ -232,31 +237,130 @@ public class UISearchPanel : MonoBehaviour
             }
         }
 
-/*#if UNITY_EDITOR
-        DebugItemsHashTable();
-#endif*/
+        //if (searchGridLayout != null && searchGridLayout.gameObject.activeSelf)
+        //searchGridLayout.gameObject.SetActive(false);
+
+        /*#if UNITY_EDITOR
+                DebugItemsHashTable();
+        #endif*/
+
+        if (searchGridCanvas)
+        {
+            searchGridCanvas.alpha = 0;
+            searchGridCanvas.interactable = false;
+            searchGridCanvas.blocksRaycasts = false;
+        }
 
         yield return new WaitForEndOfFrame();
 
         searchScrollRect.normalizedPosition = new Vector2(0, 1f);
     }
 
-    [ContextMenu("Show Debug Items Hash")]
-    public void DebugItemsHashTable()
-    {
-        foreach (DictionaryEntry item in storiesItemsHash)
-        {
-            UIStoriesItemSmall itemMain = (UIStoriesItemSmall)item.Value;
-            Debug.Log($"{item.Key} - {item.Value}, In Parent - {itemMain.transform.parent.parent.parent.name}");
-        }
-    }
-
     public void OnSearchValueEdit(string val)
     {
-        if (!whatLoadType)
+        /*if (!whatLoadType)
             SearchWithLoadTypeV1(val);
         else
-            SearchWithLoadTypeV2(val);
+            SearchWithLoadTypeV2(val);*/
+
+        SearchGridwise(val);
+    }
+
+    private void SearchGridwise(string val)
+    {
+        searchTextReplacer.UpdateMe();
+
+        if (val.Length <= 0)
+        {
+            //if ((searchVerticalLayout != null) && !searchVerticalLayout.gameObject.activeSelf)
+                //searchVerticalLayout.gameObject.SetActive(true);
+
+            if(searchVerticalCanvas)
+            {
+                searchVerticalCanvas.alpha = 1;
+                searchVerticalCanvas.interactable = true;
+                searchVerticalCanvas.blocksRaycasts = true;
+            }
+
+            searchScrollRect.content = searchVerticalLayout.transform as RectTransform;
+
+            foreach (DictionaryEntry item in storiesItemsHash)
+            {
+                UIStoriesItemSmall itemMain = (UIStoriesItemSmall)item.Value;
+                if (!itemMain.gameObject.activeSelf)
+                    itemMain.gameObject.SetActive(true);
+            }
+
+            if (searchGridLayout != null)
+            {
+                searchGridLayout.childAlignment = TextAnchor.UpperCenter;
+
+                //if (searchGridLayout.gameObject.activeSelf)
+                    //searchGridLayout.gameObject.SetActive(false);
+
+                if(searchGridCanvas)
+                {
+                    searchGridCanvas.alpha = 0;
+                    searchGridCanvas.interactable = false;
+                    searchGridCanvas.blocksRaycasts = false;
+                }
+            }
+
+            searchGridContentFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;                        
+        }
+        else
+        {
+            //if ( (searchVerticalLayout != null) && searchVerticalLayout.gameObject.activeSelf)
+            //searchVerticalLayout.gameObject.SetActive(false); 
+
+            if (searchVerticalCanvas)
+            {
+                searchVerticalCanvas.alpha = 0;
+                searchVerticalCanvas.interactable = false;
+                searchVerticalCanvas.blocksRaycasts = false;
+            }
+
+            foreach (DictionaryEntry item in storiesItemsHash)
+            {
+                UIStoriesItemSmall itemMain = (UIStoriesItemSmall)item.Value;
+
+                bool result = val.ApproximatelyEquals(item.Key.ToString(), searchTolerance, searchOptions.ToArray());
+                if (result)
+                {
+                    if (!itemMain.gameObject.activeSelf)
+                        itemMain.gameObject.SetActive(true);
+                }
+                else
+                {
+                    if (itemMain.gameObject.activeSelf)
+                        itemMain.gameObject.SetActive(false);
+                }
+            }
+
+            searchScrollRect.normalizedPosition = new Vector2(0, 1f);
+
+            if (searchGridLayout != null)
+            {
+                //if (!searchGridLayout.gameObject.activeSelf)
+                    //searchGridLayout.gameObject.SetActive(true);
+
+                if(searchGridCanvas)
+                {
+                    searchGridCanvas.alpha = 1;
+                    searchGridCanvas.interactable = true;
+                    searchGridCanvas.blocksRaycasts = true;
+                }
+
+                searchScrollRect.content = searchGridLayout.transform as RectTransform;
+
+                searchGridLayout.childAlignment = TextAnchor.UpperLeft;
+            }
+
+            //if (searchGridLayout != null)
+            //searchGridLayout.childAlignment = TextAnchor.UpperLeft;
+
+            searchGridContentFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+        }
     }
 
     private void SearchWithLoadTypeV1(string val)
@@ -273,7 +377,7 @@ public class UISearchPanel : MonoBehaviour
             if (searchGridLayout != null)
                 searchGridLayout.childAlignment = TextAnchor.UpperCenter;
 
-            searchContentFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            searchGridContentFitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
         }
         else if (val.Length > 0)
         {
@@ -336,7 +440,7 @@ public class UISearchPanel : MonoBehaviour
             if (searchGridLayout != null)
                 searchGridLayout.childAlignment = TextAnchor.UpperLeft;
 
-            searchContentFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
+            searchGridContentFitter.verticalFit = ContentSizeFitter.FitMode.Unconstrained;
         }
     }
 
@@ -383,4 +487,18 @@ public class UISearchPanel : MonoBehaviour
             searchScrollRect.normalizedPosition = new Vector2(0, 1f);
         }
     }
+
+    //-----------------------------------------------------------------------------------------------------------------------
+    
+    [ContextMenu("Show Debug Items Hash")]
+    public void DebugItemsHashTable()
+    {
+        foreach (DictionaryEntry item in storiesItemsHash)
+        {
+            UIStoriesItemSmall itemMain = (UIStoriesItemSmall)item.Value;
+            Debug.Log($"{item.Key} - {item.Value}, In Parent - {itemMain.transform.parent.parent.parent.name}");
+        }
+    }
+
+    //-----------------------------------------------------------------------------------------------------------------------
 }

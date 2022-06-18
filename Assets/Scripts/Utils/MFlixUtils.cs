@@ -125,7 +125,7 @@ public class MFlixUtils : MonoBehaviour
 
         //SayDialog prefabNarrativeSay = Instantiate(narrativeDialoguePrefab, transform) as SayDialog;
         SayDialog tutorialSayInstance = PrefabUtility.InstantiatePrefab(tutorialDialoguePrefab, transform) as SayDialog;
-        tutorialSayInstance.transform.name += "(NEW)";
+        //tutorialSayInstance.transform.name += "(NEW)";
         tutorialSayInstance.transform.SetSiblingIndex(siblingIndexScene + 1);
         tutorialSayInstance.gameObject.SetActive(tutorialDialogueInScene.gameObject.activeSelf);
 
@@ -167,7 +167,7 @@ public class MFlixUtils : MonoBehaviour
 
         //SayDialog prefabNarrativeSay = Instantiate(narrativeDialoguePrefab, transform) as SayDialog;
         SayDialog prefabNarrativeSayInstance = PrefabUtility.InstantiatePrefab(narrativeDialoguePrefab, transform) as SayDialog;
-        prefabNarrativeSayInstance.transform.name += "(NEW)";
+        //prefabNarrativeSayInstance.transform.name += "(NEW)";
         prefabNarrativeSayInstance.transform.SetSiblingIndex(siblingIndexScene + 1);
         prefabNarrativeSayInstance.gameObject.SetActive(narrativeDialogueInScene.gameObject.activeSelf);
 
@@ -208,7 +208,7 @@ public class MFlixUtils : MonoBehaviour
         int siblingIndexScene = sayDialogueInScene.transform.GetSiblingIndex();
 
         SayDialog sayDialogueInstance = PrefabUtility.InstantiatePrefab(sayDialoguePrefab, transform) as SayDialog;
-        sayDialogueInstance.transform.name += "(NEW)";
+        //sayDialogueInstance.transform.name += "(NEW)";
         sayDialogueInstance.transform.SetSiblingIndex(siblingIndexScene + 1);
         sayDialogueInstance.gameObject.SetActive(sayDialogueInScene.gameObject.activeSelf);
 
@@ -291,7 +291,7 @@ public class MFlixUtils : MonoBehaviour
         int siblingIndexScene = menuDialogueInScene.transform.GetSiblingIndex();
 
         MenuDialog menuDialogInstance = PrefabUtility.InstantiatePrefab(menuDialoguePrefab, transform) as MenuDialog;
-        menuDialogInstance.transform.name += "(NEW)";
+        //menuDialogInstance.transform.name += "(NEW)";
         menuDialogInstance.transform.SetSiblingIndex(siblingIndexScene + 1);
 
         PrefabUtility.RecordPrefabInstancePropertyModifications(menuDialogInstance);
@@ -416,7 +416,7 @@ public class MFlixUtils : MonoBehaviour
         int siblingIndexScene = endEpisodeScreenInScene.transform.GetSiblingIndex();
 
         GameObject endEpisodeInstance = PrefabUtility.InstantiatePrefab(endEpisodeScreenPrefab, transform) as GameObject;
-        endEpisodeInstance.transform.name += "(NEW)";
+        //endEpisodeInstance.transform.name += "(NEW)";
         endEpisodeInstance.transform.SetSiblingIndex(siblingIndexScene + 1);
         endEpisodeInstance.gameObject.SetActive(endEpisodeScreenInScene.gameObject.activeSelf);
 
@@ -444,11 +444,11 @@ public class MFlixUtils : MonoBehaviour
             return;
 
         GameObject storyByMaujflixInstance = PrefabUtility.InstantiatePrefab(storyByMaujflixPrefab, transform) as GameObject;
-        storyByMaujflixInstance.transform.name += "(NEW)";
+        //storyByMaujflixInstance.transform.name += "(NEW)";
         storyByMaujflixInstance.gameObject.SetActive(true);
 
         GameObject storyEndScreenInstance = PrefabUtility.InstantiatePrefab(storyEndScreenPrefab, transform) as GameObject;
-        storyEndScreenInstance.transform.name += "(NEW)";
+        //storyEndScreenInstance.transform.name += "(NEW)";
         storyEndScreenInstance.gameObject.SetActive(true);
 
         PrefabUtility.RecordPrefabInstancePropertyModifications(storyByMaujflixInstance);
@@ -467,11 +467,11 @@ public class MFlixUtils : MonoBehaviour
             return;
 
         GameObject storyByMaujflixInstance = PrefabUtility.InstantiatePrefab(storyByMaujflixPrefab, transform) as GameObject;
-        storyByMaujflixInstance.transform.name += "(NEW)";
+        //storyByMaujflixInstance.transform.name += "(NEW)";
         storyByMaujflixInstance.gameObject.SetActive(true);
 
         GameObject storyBranchEndScreenInstance = PrefabUtility.InstantiatePrefab(storyBranchEndScreenPrefab, transform) as GameObject;
-        storyBranchEndScreenInstance.transform.name += "(NEW)";
+        //storyBranchEndScreenInstance.transform.name += "(NEW)";
         storyBranchEndScreenInstance.gameObject.SetActive(true);
 
         PrefabUtility.RecordPrefabInstancePropertyModifications(storyByMaujflixInstance);
@@ -492,7 +492,7 @@ public class MFlixUtils : MonoBehaviour
         int siblingIndexScene = askYesNoPopupInScene.transform.GetSiblingIndex();
 
         GameObject askNoPopupInstance = PrefabUtility.InstantiatePrefab(askYesNoPopupPrefab, transform) as GameObject;
-        askNoPopupInstance.transform.name += "(NEW)";
+        //askNoPopupInstance.transform.name += "(NEW)";
         askNoPopupInstance.transform.SetSiblingIndex(siblingIndexScene + 1);
         askNoPopupInstance.gameObject.SetActive(askYesNoPopupInScene.gameObject.activeSelf);
 
