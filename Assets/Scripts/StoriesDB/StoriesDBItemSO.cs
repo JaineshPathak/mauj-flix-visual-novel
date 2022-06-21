@@ -157,12 +157,12 @@ public class StoriesDBItemSO : ScriptableObject
         }*/
 
         //item.storyBranchEpisodesKeys = new string[0];
-        Array.Resize(ref item.storyBranchEpisodesKeys, this.storyEpisodesBranchkeys.Length);
-        if (this.storyEpisodesBranchkeys.Length > 0)
+        if (storyEpisodesBranchkeys.Length > 0)
         {
+            Array.Resize(ref item.storyBranchEpisodesKeys, storyEpisodesBranchkeys.Length);
             for (int i = 0; i < storyEpisodesBranchkeys.Length; i++)
             {
-                if(this.storyEpisodesBranchkeys[i] != null)
+                if(storyEpisodesBranchkeys[i] != null)
                     item.storyBranchEpisodesKeys[i] = storyEpisodesBranchkeys[i].RuntimeKey.ToString();
             }
         }

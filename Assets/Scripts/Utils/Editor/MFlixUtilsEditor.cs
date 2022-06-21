@@ -21,6 +21,11 @@ public class MFlixUtilsEditor : Editor
     private SerializedProperty narrativeDialogueInSceneSerialized;
     private SerializedProperty narrativeDialoguePrefabSerialized;
 
+    //Narrative Black Dialogue Mode
+    private SerializedProperty narrativeDestroyBlackOriginalSerialized;
+    private SerializedProperty narrativeBlackDialogueInSceneSerialized;
+    private SerializedProperty narrativeBlackDialoguePrefabSerialized;
+
     //Say Dialogue Mode
     private SerializedProperty sayDialogueDestroyOriginalSerialized;
     private SerializedProperty sayDialogueInSceneSerialized;
@@ -91,6 +96,10 @@ public class MFlixUtilsEditor : Editor
         narrativeDestroyOriginalSerialized = serializedObject.FindProperty("destroyOriginalNarrativeDialogue");
         narrativeDialogueInSceneSerialized = serializedObject.FindProperty("narrativeDialogueInScene");
         narrativeDialoguePrefabSerialized = serializedObject.FindProperty("narrativeDialoguePrefab");
+
+        narrativeDestroyBlackOriginalSerialized = serializedObject.FindProperty("destroyOriginalNarrativeBlackDialogue");
+        narrativeBlackDialogueInSceneSerialized = serializedObject.FindProperty("narrativeBlackDialogueInScene");
+        narrativeBlackDialoguePrefabSerialized = serializedObject.FindProperty("narrativeBlackDialoguePrefab");
 
         sayDialogueDestroyOriginalSerialized = serializedObject.FindProperty("destroyOriginalSayDialogue");
         sayDialogueInSceneSerialized = serializedObject.FindProperty("sayDialogueInScene");
@@ -229,6 +238,38 @@ public class MFlixUtilsEditor : Editor
                         //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
                         Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Narrative Replace");
                         flixReplacer.ReplaceNarrativeDialogue();                        
+                    }
+                }
+
+                break;
+
+            case MFlixUtils.WhatToReplace.NarrativeBlackDialogue:
+
+                //EditorGUILayout.Toggle("Destroy Original", flixReplacer.destroyOriginalNarrativeDialogue);
+                GUIContent narrativeBlackDestroyOriginalContent = new GUIContent("Destroy Original", "Destroy Original Narrative Black Dialogue from Episode Prefab");
+                EditorGUILayout.PropertyField(narrativeDestroyBlackOriginalSerialized, narrativeBlackDestroyOriginalContent, GUILayout.ExpandHeight(false));
+
+                GUIContent narrativeBlackDialogueSceneContent = new GUIContent("Narrative Black Dialogue Scene", "Narrative Black Dialogue from Scene");
+                EditorGUILayout.PropertyField(narrativeBlackDialogueInSceneSerialized, narrativeBlackDialogueSceneContent, GUILayout.ExpandHeight(false));
+
+                GUIContent narrativeBlackDialoguePrefabContent = new GUIContent("Narrative Black Dialogue Prefab", "Narrative Black Dialogue Prefab");
+                EditorGUILayout.PropertyField(narrativeBlackDialoguePrefabSerialized, narrativeBlackDialoguePrefabContent, GUILayout.ExpandHeight(false));
+
+                EditorGUILayout.Space(10f);
+
+                /*if (GUILayout.Button("Replace Narrative Dialogue"))
+                {
+                    Undo.RecordObject(target, "FlixReplacer Narrative Replace");
+                    flixReplacer.ReplaceNarrativeDialogue();
+                }*/
+
+                if (flixReplacer.narrativeBlackDialogueInScene != null && flixReplacer.narrativeBlackDialoguePrefab != null && flixReplacer.episodeFlowchart != null)
+                {
+                    if (DrawButtonColored("Replace Narrative Black Dialogue".ToUpper(), "#3c8b50", Color.white))
+                    {
+                        //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
+                        Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Narrative Black Replace");
+                        flixReplacer.ReplaceNarrativeBlackDialogue();
                     }
                 }
 
