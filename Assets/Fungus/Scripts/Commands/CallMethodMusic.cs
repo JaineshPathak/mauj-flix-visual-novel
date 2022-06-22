@@ -12,6 +12,12 @@ namespace Fungus
     {
         [SerializeField] private int musicIndex;
 
+        public int MusicIndex
+        {
+            get { return musicIndex; }
+            set { musicIndex = value; }
+        }
+
         public void CallMethodMusicInit(GameObject TargetObject, string MethodName, float newDelay, int MIndex)
         {
             targetObject = TargetObject;

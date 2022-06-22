@@ -9,6 +9,18 @@ public class PlaySoundIndex : Command
     [SerializeField] protected bool unloadPreviousSound;
     [SerializeField] protected int soundIndex;
 
+    public bool UnloadPreviousSound
+    {
+        get { return unloadPreviousSound; }
+        set { unloadPreviousSound = value; }
+    }
+
+    public int SoundIndex
+    {
+        get { return soundIndex; }
+        set { soundIndex = value; }
+    }
+
     public override void OnEnter()
     {
         if (SoundsBucket.instance == null)
