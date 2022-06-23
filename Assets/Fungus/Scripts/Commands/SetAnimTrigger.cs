@@ -24,6 +24,12 @@ namespace Fungus
 
         #region Public members
 
+        public Animator Animator
+        {
+            get { return _animator.animatorVal; }
+            set { _animator.animatorVal = value; }
+        }
+
         public void SetAnimTriggerInit(Animator newAnimator, string newParameterName)
         {
             _animator = new AnimatorData(newAnimator);

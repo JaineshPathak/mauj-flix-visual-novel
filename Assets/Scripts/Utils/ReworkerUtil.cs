@@ -15,6 +15,7 @@ public class ReworkerUtil : MonoBehaviour
     private const string PREFABSTAGE = "Reworker Utils: You need to open Prefab in Prefab Mode!";
 
     [Header("FlowChart/Handler")]
+    public bool autoGetComponents = true;
     public Flowchart flowchart;
     public EpisodesHandler episodesHandler;
 
@@ -49,21 +50,24 @@ public class ReworkerUtil : MonoBehaviour
 
     private void OnValidate()
     {
-        episodesHandler = GetComponent<EpisodesHandler>();
+        if(autoGetComponents)
+        {
+            episodesHandler = GetComponent<EpisodesHandler>();
 
-        flowchart = GetComponentInChildren<Flowchart>();
-        charScreens = GetComponentsInChildren<CharacterSelectionScreen>();
-        characters = GetComponentsInChildren<Character>();
-        sayDialogsList = GetComponentsInChildren<SayDialog>(true);
-        menuDialog = GetComponentInChildren<MenuDialog>();
+            flowchart = GetComponentInChildren<Flowchart>();
+            charScreens = GetComponentsInChildren<CharacterSelectionScreen>();
+            characters = GetComponentsInChildren<Character>();
+            sayDialogsList = GetComponentsInChildren<SayDialog>(true);
+            menuDialog = GetComponentInChildren<MenuDialog>();
 
-        endEpisodePanel = GetComponentInChildren<UIEpisodeEndPanel>();
-        endEpisodePanelMk2 = GetComponentInChildren<UIEpisodeEndPanelMk2>();
-        endBranchScreen = GetComponentInChildren<UIEndStoryBranchScreenMk2>();
-        endStoryScreen = GetComponentInChildren<UIEndStoryScreenMk2>();
+            endEpisodePanel = GetComponentInChildren<UIEpisodeEndPanel>();
+            endEpisodePanelMk2 = GetComponentInChildren<UIEpisodeEndPanelMk2>();
+            endBranchScreen = GetComponentInChildren<UIEndStoryBranchScreenMk2>();
+            endStoryScreen = GetComponentInChildren<UIEndStoryScreenMk2>();
 
-        storyByMaujflixScreen = GameObject.Find("MFlixStoryByMaujFlixScreen");
-    }    
+            //storyByMaujflixScreen = GameObject.Find("MFlixStoryByMaujFlixScreen");
+        }
+    }
 
     public void ReworkStuffs()
     {
@@ -81,9 +85,10 @@ public class ReworkerUtil : MonoBehaviour
         ReworkSayCommands();
         ReworkMusicCommands();
         ReworkSoundCommands();
+        //ReworkEndScreenCommands();
+        ReworkEventHandlers();
 
         RemoveAllDialogues();
-        //ReworkEndScreenCommands();
         RemoveEndScreens();
 
         ReworkHandler();
@@ -263,7 +268,7 @@ public class ReworkerUtil : MonoBehaviour
 
                 count++;
 
-                playMusicIndexCmd.UnloadPreviousMusic = (count == 0);
+                playMusicIndexCmd.UnloadPreviousMusic = (count > 0);
                 playMusicIndexCmd.MusicIndex = musicCommand.MusicIndex;
 
                 PrefabUtility.RecordPrefabInstancePropertyModifications(playMusicIndexCmd);
@@ -343,6 +348,45 @@ public class ReworkerUtil : MonoBehaviour
 
         SceneVisibilityManager.DestroyImmediate(menuDialog.gameObject);
         PrefabUtility.RecordPrefabInstancePropertyModifications(transform);
+
+
+        //Take out SetActive commands
+        foreach(SetActive setActive in flowchart.GetComponentsInChildren<SetActive>())
+        {
+            Block block = setActive.ParentBlock;
+
+            if (setActive.TargetGameObject == null)
+            {
+                int index = block.CommandList.IndexOf(setActive);
+                if (index >= 0)
+                {
+                    block.CommandList.Remove(setActive);
+                    DestroyImmediate(setActive);
+
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(block);
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(flowchart);
+                }
+            }
+        }
+
+        //Take out Animator commands
+        foreach (SetAnimTrigger setAnimTrigger in flowchart.GetComponentsInChildren<SetAnimTrigger>())
+        {
+            Block block = setAnimTrigger.ParentBlock;
+
+            if (setAnimTrigger.Animator == null)
+            {
+                int index = block.CommandList.IndexOf(setAnimTrigger);
+                if (index >= 0)
+                {
+                    block.CommandList.Remove(setAnimTrigger);
+                    DestroyImmediate(setAnimTrigger);
+
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(block);
+                    PrefabUtility.RecordPrefabInstancePropertyModifications(flowchart);
+                }
+            }
+        }
     }
 
     private void ReworkEndScreenCommands()
@@ -407,6 +451,46 @@ public class ReworkerUtil : MonoBehaviour
         }
     }
 
+    private void ReworkEventHandlers()
+    {
+        if (flowchart == null)
+            return;
+
+        foreach(Block block in flowchart.GetComponentsInChildren<Block>())
+        {
+            if(block != null && block._EventHandler != null)
+            {
+                if(block._EventHandler.GetType() == typeof(EndEdit))
+                    DestroyImmediate(block._EventHandler);
+
+                if(block._EventHandler.GetType() == typeof(ButtonClicked))
+                {
+                    ButtonClicked buttonClicked = block._EventHandler as ButtonClicked;
+                    if(buttonClicked.TargetButton.transform.name.Contains("Male"))
+                    {
+                        buttonClicked.TargetButton = null;
+                        DestroyImmediate(buttonClicked);
+
+                        MessageReceived messageReceivedMale = flowchart.gameObject.AddComponent<MessageReceived>();
+                        messageReceivedMale.ParentBlock = block;
+                        messageReceivedMale.Message = "CharacterNameSubmitMale";
+                        block._EventHandler = messageReceivedMale;
+                    }
+                    else if (buttonClicked.TargetButton.transform.name.Contains("Female"))
+                    {
+                        buttonClicked.TargetButton = null;
+                        DestroyImmediate(buttonClicked);
+
+                        MessageReceived messageReceivedFemale = flowchart.gameObject.AddComponent<MessageReceived>();
+                        messageReceivedFemale.ParentBlock = block;
+                        messageReceivedFemale.Message = "CharacterNameSubmitFemale";
+                        block._EventHandler = messageReceivedFemale;
+                    }
+                }
+            }
+        }
+    }
+
     private void RemoveEndScreens()
     {
         if (endEpisodePanel)
@@ -439,11 +523,11 @@ public class ReworkerUtil : MonoBehaviour
             PrefabUtility.RecordPrefabInstancePropertyModifications(transform);
         }
 
-        if(menuDialog)
+        /*if(menuDialog)
         {
             SceneVisibilityManager.DestroyImmediate(menuDialog.gameObject);
             PrefabUtility.RecordPrefabInstancePropertyModifications(transform);
-        }
+        }*/
     }
 
     private void ReworkHandler()

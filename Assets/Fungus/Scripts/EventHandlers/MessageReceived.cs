@@ -17,6 +17,12 @@ namespace Fungus
         [Tooltip("Fungus message to listen for")]
         [SerializeField] protected string message = "";
 
+        public string Message
+        {
+            get { return message; }
+            set { message = value; }
+        }
+
         #region Public members
 
         /// <summary>
