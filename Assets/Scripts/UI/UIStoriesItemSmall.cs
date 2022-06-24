@@ -37,7 +37,12 @@ public class UIStoriesItemSmall : MonoBehaviour
     public TextMeshProUGUI storyViewsCountText;
     public TextMeshProUGUI storyLikesCountText;
 
-    [HideInInspector] public bool isFromPool;
+    [HideInInspector] public bool isFromPool;    
+
+    [Space(15)]
+
+    public TextMeshProUGUI trendingRankText;
+    public TextMeshProUGUI trendingRankTextOutline;
 
     private StoriesDBItem storyItem;
     private UIStoriesDetailsPanel storiesDetailsPanel;
@@ -49,7 +54,7 @@ public class UIStoriesItemSmall : MonoBehaviour
     private Sprite thumbnailLoadingSprite;
 
     private StoryData storyData;
-    private Flowchart flowchartLoaded;    
+    private Flowchart flowchartLoaded;
 
     private string viewCountRef;
     private string likeCountRef;
@@ -66,7 +71,7 @@ public class UIStoriesItemSmall : MonoBehaviour
         //storyCountsParent.SetActive(false);
     }
 
-    public void LoadThumbnailAsset(StoriesDBItem _storiesDBItem, UIStoriesDetailsPanel _storiesDetailsPanel, GameController _gameController)
+    public void LoadThumbnailAsset(StoriesDBItem _storiesDBItem, UIStoriesDetailsPanel _storiesDetailsPanel, GameController _gameController, bool trending = false, int rank = 0)
     {        
         storyButton.interactable = false;
         comingSoonImage.gameObject.SetActive(false);
@@ -125,7 +130,16 @@ public class UIStoriesItemSmall : MonoBehaviour
 
         if(ThumbnailsBucket.instance != null)
         {
-            thumbnailSmallImage.sprite = ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailSmallName, ThumbnailType.Small);
+            thumbnailSmallImage.sprite = trending ? ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailTrendingName, ThumbnailType.Trending) : ThumbnailsBucket.instance.GetThumbnailSprite(storyItem.storyThumbnailSmallName, ThumbnailType.Small);
+
+            if(trending)
+            {
+                if (trendingRankText != null && trendingRankTextOutline != null)
+                {
+                    trendingRankText.text = (rank + 1).ToString();
+                    trendingRankTextOutline.text = (rank + 1).ToString();
+                }
+            }
 
             if (thumbnailSmallImage.sprite != null && storyLoadingText)
                 storyLoadingText.SetActive(false);

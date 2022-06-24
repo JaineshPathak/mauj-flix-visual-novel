@@ -6,7 +6,8 @@ using UnityEngine;
 public class StoriesCategorySO : ScriptableObject
 {
     public bool isEnabled = true;
-    public bool isForShortStories;
+    public CategoryType categoryType;
+    //public bool isForShortStories;
 
     [Space(15)]
 
@@ -21,7 +22,8 @@ public class StoriesCategorySO : ScriptableObject
         StoriesCategory category = new StoriesCategory();
 
         category.isEnabled = this.isEnabled;
-        category.isForShortStories = this.isForShortStories;
+        category.categoryType = this.categoryType;
+        //category.isForShortStories = this.isForShortStories;
 
         category.categoryName = this.categoryName;
         category.categoryIndex = this.categoryIndex;

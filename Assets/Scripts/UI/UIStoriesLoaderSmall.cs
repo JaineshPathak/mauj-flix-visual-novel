@@ -13,8 +13,10 @@ public class UIStoriesLoaderSmall : MonoBehaviour
     [Space(15)]
 
     public int categoryIndex;
+    public int thumbnailPoolIndex = 1;
     public UIStoriesItemSmall storiesItemSmallPrefab;
-    public UIStoriesItemSmall storiesItemShortsPrefab;
+    //public UIStoriesItemSmall storiesItemShortsPrefab;
+    //public UIStoriesItemSmall storiesItemTrendingPrefab;
 
     [Space(15)]
 
@@ -132,7 +134,7 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
                 if (ThumbnailItemsPool.instance != null)
                 {
-                    GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(1);
+                    GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(thumbnailPoolIndex);
                     if (itemInstanceGO)
                         storyItemSmallInstance = itemInstanceGO.GetComponent<UIStoriesItemSmall>();
 
@@ -148,17 +150,17 @@ public class UIStoriesLoaderSmall : MonoBehaviour
                     storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, scrollContent);
 
                 storyItemSmallInstance.transform.name = storyDB.storiesCategories[categoryIndex].storiesDBItems[i].storyTitleEnglish;
-                storyItemSmallInstance.LoadThumbnailAsset(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance);
+                storyItemSmallInstance.LoadThumbnailAsset(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance, thumbnailPoolIndex == 3, i);
 
                 storiesItemSmallList.Add(storyItemSmallInstance);
-            }            
+            }
         }
 
         if (categoryCountText != null)
             categoryCountText.text = "(" + storiesItemSmallList.Count + ")";
 
         //Shuffle List if the Category is "New Stories"
-        if(categoryIndex == 1)
+        if(categoryIndex == 2)
         {
             storiesItemSmallList = OtherUtils.Shuffle<UIStoriesItemSmall>(storiesItemSmallList);
             for (int i = 0; i < storiesItemSmallList.Count; i++)            
@@ -240,7 +242,7 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
                 if (ThumbnailItemsPool.instance != null)
                 {
-                    GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(1);
+                    GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(thumbnailPoolIndex);
                     if (itemInstanceGO)
                         storyItemSmallInstance = itemInstanceGO.GetComponent<UIStoriesItemSmall>();
 

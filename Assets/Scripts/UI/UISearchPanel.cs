@@ -45,6 +45,7 @@ public class UISearchPanel : MonoBehaviour
 
     [Space(15)]
     public UIStoriesLoaderSmall storiesLoaderPrefab;
+    public UIStoriesLoaderSmall storiesLoaderTrendingPrefab;
     public UIStoriesLoaderSmall storiesLoaderShortsPrefab;
 
     [Header("Inputs")]
@@ -218,16 +219,34 @@ public class UISearchPanel : MonoBehaviour
 
         for (int i = 1; i < storiesDB.storiesCategories.Length; i++)
         {
+            if (i == 1)     //No need for Trending Stories
+                continue;
+
             bool isCategoryEnabled = FirebaseRemoteConfig.DefaultInstance.GetValue("Category" + i + "_Status").BooleanValue;
 
             if(isCategoryEnabled)
             {
                 UIStoriesLoaderSmall uIStoriesLoaderSmallInstance = null;
 
-                if (storiesDB.storiesCategories[i].isForShortStories)
+                /*if (storiesDB.storiesCategories[i].isForShortStories)
                     uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderShortsPrefab, searchVerticalLayout.transform);
                 else
-                    uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, searchVerticalLayout.transform);
+                    uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, searchVerticalLayout.transform);*/
+
+                switch (storiesDB.storiesCategories[i].categoryType)
+                {
+                    case CategoryType.Type_Normal:
+                        uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, searchVerticalLayout.transform);
+                        break;
+
+                    case CategoryType.Type_Trending:
+                        uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderTrendingPrefab, searchVerticalLayout.transform);
+                        break;
+
+                    case CategoryType.Type_Shorts:
+                        uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderShortsPrefab, searchVerticalLayout.transform);
+                        break;
+                }
 
                 uIStoriesLoaderSmallInstance.categoryIndex = i;
                 uIStoriesLoaderSmallInstance.transform.name += i;

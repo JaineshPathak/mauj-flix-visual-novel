@@ -44,6 +44,7 @@ public class StoriesDBItemSO : ScriptableObject
     public string storyThumbnailBigName;
     public string storyThumbnailLoadingName;
     public string storyThumbnailTitleName;
+    public string storyThumbnailTrendingName;
 
     [Header("Flowchart Keys")]
     public AssetReferenceGameObject storyFlowchartKey;
@@ -132,6 +133,7 @@ public class StoriesDBItemSO : ScriptableObject
         item.storyThumbnailBigName = storyThumbnailBigName;
         item.storyThumbnailLoadingName = storyThumbnailLoadingName;
         item.storyThumbnailTitleName = storyThumbnailTitleName;
+        item.storyThumbnailTrendingName = storyThumbnailTrendingName;
 
         item.storyFlowchartKey = (storyFlowchartKey != null) ? storyFlowchartKey.RuntimeKey.ToString() : string.Empty;
 
@@ -202,6 +204,7 @@ public class StoriesDBItemSOEditor : Editor
     private SerializedProperty storyThumbnailBigNameSerial;
     private SerializedProperty storyThumbnailLoadingNameSerial;
     private SerializedProperty storyThumbnailTitleNameSerial;
+    private SerializedProperty storyThumbnailTrendingNameSerial;
 
     private SerializedProperty storyFlowchartKeySerial;
 
@@ -256,6 +259,7 @@ public class StoriesDBItemSOEditor : Editor
         storyThumbnailBigNameSerial = serializedObject.FindProperty("storyThumbnailBigName");
         storyThumbnailLoadingNameSerial = serializedObject.FindProperty("storyThumbnailLoadingName");
         storyThumbnailTitleNameSerial = serializedObject.FindProperty("storyThumbnailTitleName");
+        storyThumbnailTrendingNameSerial = serializedObject.FindProperty("storyThumbnailTrendingName");
 
         storyFlowchartKeySerial = serializedObject.FindProperty("storyFlowchartKey");
 
@@ -303,6 +307,7 @@ public class StoriesDBItemSOEditor : Editor
         AddPropertyLabel(storyThumbnailBigNameSerial, "Story Image Big Name", "Story Thumbnail Big from Addressable (Eg: Thumbnail_Padosan_B.png)");
         AddPropertyLabel(storyThumbnailLoadingNameSerial, "Story Image Loading Name", "Story Thumbnail Loading from Addressable (Eg: Thumbnail_Padosan_L.png)");
         AddPropertyLabel(storyThumbnailTitleNameSerial, "Story Image Title Name", "Story Title Image from Addressable (Eg: Thumbnail_Padosan_Title.png)");
+        AddPropertyLabel(storyThumbnailTrendingNameSerial, "Story Image Trending Name", "Story Title Image from Addressable (Eg: Thumbnail_Padosan_Title.png)");
 
         AddPropertyLabel(storyFlowchartKeySerial, "Story Flowchart", "Story Flowchart GameObject prefab (Eg: ST-Padosan-Flowchart)");
         

@@ -27,6 +27,7 @@ public class StoriesDBItem
     public string storyThumbnailBigName;
     public string storyThumbnailLoadingName;
     public string storyThumbnailTitleName;
+    public string storyThumbnailTrendingName;
 
     public string storyFlowchartKey;
     public string storyProgressFileName;

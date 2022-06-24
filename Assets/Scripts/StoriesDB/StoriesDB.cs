@@ -1,5 +1,12 @@
 ﻿//This will be saved in a json file and stored as Addressable Asset Bundle
 
+public enum CategoryType
+{
+    Type_Normal,
+    Type_Trending,
+    Type_Shorts
+};
+
 [System.Serializable]
 public class StoriesDB
 {
@@ -18,7 +25,8 @@ public class StoriesDB
 public class StoriesCategory
 {
     public bool isEnabled = true;
-    public bool isForShortStories;
+    public CategoryType categoryType;
+    //public bool isForShortStories;
 
     public string categoryName;
     public int categoryIndex;

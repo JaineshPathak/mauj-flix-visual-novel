@@ -11,8 +11,9 @@ public enum ThumbnailType
     Small,
     Big,
     Loading,
-    Title
-}
+    Title,
+    Trending
+};
 
 public class ThumbnailsBucket : MonoBehaviourSingletonPersistent<ThumbnailsBucket>
 {
@@ -22,11 +23,13 @@ public class ThumbnailsBucket : MonoBehaviourSingletonPersistent<ThumbnailsBucke
     public AssetReference thumbnailsBigAtlasRef;
     public AssetReference thumbnailsLoadAtlasRef;
     public AssetReference thumbnailsTitleAtlasRef;
+    public AssetReference thumbnailsTrendingAtlasRef;
 
     private SpriteAtlas thumbnailsSmallAtlas;
     private SpriteAtlas thumbnailsBigAtlas;
     private SpriteAtlas thumbnailsLoadAtlas;
     private SpriteAtlas thumbnailsTitleAtlas;
+    private SpriteAtlas thumbnailsTrendingAtlas;
 
     private int successCount = 0;   //If 4 - Means all Atlas fully loaded. Less than 4, then something went wrong downloading
 
@@ -144,10 +147,32 @@ public class ThumbnailsBucket : MonoBehaviourSingletonPersistent<ThumbnailsBucke
         }
 
         //-------------------------------------------------------------------------------
-        
+
+        //Title Atlas
+
+        AsyncOperationHandle<SpriteAtlas> atlasTrendingHandle = Addressables.LoadAssetAsync<SpriteAtlas>(thumbnailsTrendingAtlasRef);
+
+        yield return atlasTrendingHandle;
+
+        if (atlasTrendingHandle.Status == AsyncOperationStatus.Succeeded)
+        {
+            successCount++;
+            thumbnailsTrendingAtlas = atlasTrendingHandle.Result;
+
+#if UNITY_EDITOR
+            Debug.Log("Thumbnails Bucket: Trending Atlas Thumbnails Loading DONE!");
+#endif
+        }
+        else if (atlasTrendingHandle.Status == AsyncOperationStatus.Failed)
+        {
+#if UNITY_EDITOR
+            Debug.LogError("Thumbnails Bucket: Trending Atlas Thumbnails Loading ERROR!");
+#endif
+        }
+
         Debug.Log($"Thumbnails Bucket: Atlas Thumbnails Loading - ENDED! SCORE - {successCount}");
 
-        if(successCount >= 4)
+        if(successCount >= 5)
             callback?.Invoke(true);
         else
             callback?.Invoke(false);
@@ -170,6 +195,9 @@ public class ThumbnailsBucket : MonoBehaviourSingletonPersistent<ThumbnailsBucke
 
             case ThumbnailType.Title:
                 return thumbnailsTitleAtlas.GetSprite(spriteName);
+
+            case ThumbnailType.Trending:
+                return thumbnailsTrendingAtlas.GetSprite(spriteName);
         }
 
         return null;

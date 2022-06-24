@@ -5,6 +5,7 @@ public class UISectionLoader : MonoBehaviour
 {
     [Header("Prefabs")]
     public UIStoriesLoaderSmall storiesLoaderPrefab;
+    public UIStoriesLoaderSmall storiesLoaderTrendingPrefab;
     public UIStoriesLoaderSmall storiesLoaderShortsPrefab;
 
     [Space(15)]
@@ -40,10 +41,25 @@ public class UISectionLoader : MonoBehaviour
             {
                 UIStoriesLoaderSmall uIStoriesLoaderSmallInstance = null;
 
-                if (storiesDB.storiesCategories[i].isForShortStories)
+                /*if (storiesDB.storiesCategories[i].isForShortStories)
                     uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderShortsPrefab, sectionLoaderContent);
                 else
-                    uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, sectionLoaderContent);
+                    uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, sectionLoaderContent);*/
+
+                switch (storiesDB.storiesCategories[i].categoryType)
+                {
+                    case CategoryType.Type_Normal:
+                        uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, sectionLoaderContent);
+                        break;
+
+                    case CategoryType.Type_Trending:
+                        uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderTrendingPrefab, sectionLoaderContent);
+                        break;
+
+                    case CategoryType.Type_Shorts:
+                        uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderShortsPrefab, sectionLoaderContent);
+                        break;
+                }
 
                 uIStoriesLoaderSmallInstance.categoryIndex = i;
                 uIStoriesLoaderSmallInstance.OnStoryDBLoaded(storiesDB);

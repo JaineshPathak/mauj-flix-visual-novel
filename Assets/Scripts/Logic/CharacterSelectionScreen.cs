@@ -66,7 +66,7 @@ public class CharacterSelectionScreen : MonoBehaviour
     private void OnValidate()
     {
         if (episodesHandler == null)
-            GetEpisodeHandler();
+            episodesHandler = transform.parent.GetComponent<EpisodesHandler>();
     }
 
     private void Awake()
