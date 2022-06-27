@@ -68,11 +68,11 @@ public class UIStoriesLoaderBig : MonoBehaviour
                         storyItemBigInstance.transform.parent = scrollContent;
                         //storyItemBigInstance.LoadThumbnailAssets(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel);
                     }
-                    else                    
+                    else
                         storyItemBigInstance = Instantiate(storiesItemBigPrefab, scrollContent);
                         //storyItemBigInstance.LoadThumbnailAssets(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel);                    
                 }
-                else                
+                else
                     storyItemBigInstance = Instantiate(storiesItemBigPrefab, scrollContent);
                 
                 storyItemBigInstance.LoadThumbnailAssets(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel);

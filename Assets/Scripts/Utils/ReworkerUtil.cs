@@ -1,14 +1,13 @@
-﻿using UnityEngine;
+﻿#if UNITY_EDITOR
+using UnityEngine;
 using UnityEngine.UI;
 using Fungus;
 using System.Collections.Generic;
 using System;
 
-#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEditor.Experimental.SceneManagement;
-#endif
 
 public class ReworkerUtil : MonoBehaviour
 {
@@ -540,7 +539,6 @@ public class ReworkerUtil : MonoBehaviour
     }
 }
 
-#if UNITY_EDITOR
 [CustomEditor(typeof(ReworkerUtil)), DisallowMultipleComponent, CanEditMultipleObjects]
 public class ReworkerUtilEditor : Editor
 {

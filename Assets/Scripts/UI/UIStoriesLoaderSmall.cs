@@ -60,6 +60,108 @@ public class UIStoriesLoaderSmall : MonoBehaviour
             GameController.OnStoryDBLoaded -= OnStoryDBLoaded;
     }
 
+    private void SpawnStoryItemSmall(StoriesDBItem storiesDBItem, Transform parent, int rank, bool addToList = true)
+    {
+        UIStoriesItemSmall storyItemSmallInstance = null;
+
+        if (ThumbnailItemsPool.instance != null)
+        {
+            GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(thumbnailPoolIndex);
+            if (itemInstanceGO)
+                storyItemSmallInstance = itemInstanceGO.GetComponent<UIStoriesItemSmall>();
+
+            if (storyItemSmallInstance)
+            {
+                storyItemSmallInstance.gameObject.SetActive(true);
+                storyItemSmallInstance.transform.parent = parent;
+            }
+            else
+                storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, parent);
+        }
+        else
+            storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, parent);
+
+        storyItemSmallInstance.transform.name = storiesDBItem.storyTitleEnglish;
+        storyItemSmallInstance.LoadThumbnailAsset(storiesDBItem, storiesDetailsPanel, GameController.instance, thumbnailPoolIndex == 3, rank);
+
+        if(addToList)
+            storiesItemSmallList.Add(storyItemSmallInstance);
+    }
+
+    private void SpawnStoryItemSmall(StoriesDBItem storiesDBItem, Transform parent, int customPoolIndex, int rank, bool addToList = true)
+    {
+        UIStoriesItemSmall storyItemSmallInstance = null;
+
+        if (ThumbnailItemsPool.instance != null)
+        {
+            GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(customPoolIndex);
+            if (itemInstanceGO)
+                storyItemSmallInstance = itemInstanceGO.GetComponent<UIStoriesItemSmall>();
+
+            if (storyItemSmallInstance)
+            {
+                storyItemSmallInstance.gameObject.SetActive(true);
+                storyItemSmallInstance.transform.parent = parent;
+            }
+            else
+            {
+                storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, parent);
+                ThumbnailItemsPool.instance?.AddNewItem(customPoolIndex, storyItemSmallInstance.gameObject);
+
+                Debug.Log($"{transform.name}: ITEM WAS ADDED!");
+            }
+        }
+        else        
+            storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, parent);                   
+
+        storyItemSmallInstance.transform.name = storiesDBItem.storyTitleEnglish;
+        storyItemSmallInstance.LoadThumbnailAsset(storiesDBItem, storiesDetailsPanel, GameController.instance, thumbnailPoolIndex == 3, rank);
+
+        if (addToList)
+            storiesItemSmallList.Add(storyItemSmallInstance);
+    }
+
+    private void SpawnStoryItemSmall(ref List<SearchableItem> searchItemsList, StoriesDBItem storiesDBItem, Transform parent, int customPoolIndex, int rank, bool addToList = true)
+    {
+        UIStoriesItemSmall storyItemSmallInstance = null;
+
+        if (ThumbnailItemsPool.instance != null)
+        {
+            GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(customPoolIndex);
+            if (itemInstanceGO)
+                storyItemSmallInstance = itemInstanceGO.GetComponent<UIStoriesItemSmall>();
+
+            if (storyItemSmallInstance)
+            {
+                storyItemSmallInstance.gameObject.SetActive(true);
+                storyItemSmallInstance.transform.parent = parent;
+            }
+            else
+            {                
+                storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, parent);
+                ThumbnailItemsPool.instance?.AddNewItem(customPoolIndex, storyItemSmallInstance.gameObject);
+
+                Debug.Log($"{transform.name}: ITEM WAS ADDED!");
+            }
+        }
+        else
+            storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, parent);        
+
+        storyItemSmallInstance.transform.name = storiesDBItem.storyTitleEnglish;
+        storyItemSmallInstance.LoadThumbnailAsset(storiesDBItem, storiesDetailsPanel, GameController.instance, thumbnailPoolIndex == 3, rank);
+
+        if (addToList)
+            storiesItemSmallList.Add(storyItemSmallInstance);
+
+        SearchableItem item = new SearchableItem
+        {
+            storyTitleName = storyItemSmallInstance.transform.name,
+            itemSmallInstance = storyItemSmallInstance,
+            itemLoaderInstance = this
+        };
+        searchItemsList.Add(item);
+    }
+
     public void OnStoryDBLoaded(StoriesDB storyDB)
     {
         if (GameController.instance == null)
@@ -89,8 +191,6 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
             if (/*storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isStoryEnabled*/storyEnabled)
             {
-                UIStoriesItemSmall storyItemSmallInstance = null;
-
                 #region Removed Short Stories from v0.4.3 onwards
                 /*if (storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isShortStory)
                         {
@@ -132,6 +232,8 @@ public class UIStoriesLoaderSmall : MonoBehaviour
                         }*/
                 #endregion
 
+                #region MOVED TO A METHOD
+                /*UIStoriesItemSmall storyItemSmallInstance = null;
                 if (ThumbnailItemsPool.instance != null)
                 {
                     GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(thumbnailPoolIndex);
@@ -152,7 +254,10 @@ public class UIStoriesLoaderSmall : MonoBehaviour
                 storyItemSmallInstance.transform.name = storyDB.storiesCategories[categoryIndex].storiesDBItems[i].storyTitleEnglish;
                 storyItemSmallInstance.LoadThumbnailAsset(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance, thumbnailPoolIndex == 3, i);
 
-                storiesItemSmallList.Add(storyItemSmallInstance);
+                storiesItemSmallList.Add(storyItemSmallInstance);*/
+                #endregion
+
+                SpawnStoryItemSmall(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], scrollContent, i, true);
             }
         }
 
@@ -197,8 +302,6 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
             if (/*storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isStoryEnabled*/storyEnabled)
             {
-                UIStoriesItemSmall storyItemSmallInstance = null;
-
                 #region OLD CODE Removed from v0.4.3 onwards
                 /*if (storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isShortStory)
                 {
@@ -240,6 +343,8 @@ public class UIStoriesLoaderSmall : MonoBehaviour
                 }*/
                 #endregion
 
+                #region MOVED TO A METHOD
+                /*UIStoriesItemSmall storyItemSmallInstance = null;
                 if (ThumbnailItemsPool.instance != null)
                 {
                     GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(thumbnailPoolIndex);
@@ -260,18 +365,13 @@ public class UIStoriesLoaderSmall : MonoBehaviour
                 storyItemSmallInstance.transform.name = storyDB.storiesCategories[categoryIndex].storiesDBItems[i].storyTitleEnglish;
                 storyItemSmallInstance.LoadThumbnailAsset(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance);
 
-                storiesItemSmallList.Add(storyItemSmallInstance);
+                storiesItemSmallList.Add(storyItemSmallInstance);*/
 
                 //if(!searchItemsList.ContainsKey(storyItemSmallInstance.transform.name))
                 //searchItemsList.Add(storyItemSmallInstance.transform.name, storyItemSmallInstance);
+                #endregion
 
-                SearchableItem item = new SearchableItem
-                {
-                    storyTitleName = storyItemSmallInstance.transform.name,
-                    itemSmallInstance = storyItemSmallInstance,
-                    itemLoaderInstance = this
-                };
-                searchItemsList.Add(item);
+                SpawnStoryItemSmall(ref searchItemsList, storyDB.storiesCategories[categoryIndex].storiesDBItems[i], scrollContent, thumbnailPoolIndex, 0, true);
             }
         }
 
@@ -309,7 +409,8 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
             if (storyEnabled)
             {
-                UIStoriesItemSmall storyItemSmallInstance = null;
+                #region MOVED TO A METHOD
+                /*UIStoriesItemSmall storyItemSmallInstance = null;
                 if (ThumbnailItemsPool.instance != null)
                 {
                     GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(1);
@@ -330,7 +431,10 @@ public class UIStoriesLoaderSmall : MonoBehaviour
                 storyItemSmallInstance.transform.name = _storiesDBItems[i].storyTitleEnglish;
                 storyItemSmallInstance.LoadThumbnailAsset(_storiesDBItems[i], storiesDetailsPanel, GameController.instance);
 
-                storiesItemSmallList.Add(storyItemSmallInstance);
+                storiesItemSmallList.Add(storyItemSmallInstance);*/
+                #endregion
+
+                SpawnStoryItemSmall(_storiesDBItems[i], scrollContent, 1, 0, true);
             }
         }
 
@@ -360,7 +464,8 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
             if (storyEnabled)
             {
-                UIStoriesItemSmall storyItemSmallInstance = null;
+                #region MOVED TO A METHOD
+                /*UIStoriesItemSmall storyItemSmallInstance = null;
                 if (ThumbnailItemsPool.instance != null)
                 {
                     GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(1);
@@ -381,7 +486,10 @@ public class UIStoriesLoaderSmall : MonoBehaviour
                 storyItemSmallInstance.transform.name = _storyDB.storiesCategories[_databaseIndex].storiesDBItems[i].storyTitleEnglish;
                 storyItemSmallInstance.LoadThumbnailAsset(_storyDB.storiesCategories[_databaseIndex].storiesDBItems[i], storiesDetailsPanel, GameController.instance);
 
-                storiesItemSmallList.Add(storyItemSmallInstance);
+                storiesItemSmallList.Add(storyItemSmallInstance);*/
+                #endregion
+
+                SpawnStoryItemSmall(_storyDB.storiesCategories[_databaseIndex].storiesDBItems[i], scrollContent, 0, true);
             }
         }
 
@@ -394,7 +502,8 @@ public class UIStoriesLoaderSmall : MonoBehaviour
         if (ContainsStoryItemSmall(_storiesDBItem.storyTitleEnglish))
             return;
 
-        UIStoriesItemSmall storyItemSmallInstance = null;
+        #region MOVED TO A METHOD
+        /*UIStoriesItemSmall storyItemSmallInstance = null;
         if (ThumbnailItemsPool.instance != null)
         {
             GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(1);
@@ -415,7 +524,10 @@ public class UIStoriesLoaderSmall : MonoBehaviour
         storyItemSmallInstance.transform.name = _storiesDBItem.storyTitleEnglish;
         storyItemSmallInstance.LoadThumbnailAsset(_storiesDBItem, storiesDetailsPanel, GameController.instance);
 
-        storiesItemSmallList.Add(storyItemSmallInstance);
+        storiesItemSmallList.Add(storyItemSmallInstance);*/
+        #endregion
+
+        SpawnStoryItemSmall(_storiesDBItem, scrollContent, 1, 0, true);
 
         if (categoryCountText != null)
             categoryCountText.text = "(" + storiesItemSmallList.Count + ")";

@@ -95,7 +95,21 @@ public class ThumbnailItem
         {
             itemPrefabList[i].gameObject.SetActive(false);
             itemPrefabList[i].transform.parent = itemParent;
-        }    
+        }
+    }
+
+    internal void AddItem(GameObject item)
+    {
+        if (item == null)
+            return;
+
+        if (itemPrefabList.Contains(item))
+            return;
+
+        if (item.GetComponent<UIStoriesItemSmall>() != null)
+            item.GetComponent<UIStoriesItemSmall>().isFromPool = true;
+
+        itemPrefabList.Add(item);
     }
 }
 
@@ -180,6 +194,11 @@ public class ThumbnailItemsPool : MonoBehaviourSingletonPersistent<ThumbnailItem
 
         for (int i = 0; i < thumbnailItems.Length; i++)
             thumbnailItems[i].ResetItems();
+    }
+
+    public void AddNewItem(int id, GameObject item)
+    {
+        thumbnailItems[id].AddItem(item);
     }
 }
 

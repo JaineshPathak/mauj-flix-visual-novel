@@ -30,7 +30,6 @@ public class UIStoriesItemBig : MonoBehaviour
 
     private string viewCountRef;
 
-
     private void Start()
     {
         if (GameController.instance != null)
@@ -218,8 +217,8 @@ public class UIStoriesItemBig : MonoBehaviour
 
     private void OnStoryPlayButtonClicked()
     {
-        if (gameController == null)
-            return;
+        if (gameController == null && GameController.instance != null)
+            gameController = GameController.instance;        
 
         if (storyItem == null)
             return;

@@ -6,6 +6,7 @@ using UnityEngine.U2D;
 using TMPro;
 using underDOGS.SDKEvents;
 using System.Linq;
+using Firebase.RemoteConfig;
 
 public class UIStoriesDetailsPanel : MonoBehaviour
 {
@@ -28,6 +29,10 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     public Image storyThumbnailBigImage;
     public Image storyThumbnailTitleImage;
     [HideInInspector] public Sprite storyThumbnailLoadingImage;
+
+    [Space(10)]
+
+    public Image blurMaskLayer;
 
     [Header("Share")]
     public UIShareButton shareButton;
@@ -224,7 +229,19 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             ShowPanel();
         }
         else if (episodesSpawner.blackScreenCanvasGroup.alpha > 0)
-            episodesSpawner.FadeOutBlackScreen();        
+            episodesSpawner.FadeOutBlackScreen();
+
+        //Incase if Blur Shader causes lags
+        if(blurMaskLayer && FirebaseRemoteConfig.DefaultInstance != null)
+        {
+            if(!FirebaseRemoteConfig.DefaultInstance.GetValue("Enable_Thumbnail_Blur").BooleanValue)
+            {
+                blurMaskLayer.color = new Color(1f, 1f, 1f, 0);
+                
+                if(blurMaskLayer.material != null)
+                    blurMaskLayer.material = null;
+            }
+        }
     }
 
     /*private void Update()
