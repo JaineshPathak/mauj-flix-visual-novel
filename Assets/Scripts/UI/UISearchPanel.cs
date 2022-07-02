@@ -66,7 +66,7 @@ public class UISearchPanel : MonoBehaviour
 
     //When used in LoadType = true (from Firebase Remote Config)
     private VerticalLayoutGroup verticalLayout;
-    private List<SearchableItem> searchableItemsList;
+    private List<SearchableItem> searchableItemsList = new List<SearchableItem>();
 
     private void Awake()
     {
@@ -167,20 +167,53 @@ public class UISearchPanel : MonoBehaviour
             yield return waitDelay;
         }*/
 
-        foreach(DictionaryEntry de in storiesDBHash)
-        {           
+        yield return new WaitForEndOfFrame();
+
+        //Debug.Log("Search Panel v1 - Step 1 -> Entering ForEach 'GRID STYLE'");
+        foreach (DictionaryEntry de in storiesDBHash)
+        {
             if (de.Value != null)
             {
+                //Debug.Log("Search Panel V1 - Step 2 -> de.Value != null");
                 StoriesDBItem item = de.Value as StoriesDBItem;
 
+                //Debug.Log($"Search Panel V1 - Step 3 Item Title -> {item.storyTitleEnglish}");
                 string storyTitleRaw = item.storyTitleEnglish;
                 string storyTitleFresh = storyTitleRaw.Replace(" ", "");
 
                 bool storyEnabled = remoteConfigInstance.GetValue("ST_" + storyTitleFresh + "_Status").BooleanValue;
+                //Debug.Log($"Search Panel V1 - Step 4 Item Enabled -> {item.storyTitleEnglish}: {storyEnabled}");
 
                 if (/*item.isStoryEnabled*/ storyEnabled)
                 {
-                    UIStoriesItemSmall storyItemSmallInstance = Instantiate(storyItemSmallPrefab, searchGridLayout.transform);
+                    /*UIStoriesItemSmall storyItemSmallInstance = Instantiate(storyItemSmallPrefab, searchGridLayout.transform);
+                    storyItemSmallInstance.transform.name = de.Key.ToString();
+                    storyItemSmallInstance.LoadThumbnailAsset((StoriesDBItem)de.Value, detailsPanel, GameController.instance);*/
+
+                    UIStoriesItemSmall storyItemSmallInstance = null;
+                    if (ThumbnailItemsPool.instance != null)
+                    {
+                        GameObject itemInstanceGO = ThumbnailItemsPool.instance.GetThumbnailItem(1);
+                        if (itemInstanceGO)
+                            storyItemSmallInstance = itemInstanceGO.GetComponent<UIStoriesItemSmall>();
+
+                        if (storyItemSmallInstance)
+                        {
+                            //Debug.Log($"Search Panel V1 - Step 5 Item received from Pool -> {item.storyTitleEnglish}");
+                            storyItemSmallInstance.gameObject.SetActive(true);
+                            storyItemSmallInstance.transform.parent = searchGridLayout.transform;
+                        }
+                        else
+                        {
+                            storyItemSmallInstance = Instantiate(storyItemSmallPrefab, searchGridLayout.transform);
+                            ThumbnailItemsPool.instance?.AddNewItem(1, storyItemSmallInstance.gameObject);
+
+                            //Debug.Log($"Search Panel V1 - {transform.name}: ITEM WAS ADDED TO POOL!");
+                        }
+                    }
+                    else
+                        storyItemSmallInstance = Instantiate(storyItemSmallPrefab, searchGridLayout.transform);
+
                     storyItemSmallInstance.transform.name = de.Key.ToString();
                     storyItemSmallInstance.LoadThumbnailAsset((StoriesDBItem)de.Value, detailsPanel, GameController.instance);
 
@@ -191,14 +224,15 @@ public class UISearchPanel : MonoBehaviour
             yield return waitDelay;
         }
 
-        searchScrollRect.normalizedPosition = new Vector2(0, 1f);
+        if(searchScrollRect)
+            searchScrollRect.normalizedPosition = new Vector2(0, 1f);
         //searchContentParent.GetComponent<ContentSizeFitter>().enabled = false;
     }
 
     private IEnumerator PopulateContentRoutineV2()
     {
         //searchGridLayout.enabled = false;
-        searchableItemsList = new List<SearchableItem>();
+        //searchableItemsList = new List<SearchableItem>();
 
         /*if (searchGridLayout != null)
             Destroy(searchGridLayout);
@@ -217,14 +251,19 @@ public class UISearchPanel : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
+        //Debug.Log("Search Panel v2 - Step 1 -> Entering ForEach 'CATEGORY STYLE'");
         for (int i = 1; i < storiesDB.storiesCategories.Length; i++)
         {
             if (i == 1)     //No need for Trending Stories
+            {
+                //Debug.Log("Search Panel v2 - Step 2 -> SKIPPED TRENDING SECTION");
                 continue;
+            }
 
             bool isCategoryEnabled = FirebaseRemoteConfig.DefaultInstance.GetValue("Category" + i + "_Status").BooleanValue;
+            //Debug.Log($"Search Panel V2 - Step 3 Category Status -> {i + storiesDB.storiesCategories[i].categoryName}: {isCategoryEnabled}");
 
-            if(isCategoryEnabled)
+            if (isCategoryEnabled)
             {
                 UIStoriesLoaderSmall uIStoriesLoaderSmallInstance = null;
 
@@ -236,21 +275,30 @@ public class UISearchPanel : MonoBehaviour
                 switch (storiesDB.storiesCategories[i].categoryType)
                 {
                     case CategoryType.Type_Normal:
+                        //Debug.Log($"Search Panel V2 - Step 4 Category TYPE -> {i + storiesDB.storiesCategories[i].categoryName}: TYPE NORMAL");
                         uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, searchVerticalLayout.transform);
                         break;
 
                     case CategoryType.Type_Trending:
+                        //Debug.Log($"Search Panel V2 - Step 4 Category TYPE -> {i + storiesDB.storiesCategories[i].categoryName}: TYPE TRENDING");
                         uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderTrendingPrefab, searchVerticalLayout.transform);
                         break;
 
                     case CategoryType.Type_Shorts:
+                        //Debug.Log($"Search Panel V2 - Step 4 Category TYPE -> {i + storiesDB.storiesCategories[i].categoryName}: TYPE SHORTS");
                         uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderShortsPrefab, searchVerticalLayout.transform);
                         break;
                 }
 
-                uIStoriesLoaderSmallInstance.categoryIndex = i;
-                uIStoriesLoaderSmallInstance.transform.name += i;
-                uIStoriesLoaderSmallInstance.OnStoryDBLoaded(storiesDB, ref searchableItemsList);
+                //uIStoriesLoaderSmallInstance = Instantiate(storiesLoaderPrefab, searchVerticalLayout.transform);
+                if (uIStoriesLoaderSmallInstance)
+                {
+                    //Debug.Log($"Search Panel V2 - Step 5 Category Instance -> {i + storiesDB.storiesCategories[i].categoryName}: IS UP!");
+
+                    uIStoriesLoaderSmallInstance.categoryIndex = i;
+                    uIStoriesLoaderSmallInstance.transform.name += i;
+                    uIStoriesLoaderSmallInstance.OnStoryDBLoaded(storiesDB, ref searchableItemsList);
+                }
 
                 yield return waitDelay;
             }
@@ -272,7 +320,8 @@ public class UISearchPanel : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
-        searchScrollRect.normalizedPosition = new Vector2(0, 1f);
+        if(searchScrollRect)
+            searchScrollRect.normalizedPosition = new Vector2(0, 1f);
     }
 
     public void OnSearchValueEdit(string val)

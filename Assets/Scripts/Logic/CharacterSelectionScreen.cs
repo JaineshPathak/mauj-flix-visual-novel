@@ -223,6 +223,9 @@ public class CharacterSelectionScreen : MonoBehaviour
 
             episodesHandler.SelectCharacter(characterGender, characterDataAssets[currentCharacterIndex], characterVariableRef, currentCharacterIndex, true);
 
+            if (UICharacterSelection.instance != null)
+                UICharacterSelection.instance.HideSelectionScreen();
+
             MessageReceivedMFlix[] messageReceiversMaujflixTest = episodesHandler.episodeFlowchart.GetComponentsInChildren<MessageReceivedMFlix>();
             if (messageReceiversMaujflixTest.Length > 0)
             {

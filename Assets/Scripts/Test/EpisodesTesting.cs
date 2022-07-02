@@ -76,6 +76,8 @@ public class EpisodesTesting : MonoBehaviour
 
     private List<EpisodeMenuChoiceButton> menuChoiceButtonsList = new List<EpisodeMenuChoiceButton>();
 
+    public static event Action OnEpisodeTestClosed;
+
     private void Start()
     {
         branchEndingsScreen.SetActive(false);
@@ -115,6 +117,9 @@ public class EpisodesTesting : MonoBehaviour
 
     public void SpawnEpisode(GameObject episodePrefab)
     {
+        if (EpisodesSpawner.instance != null)
+            EpisodesSpawner.instance.topPanel.HideTopPanel();
+
         currentEpisodePrefab = Instantiate(episodePrefab);
 
         for (int i = 0; i < episodeBranches.Length && (episodeBranches.Length > 0); i++)
@@ -223,6 +228,8 @@ public class EpisodesTesting : MonoBehaviour
 
             menuChoiceButtonsList.Clear();
         }
+
+        OnEpisodeTestClosed?.Invoke();
     }
 
     public void OnChoicesButton()

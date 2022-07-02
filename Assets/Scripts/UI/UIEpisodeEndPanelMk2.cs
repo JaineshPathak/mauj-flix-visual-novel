@@ -161,16 +161,22 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviourSingleton<UIEpisodeEndPanelMk2>
     private void OnEnable()
     {
         AdsManager.OnIronSrcRewardVideoComplete += OnRewardAdComplete;
+
+        EpisodesTesting.OnEpisodeTestClosed += OnEpisodeTestClosed;
     }
 
     private void OnDisable()
     {
         AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+
+        EpisodesTesting.OnEpisodeTestClosed -= OnEpisodeTestClosed;
     }
 
     private void OnDestroy()
     {
         AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+
+        EpisodesTesting.OnEpisodeTestClosed -= OnEpisodeTestClosed;
     }
 
     private void OnRewardAdComplete(string placementName)
@@ -182,6 +188,8 @@ public class UIEpisodeEndPanelMk2 : MonoBehaviourSingleton<UIEpisodeEndPanelMk2>
                 break;
         }
     }
+
+    private void OnEpisodeTestClosed() => ResetStuffs();
 
     private void Start()
     {

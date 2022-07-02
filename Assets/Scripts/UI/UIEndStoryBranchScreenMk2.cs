@@ -130,16 +130,22 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
     private void OnEnable()
     {        
         AdsManager.OnIronSrcRewardVideoComplete += OnRewardAdComplete;
+
+        EpisodesTesting.OnEpisodeTestClosed += OnEpisodeTestClosed;
     }
 
     private void OnDisable()
     {        
         AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+
+        EpisodesTesting.OnEpisodeTestClosed -= OnEpisodeTestClosed;
     }
 
     private void OnDestroy()
     {
         AdsManager.OnIronSrcRewardVideoComplete -= OnRewardAdComplete;
+
+        EpisodesTesting.OnEpisodeTestClosed -= OnEpisodeTestClosed;
     }
 
     private void OnRewardAdComplete(string placementName)
@@ -151,6 +157,8 @@ public class UIEndStoryBranchScreenMk2 : UIEndStoryBranchScreen
                 break;
         }
     }
+
+    private void OnEpisodeTestClosed() => ResetStuffs();
 
     private void Start()
     {

@@ -34,6 +34,23 @@ public class UIEndShortStoryScreen : MonoBehaviour
         ResetStuffs();
     }
 
+    private void OnEnable()
+    {
+        EpisodesTesting.OnEpisodeTestClosed += OnEpisodeTestClosed;
+    }
+
+    private void OnDisable()
+    {
+        EpisodesTesting.OnEpisodeTestClosed -= OnEpisodeTestClosed;
+    }
+
+    private void OnDestroy()
+    {
+        EpisodesTesting.OnEpisodeTestClosed -= OnEpisodeTestClosed;
+    }
+
+    private void OnEpisodeTestClosed() => ResetStuffs();
+
     public void ResetStuffs()
     {
         if (mainCanvasGroup)

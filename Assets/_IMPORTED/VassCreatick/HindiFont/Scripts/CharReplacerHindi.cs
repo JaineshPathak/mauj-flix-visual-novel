@@ -37,7 +37,16 @@ public class CharReplacerHindi : MonoBehaviour
 
     }
 
+    [ContextMenu("TRY TO FIX")]
+    public void TryFix()
+    {
+        if (GetComponent<TextMeshProUGUI>() == null)
+            return;
 
+        print("HERE!");
+        string textOg = GetComponent<TextMeshProUGUI>().text;
+        GetComponent<TextMeshProUGUI>().text = GetFixedText(textOg);
+    }
 
     void LoadAttributes()
     {

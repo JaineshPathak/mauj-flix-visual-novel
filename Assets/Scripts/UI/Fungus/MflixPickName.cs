@@ -29,9 +29,13 @@ public class MflixPickName : MonoBehaviour
 
     private void OnNameSubmit()
     {
-        if (EpisodesSpawner.instance != null && EpisodesSpawner.instance.storiesDBItem != null)
-            if (!EpisodesSpawner.instance.storiesDBItem.isReworked)
+        if ( (EpisodesSpawner.instance != null) )
+        {            
+            if (EpisodesSpawner.instance.storiesDBItem != null && 
+                !EpisodesSpawner.instance.storiesDBItem.isReworked && 
+                !EpisodesSpawner.instance.testModeSingle)
                 return;
+        }            
 
         if (episodeFlowchart == null)
             episodeFlowchart = FindObjectOfType<EpisodesHandler>().episodeFlowchart;

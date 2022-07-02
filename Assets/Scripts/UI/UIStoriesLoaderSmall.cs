@@ -76,7 +76,12 @@ public class UIStoriesLoaderSmall : MonoBehaviour
                 storyItemSmallInstance.transform.parent = parent;
             }
             else
+            {
                 storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, parent);
+                ThumbnailItemsPool.instance?.AddNewItem(thumbnailPoolIndex, storyItemSmallInstance.gameObject);
+
+                Debug.Log($"{transform.name}: ITEM WAS ADDED!");
+            }
         }
         else
             storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, parent);
@@ -145,7 +150,7 @@ public class UIStoriesLoaderSmall : MonoBehaviour
             }
         }
         else
-            storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, parent);        
+            storyItemSmallInstance = Instantiate(storiesItemSmallPrefab, parent);
 
         storyItemSmallInstance.transform.name = storiesDBItem.storyTitleEnglish;
         storyItemSmallInstance.LoadThumbnailAsset(storiesDBItem, storiesDetailsPanel, GameController.instance, thumbnailPoolIndex == 3, rank);

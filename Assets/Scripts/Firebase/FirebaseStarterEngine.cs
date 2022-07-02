@@ -34,7 +34,7 @@ public class FirebaseStarterEngine : MonoBehaviour
 
     private IEnumerator LoadSceneAtIndex(int index)
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         SceneManager.LoadScene(index);
     }

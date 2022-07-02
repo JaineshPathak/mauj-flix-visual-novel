@@ -137,6 +137,12 @@ namespace Fungus
 
         //llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll
 
+        private void Start()
+        {
+            if (EpisodesSpawner.instance != null && EpisodesSpawner.instance.testModeSingle && AtlasDB.instance != null)
+                SetupPortraitsFromAtlas(AtlasDB.instance.charactersAtlas);
+        }
+
         public void SetupPortraitsFromAtlas(SpriteAtlas _atlas)
         {
             if (_atlas == null)
