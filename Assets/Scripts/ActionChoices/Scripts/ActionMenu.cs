@@ -14,6 +14,7 @@ public class ActionItemChoice
 public class ActionItem
 {
     public bool midFadeBgBlack;
+    public Sprite itemSprite;
     public List<ActionItemChoice> actionItemChoices = new List<ActionItemChoice>();
 }
 
@@ -22,9 +23,11 @@ public class ActionItem
                  "Displays a button in a multiple choices for Action")]
 public class ActionMenu : Command
 {    
-    [SerializeField] protected string centerActionText = "Center Text";
+    public string centerActionText = "Center Text";
 
-    [SerializeField] protected List<ActionItem> actionItemsList = new List<ActionItem>();
+    public List<ActionItem> actionItemsList = new List<ActionItem>();
+
+    public ActionItem currentActionItemSelected;
 
     public override void OnEnter()
     {
@@ -40,8 +43,9 @@ public class ActionMenu : Command
             return;
         }
 
-        ActionMenuUI.instance.SetupActionItems(centerActionText, actionItemsList.ToArray());
+        ActionMenuUI.instance.SetupActionItems(centerActionText, this, actionItemsList.ToArray());
     }
+
     public override Color GetButtonColor()
     {
         return new Color32(255, 239, 0, 255);
