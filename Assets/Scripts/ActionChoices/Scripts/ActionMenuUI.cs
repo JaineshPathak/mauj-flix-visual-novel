@@ -1,31 +1,34 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using TMPro;
-using Fungus;
 
 public class ActionMenuUI : MonoBehaviourSingleton<ActionMenuUI>
 {
     [Header("Components")]
-    public CanvasGroup mainCanvasGroup;
-    public CanvasGroup blackBgCanvasGroup;
+    public CanvasGroup mainCanvasGroup;    
     public TextMeshProUGUI centerText;
     public CharReplacerHindi centerTextReplacer;
 
+    [Header("Group Types")]
+    public Transform singleItemGroup;
+    public Transform multipleItemGroup;
+
     [Header("Action Items UI Buttons")]
+    public ActionMenuUIItem actionUIItemSingle;
     public List<ActionMenuUIItem> actionMenuUIItems = new List<ActionMenuUIItem>();
 
-    [Header("Choices Buttons")]
-    public Button[] cachedChoiceButtons;
+    /*[Header("Choices Buttons")]
+    public Button[] cachedChoiceButtons;*/
 
     private ActionItem[] actionItemsList;
     private ActionMenu actionMenu;
 
     private ActionMenuUIItem currentActionUIItem;
-    private List<TextMeshProUGUI> cachedChoiceTexts = new List<TextMeshProUGUI>();
+    //private List<TextMeshProUGUI> cachedChoiceTexts = new List<TextMeshProUGUI>();
+
+    private Action callback;
+    private int modeType = 1;
 
     private void Awake()
     {
@@ -33,30 +36,28 @@ public class ActionMenuUI : MonoBehaviourSingleton<ActionMenuUI>
         mainCanvasGroup.interactable = false;
         mainCanvasGroup.blocksRaycasts = false;
 
-        cachedChoiceTexts.Clear();
+        /*cachedChoiceTexts.Clear();
         for (int i = 0; i < cachedChoiceButtons.Length && (cachedChoiceButtons.Length > 0); i++)
         {
             cachedChoiceButtons[i].transform.localScale = Vector3.zero;
             cachedChoiceButtons[i].onClick.RemoveAllListeners();
 
             cachedChoiceTexts.Add(cachedChoiceButtons[i].GetComponentInChildren<TextMeshProUGUI>());
-        }
+        }*/
 
         currentActionUIItem = null;
     }
 
     private void OnValidate()
     {
-        actionMenuUIItems.Clear();
-        actionMenuUIItems.AddRange(GetComponentsInChildren<ActionMenuUIItem>());
-
         for (int i = 0; i < actionMenuUIItems.Count && (actionMenuUIItems.Count > 0); i++)        
             actionMenuUIItems[i].id = i;
 
-        mainCanvasGroup = GetComponent<CanvasGroup>();
+        if(mainCanvasGroup == null)
+            mainCanvasGroup = GetComponent<CanvasGroup>();
     }
 
-    public void SetupActionItems(string _centerTitleText, ActionMenu _actionMenu, ActionItem[] _actionItemsList)
+    public void SetupActionItems(string _centerTitleText, ActionMenu _actionMenu, ActionItem[] _actionItemsList, Action _callback)
     {
         if (_actionItemsList.Length <= 0)
             return;
@@ -70,6 +71,8 @@ public class ActionMenuUI : MonoBehaviourSingleton<ActionMenuUI>
         actionMenu = _actionMenu;
         actionItemsList = _actionItemsList;
 
+        callback = _callback;
+
         LTSeq startSeq = LeanTween.sequence();
         startSeq.append(() => 
         {
@@ -79,36 +82,86 @@ public class ActionMenuUI : MonoBehaviourSingleton<ActionMenuUI>
         startSeq.append(LeanTween.alphaCanvas(mainCanvasGroup, 1f, 0.4f).setEaseInOutSine());
         startSeq.append( () => 
         {
-            for (int i = 0; i < actionItemsList.Length; i++)
+            if (actionItemsList.Length == 1)
             {
-                actionMenuUIItems[i].SetupItem(actionItemsList[i].itemSprite, this);
-                actionMenuUIItems[i].ItemShow();
+                modeType = 1;
+                singleItemGroup.gameObject.SetActive(true);
+                multipleItemGroup.gameObject.SetActive(false);
+
+                actionUIItemSingle.SetupItem(actionItemsList[0].itemSprite, centerTextReplacer.GetFixedText(actionItemsList[0].itemName), this);
+                actionUIItemSingle.ItemShow();
             }
+            else if(actionItemsList.Length > 1)
+            {
+                modeType = 2;
+                singleItemGroup.gameObject.SetActive(false);
+                multipleItemGroup.gameObject.SetActive(true);
+
+                //0th element is reserved for Single Item
+                for (int i = 0; i < actionItemsList.Length; i++)
+                {
+                    actionMenuUIItems[i].SetupItem(actionItemsList[i].itemSprite, centerTextReplacer.GetFixedText(actionItemsList[i].itemName), this);                   
+                    RectTransformExtensions.SetItemAnchor(actionMenuUIItems[i].rectTransform, actionItemsList[i].itemAnchorPoint);
+                    actionMenuUIItems[i].ItemShow();
+                }
+            }                
         });        
     }
 
     public void OnItemFocusClicked(int id)
     {
-        actionMenu.currentActionItemSelected = actionItemsList[id];
+        //actionMenu.currentActionItemSelected = actionItemsList[id];
 
-        if (blackBgCanvasGroup.alpha == 0)
-            LeanTween.alphaCanvas(blackBgCanvasGroup, 1f, 0.4f).setEaseInOutSine();
+        //if (blackBgCanvasGroup.alpha == 0)
+        //LeanTween.alphaCanvas(blackBgCanvasGroup, 1f, 0.4f).setEaseInOutSine();
 
-        for (int i = 0; i < actionMenuUIItems.Count && (actionMenuUIItems.Count > 0); i++)
+        LTSeq focusSeq = LeanTween.sequence();
+
+        focusSeq.append( () => 
         {
-            if (i == id)
+            if (modeType == 1)
             {
-                currentActionUIItem = actionMenuUIItems[i];
-                actionMenuUIItems[i].ItemFocus();
+                currentActionUIItem = actionUIItemSingle;
+                actionUIItemSingle.ItemFocus();
+            }
+            else if (modeType == 2)
+            {
+                for (int i = 0; i < actionMenuUIItems.Count && (actionMenuUIItems.Count > 0); i++)
+                {
+                    if (i == id)
+                    {
+                        currentActionUIItem = actionMenuUIItems[i];
+                        actionMenuUIItems[i].ItemFocus();
+                    }
+                    else
+                        actionMenuUIItems[i].ItemUnfocus();
+                }
+            }            
+        });
+        focusSeq.append(1f);
+        focusSeq.append(() =>
+        {
+            if(modeType == 1)
+            {
+                actionUIItemSingle.ItemHide();
             }
             else
-                actionMenuUIItems[i].ItemUnfocus();
-        }
+            {
+                for (int i = 0; i < actionMenuUIItems.Count && (actionMenuUIItems.Count > 0); i++)
+                    actionMenuUIItems[i].ItemHide();
+            }
 
-        ShowItemChoices();
+            mainCanvasGroup.interactable = false;
+            mainCanvasGroup.blocksRaycasts = false;
+        });
+        focusSeq.append(LeanTween.alphaCanvas(mainCanvasGroup, 0, 1f).setEaseInOutSine());
+        focusSeq.append(() => callback?.Invoke());
+
+        //ShowItemChoices();
     }
 
-    private void ShowItemChoices()
+    #region REMOVED CODE
+    /*private void ShowItemChoices()
     {
         if (cachedChoiceButtons.Length <= 0)
             return;
@@ -155,5 +208,6 @@ public class ActionMenuUI : MonoBehaviourSingleton<ActionMenuUI>
     {
         yield return new WaitForEndOfFrame();
         block.StartExecution();
-    }
+    }*/
+    #endregion
 }

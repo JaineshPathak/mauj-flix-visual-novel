@@ -52,7 +52,7 @@ public class UIStoriesItemBig : MonoBehaviour
         {
             AsyncOperationHandle<GameObject> flowchartLoading = Addressables.LoadAssetAsync<GameObject>(storyItem.storyFlowchartKey);
             flowchartLoading.Completed += OnFlowchartLoadingDone;
-        }        
+        }
 
         if (ThumbnailsBucket.instance != null)
         {

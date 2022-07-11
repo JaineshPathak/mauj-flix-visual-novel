@@ -188,8 +188,11 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             storyItem = episodesSpawner.storiesDBItem;
             storyData = episodesSpawner.storyData;
 
-            startNowButton.onClick.RemoveAllListeners();
-            startNowButton.onClick.AddListener(LoadStoryEpisodeStartNow);
+            if(startNowButton)
+            {
+                startNowButton.onClick.RemoveAllListeners();
+                startNowButton.onClick.AddListener(LoadStoryEpisodeStartNow);
+            }
 
             if (episodesSpawner.playerData.HasStoryLiked(storyItem.storyTitleEnglish))
             {
@@ -418,10 +421,14 @@ public class UIStoriesDetailsPanel : MonoBehaviour
                     viewsCountParent.SetActive(false);
             }
 
-            startNowButton.onClick.AddListener(LoadStoryEpisodeStartNow);
+            if(startNowButton)
+                startNowButton.onClick.AddListener(LoadStoryEpisodeStartNow);
         }
         else
-            startNowButton.onClick.RemoveListener(LoadStoryEpisodeStartNow);
+        {
+            if(startNowButton)
+                startNowButton.onClick.RemoveListener(LoadStoryEpisodeStartNow);
+        }
 
         MovePanel(isShown);
 

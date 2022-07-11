@@ -1,10 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEditor;
-using Fungus;
 using Fungus.EditorUtils;
-using System;
 
 [CustomEditor(typeof(ActionMenu))]
 public class ActionMenuEditor : CommandEditor
@@ -48,58 +44,86 @@ public class ActionMenuEditor : CommandEditor
 
         serializedObject.Update();
 
+        if (actionMenu.actionItemsList.Count > 1)
+            EditorGUILayout.HelpBox("Multiple Items - So make sure to properly set Anchor Points!", MessageType.Warning);
+        else if(actionMenu.actionItemsList.Count == 1)
+            EditorGUILayout.HelpBox("Single Item - Item will be by default in 'Middle-Center' Anchor Point!", MessageType.Warning);
+
+        EditorGUILayout.Space(10);
+        
+        //Center Action Title Text
         EditorGUILayout.PropertyField(centerActionTextSerial);
 
         EditorGUILayout.Space(10);
 
         //EditorGUILayout.PropertyField(actionItemsListSerial);
 
-        if (EditorTools.DrawHeader($"Actions List (Total - {actionMenu.actionItemsList.Count})"))
+        if (ActionMenuEditorTools.DrawHeader($"Items List (Total - {actionMenu.actionItemsList.Count})"))
         {
-            EditorGUI.indentLevel += 2;
+            //EditorGUI.indentLevel += 2;
             for (int i = 0; i < actionItemsListSerial.arraySize; i++)
             {
+                EditorGUILayout.Space(10f);
+
                 var itemProp = actionItemsListSerial.GetArrayElementAtIndex(i);
 
-                var midFadeBlackBgSerial = itemProp.FindPropertyRelative("midFadeBgBlack");
-                EditorGUILayout.PropertyField(midFadeBlackBgSerial, new GUIContent("Fade Background"));
+                //var midFadeBlackBgSerial = itemProp.FindPropertyRelative("midFadeBgBlack");
+                //EditorGUILayout.PropertyField(midFadeBlackBgSerial, new GUIContent("Fade Background"));
+
+                var itemNameSerial = itemProp.FindPropertyRelative("itemName");
+                EditorGUILayout.PropertyField(itemNameSerial);
+
+                EditorGUILayout.Space(5);
 
                 var itemSpriteSerial = itemProp.FindPropertyRelative("itemSprite");
-                EditorGUILayout.PropertyField(itemSpriteSerial);
+                itemSpriteSerial.objectReferenceValue = EditorGUILayout.ObjectField("Item Sprite", itemSpriteSerial.objectReferenceValue, typeof(Sprite), false);
+
+                EditorGUILayout.Space(5);
                 
-                if (EditorTools.DrawHeader($"Actions Choices - [{i}]"))
+                var itemAnchorPresets = itemProp.FindPropertyRelative("itemAnchorPoint");
+                if (actionMenu.actionItemsList.Count > 1)                
+                    EditorGUILayout.PropertyField(itemAnchorPresets);                
+
+                /*if (EditorTools.DrawHeader($"Actions Choices - [{i}]"))
                 {
                     var actionItemChoicesSerial = itemProp.FindPropertyRelative("actionItemChoices");                    
 
                     DrawActionItemChoices(flowchart, actionItemChoicesSerial);                    
-                }
+                }*/
 
                 EditorGUILayout.Space(10);
 
                 EditorGUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
                 GUI.backgroundColor = Color.red;
-                GUIContent content = new GUIContent("Remove Action (-)", (Texture)Resources.Load("Icons/Icon_Action"));
+                GUIContent content = new GUIContent("Remove Item (-)", (Texture)AssetDatabase.LoadAssetAtPath("Assets/Scripts/ActionChoices/Icons/Icon_Action.png", typeof(Texture)));
                 if (GUILayout.Button(content, buttonTextStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
                     actionItemsListSerial.DeleteArrayElementAtIndex(i);                
                 GUI.backgroundColor = defaultGUIColor;
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
+
+                DrawDividerLine(Color.grey);
             }
 
             EditorGUILayout.Space(10);
 
             DrawDividerLine(Color.grey);
 
-            EditorGUILayout.BeginHorizontal();
-            GUILayout.FlexibleSpace();
-            GUI.backgroundColor = Color.blue;
-            GUIContent content3 = new GUIContent("Add Action (+)", (Texture)Resources.Load("Icons/Icon_Action"));
-            if (GUILayout.Button(content3, buttonTextStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
-                actionItemsListSerial.InsertArrayElementAtIndex(actionItemsListSerial.arraySize);
-            GUI.backgroundColor = defaultGUIColor;
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
+            if (actionMenu.actionItemsList.Count + 1 <= 3)
+            {
+                EditorGUILayout.BeginHorizontal();
+                GUILayout.FlexibleSpace();
+                GUI.backgroundColor = Color.blue;
+                GUIContent content3 = new GUIContent("Add Item (+)", (Texture)AssetDatabase.LoadAssetAtPath("Assets/Scripts/ActionChoices/Icons/Icon_Action.png", typeof(Texture)));
+                if (GUILayout.Button(content3, buttonTextStyle, GUILayout.Width(buttonWidth), GUILayout.Height(buttonHeight)))
+                    actionItemsListSerial.InsertArrayElementAtIndex(actionItemsListSerial.arraySize);
+                GUI.backgroundColor = defaultGUIColor;
+                GUILayout.FlexibleSpace();
+                EditorGUILayout.EndHorizontal();
+            }
+            else
+                EditorGUILayout.HelpBox("Max 3 items allowed ONLY!", MessageType.Error);
 
             DrawDividerLine(Color.grey);
         }        
@@ -107,6 +131,7 @@ public class ActionMenuEditor : CommandEditor
         serializedObject.ApplyModifiedProperties();
     }
 
+    /* REMOVED CODE
     private void DrawActionItemChoices(Flowchart flowchart, SerializedProperty actionItemChoicesSerial)
     {
         for (int i = 0; i < actionItemChoicesSerial.arraySize; i++)
@@ -171,6 +196,7 @@ public class ActionMenuEditor : CommandEditor
         GUILayout.FlexibleSpace();
         EditorGUILayout.EndHorizontal();
     }
+    */
 
     private void DrawDividerLine(Color color)
     {

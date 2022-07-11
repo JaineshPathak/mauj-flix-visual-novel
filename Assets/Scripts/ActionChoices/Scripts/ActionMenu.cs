@@ -3,31 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fungus;
 
-[System.Serializable]
+/*[System.Serializable]
 public class ActionItemChoice
 {
     public string choiceText;
     public Block targetBlock;
-}
+}*/
 
 [System.Serializable]
 public class ActionItem
 {
-    public bool midFadeBgBlack;
+    public string itemName;
     public Sprite itemSprite;
-    public List<ActionItemChoice> actionItemChoices = new List<ActionItemChoice>();
+    public ItemAnchorPresets itemAnchorPoint = ItemAnchorPresets.MiddleCenter;    
+    //public List<ActionItemChoice> actionItemChoices = new List<ActionItemChoice>();
 }
 
 [CommandInfo("Narrative",
                  "Action Menu (Maujflix)",
-                 "Displays a button in a multiple choices for Action")]
+                 "Displays a single or more items to collect (Designed for Maujflix/StoryPix)")]
 public class ActionMenu : Command
 {    
     public string centerActionText = "Center Text";
 
     public List<ActionItem> actionItemsList = new List<ActionItem>();
 
-    public ActionItem currentActionItemSelected;
+    //public ActionItem currentActionItemSelected;
 
     public override void OnEnter()
     {
@@ -43,7 +44,10 @@ public class ActionMenu : Command
             return;
         }
 
-        ActionMenuUI.instance.SetupActionItems(centerActionText, this, actionItemsList.ToArray());
+        ActionMenuUI.instance.SetupActionItems(centerActionText, this, actionItemsList.ToArray(), () => 
+        {
+            Continue();
+        });
     }
 
     public override Color GetButtonColor()
