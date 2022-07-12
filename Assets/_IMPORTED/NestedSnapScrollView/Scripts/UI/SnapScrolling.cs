@@ -29,6 +29,12 @@ namespace NestedScroll.ScrollElement
         public NestedScrollView nestedScrollView;
         [Header("Showing border point")] public bool IsShowHelpers;
 
+        [HideInInspector] public bool allowUpdate = true;
+        public int SelectedPanID
+        {
+            get { return _selectedPanID; }
+            set { _selectedPanID = value; }
+        }
 
         private int _startLastIgnoredElementsCount;
 
@@ -166,6 +172,9 @@ namespace NestedScroll.ScrollElement
 
         private void Update()
         {
+            if (!allowUpdate)
+                return;
+
             if (_isInitialized && _elementPosWithOffset.Length > 0)
             {
                 scrollVelocity = Mathf.Abs(scrollRect.velocity.x);

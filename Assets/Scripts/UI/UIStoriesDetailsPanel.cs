@@ -7,6 +7,8 @@ using TMPro;
 using underDOGS.SDKEvents;
 using System.Linq;
 using Firebase.RemoteConfig;
+using NestedScroll.Core;
+using NestedScroll.ScrollElement;
 
 public class UIStoriesDetailsPanel : MonoBehaviour
 {
@@ -72,9 +74,28 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     public Button nextEpAdButton;
     public Button nextEpCloseButton;
 
+
+    [Header("Bottom Panel")]
+    public UIBottomPanel bottomPanel;
+
+    [Header("Section Button")]
+    public NestedScrollView sectionButtonScroller;
+    public SnapScrolling sectionSnapScroller;
+    public Button episodesSectionBtn;
+    public Button commentsSectionBtn;
+
     [Space(15)]
 
-    public UIBottomPanel bottomPanel;
+    public Scrollbar sectionScrollbar;
+    public TextMeshProUGUI episodesSectionText;
+    public TextMeshProUGUI commentsSectionText;
+
+    [Space(15)]
+
+    public Color sectionTextOnColor;
+    public Color sectionTextOffColor = Color.white;
+
+    //-----------------------------------------------------------------------------------------------------------
 
     private bool isShown;
     public bool IsShown { get { return isShown; } }
@@ -86,11 +107,14 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     private UIEpisodeItem selectedEpisodeItem;
 
     private LTSeq moveSeq;
+    private LTSeq sectionSeq;
+    private int sectionSeqId;
 
     private RectTransform episodesContainerRect;
 
     public static event Action<string> OnStoryLiked;
     public static event Action<string> OnStoryUnliked;
+
 
     private void Awake()
     {
@@ -112,6 +136,65 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
         if (nextEpCloseButton)
             nextEpCloseButton.onClick.AddListener(OnNextEpisodeCloseButton);
+
+        if (episodesSectionBtn)
+            episodesSectionBtn.onClick.AddListener(OnEpisodesSectionClicked);
+
+        if (commentsSectionBtn)
+            commentsSectionBtn.onClick.AddListener(OnCommentsSectionClicked);
+
+        if(sectionButtonScroller)
+            sectionButtonScroller.normalizedPosition = new Vector2(0, 1f);
+    }
+
+    private void OnEpisodesSectionClicked()
+    {
+        if (sectionButtonScroller == null)
+            return;
+
+        MoveToSection(1f, 0, 0.2f);
+        //sectionButtonScroller.horizontalNormalizedPosition = 0;
+    }
+
+    private void OnCommentsSectionClicked()
+    {
+        if (sectionButtonScroller == null)
+            return;
+
+        MoveToSection(0, 1f, 0.2f);
+        //sectionButtonScroller.horizontalNormalizedPosition = 1f;
+    }
+
+    //From = 0, To = 1, Go to 'Comments' section
+    //From = 1, To = 0, Go to 'Episodes' section
+    private void MoveToSection(float from, float to, float time = 0.3f)
+    {
+        if (sectionButtonScroller.horizontalNormalizedPosition == to)
+            return;
+
+        if (LeanTween.isTweening(sectionSeqId))
+            LeanTween.cancel(sectionSeqId);
+
+        sectionSeq = LeanTween.sequence();
+        sectionSeqId = sectionSeq.id;
+
+        sectionSeq.append(() => sectionSnapScroller.allowUpdate = false);
+        sectionSeq.append(LeanTween.value(from, to, time).setOnUpdate((float val) => sectionButtonScroller.horizontalNormalizedPosition = val).setEaseLinear());
+        sectionSeq.append(() => { sectionSnapScroller.allowUpdate = true; sectionSnapScroller.SelectedPanID = (int)to; });
+    }
+
+    private void LerpSectionTextColor()
+    {
+        if (episodesSectionText == null || commentsSectionText == null || sectionScrollbar == null)
+            return;
+
+        episodesSectionText.color = Color.Lerp(sectionTextOnColor, sectionTextOffColor, sectionScrollbar.value);
+        commentsSectionText.color = Color.Lerp(sectionTextOnColor, sectionTextOffColor, 1f - sectionScrollbar.value);
+    }
+
+    private void Update()
+    {
+        LerpSectionTextColor();
     }
 
     private void OnEnable()
