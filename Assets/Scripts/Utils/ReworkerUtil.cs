@@ -175,6 +175,12 @@ public class ReworkerUtil : MonoBehaviour
         {
             if ((sayCommand != null) && sayCommand.enabled && sayCommand.GetType() == typeof(Say))
             {
+                if (sayCommand.setSayDialog.transform.name.Equals("MFlixNarrativeScreenDialog"))
+                {
+                    Debug.LogError("Reworker Util: NarrativeScreenDialog IGNORED!");
+                    continue;
+                }
+
                 Block block = sayCommand.ParentBlock;
 
                 SayMflix sayCommandMFlix = flowchart.gameObject.AddComponent<SayMflix>();

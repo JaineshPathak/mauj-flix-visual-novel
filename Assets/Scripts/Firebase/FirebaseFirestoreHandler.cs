@@ -107,7 +107,7 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
         if (firestoreDB == null)
             firestoreDB = FirebaseFirestore.DefaultInstance;
 
-        userRef = firestoreDB.Collection(devicePlatformCollection).Document(user.UserId);
+        userRef = firestoreDB.Collection(devicePlatformCollection).Document(user.UserId);               
         userRef.GetSnapshotAsync().ContinueWith(getTask =>
         {
             DocumentSnapshot snapShot = getTask.Result;
