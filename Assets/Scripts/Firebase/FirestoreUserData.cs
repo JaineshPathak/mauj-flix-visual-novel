@@ -13,6 +13,9 @@ public struct FirestoreUserData
     public string userEmail { get; set; }
 
     [FirestoreProperty]
+    public string userProfilePicUrl { get; set; }
+
+    [FirestoreProperty]
     public float diamondsAmount { get; set; }
 
     [FirestoreProperty]

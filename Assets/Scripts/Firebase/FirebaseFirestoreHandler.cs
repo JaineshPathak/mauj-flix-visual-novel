@@ -20,7 +20,8 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
     public static event Action<FirebaseFirestoreHandler> OnFirestoreLoaded;
 
     private bool firstTimeUser;
-    private string devicePlatformCollection;    
+    private string devicePlatformCollection;
+    private string deviceCommentsPlatformCollection;
 
     public override void Awake()
     {
@@ -37,10 +38,13 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
 
 #if UNITY_EDITOR
         devicePlatformCollection = "Users PC (TEST)";
+        deviceCommentsPlatformCollection = "Comments PC (TEST)";
 #elif UNITY_ANDROID
         devicePlatformCollection = "Users Android";
+        deviceCommentsPlatformCollection = "Comments Android";
 #elif UNITY_IOS
         devicePlatformCollection = "Users iOS";
+        deviceCommentsPlatformCollection = "Comments iOS";
 #endif
     }
 
@@ -126,11 +130,13 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
                 {
                     firestoreUserData.userName = FirebaseAuthHandler.instance.GetDisplayNameFromProviderID(DataPaths.firebaseGoogleProviderID);
                     firestoreUserData.userEmail = FirebaseAuthHandler.instance.GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID);
+                    firestoreUserData.userProfilePicUrl = FirebaseAuthHandler.instance.GetProfileURLFromProviderID(DataPaths.firebaseGoogleProviderID);
                 }
                 else
                 {
                     firestoreUserData.userName = "";
                     firestoreUserData.userEmail = "";
+                    firestoreUserData.userProfilePicUrl = "";
                 }
 
                 userRef.SetAsync(firestoreUserData).ContinueWith(setTask =>
@@ -158,11 +164,13 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
                 {
                     firestoreUserData.userName = FirebaseAuthHandler.instance.GetDisplayNameFromProviderID(DataPaths.firebaseGoogleProviderID);
                     firestoreUserData.userEmail = FirebaseAuthHandler.instance.GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID);
+                    firestoreUserData.userProfilePicUrl = FirebaseAuthHandler.instance.GetProfileURLFromProviderID(DataPaths.firebaseGoogleProviderID);
                 }
                 else
                 {
                     firestoreUserData.userName = "";
                     firestoreUserData.userEmail = "";
+                    firestoreUserData.userProfilePicUrl = "";
                 }
 
                 userRef.SetAsync(firestoreUserData).ContinueWith(setTask =>
@@ -347,7 +355,7 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
         });
     }
 
-    //=======================================================================================
+    //===================================================================================================================================================
 
     public void PushOfflineData(float _diamondsAmount, float _ticketsAmount)
     {
@@ -364,4 +372,45 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
                 Debug.LogFormat("Firebase Firestore: Existing User Data Updated {0}, {1}, {2}, {3}, {4}", firestoreUserData.userID, firestoreUserData.userName, firestoreUserData.userEmail, firestoreUserData.diamondsAmount, firestoreUserData.ticketsAmount);
         });
     }
+
+    //===================================================================================================================================================
+
+    //===================================================================================================================================================
+
+    //Comments Related Section
+
+    public void AddUserComment(string storyDocName, string userCollectionName, FirestoreCommentData commentData)
+    {
+        DocumentReference storyDocRef = firestoreDB.Collection(deviceCommentsPlatformCollection).Document(storyDocName).Collection(userCollectionName).Document(commentData.userID);
+        storyDocRef.SetAsync(commentData).ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+                Debug.LogFormat("Firebase Firestore: New Comment Added {0}, {1}, {2}", commentData.userID, commentData.userName, commentData.userComment);
+        });
+        /*storyDocRef.GetSnapshotAsync().ContinueWith(getTask =>
+        {
+            if(getTask.IsCompleted)
+            {
+                DocumentSnapshot storyDocSnapshot = getTask.Result;
+
+            }
+            else if(getTask.IsFaulted)
+                Debug.LogError($"Firebase Firestore: Unable to get Story Document Ref for name: {storyDocName}");
+        });*/
+    }
+
+    public void AddUserComment(string storyDocName, string userCollectionName, FirestoreCommentData commentData, Action callback)
+    {
+        DocumentReference storyDocRef = firestoreDB.Collection(deviceCommentsPlatformCollection).Document(storyDocName).Collection(userCollectionName).Document(commentData.userID);
+        storyDocRef.SetAsync(commentData).ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+            {
+                callback?.Invoke();
+                Debug.LogFormat("Firebase Firestore: New Comment Added {0}, {1}, {2}", commentData.userID, commentData.userName, commentData.userComment);
+            }
+        });        
+    }
+
+    //===================================================================================================================================================
 }

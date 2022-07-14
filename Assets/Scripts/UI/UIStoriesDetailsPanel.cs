@@ -555,6 +555,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
                 episodesSpawner.topPanel.HideTopPanel();
 
             moreLikeScrollMain.normalizedPosition = new Vector2(0, 1f);
+            MoveToSection(1f, 0, 0.01f);
 
             moveSeq.append(() =>
             {

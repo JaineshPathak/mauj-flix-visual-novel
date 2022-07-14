@@ -135,7 +135,7 @@ public class UIGoogleSignIn : MonoBehaviour
         yield return wr.SendWebRequest();
 
         if (wr.isNetworkError || wr.isHttpError)        
-            Debug.Log("Google Sign In: Unable to Get User Profile Pic: " + wr.error);        
+            Debug.Log("Google Sign In: Unable to Get User Profile Pic: " + wr.error);
         else
         {
             Texture2D tex = new Texture2D(2, 2);

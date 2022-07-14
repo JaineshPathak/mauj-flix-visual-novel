@@ -1,18 +1,17 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using Firebase.Firestore;
 
-public class FirestoreCommentData : MonoBehaviour
+[FirestoreData]
+public class FirestoreCommentData
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [FirestoreProperty]
+    public string userID { get; set; }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [FirestoreProperty]
+    public string userName { get; set; }    
+
+    [FirestoreProperty]
+    public string userProfilePicUrl { get; set; }
+
+    [FirestoreProperty]
+    public string userComment { get; set; }
 }

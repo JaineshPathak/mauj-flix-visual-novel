@@ -23,6 +23,9 @@ public class FirebaseAuthHandler : MonoBehaviourSingletonPersistent<FirebaseAuth
     public static event Action<FirebaseUser> OnFirebaseUserAccountDeleted;
     public static event Action<FirebaseUser> OnFirebaseUserAccountSignedIn;
 
+    public static event Action OnUserGoogleSignIn;
+    public static event Action OnUserGoogleSignOut;
+
     private GoogleSignInConfiguration configuration;
 
     public override void Awake()
@@ -189,6 +192,7 @@ public class FirebaseAuthHandler : MonoBehaviourSingletonPersistent<FirebaseAuth
                 UpdateUserEmail(GetEmailFromProviderID(DataPaths.firebaseAnonymousProviderID));
 
                 unlinkTaskCallback?.Invoke(unlinkTask);
+                OnUserGoogleSignOut?.Invoke();
             }
         });
     }
@@ -242,7 +246,7 @@ public class FirebaseAuthHandler : MonoBehaviourSingletonPersistent<FirebaseAuth
                     if(signIn.IsCompleted)
                     {
                         userCurrent = signTask.Result;
-                        Debug.LogFormat("Firebase Auth: Credentials successfully linked to Firebase user: {0} ({1})", userCurrent.UserId, userCurrent.DisplayName);
+                        Debug.LogFormat("Firebase Auth: Google Credentials successfully linked to Firebase user: {0} ({1})", userCurrent.UserId, userCurrent.DisplayName);
 
                         OnFirebaseUserAccountLoaded?.Invoke(userCurrent);
 
@@ -250,6 +254,7 @@ public class FirebaseAuthHandler : MonoBehaviourSingletonPersistent<FirebaseAuth
                         GetProvidersDataFromEmail(GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID));
 
                         OnFirebaseUserAccountSignedIn?.Invoke(userCurrent);
+                        OnUserGoogleSignIn?.Invoke();
                     }
                 }); 
             }
@@ -307,14 +312,15 @@ public class FirebaseAuthHandler : MonoBehaviourSingletonPersistent<FirebaseAuth
                     if (signIn.IsCompleted)
                     {
                         userCurrent = signTask.Result;
-                        Debug.LogFormat("Firebase Auth: Credentials successfully linked to Firebase user: {0} ({1})", userCurrent.UserId, userCurrent.DisplayName);
+                        Debug.LogFormat("Firebase Auth: Google Credentials successfully linked to Firebase user: {0} ({1})", userCurrent.UserId, userCurrent.DisplayName);
 
                         OnFirebaseUserAccountLoaded?.Invoke(userCurrent);
 
                         UpdateUserEmail(GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID));
-                        GetProvidersDataFromEmail(GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID));
+                        GetProvidersDataFromEmail(GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID));                        
 
                         OnFirebaseUserAccountSignedIn?.Invoke(userCurrent);
+                        OnUserGoogleSignIn?.Invoke();
                     }
                 });
             }
@@ -356,6 +362,7 @@ public class FirebaseAuthHandler : MonoBehaviourSingletonPersistent<FirebaseAuth
                         GetProvidersDataFromEmail(GetEmailFromProviderID(DataPaths.firebaseGoogleProviderID));
 
                         OnFirebaseUserAccountSignedIn?.Invoke(userCurrent);
+                        OnUserGoogleSignIn?.Invoke();
                     }
                 });
             }
@@ -450,5 +457,23 @@ public class FirebaseAuthHandler : MonoBehaviourSingletonPersistent<FirebaseAuth
         }
 
         return userEmail;
+    }
+
+    public string GetProfileURLFromProviderID(string providerID)
+    {
+        var userProfileURL = string.Empty;
+        var enumerator = userCurrent.ProviderData.GetEnumerator();
+
+        while (enumerator.MoveNext())
+        {
+            var provider = enumerator.Current.ProviderId;
+            if (provider == providerID)
+            {
+                userProfileURL = enumerator.Current.PhotoUrl.AbsoluteUri;
+                return userProfileURL;
+            }
+        }
+
+        return userProfileURL;
     }
 }

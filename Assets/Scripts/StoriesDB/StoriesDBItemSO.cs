@@ -149,19 +149,19 @@ public class StoriesDBItemSO : ScriptableObject
             }
         }
 
-        /*try
+        try
         {
             Array.Resize(ref item.storyBranchEpisodesKeys, this.storyEpisodesBranchkeys.Length);            
         }
         catch(NullReferenceException e)
         {
             Debug.LogError("Array Problem in: item.storyBranchEpisodesKeys + [" + e.Message + " - " + e.Source + "]");
-        }*/
+        }
 
         //item.storyBranchEpisodesKeys = new string[0];
         if (storyEpisodesBranchkeys.Length > 0)
         {
-            Array.Resize(ref item.storyBranchEpisodesKeys, storyEpisodesBranchkeys.Length);
+            //Array.Resize(ref item.storyBranchEpisodesKeys, storyEpisodesBranchkeys.Length);
             for (int i = 0; i < storyEpisodesBranchkeys.Length; i++)
             {
                 if(storyEpisodesBranchkeys[i] != null)
