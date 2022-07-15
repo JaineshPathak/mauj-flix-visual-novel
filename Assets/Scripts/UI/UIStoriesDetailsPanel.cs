@@ -23,6 +23,15 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     public ScrollRect mainScrollRect;
     public RectTransform buttonsVerticalGroup;
     public ContentSizeFitter buttonsGroupSizeFitter;
+
+    public RectTransform episodesCommentsGroup;
+    public ContentSizeFitter episodesCommentsSizeFitter;
+
+    public RectTransform storyContentGroup;
+    public ContentSizeFitter storyContentSizeFitter;
+
+    [Space(15)]
+
     //public Text storyTitleText;
     public TextMeshProUGUI storyTitleText;
     //public Text storyDescriptionText;
@@ -74,7 +83,6 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     public Button nextEpAdButton;
     public Button nextEpCloseButton;
 
-
     [Header("Bottom Panel")]
     public UIBottomPanel bottomPanel;
 
@@ -94,6 +102,9 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
     public Color sectionTextOnColor;
     public Color sectionTextOffColor = Color.white;
+
+    [Header("Comments Section")]
+    public UICommentsSection commentsSection;
 
     //-----------------------------------------------------------------------------------------------------------
 
@@ -567,6 +578,9 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     private void OnPanelShown()
     {
         PopulateEpisodesContainer();
+
+        if(commentsSection)
+            commentsSection.PopulateSection();
     }
 
     private void PopulateEpisodesContainer()
@@ -610,18 +624,28 @@ public class UIStoriesDetailsPanel : MonoBehaviour
                 }
             }
 
-            float totalEpisodesItems = episodeContainer.childCount - 1;
+            float totalEpisodesItems = episodeContainer.childCount;
             float newYPos = ( (totalEpisodesItems * 100f) + /*1000f*/ 750f) * -1f;
             //newYPos *= -1f;
-            episodesContainerRect.anchoredPosition = new Vector2(episodesContainerRect.anchoredPosition.x, newYPos);
+            //episodesContainerRect.anchoredPosition = new Vector2(episodesContainerRect.anchoredPosition.x, newYPos);
 
             float newHeight = totalEpisodesItems * 2f;
             newHeight += 3f;
             newHeight *= 100f;
-            newHeight += 750f;
+            //newHeight += 750f;
             storyEpisodesContainer.sizeDelta = new Vector2(storyEpisodesContainer.sizeDelta.x, newHeight);
 
-            moreLikeThisSection.SetAsLastSibling();            
+            moreLikeThisSection.SetAsLastSibling();
+
+            episodesCommentsSizeFitter.enabled = false;
+            episodesCommentsSizeFitter.SetLayoutVertical();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(episodesCommentsGroup);
+            episodesCommentsSizeFitter.enabled = true;
+
+            storyContentSizeFitter.enabled = false;
+            storyContentSizeFitter.SetLayoutVertical();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(storyContentGroup);
+            storyContentSizeFitter.enabled = true;
         }
 
         mainScrollRect.normalizedPosition = new Vector2(0, 1f);
@@ -630,6 +654,9 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     private void OnPanelHidden()
     {        
         ClearEpisodesContainer();
+        
+        if(commentsSection)
+            commentsSection.EmptySection();
     }
 
     private void ClearEpisodesContainer()

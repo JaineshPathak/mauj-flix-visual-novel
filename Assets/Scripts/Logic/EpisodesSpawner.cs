@@ -264,6 +264,7 @@ public class EpisodesSpawner : MonoBehaviourSingletonPersistent<EpisodesSpawner>
     private IEnumerator StartLoadingStorySceneAsync()
     {
         ThumbnailItemsPool.instance?.ResetThumbnailItems();
+        CommentsPool.instance?.ResetAllItems();
 
         storyPercentBar.fillAmount = 0;
         percentDownloadedText.text = (storyPercentBar.fillAmount * 100f).ToString("0") + "%";

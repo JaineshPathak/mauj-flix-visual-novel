@@ -6,7 +6,8 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using TMPro;
 //using Firebase.Auth;
-//using Firebase.Firestore;
+using Firebase.Firestore;
+using Firebase.Extensions;
 
 public class UICommentsSection : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class UICommentsSection : MonoBehaviour
     private EpisodesSpawner episodesSpawner;
 
     private FirestoreCommentData commentData;
+    private List<FirestoreCommentData> commentDataListActual = new List<FirestoreCommentData>();
 
     private void OnEnable()
     {
@@ -117,11 +119,22 @@ public class UICommentsSection : MonoBehaviour
         englishTitleNoSpace = englishTitleNoSpace.Replace(" ", "");
         fireStoreHandler.AddUserComment($"{storyItem.storyProgressFileName}_{englishTitleNoSpace}", fireAuthHandler.userCurrent.UserId, commentData, () =>
         {
-            StartCoroutine(PostSetupCommentItemRoutine());            
+            //StartCoroutine(PostSetupCommentItemRoutine());
+
+            commentInputField.text = "";
+
+            StartCoroutine(GetUserProfilePicRoutine((Texture profilePicTex) => 
+            {
+                SpawnCommentItem(transform, profilePicTex);
+
+#if UNITY_EDITOR
+                Debug.Log("Comment Section: Comment Successfully Added!");
+#endif
+            }));
         });
     }
 
-    private IEnumerator PostSetupCommentItemRoutine()
+    private IEnumerator GetUserProfilePicRoutine(Action<Texture> callback)
     {
         UnityWebRequest wr = UnityWebRequestTexture.GetTexture(fireAuthHandler.userCurrent.PhotoUrl);
 
@@ -134,14 +147,184 @@ public class UICommentsSection : MonoBehaviour
             Texture2D tex = new Texture2D(2, 2);
             tex = DownloadHandlerTexture.GetContent(wr);
 
-            UICommentItem commentItem = Instantiate(commentItemPrefab, transform);
-            commentItem.SetupItem(tex, commentData.userName, commentData.userComment);
+            callback?.Invoke(tex);
+            //UICommentItem commentItem = Instantiate(commentItemPrefab, transform);
+            //commentItem.SetupItem(tex, commentData.userName, commentData.userComment);
 
-            commentInputField.text = "";
+            //SpawnCommentItem(transform, tex);      
+        }
+    }
+
+    private IEnumerator GetUserProfilePicRoutine(string photoUrl, Action<Texture> callback)
+    {
+        UnityWebRequest wr = UnityWebRequestTexture.GetTexture(photoUrl);
+
+        yield return wr.SendWebRequest();
+
+        if (wr.isNetworkError || wr.isHttpError)
+            Debug.Log("Comment Section: Unable to Get User Profile Pic: " + wr.error);
+        else
+        {
+            Texture2D tex = new Texture2D(2, 2);
+            tex = DownloadHandlerTexture.GetContent(wr);
+
+            callback?.Invoke(tex);
+            //UICommentItem commentItem = Instantiate(commentItemPrefab, transform);
+            //commentItem.SetupItem(tex, commentData.userName, commentData.userComment);
+
+            //SpawnCommentItem(transform, tex);      
+        }
+    }    
+
+    public void PopulateSection()
+    {
+        if (fireStoreHandler == null)
+            return;
+
+        if (episodesSpawner == null || episodesSpawner.storiesDBItem == null)
+            return;
+
+        StoriesDBItem storyItem = episodesSpawner.storiesDBItem;
+        
+        string englishTitleNoSpace = storyItem.storyTitleEnglish;
+        englishTitleNoSpace = englishTitleNoSpace.Replace(" ", "");
+
+        commentDataListActual.Clear();
+        fireStoreHandler.GetAllCommentDocs($"{storyItem.storyProgressFileName}_{englishTitleNoSpace}", (List<FirestoreCommentData> commentDataList) => 
+        {            
+            commentDataListActual = commentDataList;
+            if (commentDataListActual.Count > 0)
+            {
+                PopulateComments();
+            }            
+        });
+    }
+
+    private void PopulateComments()
+    {
+        Debug.Log("Comment Section: snapshotsList.Length : " + commentDataListActual.Count);
+        for (int i = 0; i < commentDataListActual.Count; i++)
+        {
+            //UICommentItem commentItemInstance = Instantiate(commentItemPrefab, transform);
+            //commentItemInstance.SetupItem(commentDataList[i].userName, commentDataList[i].userComment);
+
+            Debug.Log("Comment Section: Snapshot ID : " + commentDataListActual[i].userID);
+            //FirestoreCommentData otherCommentData = commentDataList[i].ConvertTo<FirestoreCommentData>();
+
+            Debug.Log("Comment Section: otherCommentData ID : " + commentDataListActual[i].userID);
+            Debug.Log("Comment Section: otherCommentData Name : " + commentDataListActual[i].userName);
+
+            SpawnCommentItem(transform, commentDataListActual[i]);
+
+            /*StartCoroutine(GetUserProfilePicRoutine(otherCommentData.userProfilePicUrl, (Texture profilePicTex) =>
+            {
+                Debug.Log("Comment Section: Got Profile Pic Tex Status: " + profilePicTex != null);
+                SpawnCommentItem(transform, profilePicTex, otherCommentData);
+            }));*/
+            /*if (otherCommentData != null && otherCommentData.userProfilePicUrl != null)
+            {
+            }*/
+        }
+    }
+
+    public void EmptySection()
+    {
+        if (CommentsPool.instance == null)
+            return;
+
+        CommentsPool.instance.ResetAllItems();
+    }
+
+    public void SpawnCommentItem(Transform _parent, Texture _tex)
+    {
+        UICommentItem commentItem = null;
+        if (CommentsPool.instance != null)
+        {
+            commentItem = CommentsPool.instance.GetCommentItem();
+            if (commentItem != null)
+            {
+                commentItem.gameObject.SetActive(true);
+                commentItem.transform.parent = _parent;
+                commentItem.SetupItem(_tex, commentData.userName, commentData.userComment);
+            }
+            else
+            {
+                commentItem = Instantiate(commentItemPrefab, _parent);
+                commentItem.SetupItem(_tex, commentData.userName, commentData.userComment);
+
+                CommentsPool.instance.AddNewCommentItem(commentItem);
 
 #if UNITY_EDITOR
-            Debug.Log("Comment Section: Comment Successfully Added!");
+                Debug.Log("Comment Section: New Comment Item was added to Pool!");
 #endif
+            }
+        }
+        else
+        {
+            commentItem = Instantiate(commentItemPrefab, _parent);
+            commentItem.SetupItem(_tex, commentData.userName, commentData.userComment);
+        }
+    }
+
+    public void SpawnCommentItem(Transform _parent, FirestoreCommentData _commentData)
+    {
+        UICommentItem commentItem = null;
+        if (CommentsPool.instance != null)
+        {
+            commentItem = CommentsPool.instance.GetCommentItem();
+            if (commentItem != null)
+            {
+                commentItem.gameObject.SetActive(true);
+                commentItem.transform.parent = _parent;
+                commentItem.SetupItem(_commentData.userName, _commentData.userComment);
+            }
+            else
+            {
+                commentItem = Instantiate(commentItemPrefab, _parent);
+                commentItem.SetupItem(_commentData.userName, _commentData.userComment);
+
+                CommentsPool.instance.AddNewCommentItem(commentItem);
+
+#if UNITY_EDITOR
+                Debug.Log("Comment Section: New Comment Item was added to Pool!");
+#endif
+            }
+        }
+        else
+        {
+            commentItem = Instantiate(commentItemPrefab, _parent);
+            commentItem.SetupItem(_commentData.userName, _commentData.userComment);
+        }
+    }
+
+    public void SpawnCommentItem(Transform _parent, Texture _tex, FirestoreCommentData _commentData)
+    {
+        UICommentItem commentItem = null;
+        if (CommentsPool.instance != null)
+        {
+            commentItem = CommentsPool.instance.GetCommentItem();
+            if (commentItem != null)
+            {
+                commentItem.gameObject.SetActive(true);
+                commentItem.transform.parent = _parent;
+                commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment);
+            }
+            else
+            {
+                commentItem = Instantiate(commentItemPrefab, _parent);
+                commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment);
+
+                CommentsPool.instance.AddNewCommentItem(commentItem);
+
+#if UNITY_EDITOR
+                Debug.Log("Comment Section: New Comment Item was added to Pool!");
+#endif
+            }
+        }
+        else
+        {
+            commentItem = Instantiate(commentItemPrefab, _parent);
+            commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment);
         }
     }
 

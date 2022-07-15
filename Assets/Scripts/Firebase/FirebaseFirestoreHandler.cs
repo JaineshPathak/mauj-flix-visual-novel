@@ -3,6 +3,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Firebase.Firestore;
 using Firebase.Auth;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<FirebaseFirestoreHandler>
 {
@@ -187,7 +190,7 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
             }
         });        
         //firestoreDBListener = userRef.Listen(OnFirestoreUserDataListener);
-    }
+    }    
 
     /*private void OnFirestoreUserDataListener(DocumentSnapshot snapshot)
     {
@@ -399,9 +402,10 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
         });*/
     }
 
-    public void AddUserComment(string storyDocName, string userCollectionName, FirestoreCommentData commentData, Action callback)
+    public void AddUserComment(string storyCollectionName, string userDocName, FirestoreCommentData commentData, Action callback)
     {
-        DocumentReference storyDocRef = firestoreDB.Collection(deviceCommentsPlatformCollection).Document(storyDocName).Collection(userCollectionName).Document(commentData.userID);
+        //DocumentReference storyDocRef = firestoreDB.Collection(deviceCommentsPlatformCollection).Document(storyDocName).Collection(userCollectionName).Document(commentData.userID);
+        DocumentReference storyDocRef = firestoreDB.Collection(storyCollectionName).Document(commentData.userID);
         storyDocRef.SetAsync(commentData).ContinueWith(task =>
         {
             if (task.IsCompleted)
@@ -409,8 +413,63 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
                 callback?.Invoke();
                 Debug.LogFormat("Firebase Firestore: New Comment Added {0}, {1}, {2}", commentData.userID, commentData.userName, commentData.userComment);
             }
-        });        
+        });
     }
+
+    public void GetAllCommentDocs(string storyCollectionName, Action<List<FirestoreCommentData>> callback)
+    {
+        List<FirestoreCommentData> documentSnapshotsList = new List<FirestoreCommentData>();
+
+        Query storyCollectionQuery = firestoreDB.Collection(storyCollectionName);
+        storyCollectionQuery.GetSnapshotAsync().ContinueWith(task => 
+        {            
+            if(task.IsCompleted)
+            {
+                QuerySnapshot documentSnapshots = task.Result;
+                foreach (DocumentSnapshot documentSnapshot in documentSnapshots.Documents)
+                {
+                    Debug.Log(String.Format("Document data for {0} document:", documentSnapshot.Id));
+                    documentSnapshotsList.Add(documentSnapshot.ConvertTo<FirestoreCommentData>());
+                }
+
+                if (documentSnapshotsList.Count > 0)
+                {
+                    Debug.Log($"Firestore Handle: SUCCESSFULLY GOT ALL DOCUMENTS OF TITLE: {storyCollectionName}, Count: {documentSnapshotsList.Count}");
+                    callback?.Invoke(documentSnapshotsList);
+                }
+                else
+                    Debug.LogError("Firestore Handle: FAILED TO ALL DOCUMENTS OF TITLE: " + storyCollectionName);
+            }
+        });
+    }
+
+    /*public async void GetAllCommentDocs(string storyCollectionName, Action<DocumentSnapshot[]> callback)
+    {
+        List<DocumentSnapshot> documentSnapshotsList = new List<DocumentSnapshot>();
+
+        Query storyCollectionQuery = firestoreDB.Collection(storyCollectionName);
+        QuerySnapshot docsSnapshot = await storyCollectionQuery.GetSnapshotAsync();
+
+        int i = 0;
+        foreach (DocumentSnapshot documentSnapshot in docsSnapshot.Documents)
+        {
+            if(documentSnapshot.Exists)
+                Debug.Log($"Firestore Handle: [{i}] Document EXISTS!");
+            else
+                Debug.LogError($"Firestore Handle: [{i}] Document NOT EXISTS!");
+
+            i++;
+            documentSnapshotsList.Add(documentSnapshot);
+        }
+
+        if (documentSnapshotsList.Count > 0)
+        {
+            Debug.LogError("Firestore Handle: SUCCESSFULLY GOT ALL DOCUMENTS OF TITLE: " + storyCollectionName);
+            callback?.Invoke(documentSnapshotsList.ToArray());
+        }
+        else
+            Debug.LogError("Firestore Handle: FAILED TO ALL DOCUMENTS OF TITLE: " + storyCollectionName);
+    }*/
 
     //===================================================================================================================================================
 }
