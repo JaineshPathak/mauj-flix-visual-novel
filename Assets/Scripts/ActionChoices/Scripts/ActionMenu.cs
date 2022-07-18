@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.Events;
 using Fungus;
 
 /*[System.Serializable]
@@ -15,7 +17,8 @@ public class ActionItem
 {
     public string itemName;
     public Sprite itemSprite;
-    public ItemAnchorPresets itemAnchorPoint = ItemAnchorPresets.MiddleCenter;    
+    public ItemAnchorPresets itemAnchorPoint = ItemAnchorPresets.MiddleCenter;
+    public Block itemTargetBlock;
     //public List<ActionItemChoice> actionItemChoices = new List<ActionItemChoice>();
 }
 
@@ -28,7 +31,7 @@ public class ActionMenu : Command
 
     public List<ActionItem> actionItemsList = new List<ActionItem>();
 
-    //public ActionItem currentActionItemSelected;
+    [HideInInspector] public ActionItem currentActionItemSelected;
 
     public override void OnEnter()
     {
@@ -46,8 +49,37 @@ public class ActionMenu : Command
 
         ActionMenuUI.instance.SetupActionItems(centerActionText, this, actionItemsList.ToArray(), () => 
         {
-            Continue();
+            if (currentActionItemSelected != null && currentActionItemSelected.itemTargetBlock != null)
+            {
+#if UNITY_EDITOR
+                Debug.Log($"Moving Branch to -> {currentActionItemSelected.itemTargetBlock.BlockName}");
+#endif
+                var block = currentActionItemSelected.itemTargetBlock;
+                EventSystem.current.SetSelectedGameObject(null);
+                StopAllCoroutines();
+
+                // Stop timeout
+                if (block != null)
+                {
+                    var flowchart = block.GetFlowchart();
+                    flowchart.StartCoroutine(CallBlock(block));
+                }
+            }
+            else
+            {
+#if UNITY_EDITOR
+                Debug.Log($"Moving Branch to -> Continue()");
+#endif
+
+                Continue();
+            }
         });
+    }
+
+    protected IEnumerator CallBlock(Block block)
+    {
+        yield return new WaitForEndOfFrame();
+        block.StartExecution();
     }
 
     public override Color GetButtonColor()
@@ -63,5 +95,19 @@ public class ActionMenu : Command
             //result = centerActionText + " | Total Actions - " + actionItemsList.Length;
 
         return result;
+    }    
+
+    public override void GetConnectedBlocks(ref List<Block> connectedBlocks)
+    {
+        /*if (targetBlock != null)
+        {
+            connectedBlocks.Add(targetBlock);
+        }*/
+
+        for (int i = 0; i < actionItemsList.Count && (actionItemsList.Count > 0); i++)
+        {
+            if(actionItemsList[i].itemTargetBlock != null)
+                connectedBlocks.Add(actionItemsList[i].itemTargetBlock);
+        }
     }
 }

@@ -189,6 +189,7 @@ namespace Fungus.EditorUtils
 
 
         protected readonly Color connectionColor = new Color(0.65f, 0.65f, 0.65f, 1.0f);
+        //protected readonly Color connectionColor = Color.red;
 
 
         protected List<BlockCopy> copyList = new List<BlockCopy>();

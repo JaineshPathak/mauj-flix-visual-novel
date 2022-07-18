@@ -110,7 +110,7 @@ public class ActionMenuUI : MonoBehaviourSingleton<ActionMenuUI>
 
     public void OnItemFocusClicked(int id)
     {
-        //actionMenu.currentActionItemSelected = actionItemsList[id];
+        actionMenu.currentActionItemSelected = actionItemsList[id];
 
         //if (blackBgCanvasGroup.alpha == 0)
         //LeanTween.alphaCanvas(blackBgCanvasGroup, 1f, 0.4f).setEaseInOutSine();
@@ -155,10 +155,13 @@ public class ActionMenuUI : MonoBehaviourSingleton<ActionMenuUI>
             mainCanvasGroup.blocksRaycasts = false;
         });
         focusSeq.append(LeanTween.alphaCanvas(mainCanvasGroup, 0, 1f).setEaseInOutSine());
-        focusSeq.append(() => callback?.Invoke());
+        focusSeq.append(() => 
+        { 
+            callback?.Invoke();
+        });
 
         //ShowItemChoices();
-    }
+    }    
 
     #region REMOVED CODE
     /*private void ShowItemChoices()

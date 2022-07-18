@@ -49,6 +49,8 @@ public class ActionMenuEditor : CommandEditor
         else if(actionMenu.actionItemsList.Count == 1)
             EditorGUILayout.HelpBox("Single Item - Item will be by default in 'Middle-Center' Anchor Point!", MessageType.Warning);
 
+        EditorGUILayout.HelpBox("If Item has no Target Block set then it will continue in the same Block!", MessageType.Warning);
+
         EditorGUILayout.Space(10);
         
         //Center Action Title Text
@@ -81,8 +83,30 @@ public class ActionMenuEditor : CommandEditor
                 EditorGUILayout.Space(5);
                 
                 var itemAnchorPresets = itemProp.FindPropertyRelative("itemAnchorPoint");
-                if (actionMenu.actionItemsList.Count > 1)                
-                    EditorGUILayout.PropertyField(itemAnchorPresets);                
+                if (actionMenu.actionItemsList.Count > 1)
+                    EditorGUILayout.PropertyField(itemAnchorPresets);
+
+                EditorGUILayout.Space(5);
+
+                var itemTargetBlock = itemProp.FindPropertyRelative("itemTargetBlock");
+                EditorGUILayout.BeginHorizontal();
+
+                BlockEditor.BlockField(itemTargetBlock,
+                                    new GUIContent("Item Target Block", "Block to call when item is selected"),
+                                    new GUIContent("<None>"),
+                                    flowchart);
+                const int popupWidth = 17;
+                if (itemTargetBlock.objectReferenceValue == null && GUILayout.Button("+", GUILayout.MaxWidth(popupWidth)))
+                {
+                    var fw = EditorWindow.GetWindow<FlowchartWindow>();
+                    var t = (ActionMenu)target;
+                    var activeFlowchart = t.GetFlowchart();
+                    var newBlock = fw.CreateBlockSuppressSelect(activeFlowchart, t.ParentBlock._NodeRect.position - Vector2.down * 60);
+                    itemTargetBlock.objectReferenceValue = newBlock;
+                    activeFlowchart.SelectedBlock = t.ParentBlock;
+                }
+
+                EditorGUILayout.EndHorizontal();
 
                 /*if (EditorTools.DrawHeader($"Actions Choices - [{i}]"))
                 {

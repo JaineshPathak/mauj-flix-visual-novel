@@ -24,6 +24,11 @@ public class UICommentsSection : MonoBehaviour
     [SerializeField] private GameObject loginToCommentText;
     [SerializeField] private GameObject buttonsGroup;
 
+    [Space(15)]
+
+    [SerializeField] private RectTransform sectionRect;
+    [SerializeField] private ContentSizeFitter sectionSizeFitter;
+
     private FirebaseAuthHandler fireAuthHandler;
     private FirebaseFirestoreHandler fireStoreHandler;
     private EpisodesSpawner episodesSpawner;
@@ -56,7 +61,7 @@ public class UICommentsSection : MonoBehaviour
     private void Awake()
     {
         if (commentInputField)
-        {
+        {            
             commentInputField.onValueChanged.AddListener((string val) =>
             {
                 addCommentButton.interactable = val.Length > 0;
@@ -92,6 +97,12 @@ public class UICommentsSection : MonoBehaviour
 
         buttonsGroup.SetActive(fireAuthHandler.GetProviderID() == DataPaths.firebaseGoogleProviderID);
         loginToCommentText.SetActive(!(fireAuthHandler.GetProviderID() == DataPaths.firebaseGoogleProviderID));
+
+        if(addCommentButton && cancelCommentButton && commentInputField)
+        {
+            addCommentButton.interactable = commentInputField.text.Length > 0;
+            cancelCommentButton.interactable = commentInputField.text.Length > 0;
+        }
     }
 
     private void AddUserComment()
@@ -174,7 +185,7 @@ public class UICommentsSection : MonoBehaviour
 
             //SpawnCommentItem(transform, tex);      
         }
-    }    
+    }
 
     public void PopulateSection()
     {
@@ -189,14 +200,27 @@ public class UICommentsSection : MonoBehaviour
         string englishTitleNoSpace = storyItem.storyTitleEnglish;
         englishTitleNoSpace = englishTitleNoSpace.Replace(" ", "");
 
-        commentDataListActual.Clear();
-        fireStoreHandler.GetAllCommentDocs($"{storyItem.storyProgressFileName}_{englishTitleNoSpace}", (List<FirestoreCommentData> commentDataList) => 
-        {            
-            commentDataListActual = commentDataList;
-            if (commentDataListActual.Count > 0)
+        //commentDataListActual.Clear();
+        fireStoreHandler.GetAllCommentDocs($"{storyItem.storyProgressFileName}_{englishTitleNoSpace}", (List<DocumentSnapshot> commentDataList) => 
+        {
+            //commentDataListActual = commentDataList;
+            if (commentDataList.Count > 0)
             {
-                PopulateComments();
-            }            
+                for (int i = 0; i < commentDataList.Count; i++)
+                {
+                    FirestoreCommentData otherCommentData = commentDataList[i].ConvertTo<FirestoreCommentData>();
+                    string profileID = otherCommentData.userID;
+                    string profileName = otherCommentData.userName;
+                    string profileURL = otherCommentData.userProfilePicUrl;
+                    string profileComment = otherCommentData.userComment;
+                    
+                    StartCoroutine(GetUserProfilePicRoutine(profileURL, (Texture profilePicTex) =>
+                    {
+                        //SpawnCommentItem(transform, profilePicTex, otherCommentData);
+                        SpawnCommentItem(transform, profileName, profileComment, profilePicTex);
+                    }));
+                }
+            }
         });
     }
 
@@ -214,7 +238,10 @@ public class UICommentsSection : MonoBehaviour
             Debug.Log("Comment Section: otherCommentData ID : " + commentDataListActual[i].userID);
             Debug.Log("Comment Section: otherCommentData Name : " + commentDataListActual[i].userName);
 
-            SpawnCommentItem(transform, commentDataListActual[i]);
+            StartCoroutine(GetUserProfilePicRoutine(commentDataListActual[i].userProfilePicUrl, (Texture profilePicTex) =>
+            {
+                SpawnCommentItem(transform, profilePicTex, commentDataListActual[i]);
+            }));
 
             /*StartCoroutine(GetUserProfilePicRoutine(otherCommentData.userProfilePicUrl, (Texture profilePicTex) =>
             {
@@ -233,6 +260,8 @@ public class UICommentsSection : MonoBehaviour
             return;
 
         CommentsPool.instance.ResetAllItems();
+
+        Invoke("RebuildSectionLayout", 0.5f);
     }
 
     public void SpawnCommentItem(Transform _parent, Texture _tex)
@@ -246,6 +275,8 @@ public class UICommentsSection : MonoBehaviour
                 commentItem.gameObject.SetActive(true);
                 commentItem.transform.parent = _parent;
                 commentItem.SetupItem(_tex, commentData.userName, commentData.userComment);
+
+                Invoke("RebuildSectionLayout", 0.5f);
             }
             else
             {
@@ -253,6 +284,8 @@ public class UICommentsSection : MonoBehaviour
                 commentItem.SetupItem(_tex, commentData.userName, commentData.userComment);
 
                 CommentsPool.instance.AddNewCommentItem(commentItem);
+
+                Invoke("RebuildSectionLayout", 0.5f);
 
 #if UNITY_EDITOR
                 Debug.Log("Comment Section: New Comment Item was added to Pool!");
@@ -263,6 +296,8 @@ public class UICommentsSection : MonoBehaviour
         {
             commentItem = Instantiate(commentItemPrefab, _parent);
             commentItem.SetupItem(_tex, commentData.userName, commentData.userComment);
+
+            Invoke("RebuildSectionLayout", 0.5f);
         }
     }
 
@@ -277,6 +312,8 @@ public class UICommentsSection : MonoBehaviour
                 commentItem.gameObject.SetActive(true);
                 commentItem.transform.parent = _parent;
                 commentItem.SetupItem(_commentData.userName, _commentData.userComment);
+
+                Invoke("RebuildSectionLayout", 0.5f);
             }
             else
             {
@@ -284,6 +321,8 @@ public class UICommentsSection : MonoBehaviour
                 commentItem.SetupItem(_commentData.userName, _commentData.userComment);
 
                 CommentsPool.instance.AddNewCommentItem(commentItem);
+
+                Invoke("RebuildSectionLayout", 0.5f);
 
 #if UNITY_EDITOR
                 Debug.Log("Comment Section: New Comment Item was added to Pool!");
@@ -294,6 +333,45 @@ public class UICommentsSection : MonoBehaviour
         {
             commentItem = Instantiate(commentItemPrefab, _parent);
             commentItem.SetupItem(_commentData.userName, _commentData.userComment);
+
+            Invoke("RebuildSectionLayout", 0.5f);
+        }
+    }
+
+    public void SpawnCommentItem(Transform _parent, string _profileName, string _profileComment, Texture _tex)
+    {
+        UICommentItem commentItem = null;
+        if (CommentsPool.instance != null)
+        {
+            commentItem = CommentsPool.instance.GetCommentItem();
+            if (commentItem != null)
+            {
+                commentItem.gameObject.SetActive(true);
+                commentItem.transform.parent = _parent;
+                commentItem.SetupItem(_tex, _profileName, _profileComment);
+
+                Invoke("RebuildSectionLayout", 0.5f);
+            }
+            else
+            {
+                commentItem = Instantiate(commentItemPrefab, _parent);
+                commentItem.SetupItem(_tex, _profileName, _profileComment);
+
+                CommentsPool.instance.AddNewCommentItem(commentItem);
+
+                Invoke("RebuildSectionLayout", 0.5f);
+
+#if UNITY_EDITOR
+                Debug.Log("Comment Section: New Comment Item was added to Pool!");
+#endif
+            }
+        }
+        else
+        {
+            commentItem = Instantiate(commentItemPrefab, _parent);
+            commentItem.SetupItem(_tex, _profileName, _profileComment);
+
+            Invoke("RebuildSectionLayout", 0.5f);
         }
     }
 
@@ -308,6 +386,8 @@ public class UICommentsSection : MonoBehaviour
                 commentItem.gameObject.SetActive(true);
                 commentItem.transform.parent = _parent;
                 commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment);
+
+                Invoke("RebuildSectionLayout", 0.5f);
             }
             else
             {
@@ -315,6 +395,8 @@ public class UICommentsSection : MonoBehaviour
                 commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment);
 
                 CommentsPool.instance.AddNewCommentItem(commentItem);
+
+                Invoke("RebuildSectionLayout", 0.5f);
 
 #if UNITY_EDITOR
                 Debug.Log("Comment Section: New Comment Item was added to Pool!");
@@ -325,7 +407,21 @@ public class UICommentsSection : MonoBehaviour
         {
             commentItem = Instantiate(commentItemPrefab, _parent);
             commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment);
+
+            //RebuildSectionLayout();
+            Invoke("RebuildSectionLayout", 0.5f);
         }
+    }
+
+    private void RebuildSectionLayout()
+    {
+        if (sectionSizeFitter == null || sectionRect == null)
+            return;
+
+        sectionSizeFitter.enabled = false;
+        sectionSizeFitter.SetLayoutVertical();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(sectionRect);
+        sectionSizeFitter.enabled = true;
     }
 
     private void CancelUserComment()

@@ -416,9 +416,9 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
         });
     }
 
-    public void GetAllCommentDocs(string storyCollectionName, Action<List<FirestoreCommentData>> callback)
+    public void GetAllCommentDocs(string storyCollectionName, Action<List<DocumentSnapshot>> callback)
     {
-        List<FirestoreCommentData> documentSnapshotsList = new List<FirestoreCommentData>();
+        List<DocumentSnapshot> documentSnapshotsList = new List<DocumentSnapshot>();
 
         Query storyCollectionQuery = firestoreDB.Collection(storyCollectionName);
         storyCollectionQuery.GetSnapshotAsync().ContinueWith(task => 
@@ -429,7 +429,7 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
                 foreach (DocumentSnapshot documentSnapshot in documentSnapshots.Documents)
                 {
                     Debug.Log(String.Format("Document data for {0} document:", documentSnapshot.Id));
-                    documentSnapshotsList.Add(documentSnapshot.ConvertTo<FirestoreCommentData>());
+                    documentSnapshotsList.Add(documentSnapshot);
                 }
 
                 if (documentSnapshotsList.Count > 0)

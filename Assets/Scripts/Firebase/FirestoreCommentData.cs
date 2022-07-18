@@ -1,7 +1,7 @@
 ﻿using Firebase.Firestore;
 
 [FirestoreData]
-public class FirestoreCommentData
+public struct FirestoreCommentData
 {
     [FirestoreProperty]
     public string userID { get; set; }

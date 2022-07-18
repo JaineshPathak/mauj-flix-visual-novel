@@ -84,7 +84,7 @@ namespace Fungus
             if (targetBlock != null)
             {
                 connectedBlocks.Add(targetBlock);
-            }       
+            }
         }
 
         public override string GetSummary()
