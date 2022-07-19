@@ -7,7 +7,10 @@ public struct FirestoreCommentData
     public string userID { get; set; }
 
     [FirestoreProperty]
-    public string userName { get; set; }    
+    public string userName { get; set; }
+
+    [FirestoreProperty]
+    public string userEmail { get; set; }
 
     [FirestoreProperty]
     public string userProfilePicUrl { get; set; }

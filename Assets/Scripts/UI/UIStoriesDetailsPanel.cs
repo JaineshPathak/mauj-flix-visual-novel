@@ -26,6 +26,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
     public RectTransform episodesCommentsGroup;
     public ContentSizeFitter episodesCommentsSizeFitter;
+    public float episodesNewHeightFactor = 2f;
 
     public RectTransform storyContentGroup;
     public ContentSizeFitter storyContentSizeFitter;
@@ -41,9 +42,8 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     public Image storyThumbnailTitleImage;
     [HideInInspector] public Sprite storyThumbnailLoadingImage;
 
-    [Space(10)]
-
-    public Image blurMaskLayer;
+    //[Space(10)]
+    //public Image blurMaskLayer;
 
     [Header("Share")]
     public UIShareButton shareButton;
@@ -122,6 +122,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     private int sectionSeqId;
 
     private RectTransform episodesContainerRect;
+    private RectTransform commentsSectionRect;
 
     public static event Action<string> OnStoryLiked;
     public static event Action<string> OnStoryUnliked;
@@ -156,6 +157,9 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
         if(sectionButtonScroller)
             sectionButtonScroller.normalizedPosition = new Vector2(0, 1f);
+
+        if (commentsSection)
+            commentsSectionRect = commentsSection.transform as RectTransform;
     }
 
     private void OnEpisodesSectionClicked()
@@ -198,6 +202,11 @@ public class UIStoriesDetailsPanel : MonoBehaviour
     {
         if (episodesSectionText == null || commentsSectionText == null || sectionScrollbar == null)
             return;
+
+        /*if (sectionScrollbar.value <= 0.2f)
+            GetEpisodesSectionHeight();
+        else if (sectionScrollbar.value >= 0.6f && commentsSection.transform.childCount > 7)
+            GetCommentsSectionHeight();*/
 
         episodesSectionText.color = Color.Lerp(sectionTextOnColor, sectionTextOffColor, sectionScrollbar.value);
         commentsSectionText.color = Color.Lerp(sectionTextOnColor, sectionTextOffColor, 1f - sectionScrollbar.value);
@@ -329,7 +338,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             episodesSpawner.FadeOutBlackScreen();
 
         //Incase if Blur Shader causes lags
-        if(blurMaskLayer && FirebaseRemoteConfig.DefaultInstance != null)
+        /*if(blurMaskLayer && FirebaseRemoteConfig.DefaultInstance != null)
         {
             if(!FirebaseRemoteConfig.DefaultInstance.GetValue("Enable_Thumbnail_Blur").BooleanValue)
             {
@@ -338,7 +347,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
                 if(blurMaskLayer.material != null)
                     blurMaskLayer.material = null;
             }
-        }
+        }*/
     }
 
     /*private void Update()
@@ -545,7 +554,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
             startLevelData.status = "test";
             SDKManager.instance.SendEvent(startLevelData);*/
         }
-    }
+    }    
 
     private void MovePanel(bool status, float speed = 0.5f)
     {
@@ -624,16 +633,7 @@ public class UIStoriesDetailsPanel : MonoBehaviour
                 }
             }
 
-            float totalEpisodesItems = episodeContainer.childCount;
-            float newYPos = ( (totalEpisodesItems * 100f) + /*1000f*/ 750f) * -1f;
-            //newYPos *= -1f;
-            //episodesContainerRect.anchoredPosition = new Vector2(episodesContainerRect.anchoredPosition.x, newYPos);
-
-            float newHeight = totalEpisodesItems * 2f;
-            newHeight += 3f;
-            newHeight *= 100f;
-            //newHeight += 750f;
-            storyEpisodesContainer.sizeDelta = new Vector2(storyEpisodesContainer.sizeDelta.x, newHeight);
+            GetEpisodesSectionHeight();
 
             moreLikeThisSection.SetAsLastSibling();
 
@@ -650,6 +650,40 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
         mainScrollRect.normalizedPosition = new Vector2(0, 1f);
     }
+
+    private void GetEpisodesSectionHeight()
+    {
+        if (episodeContainer == null || storyEpisodesContainer == null)
+            return;
+
+        float totalEpisodesItems = episodeContainer.childCount;
+        //float newYPos = ( (totalEpisodesItems * 100f) + /*1000f*/ 750f) * -1f;
+        //newYPos *= -1f;
+        //episodesContainerRect.anchoredPosition = new Vector2(episodesContainerRect.anchoredPosition.x, newYPos);
+
+        float newHeight = totalEpisodesItems * 2f;
+        newHeight += 3f;
+        newHeight *= 100f;
+        //newHeight += 750f;
+        storyEpisodesContainer.sizeDelta = new Vector2(storyEpisodesContainer.sizeDelta.x, newHeight);
+    }
+
+    private void GetCommentsSectionHeight()
+    {
+        if (storyEpisodesContainer == null || commentsSection == null)
+            return;
+
+        storyEpisodesContainer.sizeDelta = new Vector2(storyEpisodesContainer.sizeDelta.x, commentsSectionRect.sizeDelta.y);
+    }
+
+    [ContextMenu("OnCommentAdded")]
+    internal void OnCommentAdded()
+    {
+        if (commentsSection == null || (commentsSection != null && commentsSection.transform.childCount <= 7))
+            return;
+
+        GetCommentsSectionHeight();
+    }    
 
     private void OnPanelHidden()
     {        

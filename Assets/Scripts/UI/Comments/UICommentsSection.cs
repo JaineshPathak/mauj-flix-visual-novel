@@ -7,10 +7,12 @@ using UnityEngine.Networking;
 using TMPro;
 //using Firebase.Auth;
 using Firebase.Firestore;
-using Firebase.Extensions;
 
 public class UICommentsSection : MonoBehaviour
 {
+    [Header("Details Panel")]
+    [SerializeField] private UIStoriesDetailsPanel detailsPanel;
+
     [Header("Prefab")]
     [SerializeField] private UICommentItem commentItemPrefab;
 
@@ -19,22 +21,26 @@ public class UICommentsSection : MonoBehaviour
     [SerializeField] private Button addCommentButton;
     [SerializeField] private Button cancelCommentButton;
 
-    [Space(15)]
-
+    [Header("Buttons n Texts")]
     [SerializeField] private GameObject loginToCommentText;
     [SerializeField] private GameObject buttonsGroup;
 
-    [Space(15)]
-
+    [Header("Section Fitters")]
     [SerializeField] private RectTransform sectionRect;
     [SerializeField] private ContentSizeFitter sectionSizeFitter;
+
+    [Header("Comments Load Buttons")]
+    [SerializeField] private Button loadMoreCommentButton;    
 
     private FirebaseAuthHandler fireAuthHandler;
     private FirebaseFirestoreHandler fireStoreHandler;
     private EpisodesSpawner episodesSpawner;
 
     private FirestoreCommentData commentData;
-    private List<FirestoreCommentData> commentDataListActual = new List<FirestoreCommentData>();
+    private List<DocumentSnapshot> commentDataListActual = new List<DocumentSnapshot>();
+
+    private int startIndex;
+    private int loadCount;
 
     private void OnEnable()
     {
@@ -74,6 +80,11 @@ public class UICommentsSection : MonoBehaviour
 
         if (cancelCommentButton)
             cancelCommentButton.onClick.AddListener(CancelUserComment);
+
+        if (loadMoreCommentButton)
+            loadMoreCommentButton.onClick.AddListener(LoadExtraComments);
+
+        loadMoreCommentButton.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -122,13 +133,14 @@ public class UICommentsSection : MonoBehaviour
         {
             userID = fireAuthHandler.userCurrent.UserId,
             userName = fireAuthHandler.userCurrent.DisplayName,
+            userEmail = fireAuthHandler.userCurrent.Email,
             userProfilePicUrl = fireAuthHandler.userCurrent.PhotoUrl.AbsoluteUri,
             userComment = commentInputField.text
         };
 
         string englishTitleNoSpace = storyItem.storyTitleEnglish;
         englishTitleNoSpace = englishTitleNoSpace.Replace(" ", "");
-        fireStoreHandler.AddUserComment($"{storyItem.storyProgressFileName}_{englishTitleNoSpace}", fireAuthHandler.userCurrent.UserId, commentData, () =>
+        fireStoreHandler.AddUserComment($"{englishTitleNoSpace}_{storyItem.storyProgressFileName}", fireAuthHandler.userCurrent.UserId, commentData, () =>
         {
             //StartCoroutine(PostSetupCommentItemRoutine());
 
@@ -200,31 +212,74 @@ public class UICommentsSection : MonoBehaviour
         string englishTitleNoSpace = storyItem.storyTitleEnglish;
         englishTitleNoSpace = englishTitleNoSpace.Replace(" ", "");
 
-        //commentDataListActual.Clear();
-        fireStoreHandler.GetAllCommentDocs($"{storyItem.storyProgressFileName}_{englishTitleNoSpace}", (List<DocumentSnapshot> commentDataList) => 
+        commentDataListActual.Clear();
+        fireStoreHandler.GetAllCommentDocs($"{englishTitleNoSpace}_{storyItem.storyProgressFileName}", (List<DocumentSnapshot> commentDataList) => 
         {
-            //commentDataListActual = commentDataList;
-            if (commentDataList.Count > 0)
-            {
-                for (int i = 0; i < commentDataList.Count; i++)
-                {
-                    FirestoreCommentData otherCommentData = commentDataList[i].ConvertTo<FirestoreCommentData>();
-                    string profileID = otherCommentData.userID;
-                    string profileName = otherCommentData.userName;
-                    string profileURL = otherCommentData.userProfilePicUrl;
-                    string profileComment = otherCommentData.userComment;
-                    
-                    StartCoroutine(GetUserProfilePicRoutine(profileURL, (Texture profilePicTex) =>
-                    {
-                        //SpawnCommentItem(transform, profilePicTex, otherCommentData);
-                        SpawnCommentItem(transform, profileName, profileComment, profilePicTex);
-                    }));
-                }
-            }
+            commentDataListActual = commentDataList;
+            if (commentDataListActual.Count > 0)
+                LoadStartComments();
         });
     }
 
-    private void PopulateComments()
+    private void LoadStartComments()
+    {
+        if (commentDataListActual.Count <= 0)
+        {
+            loadMoreCommentButton.gameObject.SetActive(false);
+            return;
+        }
+        
+        loadMoreCommentButton.gameObject.SetActive(commentDataListActual.Count > 10);
+
+        loadCount = commentDataListActual.Count > 10 ? 10 : commentDataListActual.Count;
+        startIndex = 0;
+        for (int i = startIndex; i < loadCount; i++)
+        {
+            FirestoreCommentData otherCommentData = commentDataListActual[i].ConvertTo<FirestoreCommentData>();
+            string profileID = otherCommentData.userID;
+            string profileName = otherCommentData.userName;
+            string profileEmail = otherCommentData.userEmail;
+            string profileURL = otherCommentData.userProfilePicUrl;
+            string profileComment = otherCommentData.userComment;
+
+            StartCoroutine(GetUserProfilePicRoutine(profileURL, (Texture profilePicTex) =>
+            {
+                //SpawnCommentItem(transform, profilePicTex, otherCommentData);
+                SpawnCommentItem(transform, profileName, profileComment, profilePicTex);
+            }));
+        }
+
+        startIndex = loadCount;
+        loadCount += 10;
+        if (loadCount >= commentDataListActual.Count)
+            loadCount = commentDataListActual.Count;
+    }
+
+    private void LoadMoreComments()
+    {
+        for (int i = startIndex; i < loadCount; i++)
+        {
+            FirestoreCommentData otherCommentData = commentDataListActual[i].ConvertTo<FirestoreCommentData>();
+            string profileID = otherCommentData.userID;
+            string profileName = otherCommentData.userName;
+            string profileEmail = otherCommentData.userEmail;
+            string profileURL = otherCommentData.userProfilePicUrl;
+            string profileComment = otherCommentData.userComment;
+
+            StartCoroutine(GetUserProfilePicRoutine(profileURL, (Texture profilePicTex) =>
+            {
+                //SpawnCommentItem(transform, profilePicTex, otherCommentData);
+                SpawnCommentItem(transform, profileName, profileComment, profilePicTex);
+            }));
+        }
+
+        startIndex = loadCount;
+        loadCount += 10;
+        if (loadCount >= commentDataListActual.Count)
+            loadCount = commentDataListActual.Count;
+    }
+
+    /*private void PopulateComments()
     {
         Debug.Log("Comment Section: snapshotsList.Length : " + commentDataListActual.Count);
         for (int i = 0; i < commentDataListActual.Count; i++)
@@ -241,18 +296,9 @@ public class UICommentsSection : MonoBehaviour
             StartCoroutine(GetUserProfilePicRoutine(commentDataListActual[i].userProfilePicUrl, (Texture profilePicTex) =>
             {
                 SpawnCommentItem(transform, profilePicTex, commentDataListActual[i]);
-            }));
-
-            /*StartCoroutine(GetUserProfilePicRoutine(otherCommentData.userProfilePicUrl, (Texture profilePicTex) =>
-            {
-                Debug.Log("Comment Section: Got Profile Pic Tex Status: " + profilePicTex != null);
-                SpawnCommentItem(transform, profilePicTex, otherCommentData);
-            }));*/
-            /*if (otherCommentData != null && otherCommentData.userProfilePicUrl != null)
-            {
-            }*/
+            }));            
         }
-    }
+    }*/
 
     public void EmptySection()
     {
@@ -421,7 +467,11 @@ public class UICommentsSection : MonoBehaviour
         sectionSizeFitter.enabled = false;
         sectionSizeFitter.SetLayoutVertical();
         LayoutRebuilder.ForceRebuildLayoutImmediate(sectionRect);
-        sectionSizeFitter.enabled = true;
+        sectionSizeFitter.enabled = true;        
+
+        loadMoreCommentButton.transform.SetAsLastSibling();
+
+        detailsPanel.OnCommentAdded();
     }
 
     private void CancelUserComment()
@@ -430,5 +480,28 @@ public class UICommentsSection : MonoBehaviour
             return;
 
         commentInputField.text = "";
+    }
+
+    private void LoadExtraComments()
+    {
+        if (detailsPanel)
+            detailsPanel.PlayButtonClickSound();
+
+        LoadMoreComments();
+
+        loadMoreCommentButton.gameObject.SetActive(!(startIndex >= loadCount));
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.V) && episodesSpawner.storiesDBItem != null)
+        {
+            StoriesDBItem storyItem = episodesSpawner.storiesDBItem;
+
+            string englishTitleNoSpace = storyItem.storyTitleEnglish;
+            englishTitleNoSpace = englishTitleNoSpace.Replace(" ", "");
+
+            fireStoreHandler.AddTestComments($"{englishTitleNoSpace}_{storyItem.storyProgressFileName}", 20);
+        }
     }
 }

@@ -443,6 +443,28 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
         });
     }
 
+    public void AddTestComments(string storyCollectionName, int count = 10)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            DocumentReference storyDocRef = firestoreDB.Collection(storyCollectionName).Document(i.ToString("D2"));
+            
+            FirestoreCommentData commentData = new FirestoreCommentData();
+            commentData.userID = i.ToString();
+            commentData.userName = i.ToString();
+            commentData.userComment = i.ToString();
+            commentData.userProfilePicUrl = "https://lh3.googleusercontent.com/a-/AFdZucpwMi1-aLCE3T7I32QH5BpAFJ2jPHQI4NtsBEsEAw=s96-c";
+            
+            storyDocRef.SetAsync(commentData).ContinueWith(task =>
+            {
+                if (task.IsCompleted)
+                {                    
+                   Debug.LogFormat("Firebase Firestore: Test Comment Added - " + i);
+                }
+            });
+        }
+    }
+
     /*public async void GetAllCommentDocs(string storyCollectionName, Action<DocumentSnapshot[]> callback)
     {
         List<DocumentSnapshot> documentSnapshotsList = new List<DocumentSnapshot>();
