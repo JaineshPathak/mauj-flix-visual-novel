@@ -277,6 +277,8 @@ public class UICommentsSection : MonoBehaviour
         loadCount += 10;
         if (loadCount >= commentDataListActual.Count)
             loadCount = commentDataListActual.Count;
+
+        loadMoreCommentButton.gameObject.SetActive(!(startIndex >= loadCount));
     }
 
     /*private void PopulateComments()
@@ -487,9 +489,7 @@ public class UICommentsSection : MonoBehaviour
         if (detailsPanel)
             detailsPanel.PlayButtonClickSound();
 
-        LoadMoreComments();
-
-        loadMoreCommentButton.gameObject.SetActive(!(startIndex >= loadCount));
+        LoadMoreComments();        
     }
 
     private void Update()
