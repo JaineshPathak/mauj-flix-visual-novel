@@ -402,6 +402,7 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
         });*/
     }
 
+    //Adds a new User comment
     public void AddUserComment(string storyCollectionName, string userDocName, FirestoreCommentData commentData, Action callback)
     {
         //DocumentReference storyDocRef = firestoreDB.Collection(deviceCommentsPlatformCollection).Document(storyDocName).Collection(userCollectionName).Document(commentData.userID);
@@ -420,29 +421,75 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
     {
         List<DocumentSnapshot> documentSnapshotsList = new List<DocumentSnapshot>();
 
-        Query storyCollectionQuery = firestoreDB.Collection(storyCollectionName);
-        storyCollectionQuery.GetSnapshotAsync().ContinueWith(task => 
-        {            
-            if(task.IsCompleted)
+        
+        //Try to get all documents from cache. If error, then get it from firebase firestore server
+        //REMOVED!
+        Query storyCollectionQuery = firestoreDB.Collection(storyCollectionName);        
+        storyCollectionQuery.GetSnapshotAsync().ContinueWith(commentTask => 
+        {
+            /*if(cachedTask.IsFaulted)
             {
-                QuerySnapshot documentSnapshots = task.Result;
-                foreach (DocumentSnapshot documentSnapshot in documentSnapshots.Documents)
+#if UNITY_EDITOR
+                Debug.LogError($"Firestore Handle: (VIA CACHE) FAILED GOT ALL DOCUMENTS OF TITLE: {storyCollectionName} | Exception: {cachedTask.Exception.Message} | TRYING TO FETCH LATEST FROM SERVER!");
+#endif
+
+                //Getting from cache failed, so try to get it from Server
+                Query storyCollectionQueryServer = firestoreDB.Collection(storyCollectionName);
+                storyCollectionQueryCached.GetSnapshotAsync(Source.Server).ContinueWith(serverTask =>
                 {
-                    Debug.Log(String.Format("Document data for {0} document:", documentSnapshot.Id));
-                    documentSnapshotsList.Add(documentSnapshot);
-                }
+                    if(serverTask.IsCompleted)
+                    {
+                        QuerySnapshot documentSnapshots = cachedTask.Result;
+                        foreach (DocumentSnapshot documentSnapshot in documentSnapshots.Documents)
+                            documentSnapshotsList.Add(documentSnapshot);
+
+                        if (documentSnapshotsList.Count > 0)
+                        {
+#if UNITY_EDITOR
+                            Debug.Log($"Firestore Handle: (VIA SERVER) SUCCESSFULLY GOT ALL DOCUMENTS OF TITLE: {storyCollectionName}, Count: {documentSnapshotsList.Count}");
+#endif
+                            callback?.Invoke(documentSnapshotsList);
+                        }
+                        else
+                        {
+#if UNITY_EDITOR
+                            Debug.LogError("Firestore Handle: (VIA SERVER) BECAUSE LIST IS EMPTY! FAILED TO ALL DOCUMENTS OF TITLE: " + storyCollectionName);
+#endif
+                        }
+                    }
+                    else if(serverTask.IsFaulted)
+                    {
+#if UNITY_EDITOR
+                        Debug.LogError($"Firestore Handle: (VIA SERVER) BECAUSE TASK FAULTED! FAILED TO ALL DOCUMENTS OF TITLE: " + storyCollectionName);
+#endif
+                    }
+                });
+            }
+            else*/ 
+            if(commentTask.IsCompleted)
+            {
+                QuerySnapshot documentSnapshots = commentTask.Result;
+                foreach (DocumentSnapshot documentSnapshot in documentSnapshots.Documents)                
+                    documentSnapshotsList.Add(documentSnapshot);                
 
                 if (documentSnapshotsList.Count > 0)
                 {
-                    Debug.Log($"Firestore Handle: SUCCESSFULLY GOT ALL DOCUMENTS OF TITLE: {storyCollectionName}, Count: {documentSnapshotsList.Count}");
+#if UNITY_EDITOR
+                    Debug.Log($"Firestore Handle: (VIA DEFAULT) SUCCESSFULLY GOT ALL DOCUMENTS OF TITLE: {storyCollectionName}, Count: {documentSnapshotsList.Count}");
+#endif
                     callback?.Invoke(documentSnapshotsList);
                 }
                 else
-                    Debug.LogError("Firestore Handle: FAILED TO ALL DOCUMENTS OF TITLE: " + storyCollectionName);
+                {
+#if UNITY_EDITOR
+                    Debug.LogError("Firestore Handle: (VIA DEFAULT) BECAUSE LIST IS EMPTY! FAILED TO ALL DOCUMENTS OF TITLE: " + storyCollectionName);
+#endif
+                }
             }
         });
     }
 
+    //For testing purpose. Press 'V' key then check firestore console
     public void AddTestComments(string storyCollectionName, int count = 10)
     {
         for (int i = 0; i < count; i++)
@@ -450,9 +497,9 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
             DocumentReference storyDocRef = firestoreDB.Collection(storyCollectionName).Document(i.ToString("D2"));
             
             FirestoreCommentData commentData = new FirestoreCommentData();
-            commentData.userID = i.ToString();
-            commentData.userName = i.ToString();
-            commentData.userComment = i.ToString();
+            commentData.userID = i.ToString("D2");
+            commentData.userName = i.ToString("D2");
+            commentData.userComment = i.ToString("D2");
             commentData.userProfilePicUrl = "https://lh3.googleusercontent.com/a-/AFdZucpwMi1-aLCE3T7I32QH5BpAFJ2jPHQI4NtsBEsEAw=s96-c";
             
             storyDocRef.SetAsync(commentData).ContinueWith(task =>

@@ -16,6 +16,7 @@ public class FirebaseRemoteConfigHandler : MonoBehaviourSingletonPersistent<Fire
 
     private const string gameAppVersionSetting = "GameAppVersion";
     private const string versionCheckTypeSetting = "VersionCheckType";
+    private const string adminDevicesSetting = "_AdminDevices";
 
     private const string PLAYSTOREURL = "https://play.google.com/store/apps/details?id=com.culttales.maujflix";
 
@@ -325,5 +326,10 @@ public class FirebaseRemoteConfigHandler : MonoBehaviourSingletonPersistent<Fire
 #endif
             OnAppVersionIncorrect?.Invoke();
         }
+    }
+
+    public string[] GetAdminDevicesList()
+    {
+        return FirebaseRemoteConfig.DefaultInstance.GetValue(adminDevicesSetting).StringValue.Split(',');
     }
 }

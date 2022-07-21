@@ -13,7 +13,7 @@ public class AdsManager : MonoBehaviourSingletonPersistent<AdsManager>
     public static event Action<bool> OnIronSrcRewardVideoAvailable;
     public static event Action OnIronSrcRewardVideoClicked;
     public static event Action OnIronSrcRewardVideoFailed;
-    public static event Action<string> OnIronSrcRewardVideoComplete;
+    public static event Action<string> OnIronSrcRewardVideoComplete;    
 
     public struct userAttributes { };
     public struct appAttributes { };
@@ -37,13 +37,13 @@ public class AdsManager : MonoBehaviourSingletonPersistent<AdsManager>
     {
         IronSource.Agent.init(ironSrcAppID, IronSourceAdUnits.REWARDED_VIDEO);        
         IronSource.Agent.setAdaptersDebug(true);
-        IronSource.Agent.validateIntegration();
+        IronSource.Agent.validateIntegration();        
 
         //RegisterBannerAds();
         //IronSource.Agent.displayBanner();
         RegisterRewardAds();
         //RegisterInterstitialAds();
-        //IronSource.Agent.loadInterstitial();
+        //IronSource.Agent.loadInterstitial();        
     }
 
     private void RegisterBannerAds()

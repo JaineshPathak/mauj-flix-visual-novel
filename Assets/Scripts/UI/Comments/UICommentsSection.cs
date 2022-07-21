@@ -245,7 +245,7 @@ public class UICommentsSection : MonoBehaviour
             StartCoroutine(GetUserProfilePicRoutine(profileURL, (Texture profilePicTex) =>
             {
                 //SpawnCommentItem(transform, profilePicTex, otherCommentData);
-                SpawnCommentItem(transform, profileName, profileComment, profilePicTex);
+                SpawnCommentItem(transform, profileName, profileComment, profilePicTex, profileID);
             }));
         }
 
@@ -269,7 +269,7 @@ public class UICommentsSection : MonoBehaviour
             StartCoroutine(GetUserProfilePicRoutine(profileURL, (Texture profilePicTex) =>
             {
                 //SpawnCommentItem(transform, profilePicTex, otherCommentData);
-                SpawnCommentItem(transform, profileName, profileComment, profilePicTex);
+                SpawnCommentItem(transform, profileName, profileComment, profilePicTex, profileID);
             }));
         }
 
@@ -322,14 +322,14 @@ public class UICommentsSection : MonoBehaviour
             {
                 commentItem.gameObject.SetActive(true);
                 commentItem.transform.parent = _parent;
-                commentItem.SetupItem(_tex, commentData.userName, commentData.userComment);
+                commentItem.SetupItem(_tex, commentData.userName, commentData.userComment, commentData.userID);
 
                 Invoke("RebuildSectionLayout", 0.5f);
             }
             else
             {
                 commentItem = Instantiate(commentItemPrefab, _parent);
-                commentItem.SetupItem(_tex, commentData.userName, commentData.userComment);
+                commentItem.SetupItem(_tex, commentData.userName, commentData.userComment, commentData.userID);
 
                 CommentsPool.instance.AddNewCommentItem(commentItem);
 
@@ -343,7 +343,7 @@ public class UICommentsSection : MonoBehaviour
         else
         {
             commentItem = Instantiate(commentItemPrefab, _parent);
-            commentItem.SetupItem(_tex, commentData.userName, commentData.userComment);
+            commentItem.SetupItem(_tex, commentData.userName, commentData.userComment, commentData.userID);
 
             Invoke("RebuildSectionLayout", 0.5f);
         }
@@ -386,7 +386,7 @@ public class UICommentsSection : MonoBehaviour
         }
     }
 
-    public void SpawnCommentItem(Transform _parent, string _profileName, string _profileComment, Texture _tex)
+    public void SpawnCommentItem(Transform _parent, string _profileName, string _profileComment, Texture _tex, string _profileID)
     {
         UICommentItem commentItem = null;
         if (CommentsPool.instance != null)
@@ -396,14 +396,14 @@ public class UICommentsSection : MonoBehaviour
             {
                 commentItem.gameObject.SetActive(true);
                 commentItem.transform.parent = _parent;
-                commentItem.SetupItem(_tex, _profileName, _profileComment);
+                commentItem.SetupItem(_tex, _profileName, _profileComment, _profileID);
 
                 Invoke("RebuildSectionLayout", 0.5f);
             }
             else
             {
                 commentItem = Instantiate(commentItemPrefab, _parent);
-                commentItem.SetupItem(_tex, _profileName, _profileComment);
+                commentItem.SetupItem(_tex, _profileName, _profileComment, _profileID);
 
                 CommentsPool.instance.AddNewCommentItem(commentItem);
 
@@ -417,7 +417,7 @@ public class UICommentsSection : MonoBehaviour
         else
         {
             commentItem = Instantiate(commentItemPrefab, _parent);
-            commentItem.SetupItem(_tex, _profileName, _profileComment);
+            commentItem.SetupItem(_tex, _profileName, _profileComment, _profileID);
 
             Invoke("RebuildSectionLayout", 0.5f);
         }
@@ -433,14 +433,14 @@ public class UICommentsSection : MonoBehaviour
             {
                 commentItem.gameObject.SetActive(true);
                 commentItem.transform.parent = _parent;
-                commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment);
+                commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment, _commentData.userID);
 
                 Invoke("RebuildSectionLayout", 0.5f);
             }
             else
             {
                 commentItem = Instantiate(commentItemPrefab, _parent);
-                commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment);
+                commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment, _commentData.userID);
 
                 CommentsPool.instance.AddNewCommentItem(commentItem);
 
@@ -454,7 +454,7 @@ public class UICommentsSection : MonoBehaviour
         else
         {
             commentItem = Instantiate(commentItemPrefab, _parent);
-            commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment);
+            commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment, _commentData.userID);
 
             //RebuildSectionLayout();
             Invoke("RebuildSectionLayout", 0.5f);
@@ -492,6 +492,7 @@ public class UICommentsSection : MonoBehaviour
         LoadMoreComments();        
     }
 
+#if UNITY_EDITOR
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.V) && episodesSpawner.storiesDBItem != null)
@@ -504,4 +505,5 @@ public class UICommentsSection : MonoBehaviour
             fireStoreHandler.AddTestComments($"{englishTitleNoSpace}_{storyItem.storyProgressFileName}", 20);
         }
     }
+#endif
 }
