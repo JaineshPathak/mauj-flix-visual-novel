@@ -56,31 +56,43 @@ public class UIStoriesLoaderBig : MonoBehaviour
 
             bool storyEnabled = FirebaseRemoteConfig.DefaultInstance.GetValue("ST_" + storyTitleFresh + "_Status").BooleanValue;
 
-            if (storyEnabled)
-            {
-                UIStoriesItemBig storyItemBigInstance = null;
-                if (ThumbnailItemsPool.instance != null)
-                {
-                    storyItemBigInstance = ThumbnailItemsPool.instance.GetThumbnailItem(0).GetComponent<UIStoriesItemBig>();
-                    if (storyItemBigInstance)
-                    {
-                        storyItemBigInstance.gameObject.SetActive(true);
-                        storyItemBigInstance.transform.parent = scrollContent;
-                        //storyItemBigInstance.LoadThumbnailAssets(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel);
-                    }
-                    else
-                        storyItemBigInstance = Instantiate(storiesItemBigPrefab, scrollContent);
-                        //storyItemBigInstance.LoadThumbnailAssets(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel);                    
-                }
-                else
-                    storyItemBigInstance = Instantiate(storiesItemBigPrefab, scrollContent);
-                
-                storyItemBigInstance.LoadThumbnailAssets(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel);
-            }
+            if (storyEnabled)            
+                SpawnBigItem(storyDB.storiesCategories[categoryIndex].storiesDBItems[i]);            
+            else if(!storyEnabled && UserControl.instance.AdminMode)    //If story is not enabled and admin mode, then load the story anyway
+                SpawnBigItem(storyDB.storiesCategories[categoryIndex].storiesDBItems[i]);            
         }
 
         snapScroller.UpdateScroll();
         snapScroller.autoScrolling = autoScrolling;
         snapScroller.autoScrollingInterval = autoScrollInterval;
-    }    
+    }
+
+    private void SpawnBigItem(StoriesDBItem storiesDBItem)
+    {
+        UIStoriesItemBig storyItemBigInstance = null;
+        if (ThumbnailItemsPool.instance != null)
+        {
+            GameObject bigItemGO = ThumbnailItemsPool.instance.GetThumbnailItem(0);
+            if (bigItemGO != null)
+            {
+                storyItemBigInstance = bigItemGO.GetComponent<UIStoriesItemBig>();
+                if (storyItemBigInstance != null)
+                {
+                    storyItemBigInstance.gameObject.SetActive(true);
+                    storyItemBigInstance.transform.parent = scrollContent;
+                    //storyItemBigInstance.LoadThumbnailAssets(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel);
+                }
+                else
+                    storyItemBigInstance = Instantiate(storiesItemBigPrefab, scrollContent);
+            }
+            else
+                storyItemBigInstance = Instantiate(storiesItemBigPrefab, scrollContent);
+            //storyItemBigInstance.LoadThumbnailAssets(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], storiesDetailsPanel);
+        }
+        else
+            storyItemBigInstance = Instantiate(storiesItemBigPrefab, scrollContent);
+
+        if (storyItemBigInstance != null)
+            storyItemBigInstance.LoadThumbnailAssets(storiesDBItem, storiesDetailsPanel);
+    }
 }

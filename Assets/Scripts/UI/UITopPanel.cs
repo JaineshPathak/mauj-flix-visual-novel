@@ -28,6 +28,7 @@ public class UITopPanel : MonoBehaviour
     [Space(15)]
 
     public Transform devModeIcon;
+    public GameObject adminModeIcon;
 
     private int showSeqID;
     private int diamondSeqID;
@@ -69,6 +70,11 @@ public class UITopPanel : MonoBehaviour
 
         if (GameController.instance != null && devModeIcon)
             devModeIcon.gameObject.SetActive(GameController.instance.DevMode);
+
+        if (UserControl.instance != null)
+            adminModeIcon.SetActive(UserControl.instance.AdminMode);
+        else
+            adminModeIcon.SetActive(false);
     }
 
     //----------------------------------------------------------------------------------------------------

@@ -196,7 +196,7 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
             if (/*storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isStoryEnabled*/storyEnabled)
             {
-                #region Removed Short Stories from v0.4.3 onwards
+                #region Removed Short Stories Item from v0.4.3 onwards
                 /*if (storyDB.storiesCategories[categoryIndex].storiesDBItems[i].isShortStory)
                         {
                             if(ThumbnailItemsPool.instance != null)
@@ -264,6 +264,8 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
                 SpawnStoryItemSmall(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], scrollContent, i, true);
             }
+            else if(!storyEnabled && UserControl.instance.AdminMode)
+                SpawnStoryItemSmall(storyDB.storiesCategories[categoryIndex].storiesDBItems[i], scrollContent, i, true);
         }
 
         if (categoryCountText != null)
@@ -378,6 +380,8 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
                 SpawnStoryItemSmall(ref searchItemsList, storyDB.storiesCategories[categoryIndex].storiesDBItems[i], scrollContent, thumbnailPoolIndex, 0, true);
             }
+            else if(!storyEnabled && UserControl.instance.AdminMode)
+                SpawnStoryItemSmall(ref searchItemsList, storyDB.storiesCategories[categoryIndex].storiesDBItems[i], scrollContent, thumbnailPoolIndex, 0, true);
         }
 
         if (categoryCountText != null)
@@ -441,6 +445,8 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
                 SpawnStoryItemSmall(_storiesDBItems[i], scrollContent, 1, 0, true);
             }
+            else if(!storyEnabled && UserControl.instance.AdminMode)
+                SpawnStoryItemSmall(_storiesDBItems[i], scrollContent, 1, 0, true);
         }
 
         if (categoryCountText != null)
@@ -496,6 +502,8 @@ public class UIStoriesLoaderSmall : MonoBehaviour
 
                 SpawnStoryItemSmall(_storyDB.storiesCategories[_databaseIndex].storiesDBItems[i], scrollContent, 0, true);
             }
+            else if(!storyEnabled && UserControl.instance.AdminMode)
+                SpawnStoryItemSmall(_storyDB.storiesCategories[_databaseIndex].storiesDBItems[i], scrollContent, 0, true);
         }
 
         if (categoryCountText != null)

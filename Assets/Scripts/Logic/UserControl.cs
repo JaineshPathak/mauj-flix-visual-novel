@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UserControl : MonoBehaviourSingletonPersistent<UserControl>
 {
-    private bool adminMode = false;
+    [SerializeField] private bool adminMode = false;
     public bool AdminMode
     {
         get { return adminMode; }
@@ -15,6 +15,9 @@ public class UserControl : MonoBehaviourSingletonPersistent<UserControl>
         //Let Ads Manager Initialize first, so wait for 2 seconds
         yield return new WaitForSeconds(2f);
 
+#if UNITY_EDITOR
+        adminMode = true;
+#elif UNITY_ANDROID && !UNITY_EDITOR
         if(FirebaseRemoteConfigHandler.instance != null && IronSource.Agent != null)
         {
             string adID = IronSource.Agent.getAdvertiserId();
@@ -35,5 +38,6 @@ public class UserControl : MonoBehaviourSingletonPersistent<UserControl>
                 Debug.Log($"User Control: Ad ID {adID} mismatches, Admin mode is inactive!");
 
         }
+#endif
     }
 }
