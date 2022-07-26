@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using Fungus;
 using TMPro;
+using MoreMountains.NiceVibrations;
 
 public class MenuDialogMflix : MenuDialog
 {
@@ -110,6 +111,9 @@ public class MenuDialogMflix : MenuDialog
                     Debug.Log("Firebase Firestore Offline: Test Mode so Lets GO!");
 #endif
 
+                    if (MMVibrationManager.HapticsSupported())
+                        MMVibrationManager.Haptic(HapticTypes.MediumImpact);
+
                     EpisodesSpawner.instance.topPanel.HideTopPanel();
 
                     EventSystem.current.SetSelectedGameObject(null);
@@ -145,6 +149,9 @@ public class MenuDialogMflix : MenuDialog
 #if UNITY_EDITOR
                 Debug.Log("Firebase Firestore Offline: No Diamond Cost, Go Ahead!");
 #endif
+
+                if (MMVibrationManager.HapticsSupported())
+                    MMVibrationManager.Haptic(HapticTypes.MediumImpact);
 
                 if (EpisodesSpawner.instance != null)
                 {

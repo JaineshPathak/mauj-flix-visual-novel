@@ -1,4 +1,5 @@
 ﻿using Firebase.Firestore;
+using System.Collections.Generic;
 
 [FirestoreData]
 public struct FirestoreCommentData
@@ -17,4 +18,7 @@ public struct FirestoreCommentData
 
     [FirestoreProperty]
     public string userComment { get; set; }
+
+    [FirestoreProperty]
+    public string[] userComments { get; set; }
 }

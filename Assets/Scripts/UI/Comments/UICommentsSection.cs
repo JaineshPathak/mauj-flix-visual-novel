@@ -128,33 +128,69 @@ public class UICommentsSection : MonoBehaviour
             return;
 
         StoriesDBItem storyItem = episodesSpawner.storiesDBItem;
-
-        commentData = new FirestoreCommentData()
-        {
-            userID = fireAuthHandler.userCurrent.UserId,
-            userName = fireAuthHandler.userCurrent.DisplayName,
-            userEmail = fireAuthHandler.userCurrent.Email,
-            userProfilePicUrl = fireAuthHandler.userCurrent.PhotoUrl.AbsoluteUri,
-            userComment = commentInputField.text
-        };
-
         string englishTitleNoSpace = storyItem.storyTitleEnglish;
         englishTitleNoSpace = englishTitleNoSpace.Replace(" ", "");
-        fireStoreHandler.AddUserComment($"{englishTitleNoSpace}_{storyItem.storyProgressFileName}", fireAuthHandler.userCurrent.UserId, commentData, () =>
+
+        //First check if the User Document already exists, if not make a new comment item
+        fireStoreHandler.HasUserDocumentExists($"{englishTitleNoSpace}_{storyItem.storyProgressFileName}", fireAuthHandler.userCurrent.UserId, (DocumentSnapshot docSnap) =>
         {
-            //StartCoroutine(PostSetupCommentItemRoutine());
-
-            commentInputField.text = "";
-
-            StartCoroutine(GetUserProfilePicRoutine((Texture profilePicTex) => 
+            Debug.Log($"Comment Section: {fireAuthHandler.userCurrent.UserId} Status: {docSnap.Exists}");
+            if(docSnap.Exists)
             {
-                SpawnCommentItem(transform, profilePicTex);
+                commentData = docSnap.ConvertTo<FirestoreCommentData>();
 
+                Debug.Log($"Comment Section: {commentData.userID} Document Exists!");
+                
+                List<string> userCommentsList = new List<string>(commentData.userComments);
+                userCommentsList.Add(commentInputField.text);
+                commentData.userComments = userCommentsList.ToArray();
+
+                fireStoreHandler.AddUserComment($"{englishTitleNoSpace}_{storyItem.storyProgressFileName}", fireAuthHandler.userCurrent.UserId, commentData, () =>
+                {
+                    //StartCoroutine(PostSetupCommentItemRoutine());
+
+                    commentInputField.text = "";
+
+                    StartCoroutine(GetUserProfilePicRoutine((Texture profilePicTex) =>
+                    {
+                        SpawnCommentItem(transform, profilePicTex);
 #if UNITY_EDITOR
-                Debug.Log("Comment Section: Comment Successfully Added!");
+                        Debug.Log("Comment Section: Comment Successfully Added!");
 #endif
-            }));
-        });
+                    }));
+                });
+            }
+            else
+            {
+                commentData = new FirestoreCommentData();
+                commentData.userID = fireAuthHandler.userCurrent.UserId;
+                commentData.userName = fireAuthHandler.userCurrent.DisplayName;
+                commentData.userEmail = fireAuthHandler.userCurrent.Email;
+                commentData.userProfilePicUrl = fireAuthHandler.userCurrent.PhotoUrl.AbsoluteUri;
+                commentData.userComment = commentInputField.text;
+                commentData.userComments = new string[] { commentInputField.text };
+
+                /*List<string> userCommentsL = new List<string>();
+                userCommentsL.Add(commentInputField.text);
+                commentData.userComments = userCommentsL.ToArray();*/
+                //commentData.userCommentsList.Add(commentInputField.text);
+
+                fireStoreHandler.AddUserComment($"{englishTitleNoSpace}_{storyItem.storyProgressFileName}", fireAuthHandler.userCurrent.UserId, commentData, () =>
+                {
+                    //StartCoroutine(PostSetupCommentItemRoutine());
+
+                    commentInputField.text = "";
+
+                    StartCoroutine(GetUserProfilePicRoutine((Texture profilePicTex) =>
+                    {
+                        SpawnCommentItem(transform, profilePicTex);
+#if UNITY_EDITOR
+                        Debug.Log("Comment Section: Comment Successfully Added!");
+#endif
+                    }));
+                });
+            }
+        });        
     }
 
     private IEnumerator GetUserProfilePicRoutine(Action<Texture> callback)
@@ -241,11 +277,13 @@ public class UICommentsSection : MonoBehaviour
             string profileEmail = otherCommentData.userEmail;
             string profileURL = otherCommentData.userProfilePicUrl;
             string profileComment = otherCommentData.userComment;
+            string[] profileComments = otherCommentData.userComments;
 
             StartCoroutine(GetUserProfilePicRoutine(profileURL, (Texture profilePicTex) =>
             {
                 //SpawnCommentItem(transform, profilePicTex, otherCommentData);
-                SpawnCommentItem(transform, profileName, profileComment, profilePicTex, profileID);
+                //SpawnCommentItem(transform, profileName, profileComment, profilePicTex, profileID);
+                SpawnCommentItem(transform, profileName, profileComments, profilePicTex, profileID);
             }));
         }
 
@@ -265,11 +303,13 @@ public class UICommentsSection : MonoBehaviour
             string profileEmail = otherCommentData.userEmail;
             string profileURL = otherCommentData.userProfilePicUrl;
             string profileComment = otherCommentData.userComment;
+            string[] profileComments = otherCommentData.userComments;
 
             StartCoroutine(GetUserProfilePicRoutine(profileURL, (Texture profilePicTex) =>
             {
                 //SpawnCommentItem(transform, profilePicTex, otherCommentData);
-                SpawnCommentItem(transform, profileName, profileComment, profilePicTex, profileID);
+                //SpawnCommentItem(transform, profileName, profileComment, profilePicTex, profileID);
+                SpawnCommentItem(transform, profileName, profileComments, profilePicTex, profileID);
             }));
         }
 
@@ -314,6 +354,8 @@ public class UICommentsSection : MonoBehaviour
 
     public void SpawnCommentItem(Transform _parent, Texture _tex)
     {
+        string latestComment = commentData.userComments[commentData.userComments.Length - 1];
+
         UICommentItem commentItem = null;
         if (CommentsPool.instance != null)
         {
@@ -322,14 +364,14 @@ public class UICommentsSection : MonoBehaviour
             {
                 commentItem.gameObject.SetActive(true);
                 commentItem.transform.parent = _parent;
-                commentItem.SetupItem(_tex, commentData.userName, commentData.userComment, commentData.userID);
+                commentItem.SetupItem(_tex, commentData.userName, latestComment, commentData.userID);
 
                 Invoke("RebuildSectionLayout", 0.5f);
             }
             else
             {
                 commentItem = Instantiate(commentItemPrefab, _parent);
-                commentItem.SetupItem(_tex, commentData.userName, commentData.userComment, commentData.userID);
+                commentItem.SetupItem(_tex, commentData.userName, latestComment, commentData.userID);
 
                 CommentsPool.instance.AddNewCommentItem(commentItem);
 
@@ -343,7 +385,7 @@ public class UICommentsSection : MonoBehaviour
         else
         {
             commentItem = Instantiate(commentItemPrefab, _parent);
-            commentItem.SetupItem(_tex, commentData.userName, commentData.userComment, commentData.userID);
+            commentItem.SetupItem(_tex, commentData.userName, latestComment, commentData.userID);
 
             Invoke("RebuildSectionLayout", 0.5f);
         }
@@ -351,39 +393,42 @@ public class UICommentsSection : MonoBehaviour
 
     public void SpawnCommentItem(Transform _parent, FirestoreCommentData _commentData)
     {
-        UICommentItem commentItem = null;
-        if (CommentsPool.instance != null)
+        for (int i = 0; i < _commentData.userComments.Length && (_commentData.userComments.Length > 0); i++)
         {
-            commentItem = CommentsPool.instance.GetCommentItem();
-            if (commentItem != null)
+            UICommentItem commentItem = null;
+            if (CommentsPool.instance != null)
             {
-                commentItem.gameObject.SetActive(true);
-                commentItem.transform.parent = _parent;
-                commentItem.SetupItem(_commentData.userName, _commentData.userComment);
+                commentItem = CommentsPool.instance.GetCommentItem();
+                if (commentItem != null)
+                {
+                    commentItem.gameObject.SetActive(true);
+                    commentItem.transform.parent = _parent;
+                    commentItem.SetupItem(_commentData.userName, _commentData.userComments[i]);
 
-                Invoke("RebuildSectionLayout", 0.5f);
+                    Invoke("RebuildSectionLayout", 0.5f);
+                }
+                else
+                {
+                    commentItem = Instantiate(commentItemPrefab, _parent);
+                    commentItem.SetupItem(_commentData.userName, _commentData.userComments[i]);
+
+                    CommentsPool.instance.AddNewCommentItem(commentItem);
+
+                    Invoke("RebuildSectionLayout", 0.5f);
+
+#if UNITY_EDITOR
+                    Debug.Log("Comment Section: New Comment Item was added to Pool!");
+#endif
+                }
             }
             else
             {
                 commentItem = Instantiate(commentItemPrefab, _parent);
-                commentItem.SetupItem(_commentData.userName, _commentData.userComment);
-
-                CommentsPool.instance.AddNewCommentItem(commentItem);
+                commentItem.SetupItem(_commentData.userName, _commentData.userComments[i]);
 
                 Invoke("RebuildSectionLayout", 0.5f);
-
-#if UNITY_EDITOR
-                Debug.Log("Comment Section: New Comment Item was added to Pool!");
-#endif
             }
-        }
-        else
-        {
-            commentItem = Instantiate(commentItemPrefab, _parent);
-            commentItem.SetupItem(_commentData.userName, _commentData.userComment);
-
-            Invoke("RebuildSectionLayout", 0.5f);
-        }
+        }        
     }
 
     public void SpawnCommentItem(Transform _parent, string _profileName, string _profileComment, Texture _tex, string _profileID)
@@ -423,41 +468,84 @@ public class UICommentsSection : MonoBehaviour
         }
     }
 
-    public void SpawnCommentItem(Transform _parent, Texture _tex, FirestoreCommentData _commentData)
+    public void SpawnCommentItem(Transform _parent, string _profileName, string[] _profileComments, Texture _tex, string _profileID)
     {
-        UICommentItem commentItem = null;
-        if (CommentsPool.instance != null)
+        for (int i = 0; i < _profileComments.Length && (_profileComments.Length > 0); i++)
         {
-            commentItem = CommentsPool.instance.GetCommentItem();
-            if (commentItem != null)
+            UICommentItem commentItem = null;
+            if (CommentsPool.instance != null)
             {
-                commentItem.gameObject.SetActive(true);
-                commentItem.transform.parent = _parent;
-                commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment, _commentData.userID);
+                commentItem = CommentsPool.instance.GetCommentItem();
+                if (commentItem != null)
+                {
+                    commentItem.gameObject.SetActive(true);
+                    commentItem.transform.parent = _parent;
+                    commentItem.SetupItem(_tex, _profileName, _profileComments[i], _profileID);
+
+                    Invoke("RebuildSectionLayout", 0.5f);
+                }
+                else
+                {
+                    commentItem = Instantiate(commentItemPrefab, _parent);
+                    commentItem.SetupItem(_tex, _profileName, _profileComments[i], _profileID);
+
+                    CommentsPool.instance.AddNewCommentItem(commentItem);
+
+                    Invoke("RebuildSectionLayout", 0.5f);
+
+#if UNITY_EDITOR
+                    Debug.Log("Comment Section: New Comment Item was added to Pool!");
+#endif
+                }
+            }
+            else
+            {
+                commentItem = Instantiate(commentItemPrefab, _parent);
+                commentItem.SetupItem(_tex, _profileName, _profileComments[i], _profileID);
 
                 Invoke("RebuildSectionLayout", 0.5f);
+            }
+        }        
+    }
+
+    public void SpawnCommentItem(Transform _parent, Texture _tex, FirestoreCommentData _commentData)
+    {
+        for (int i = 0; i < _commentData.userComments.Length && (_commentData.userComments.Length > 0); i++)
+        {
+            UICommentItem commentItem = null;
+            if (CommentsPool.instance != null)
+            {
+                commentItem = CommentsPool.instance.GetCommentItem();
+                if (commentItem != null)
+                {
+                    commentItem.gameObject.SetActive(true);
+                    commentItem.transform.parent = _parent;
+                    commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment, _commentData.userID);
+
+                    Invoke("RebuildSectionLayout", 0.5f);
+                }
+                else
+                {
+                    commentItem = Instantiate(commentItemPrefab, _parent);
+                    commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment, _commentData.userID);
+
+                    CommentsPool.instance.AddNewCommentItem(commentItem);
+
+                    Invoke("RebuildSectionLayout", 0.5f);
+
+#if UNITY_EDITOR
+                    Debug.Log("Comment Section: New Comment Item was added to Pool!");
+#endif
+                }
             }
             else
             {
                 commentItem = Instantiate(commentItemPrefab, _parent);
                 commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment, _commentData.userID);
 
-                CommentsPool.instance.AddNewCommentItem(commentItem);
-
+                //RebuildSectionLayout();
                 Invoke("RebuildSectionLayout", 0.5f);
-
-#if UNITY_EDITOR
-                Debug.Log("Comment Section: New Comment Item was added to Pool!");
-#endif
             }
-        }
-        else
-        {
-            commentItem = Instantiate(commentItemPrefab, _parent);
-            commentItem.SetupItem(_tex, _commentData.userName, _commentData.userComment, _commentData.userID);
-
-            //RebuildSectionLayout();
-            Invoke("RebuildSectionLayout", 0.5f);
         }
     }
 

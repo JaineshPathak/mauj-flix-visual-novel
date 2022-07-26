@@ -382,6 +382,18 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
 
     //Comments Related Section
 
+    public void HasUserDocumentExists(string storyCollectionName, string userID, Action<DocumentSnapshot> callback)
+    {
+        DocumentReference storyDocRef = firestoreDB.Collection(storyCollectionName).Document(userID);
+        storyDocRef.GetSnapshotAsync().ContinueWith(task =>
+        {
+            if (task.IsCompleted)
+            {
+                callback?.Invoke(task.Result);
+            }
+        });
+    }
+
     public void AddUserComment(string storyDocName, string userCollectionName, FirestoreCommentData commentData)
     {
         DocumentReference storyDocRef = firestoreDB.Collection(deviceCommentsPlatformCollection).Document(storyDocName).Collection(userCollectionName).Document(commentData.userID);
@@ -420,7 +432,6 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
     public void GetAllCommentDocs(string storyCollectionName, Action<List<DocumentSnapshot>> callback)
     {
         List<DocumentSnapshot> documentSnapshotsList = new List<DocumentSnapshot>();
-
         
         //Try to get all documents from cache. If error, then get it from firebase firestore server
         //REMOVED!
@@ -501,7 +512,16 @@ public class FirebaseFirestoreHandler : MonoBehaviourSingletonPersistent<Firebas
             commentData.userName = i.ToString("D2");
             commentData.userComment = i.ToString("D2");
             commentData.userProfilePicUrl = "https://lh3.googleusercontent.com/a-/AFdZucpwMi1-aLCE3T7I32QH5BpAFJ2jPHQI4NtsBEsEAw=s96-c";
-            
+
+            List<string> userCommentsL = new List<string>();
+            userCommentsL.Add(i.ToString("D2"));
+            userCommentsL.Add(i.ToString("D2"));
+            userCommentsL.Add(i.ToString("D2"));
+
+            commentData.userComments = userCommentsL.ToArray();
+            //commentData.userCommentsList.Add(i.ToString("D2"));
+            //commentData.userCommentsList.Add(i.ToString("D2"));
+
             storyDocRef.SetAsync(commentData).ContinueWith(task =>
             {
                 if (task.IsCompleted)
