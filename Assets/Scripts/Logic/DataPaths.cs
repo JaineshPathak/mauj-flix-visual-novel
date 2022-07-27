@@ -9,5 +9,11 @@
     public static readonly string storyImagesLoadDatabaseName = "StoriesLoadImagesDB.json";
 
     public static readonly string firebaseGoogleProviderID = "google.com";
-    public static readonly string firebaseAnonymousProviderID = "(anonymous)";    
+    public static readonly string firebaseAnonymousProviderID = "(anonymous)";
+
+    public static readonly string dialogueCharacterSayYPosID = "Dialogue_CharacterSay_YPos";
+    public static readonly string[] dialogueYPosID = new string[] { "Dialogue_CharacterSay_YPos", 
+                                                                    "Dialogue_TutorialSay_YPos",
+                                                                    "Dialogue_NarrativeSay_YPos",
+                                                                    "Dialogue_NarrativeBlackSay_YPos"};
 }

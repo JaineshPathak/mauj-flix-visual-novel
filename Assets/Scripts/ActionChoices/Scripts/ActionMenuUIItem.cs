@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using MoreMountains.NiceVibrations;
 
 public class ActionMenuUIItem : MonoBehaviour
 {
@@ -105,6 +106,9 @@ public class ActionMenuUIItem : MonoBehaviour
     {
         if (actionMenuUI == null)
             return;
+
+        if (MMVibrationManager.HapticsSupported())
+            MMVibrationManager.Haptic(HapticTypes.MediumImpact);
 
         actionMenuUI.OnItemFocusClicked(id);
     }

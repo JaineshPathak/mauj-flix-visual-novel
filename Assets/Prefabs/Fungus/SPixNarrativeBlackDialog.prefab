@@ -33,10 +33,10 @@ RectTransform:
   m_Father: {fileID: 4392816951867193505}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000012397766, y: 0.0000038146973}
-  m_SizeDelta: {x: 814.6958, y: 510.17145}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -170, y: -170}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4392816950441821397
 CanvasRenderer:
@@ -71,8 +71,7 @@ MonoBehaviour:
     \u0906\u0928\u0947 \u0935\u093E\u0932\u0947 \u0939\u0948\u0964 + English"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e748469943340b54bb3b8b7cf7b05ce5, type: 2}
-  m_sharedMaterial: {fileID: -3468323150492546538, guid: e748469943340b54bb3b8b7cf7b05ce5,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: a3c770cf7f608fd45a5ecc28171fdc98, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -96,13 +95,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 65
-  m_fontSizeBase: 60
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -170,6 +169,7 @@ GameObject:
   - component: {fileID: 2676834069733999174}
   - component: {fileID: 4392816950703136244}
   - component: {fileID: 4392816950703136245}
+  - component: {fileID: 7905589998035943296}
   - component: {fileID: 4392816950703136246}
   m_Layer: 5
   m_Name: SPixNarrativeBlackDialog
@@ -379,6 +379,20 @@ MonoBehaviour:
   nextClickDelay: 0
   cancelEnabled: 0
   ignoreMenuClicks: 1
+--- !u!114 &7905589998035943296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4392816950703136247}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f0e2e1e8c17743468799fef2f39db5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainPanel: {fileID: 4392816951867193505}
+  yPosID: 3
 --- !u!82 &4392816950703136246
 AudioSource:
   m_ObjectHideFlags: 0
