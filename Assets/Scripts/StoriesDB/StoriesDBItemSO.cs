@@ -56,6 +56,9 @@ public class StoriesDBItemSO : ScriptableObject
     [Header("Story Episodes Keys")]
     public AssetReferenceGameObject[] storyEpisodesKeys;
 
+    [Header("Story Episodes Description")]
+    public string[] storyEpisodesDescriptions;
+
     [Header("Story Episodes Branch Keys")]
     public AssetReferenceGameObject[] storyEpisodesBranchkeys;
 
@@ -101,6 +104,8 @@ public class StoriesDBItemSO : ScriptableObject
         storyThumbnailBigName = storyThumbnailBigKey.editorAsset != null ? storyThumbnailBigKey.editorAsset.name : "";
         storyThumbnailLoadingName = storyThumbnailLoadingKey.editorAsset != null ? storyThumbnailLoadingKey.editorAsset.name : "";
         storyThumbnailTitleName = storyTitleImageKey.editorAsset != null ? storyTitleImageKey.editorAsset.name : "";
+
+        Array.Resize(ref storyEpisodesDescriptions, storyEpisodesKeys.Length);
     }
 
     public StoriesDBItem GetStoriesDBItem()
@@ -149,19 +154,21 @@ public class StoriesDBItemSO : ScriptableObject
             }
         }
 
-        try
+        item.storyEpisodesDescriptions = storyEpisodesDescriptions;
+
+        /*try
         {
             Array.Resize(ref item.storyBranchEpisodesKeys, this.storyEpisodesBranchkeys.Length);            
         }
         catch(NullReferenceException e)
         {
             Debug.LogError("Array Problem in: item.storyBranchEpisodesKeys + [" + e.Message + " - " + e.Source + "]");
-        }
+        }*/
 
         //item.storyBranchEpisodesKeys = new string[0];
         if (storyEpisodesBranchkeys.Length > 0)
         {
-            //Array.Resize(ref item.storyBranchEpisodesKeys, storyEpisodesBranchkeys.Length);
+            Array.Resize(ref item.storyBranchEpisodesKeys, storyEpisodesBranchkeys.Length);
             for (int i = 0; i < storyEpisodesBranchkeys.Length; i++)
             {
                 if(storyEpisodesBranchkeys[i] != null)
@@ -211,6 +218,7 @@ public class StoriesDBItemSOEditor : Editor
     private SerializedProperty storyProgressFileNameSerial;
 
     private SerializedProperty storyEpisodesKeysSerial;
+    private SerializedProperty storyEpisodesDescriptionsSerial;
     private SerializedProperty storyBranchEpisodesKeysSerial;
 
     private Texture2D thumbnailSmallTex;
@@ -266,6 +274,7 @@ public class StoriesDBItemSOEditor : Editor
         storyProgressFileNameSerial = serializedObject.FindProperty("storyProgressFileName");
 
         storyEpisodesKeysSerial = serializedObject.FindProperty("storyEpisodesKeys");
+        storyEpisodesDescriptionsSerial = serializedObject.FindProperty("storyEpisodesDescriptions");
         storyBranchEpisodesKeysSerial = serializedObject.FindProperty("storyEpisodesBranchkeys");
     }
 
@@ -314,6 +323,7 @@ public class StoriesDBItemSOEditor : Editor
         AddPropertyLabel(storyProgressFileNameSerial, "Story Progress File name", "File name of the Story Progress. Hit the 'Update' button next to it after assigning at least three Episode prefabs in below list.");        
 
         AddPropertyLabel(storyEpisodesKeysSerial, "Story Episodes", "List of Story Episodes Prefabs (Eg: ST-Padosan-Ep1.prefab). This appears in Details Panel depending on array size.");
+        AddPropertyLabel(storyEpisodesDescriptionsSerial, "Story Episodes Descriptions", "Small description of each episodes");
         AddPropertyLabel(storyBranchEpisodesKeysSerial, "Story Branch Episodes", "List of Story Episodes Prefabs With Branch Endings (Eg: ST-Padosan-Ep1.prefab). This appears in Details Panel depending on array size.");
         
         //DrawDefaultInspector();

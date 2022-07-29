@@ -252,14 +252,28 @@ public class UIPersonalProfile : MonoBehaviour
         {
             case 0:         //FB
                 
-                url = FirebaseRemoteConfig.DefaultInstance.GetValue("Social_Link_FB").StringValue;
+                url = FirebaseRemoteConfig.DefaultInstance.GetValue(DataPaths.socialLinkFB).StringValue;
                 Application.OpenURL(url);
                 
                 break;
 
             case 1:         //Insta
 
-                url = FirebaseRemoteConfig.DefaultInstance.GetValue("Social_Link_Insta").StringValue;
+                url = FirebaseRemoteConfig.DefaultInstance.GetValue(DataPaths.socialLinkInsta).StringValue;
+                Application.OpenURL(url);
+
+                break;
+
+            case 2:         //Whatsapp
+
+                url = FirebaseRemoteConfig.DefaultInstance.GetValue(DataPaths.socialLinkWhatsapp).StringValue;
+                Application.OpenURL(url);
+
+                break;
+
+            case 3:         //Telegram
+
+                url = FirebaseRemoteConfig.DefaultInstance.GetValue(DataPaths.socialLinkTelegram).StringValue;
                 Application.OpenURL(url);
 
                 break;

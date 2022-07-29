@@ -33,6 +33,15 @@ public class ActionMenu : Command
 
     [HideInInspector] public ActionItem currentActionItemSelected;
 
+    public void ActionMenuInit(string newCenterText, List<ActionItem> newActionsItems)
+    {
+        centerActionText = newCenterText;
+        //actionItemsList.AddRange(newActionsItems);
+
+        foreach (ActionItem a in newActionsItems)
+            actionItemsList.Add(a);
+    }
+
     public override void OnEnter()
     {
         if(actionItemsList.Count <= 0)

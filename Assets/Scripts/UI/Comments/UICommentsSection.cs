@@ -7,11 +7,19 @@ using UnityEngine.Networking;
 using TMPro;
 //using Firebase.Auth;
 using Firebase.Firestore;
+using Crosstales.BWF;
+using Crosstales.BWF.Model.Enum;
 
 public class UICommentsSection : MonoBehaviour
 {
     [Header("Details Panel")]
     [SerializeField] private UIStoriesDetailsPanel detailsPanel;
+
+    [Header("Managers")] 
+    public ManagerMask BadwordManager = ManagerMask.BadWord;
+    public ManagerMask DomManager = ManagerMask.Domain;
+    public ManagerMask CapsManager = ManagerMask.Capitalization;
+    public ManagerMask PuncManager = ManagerMask.Punctuation;
 
     [Header("Prefab")]
     [SerializeField] private UICommentItem commentItemPrefab;
@@ -58,7 +66,7 @@ public class UICommentsSection : MonoBehaviour
     {
         FirebaseAuthHandler.OnUserGoogleSignIn -= OnGoogleSignIn;
         FirebaseAuthHandler.OnUserGoogleSignOut -= OnGoogleSignOut;
-    }
+    }    
 
     private void OnGoogleSignIn() => CheckSignInStatus();
 
@@ -124,25 +132,33 @@ public class UICommentsSection : MonoBehaviour
         if (fireAuthHandler.GetProviderID() != DataPaths.firebaseGoogleProviderID)
             return;
 
-        if (episodesSpawner == null || episodesSpawner.storiesDBItem == null)
+        if ( (episodesSpawner == null) || episodesSpawner.storiesDBItem == null)
             return;
 
         StoriesDBItem storyItem = episodesSpawner.storiesDBItem;
         string englishTitleNoSpace = storyItem.storyTitleEnglish;
         englishTitleNoSpace = englishTitleNoSpace.Replace(" ", "");
 
+        string filteredCommentText = "";
+
         //First check if the User Document already exists, if not make a new comment item
         fireStoreHandler.HasUserDocumentExists($"{englishTitleNoSpace}_{storyItem.storyProgressFileName}", fireAuthHandler.userCurrent.UserId, (DocumentSnapshot docSnap) =>
         {
+#if UNITY_EDITOR
             Debug.Log($"Comment Section: {fireAuthHandler.userCurrent.UserId} Status: {docSnap.Exists}");
+#endif
             if(docSnap.Exists)
             {
                 commentData = docSnap.ConvertTo<FirestoreCommentData>();
 
+#if UNITY_EDITOR
                 Debug.Log($"Comment Section: {commentData.userID} Document Exists!");
-                
+#endif
+
+                filteredCommentText = BWFManager.Instance.ReplaceAll(commentInputField.text, BadwordManager | DomManager | CapsManager | PuncManager);
+
                 List<string> userCommentsList = new List<string>(commentData.userComments);
-                userCommentsList.Add(commentInputField.text);
+                userCommentsList.Add(filteredCommentText);
                 commentData.userComments = userCommentsList.ToArray();
 
                 fireStoreHandler.AddUserComment($"{englishTitleNoSpace}_{storyItem.storyProgressFileName}", fireAuthHandler.userCurrent.UserId, commentData, () =>
@@ -162,13 +178,15 @@ public class UICommentsSection : MonoBehaviour
             }
             else
             {
+                filteredCommentText = BWFManager.Instance.ReplaceAll(commentInputField.text, BadwordManager | DomManager | CapsManager | PuncManager);
+
                 commentData = new FirestoreCommentData();
                 commentData.userID = fireAuthHandler.userCurrent.UserId;
                 commentData.userName = fireAuthHandler.userCurrent.DisplayName;
                 commentData.userEmail = fireAuthHandler.userCurrent.Email;
                 commentData.userProfilePicUrl = fireAuthHandler.userCurrent.PhotoUrl.AbsoluteUri;
-                commentData.userComment = commentInputField.text;
-                commentData.userComments = new string[] { commentInputField.text };
+                commentData.userComment = filteredCommentText;
+                commentData.userComments = new string[] { filteredCommentText };
 
                 /*List<string> userCommentsL = new List<string>();
                 userCommentsL.Add(commentInputField.text);
@@ -240,7 +258,7 @@ public class UICommentsSection : MonoBehaviour
         if (fireStoreHandler == null)
             return;
 
-        if (episodesSpawner == null || episodesSpawner.storiesDBItem == null)
+        if ( (episodesSpawner == null) || episodesSpawner.storiesDBItem == null)
             return;
 
         StoriesDBItem storyItem = episodesSpawner.storiesDBItem;
@@ -254,6 +272,8 @@ public class UICommentsSection : MonoBehaviour
             commentDataListActual = commentDataList;
             if (commentDataListActual.Count > 0)
                 LoadStartComments();
+            else
+                loadMoreCommentButton.gameObject.SetActive(false);
         });
     }
 

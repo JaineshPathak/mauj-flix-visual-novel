@@ -16,4 +16,9 @@
                                                                     "Dialogue_TutorialSay_YPos",
                                                                     "Dialogue_NarrativeSay_YPos",
                                                                     "Dialogue_NarrativeBlackSay_YPos"};
+
+    public static readonly string socialLinkFB = "Social_Link_FB";
+    public static readonly string socialLinkInsta = "Social_Link_Insta";
+    public static readonly string socialLinkWhatsapp = "Social_Link_Whatsapp";
+    public static readonly string socialLinkTelegram = "Social_Link_Telegram";
 }

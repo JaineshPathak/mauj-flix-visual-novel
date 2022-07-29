@@ -7,6 +7,11 @@ public class UIEpisodeItem : MonoBehaviour
 {
     public string episodeString = "एपिसोड";
     public TextMeshProUGUI episodeNumberText;
+
+    [Space(15)]
+
+    public TextMeshProUGUI episodeDescriptionText;
+    public CharReplacerHindi episodeHindiFixer;
     //public Text episodeNumberText;
 
     [Space(15)]
@@ -45,6 +50,11 @@ public class UIEpisodeItem : MonoBehaviour
         //episodeNumberText.text = episodeString + " " + num;
         episodeNumber = num;
         episodeNumberText.text =  num.ToString();
+
+        if (!string.IsNullOrEmpty(_storyItem.storyEpisodesDescriptions[num - 1]))                    
+            episodeDescriptionText.text = episodeHindiFixer.GetFixedText(_storyItem.storyEpisodesDescriptions[num - 1]);        
+        else
+            episodeDescriptionText.gameObject.SetActive(false);
 
         episodeKey = _episodeKey;
         episodeFileName = _episodeFileName;

@@ -33,6 +33,7 @@ public class StoriesDBItem
     public string storyProgressFileName;
     
     public string[] storyEpisodesKeys;
+    public string[] storyEpisodesDescriptions;
 
     public string[] storyBranchEpisodesKeys;
 }
