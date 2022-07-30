@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using TMPro;
 using underDOGS.SDKEvents;
+using Firebase.RemoteConfig;
 
 public class UIEpisodeItem : MonoBehaviour
 {
@@ -51,10 +52,18 @@ public class UIEpisodeItem : MonoBehaviour
         episodeNumber = num;
         episodeNumberText.text =  num.ToString();
 
-        if (!string.IsNullOrEmpty(_storyItem.storyEpisodesDescriptions[num - 1]))                    
-            episodeDescriptionText.text = episodeHindiFixer.GetFixedText(_storyItem.storyEpisodesDescriptions[num - 1]);        
-        else
-            episodeDescriptionText.gameObject.SetActive(false);
+        if(FirebaseRemoteConfig.DefaultInstance != null)
+        {
+            if(FirebaseRemoteConfig.DefaultInstance.GetValue(DataPaths.m_ShortDescriptionStatus).BooleanValue)
+            {
+                if (!string.IsNullOrEmpty(_storyItem.storyEpisodesDescriptions[num - 1]))
+                    episodeDescriptionText.text = episodeHindiFixer.GetFixedText(_storyItem.storyEpisodesDescriptions[num - 1]);
+                else
+                    episodeDescriptionText.gameObject.SetActive(false);
+            }
+            else
+                episodeDescriptionText.gameObject.SetActive(false);
+        }        
 
         episodeKey = _episodeKey;
         episodeFileName = _episodeFileName;

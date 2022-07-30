@@ -21,4 +21,7 @@
     public static readonly string socialLinkInsta = "Social_Link_Insta";
     public static readonly string socialLinkWhatsapp = "Social_Link_Whatsapp";
     public static readonly string socialLinkTelegram = "Social_Link_Telegram";
+
+    public static readonly string m_UICommentsSectionStatus = "UI_CommentsSection_Status";
+    public static readonly string m_ShortDescriptionStatus = "UI_ShortDesc_Status";
 }

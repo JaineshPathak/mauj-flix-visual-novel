@@ -1,11 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.U2D;
 using TMPro;
 using underDOGS.SDKEvents;
-using System.Linq;
 using Firebase.RemoteConfig;
 using NestedScroll.Core;
 using NestedScroll.ScrollElement;
@@ -123,10 +122,11 @@ public class UIStoriesDetailsPanel : MonoBehaviour
 
     private RectTransform episodesContainerRect;
     private RectTransform commentsSectionRect;
+    
+    private static WaitForSeconds updateDelay = new WaitForSeconds(0.05f);
 
     public static event Action<string> OnStoryLiked;
     public static event Action<string> OnStoryUnliked;
-
 
     private void Awake()
     {
@@ -212,10 +212,29 @@ public class UIStoriesDetailsPanel : MonoBehaviour
         commentsSectionText.color = Color.Lerp(sectionTextOnColor, sectionTextOffColor, 1f - sectionScrollbar.value);
     }
 
-    private void Update()
+    private IEnumerator UpdateRoutine()
     {
-        LerpSectionTextColor();
+        while(true)
+        {
+            if ((FirebaseRemoteConfig.DefaultInstance != null) && FirebaseRemoteConfig.DefaultInstance.GetValue(DataPaths.m_UICommentsSectionStatus).BooleanValue)
+                LerpSectionTextColor();
+
+            yield return updateDelay;
+        }
     }
+
+    /*private void Update()
+    {
+        if((FirebaseRemoteConfig.DefaultInstance != null) && FirebaseRemoteConfig.DefaultInstance.GetValue(DataPaths.m_UICommentsSectionStatus).BooleanValue)
+            LerpSectionTextColor();
+        else if(!commentsSectionDisabled)
+        {
+            episodesSectionText.color = sectionTextOnColor;
+            episodesSectionBtn.interactable = false;
+
+            commentsSectionDisabled = true;
+        }
+    }*/
 
     private void OnEnable()
     {
@@ -348,6 +367,35 @@ public class UIStoriesDetailsPanel : MonoBehaviour
                     blurMaskLayer.material = null;
             }
         }*/
+
+        if( (FirebaseRemoteConfig.DefaultInstance != null) && commentsSection != null && commentsSectionBtn != null)
+        {
+            if(FirebaseRemoteConfig.DefaultInstance.GetValue(DataPaths.m_UICommentsSectionStatus).BooleanValue)
+            {
+                commentsSection.gameObject.SetActive(true);
+                commentsSectionBtn.gameObject.SetActive(true);
+
+                StartCoroutine("UpdateRoutine");
+            }
+            else
+            {
+                commentsSection.gameObject.SetActive(false);
+                commentsSectionBtn.gameObject.SetActive(false);
+
+                episodesSectionText.color = sectionTextOnColor;
+                episodesSectionBtn.interactable = false;
+                episodesSectionBtn.GetComponent<UIButtonClicker>().enabled = false;
+            }
+        }
+        else
+        {
+            commentsSection.gameObject.SetActive(false);
+            commentsSectionBtn.gameObject.SetActive(false);
+
+            episodesSectionText.color = sectionTextOnColor;
+            episodesSectionBtn.interactable = false;
+            episodesSectionBtn.GetComponent<UIButtonClicker>().enabled = false;
+        }
     }
 
     /*private void Update()
