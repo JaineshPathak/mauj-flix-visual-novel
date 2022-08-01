@@ -194,7 +194,7 @@ public class GameController : MonoBehaviourSingleton<GameController>
                 episodeData.episodeAssetKey = storiesDBItemLoaded.storyEpisodesKeys[i];
                 episodeData.isFinished = false;
 
-                if (devMode)
+                if ( (UserControl.instance != null) && UserControl.instance.AdminMode)
                     episodeData.isUnlocked = true;
                 else
                     episodeData.isUnlocked = (i == 0) ? true : false;

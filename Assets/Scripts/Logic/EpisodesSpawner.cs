@@ -92,6 +92,8 @@ public class EpisodesSpawner : MonoBehaviourSingletonPersistent<EpisodesSpawner>
     public static event Action<SpriteAtlas> OnBackgroundAtlasLoaded;
     public static event Action<SpriteAtlas> OnNextEpsAtlasLoaded;
 
+    public static event Action<EpisodesHandler> OnEpisodeLoaded;
+
     private StoriesDB storiesDB;
 
     private AsyncOperationHandle<GameObject> atlasDBHandle;
@@ -512,6 +514,9 @@ public class EpisodesSpawner : MonoBehaviourSingletonPersistent<EpisodesSpawner>
             currentEpisodePrefab = Instantiate(episodeLoadHandle.Result);
             episodesHandler = currentEpisodePrefab.GetComponent<EpisodesHandler>();
             episodesHandler.Init(this);
+
+            if(episodesHandler)
+                OnEpisodeLoaded?.Invoke(episodesHandler);
         }
     }
 

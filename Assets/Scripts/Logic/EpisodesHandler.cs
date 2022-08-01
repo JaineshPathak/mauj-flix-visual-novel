@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
@@ -35,7 +36,7 @@ public class EpisodesHandler : MonoBehaviour
     private EpisodeData episodeData;
     [HideInInspector] public EpisodeData NextEpisodeData;
 
-    private MusicManager musicManager;
+    private MusicManager musicManager;    
 
 #if UNITY_EDITOR
     private void OnValidate()

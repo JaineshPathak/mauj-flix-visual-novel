@@ -68,8 +68,8 @@ public class UITopPanel : MonoBehaviour
             FirebaseFirestoreOffline.instance.RegisterTicketAmountText(ticketsText);
         }
 
-        if (GameController.instance != null && devModeIcon)
-            devModeIcon.gameObject.SetActive(GameController.instance.DevMode);
+        if (UserControl.instance != null && devModeIcon)
+            devModeIcon.gameObject.SetActive(UserControl.instance.AdminMode);
 
         if (UserControl.instance != null)
             adminModeIcon.SetActive(UserControl.instance.AdminMode);

@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Fungus;
 using TMPro;
 
 public class EpisodeMenuChoiceButton : MonoBehaviour
 {
     [HideInInspector] public EpisodesTesting episodesTesting;
+    [HideInInspector] public AdminTestTools adminTesting;
 
     public Block myTargetBlock;
     public TextMeshProUGUI choicebuttonText;
@@ -14,9 +13,13 @@ public class EpisodeMenuChoiceButton : MonoBehaviour
 
     public void OnMenuChoiceClicked()
     {
-        if (episodesTesting == null || myTargetBlock == null)
+        if (myTargetBlock == null)
             return;
 
-        episodesTesting.ExecuteMenuChoice(myTargetBlock);        
+        if(episodesTesting != null)
+            episodesTesting.ExecuteMenuChoice(myTargetBlock);
+
+        if(adminTesting != null)
+            adminTesting.ExecuteMenuChoice(myTargetBlock);
     }
 }

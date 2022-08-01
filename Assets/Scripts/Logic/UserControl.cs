@@ -5,6 +5,11 @@ using UnityEngine;
 public class UserControl : MonoBehaviourSingletonPersistent<UserControl>
 {
     [SerializeField] private bool adminMode = false;
+
+#if UNITY_EDITOR
+    [SerializeField] private bool editorAdminMode = true;
+#endif
+
     public bool AdminMode
     {
         get { return adminMode; }
@@ -16,7 +21,7 @@ public class UserControl : MonoBehaviourSingletonPersistent<UserControl>
         yield return new WaitForSeconds(2f);
 
 #if UNITY_EDITOR
-        adminMode = true;
+        adminMode = editorAdminMode;
 #elif UNITY_ANDROID && !UNITY_EDITOR
         if(FirebaseRemoteConfigHandler.instance != null && IronSource.Agent != null)
         {
