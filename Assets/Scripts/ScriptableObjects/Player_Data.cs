@@ -7,6 +7,7 @@ public class Player_Data : ScriptableObject
     public bool hasRatedGame;
     public bool hasGivenGenderType;
     public int genderType;      //0 = Male, 1 - Female
+    public bool soundStatus = true;
 
     [Header("Liked Stories Names")]
     [SerializeField] private List<string> likedStories = new List<string>();
@@ -176,6 +177,8 @@ public class Player_Data : ScriptableObject
 
         hasGivenGenderType = false;
         genderType = 0;
+
+        soundStatus = true;
 
         likedStories.Clear();
         storiesStartedList.Clear();

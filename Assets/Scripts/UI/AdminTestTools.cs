@@ -63,7 +63,7 @@ public class AdminTestTools : MonoBehaviour
         if (testToolsMainButton)
         {
             testToolsMainButton.gameObject.SetActive(false);
-            if (UserControl.instance.AdminMode)            
+            if ((UserControl.instance != null) && UserControl.instance.AdminMode)
                 testToolsMainButton.onClick.AddListener(ShowHideTestingToolsPanel);            
             else
                 testToolsMainButton.gameObject.SetActive(false);

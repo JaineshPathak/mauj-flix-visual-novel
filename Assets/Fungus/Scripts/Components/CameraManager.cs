@@ -53,6 +53,19 @@ namespace Fungus
         };
         
         protected Dictionary<string, CameraView> storedViews = new Dictionary<string, CameraView>();
+
+        //StoryPix modified from here
+        private bool cameraIsMoving;
+        public bool CameraIsMoving { get { return cameraIsMoving; } set { cameraIsMoving = value; } }
+        
+        private bool cameraIsRotating;
+        public bool CameraIsRotating { get { return cameraIsRotating; } set { cameraIsRotating = value; } }
+        
+        private bool cameraIsFading;
+        public bool CameraIsFading { get { return cameraIsFading; } set { cameraIsFading = value; } }
+        
+        private bool cameraIsZooming;
+        public bool CameraIsZooming { get { return cameraIsZooming; } set { cameraIsZooming = value; } }
         
         protected virtual void OnGUI()
         {
@@ -221,17 +234,25 @@ namespace Fungus
             {
                 fadeAlpha = targetAlpha;
                 if (fadeAction != null) fadeAction();
+
+                CameraIsFading = false;
             }
             else
             {
                 fadeTween = LeanTween.value(fadeAlpha, targetAlpha, fadeDuration)
                     .setEase(leanTweenType)
-                    .setOnUpdate((x) => fadeAlpha = x)
+                    .setOnUpdate((x) => 
+                    { 
+                        fadeAlpha = x;
+                        CameraIsFading = true;
+                    })
                     .setOnComplete(() =>
                     {
                         fadeAlpha = targetAlpha;
                         if (fadeAction != null) fadeAction();
                         fadeTween = null;
+
+                        CameraIsFading = false;
                     });
             }
         }
@@ -270,7 +291,7 @@ namespace Fungus
                 Fade(0f, inDuration, delegate {
                     if (fadeAction != null)
                     {
-                        fadeAction();
+                        fadeAction();                        
                     }
                 }, fadeType);
             }, fadeType);
@@ -345,35 +366,47 @@ namespace Fungus
 
                 if (arriveAction != null)
                 {
-                    arriveAction();
+                    arriveAction();                    
                 }
             }
             else
             {
                 sizeTween = LeanTween.value(camera.orthographicSize, targetSize, duration)
                     .setEase(sizeTweenType)
-                    .setOnUpdate(x => camera.orthographicSize = x)
+                    .setOnUpdate(x => 
+                    { 
+                        camera.orthographicSize = x;
+                        CameraIsZooming = true;
+                    })
                     .setOnComplete(() =>
                     {
                         camera.orthographicSize = targetSize;
                         if (arriveAction != null) arriveAction();
                         sizeTween = null;
+
+                        CameraIsZooming = false;
                     });
 
                 camPosTween = LeanTween.move(camera.gameObject, targetPosition, duration)
                     .setEase(posTweenType)
+                    .setOnUpdate((float x) => CameraIsMoving = true)
                     .setOnComplete(() =>
                     {
                         camera.transform.position = targetPosition;
-                        camPosTween = null;
+                        camPosTween = null;    
+                        
+                        CameraIsMoving = false;
                     });
 
                 camRotTween = LeanTween.rotate(camera.gameObject, targetRotation.eulerAngles, duration)
                     .setEase(rotTweenType)
+                    .setOnUpdate((float f) => CameraIsRotating = true)
                     .setOnComplete(() =>
                     {
                         camera.transform.rotation = targetRotation;
                         camRotTween = null;
+
+                        CameraIsRotating = false;
                     });
             }
         }

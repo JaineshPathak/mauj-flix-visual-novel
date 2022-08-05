@@ -15,6 +15,8 @@ namespace Fungus
         Disabled,
         /// <summary> Click anywhere on screen to advance. </summary>
         ClickAnywhere,
+        /// <summary> Click anywhere on screen except specific UI Objects to advance. </summary>
+        ClickAnywhereExcept,
         /// <summary> Click anywhere on Say Dialog to advance. </summary>
         ClickOnDialog,
         /// <summary> Click on continue button to advance. </summary>
@@ -28,6 +30,7 @@ namespace Fungus
     {
         [Tooltip("Click to advance story")]
         [SerializeField] protected ClickMode clickMode;
+        [SerializeField] protected GameObject[] specificObjects;
 
         [Tooltip("Delay between consecutive clicks. Useful to prevent accidentally clicking through story.")]
         [SerializeField] protected float nextClickDelay = 0f;
@@ -115,6 +118,41 @@ namespace Fungus
                             SetNextLineFlag();
                         }
                     }
+                    break;
+                case ClickMode.ClickAnywhereExcept:
+
+                    if(specificObjects.Length > 0)
+                    {
+                        if(Input.GetMouseButtonDown(0))
+                        {
+                            bool overUI = false;
+                            for (int i = 0; i < specificObjects.Length; i++)
+                            {
+                                if (EventSystem.current.currentSelectedGameObject == specificObjects[i])
+                                {
+                                    overUI = true;
+                                    break;
+                                }
+                            }
+
+                            if(!overUI)
+                            {
+                                if (quitPopup == null)
+                                    quitPopup = FindObjectOfType<UIAskQuitPopup>();
+
+                                if (quitPopup != null)
+                                {
+                                    if (!quitPopup.isOn)
+                                        SetNextLineFlag();
+                                }
+                                else
+                                {
+                                    SetNextLineFlag();
+                                }
+                            }
+                        }
+                    }
+
                     break;
                 case ClickMode.ClickOnDialog:
                     if (dialogClickedFlag)

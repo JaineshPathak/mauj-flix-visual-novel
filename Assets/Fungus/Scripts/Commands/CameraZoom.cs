@@ -71,6 +71,9 @@ namespace Fungus
                     {
                         if(targetCamera != null)
                             targetCamera.orthographicSize = f;
+
+                        if (FungusManager.Instance != null && FungusManager.Instance.CameraManager != null)
+                            FungusManager.Instance.CameraManager.CameraIsZooming = true;
                     });
                 }
                 else
@@ -79,6 +82,9 @@ namespace Fungus
                     {
                         if(targetCamera != null)
                             targetCamera.orthographicSize = f;
+
+                        if (FungusManager.Instance != null && FungusManager.Instance.CameraManager != null)
+                            FungusManager.Instance.CameraManager.CameraIsZooming = true;
                     });
                 }                
             }
@@ -90,6 +96,9 @@ namespace Fungus
                     {
                         if (targetCamera != null)
                             targetCamera.fieldOfView = f;
+
+                        if (FungusManager.Instance != null && FungusManager.Instance.CameraManager != null)
+                            FungusManager.Instance.CameraManager.CameraIsZooming = true;
                     });
                 }
                 else
@@ -98,6 +107,9 @@ namespace Fungus
                     {
                         if (targetCamera != null)
                             targetCamera.fieldOfView = f;
+
+                        if (FungusManager.Instance != null && FungusManager.Instance.CameraManager != null)
+                            FungusManager.Instance.CameraManager.CameraIsZooming = true;
                     });
                 }                
             }
@@ -110,6 +122,9 @@ namespace Fungus
         {
             if (!waitUntilFinished)
                 return;
+
+            if (FungusManager.Instance != null && FungusManager.Instance.CameraManager != null)
+                FungusManager.Instance.CameraManager.CameraIsZooming = false;
 
             Continue();
         }
