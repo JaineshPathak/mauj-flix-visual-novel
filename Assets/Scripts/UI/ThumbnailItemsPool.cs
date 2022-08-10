@@ -71,7 +71,7 @@ public class ThumbnailItem
     internal GameObject GetThumbnailItem()
     {
         for (int i = 0; i < itemPrefabList.Count; i++)
-            if (!itemPrefabList[i].gameObject.activeSelf)
+            if ( (itemPrefabList[i] != null) && !itemPrefabList[i].gameObject.activeSelf)
                 return itemPrefabList[i].gameObject;
 
         return null;
@@ -93,8 +93,11 @@ public class ThumbnailItem
 
         for (int i = 0; i < itemPrefabList.Count; i++)
         {
-            itemPrefabList[i].gameObject.SetActive(false);
-            itemPrefabList[i].transform.parent = itemParent;
+            if(itemPrefabList[i] != null)
+            {
+                itemPrefabList[i].gameObject.SetActive(false);
+                itemPrefabList[i].transform.parent = itemParent;
+            }            
         }
     }
 

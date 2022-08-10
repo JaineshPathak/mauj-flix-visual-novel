@@ -36,11 +36,11 @@ public class UICharacterSelection : MonoBehaviourSingleton<UICharacterSelection>
     [Header("Debugging")]
     public int currentCharacterIndex;
     public EpisodesHandler episodesHandler;
-    public IntegerVariable integerVariableRef;    
+    public IntegerVariable integerVariableRef;
 
     private Action<int, Transform> callback;
 
-    private EpisodesSpawner episodesSpawner;
+    private EpisodesSpawner episodesSpawner;    
 
     private void OnValidate()
     {
@@ -195,6 +195,25 @@ public class UICharacterSelection : MonoBehaviourSingleton<UICharacterSelection>
     private void OnCharacterSubmit()
     {
         callback?.Invoke(currentCharacterIndex, diamondCostPanel);
+
+#if UNITY_EDITOR
+        if(UITopMenuButton.instance != null)
+        {
+            if (episodesHandler == null)
+                episodesHandler = FindObjectOfType<EpisodesHandler>();
+
+            if (episodesHandler != null && episodesHandler.EpisodeDataCurrent != null)
+            {
+                if(!episodesHandler.EpisodeDataCurrent.allowClothesChange)
+                {
+                    episodesHandler.EpisodeDataCurrent.allowClothesChange = true;
+                    episodesHandler.SaveStoryData();
+
+                    UITopMenuButton.instance.ChangeClothesButtonStatus = episodesHandler.EpisodeDataCurrent.allowClothesChange;
+                }
+            }
+        }
+#endif
         //HideSelectionScreen();
     }
 

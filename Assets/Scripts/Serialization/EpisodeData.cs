@@ -29,6 +29,9 @@ public class EpisodeData
 
     public bool isFinished;
     public bool isUnlocked = false;
+#if UNITY_EDITOR
+    public bool allowClothesChange;
+#endif
 
     public int currentBlocksTotal;
     public List<int> currentBlocksVisited = new List<int>();

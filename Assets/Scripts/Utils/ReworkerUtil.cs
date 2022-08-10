@@ -175,11 +175,11 @@ public class ReworkerUtil : MonoBehaviour
         {
             if ((sayCommand != null) && sayCommand.enabled && sayCommand.GetType() == typeof(Say))
             {
-                if (sayCommand.setSayDialog.transform.name.Equals("MFlixNarrativeScreenDialog"))
+                /*if (sayCommand.setSayDialog.transform.name.Equals("MFlixNarrativeScreenDialog") && sayCommand.setSayDialog != null)
                 {
-                    Debug.LogError("Reworker Util: NarrativeScreenDialog IGNORED!");
+                    Debug.Log("Reworker Util: NarrativeScreenDialog IGNORED!");
                     continue;
-                }
+                }*/
 
                 Block block = sayCommand.ParentBlock;
 

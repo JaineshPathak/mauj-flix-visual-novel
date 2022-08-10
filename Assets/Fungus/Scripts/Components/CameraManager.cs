@@ -54,7 +54,8 @@ namespace Fungus
         
         protected Dictionary<string, CameraView> storedViews = new Dictionary<string, CameraView>();
 
-        //StoryPix modified from here
+        //StoryPix modified from here, Added for UITopMenuButton script
+        //===============================================================================================================
         private bool cameraIsMoving;
         public bool CameraIsMoving { get { return cameraIsMoving; } set { cameraIsMoving = value; } }
         
@@ -66,7 +67,8 @@ namespace Fungus
         
         private bool cameraIsZooming;
         public bool CameraIsZooming { get { return cameraIsZooming; } set { cameraIsZooming = value; } }
-        
+        //===============================================================================================================
+
         protected virtual void OnGUI()
         {
             if (swipePanActive)

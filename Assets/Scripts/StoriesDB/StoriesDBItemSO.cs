@@ -156,17 +156,17 @@ public class StoriesDBItemSO : ScriptableObject
 
         item.storyEpisodesDescriptions = storyEpisodesDescriptions;
 
-        /*try
+        try
         {
             Array.Resize(ref item.storyBranchEpisodesKeys, this.storyEpisodesBranchkeys.Length);            
         }
         catch(NullReferenceException e)
         {
             Debug.LogError("Array Problem in: item.storyBranchEpisodesKeys + [" + e.Message + " - " + e.Source + "]");
-        }*/
+        }
 
         //item.storyBranchEpisodesKeys = new string[0];
-        if (storyEpisodesBranchkeys.Length > 0)
+        /*if (storyEpisodesBranchkeys.Length > 0)
         {
             Array.Resize(ref item.storyBranchEpisodesKeys, storyEpisodesBranchkeys.Length);
             for (int i = 0; i < storyEpisodesBranchkeys.Length; i++)
@@ -174,7 +174,7 @@ public class StoriesDBItemSO : ScriptableObject
                 if(storyEpisodesBranchkeys[i] != null)
                     item.storyBranchEpisodesKeys[i] = storyEpisodesBranchkeys[i].RuntimeKey.ToString();
             }
-        }
+        }*/
 
         return item;
     }

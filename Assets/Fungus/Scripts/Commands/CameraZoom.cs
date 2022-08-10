@@ -72,8 +72,10 @@ namespace Fungus
                         if(targetCamera != null)
                             targetCamera.orthographicSize = f;
 
+#if UNITY_EDITOR
                         if (FungusManager.Instance != null && FungusManager.Instance.CameraManager != null)
                             FungusManager.Instance.CameraManager.CameraIsZooming = true;
+#endif
                     });
                 }
                 else
@@ -82,9 +84,10 @@ namespace Fungus
                     {
                         if(targetCamera != null)
                             targetCamera.orthographicSize = f;
-
+#if UNITY_EDITOR
                         if (FungusManager.Instance != null && FungusManager.Instance.CameraManager != null)
                             FungusManager.Instance.CameraManager.CameraIsZooming = true;
+#endif
                     });
                 }                
             }
@@ -97,8 +100,10 @@ namespace Fungus
                         if (targetCamera != null)
                             targetCamera.fieldOfView = f;
 
+#if UNITY_EDITOR
                         if (FungusManager.Instance != null && FungusManager.Instance.CameraManager != null)
                             FungusManager.Instance.CameraManager.CameraIsZooming = true;
+#endif
                     });
                 }
                 else
@@ -108,8 +113,10 @@ namespace Fungus
                         if (targetCamera != null)
                             targetCamera.fieldOfView = f;
 
+#if UNITY_EDITOR
                         if (FungusManager.Instance != null && FungusManager.Instance.CameraManager != null)
                             FungusManager.Instance.CameraManager.CameraIsZooming = true;
+#endif
                     });
                 }                
             }

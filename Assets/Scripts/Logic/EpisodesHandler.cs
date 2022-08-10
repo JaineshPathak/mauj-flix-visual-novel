@@ -36,7 +36,11 @@ public class EpisodesHandler : MonoBehaviour
     private EpisodeData episodeData;
     [HideInInspector] public EpisodeData NextEpisodeData;
 
-    private MusicManager musicManager;    
+#if UNITY_EDITOR
+    public EpisodeData EpisodeDataCurrent { get { return episodeData; } }
+#endif
+
+    private MusicManager musicManager;
 
 #if UNITY_EDITOR
     private void OnValidate()
@@ -247,7 +251,12 @@ public class EpisodesHandler : MonoBehaviour
             blockToExecute = episodeFlowchart.FindBlockFromItemId(episodeData.currentBlockID);
             episodeFlowchart.ExecuteBlock(blockToExecute, episodeData.currentCommandID);
         }
-        
+
+#if UNITY_EDITOR
+        if (UITopMenuButton.instance != null && episodeData != null)
+            UITopMenuButton.instance.ChangeClothesButtonStatus = episodeData.allowClothesChange;
+#endif
+
         StartCoroutine("UpdateRoutine");
 
         //Play Last saved music index

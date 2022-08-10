@@ -20,6 +20,11 @@ public class UITopMenuButton : MonoBehaviourSingleton<UITopMenuButton>
     [SerializeField] private Sprite soundOnSprite;
     [SerializeField] private Sprite soundOffSprite;
 
+    public bool ChangeClothesButtonStatus
+    {        
+        set { changeClothesButton.gameObject.SetActive(value); }
+    }
+
     //private LTSeq showUpSeq;
     //private int showUpSeqId = -1;
 
@@ -33,6 +38,8 @@ public class UITopMenuButton : MonoBehaviourSingleton<UITopMenuButton>
     private bool isBusyBackground;
     private bool buttonsAreShown;
     private bool buttonsWereShown;
+
+    private EpisodesHandler episodesHandler;
 
     private void OnEnable()
     {
@@ -196,6 +203,16 @@ public class UITopMenuButton : MonoBehaviourSingleton<UITopMenuButton>
 
     private void OnClothesChangeButton()
     {
+        if (episodesHandler == null)
+            episodesHandler = FindObjectOfType<EpisodesHandler>();
+
+        if (UICharacterSelection.instance == null)
+            return;
+
+        if (EpisodesSpawner.instance == null)
+            return;
+        else if (EpisodesSpawner.instance != null && EpisodesSpawner.instance.storiesDBItem != null)
+            return;
     }
 
     private void OnSoundsOnOffButton()
