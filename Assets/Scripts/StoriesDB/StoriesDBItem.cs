@@ -6,6 +6,9 @@ public class StoriesDBItem
     public bool isNewStory;
     public bool isStoryEnabled = true;
     public bool isShortStory;
+#if UNITY_EDITOR
+    public bool allowWardrobeChange;
+#endif
 
     public string storyTitle;
     public string storyTitleEnglish;

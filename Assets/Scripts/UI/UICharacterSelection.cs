@@ -197,8 +197,15 @@ public class UICharacterSelection : MonoBehaviourSingleton<UICharacterSelection>
         callback?.Invoke(currentCharacterIndex, diamondCostPanel);
 
 #if UNITY_EDITOR
-        if(UITopMenuButton.instance != null)
+        if(UITopMenuButton.instance != null && EpisodesSpawner.instance != null)
         {
+            //Disable to Wardrobe button if not allowed. (This is used for old Stories)
+            if (EpisodesSpawner.instance.storiesDBItem == null || !EpisodesSpawner.instance.storiesDBItem.allowWardrobeChange)
+            {
+                UITopMenuButton.instance.WardrobeButtonStatus = false;
+                return;
+            }
+
             if (episodesHandler == null)
                 episodesHandler = FindObjectOfType<EpisodesHandler>();
 
@@ -209,7 +216,7 @@ public class UICharacterSelection : MonoBehaviourSingleton<UICharacterSelection>
                     episodesHandler.EpisodeDataCurrent.allowClothesChange = true;
                     episodesHandler.SaveStoryData();
 
-                    UITopMenuButton.instance.ChangeClothesButtonStatus = episodesHandler.EpisodeDataCurrent.allowClothesChange;
+                    UITopMenuButton.instance.WardrobeButtonStatus = episodesHandler.EpisodeDataCurrent.allowClothesChange;
                 }
             }
         }

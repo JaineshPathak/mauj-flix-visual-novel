@@ -1,0 +1,48 @@
+- MFlixCharacter.cs																(Higher layer will overlap)
+	- List<Sprite> bodySkeleton		//(Normally in Skin; without clothes)	->	Layer 0
+	- List<Sprite> bodyClothes		//The Clothes Sprite					->	Layer 1
+	- List<Sprite> face				//Face Sprite							->	Layer 2
+	- List<Sprite> hairstyle		//Hairstyle Sprite						->	Layer 3
+
+	- List<string> bodySkeletonNames;
+	- List<string> bodyClothesNames;
+	- List<string> faceNames;
+	- List<string> hairstyleNames;
+
+- MFlixCharacterHolder.cs
+	- Sprite bodySprite;
+	- Sprite bodyClothes;
+	- Sprite face;
+	- Sprite hair
+
+	Heirarchy Object Order:
+		- [CharacterName]
+			- [Emotion name by face sprite]		(This is will get active/inactive)
+				- Image (bodySprite)
+				- Image (bodyClothes)
+				- Image (face)
+				- Image (hair)
+			- [Emotion name by face sprite]
+				- Image (bodySprite)
+				- Image (bodyClothes)
+				- Image (face)
+				- Image (hair)
+			- [Emotion name by face sprite]
+				- Image (bodySprite)
+				- Image (bodyClothes)
+				- Image (face)
+				- Image (hair)
+			- Etc
+
+- MFlixPortrait.cs (typeof command) inherits from Portrait
+	- string bodySpriteName
+	- string bodyClothesSpriteName
+	- string faceSpriteName
+	- string hairSpriteName
+
+	OnEnter()
+	{
+		MFlixPortraitOptions = new MFlixPortraitOptions();
+
+		MFlixPortraitStage.RunMFlixPortrait();
+	}

@@ -15,6 +15,9 @@ public class StoriesDBItemSO : ScriptableObject
     public bool isStoryEnabled = true;
     public bool isShortStory;
 
+    [Header("Clothes Settings")]    
+    public bool allowWardrodeChange;
+
     [Header("Titles")]
     public string storyTitle;
     public string storyTitleEnglish;
@@ -112,36 +115,50 @@ public class StoriesDBItemSO : ScriptableObject
     {
         StoriesDBItem item = new StoriesDBItem();
 
+        //Reworked?
         item.isReworked = isReworked;
 
+        //Type of Story
         item.isNewStory = isNewStory;
         item.isStoryEnabled = isStoryEnabled;
         item.isShortStory = isShortStory;
 
+        //Clothes Change allowed? v0.5.1 onwards
+        item.allowWardrobeChange = allowWardrodeChange;
+
+        //Title - Hindi and English
         item.storyTitle = storyTitle;
         item.storyTitleEnglish = storyTitleEnglish;
 
+        //Story Description
         item.storyDescription = storyDescription;
 
+        //Story Blocks Count
         item.storyTotalBlocksCount = storyTotalBlocksCount;
 
+        //Atlas Key (if isReworked = true)
         item.atlasDBKey = (atlasDBKey != null) ? atlasDBKey.RuntimeKey.ToString() : string.Empty;
 
+        //Sounds Bucket (if isReworked = true)
         item.soundsBucketKey = (soundsBucketKey != null) ? soundsBucketKey.RuntimeKey.ToString() : string.Empty;
 
+        //Thumbnails Key
         item.storyThumbnailSmallKey = (storyThumbnailSmallKey != null) ? storyThumbnailSmallKey.RuntimeKey.ToString() : string.Empty;
         item.storyThumbnailBigKey = (storyThumbnailBigKey != null) ? storyThumbnailBigKey.RuntimeKey.ToString() : string.Empty;
         item.storyThumbnailLoadingKey = (storyThumbnailLoadingKey != null) ? storyThumbnailLoadingKey.RuntimeKey.ToString() : string.Empty;
         item.storyTitleImageKey = (storyTitleImageKey != null) ? storyTitleImageKey.RuntimeKey.ToString() : string.Empty;
 
+        //Thumbnails String names
         item.storyThumbnailSmallName = storyThumbnailSmallName;
         item.storyThumbnailBigName = storyThumbnailBigName;
         item.storyThumbnailLoadingName = storyThumbnailLoadingName;
         item.storyThumbnailTitleName = storyThumbnailTitleName;
         item.storyThumbnailTrendingName = storyThumbnailTrendingName;
 
+        //Flowchart Key
         item.storyFlowchartKey = (storyFlowchartKey != null) ? storyFlowchartKey.RuntimeKey.ToString() : string.Empty;
 
+        //Progress filename;
         item.storyProgressFileName = storyProgressFileName;
 
         //item.storyEpisodesKeys = storyEpisodesKeys;
@@ -156,17 +173,17 @@ public class StoriesDBItemSO : ScriptableObject
 
         item.storyEpisodesDescriptions = storyEpisodesDescriptions;
 
-        try
+        /*try
         {
             Array.Resize(ref item.storyBranchEpisodesKeys, this.storyEpisodesBranchkeys.Length);            
         }
         catch(NullReferenceException e)
         {
             Debug.LogError("Array Problem in: item.storyBranchEpisodesKeys + [" + e.Message + " - " + e.Source + "]");
-        }
+        }*/
 
         //item.storyBranchEpisodesKeys = new string[0];
-        /*if (storyEpisodesBranchkeys.Length > 0)
+        if (storyEpisodesBranchkeys.Length > 0)
         {
             Array.Resize(ref item.storyBranchEpisodesKeys, storyEpisodesBranchkeys.Length);
             for (int i = 0; i < storyEpisodesBranchkeys.Length; i++)
@@ -174,7 +191,7 @@ public class StoriesDBItemSO : ScriptableObject
                 if(storyEpisodesBranchkeys[i] != null)
                     item.storyBranchEpisodesKeys[i] = storyEpisodesBranchkeys[i].RuntimeKey.ToString();
             }
-        }*/
+        }
 
         return item;
     }
@@ -190,6 +207,8 @@ public class StoriesDBItemSOEditor : Editor
     private SerializedProperty isNewStorySerial;
     private SerializedProperty storyEnabledSerial;
     private SerializedProperty storyTypeSerial;
+
+    private SerializedProperty allowWardrodeChangeSerial;
 
     private SerializedProperty storyTitleSerial;
     private SerializedProperty storyTitleEnglishSerial;
@@ -247,6 +266,8 @@ public class StoriesDBItemSOEditor : Editor
         storyEnabledSerial = serializedObject.FindProperty("isStoryEnabled");
         storyTypeSerial = serializedObject.FindProperty("isShortStory");
 
+        allowWardrodeChangeSerial = serializedObject.FindProperty("allowWardrodeChange");
+
         storyTitleSerial = serializedObject.FindProperty("storyTitle");
         storyTitleEnglishSerial = serializedObject.FindProperty("storyTitleEnglish");
 
@@ -289,6 +310,8 @@ public class StoriesDBItemSOEditor : Editor
         AddPropertyLabel(isNewStorySerial, "Is New Story", "Check if Story is new so in order to add 'New' stamp banner in Thumbnails");
         AddPropertyLabel(storyEnabledSerial, "Story Enabled", "Is Story Enabled? Helpful when you want to disable a story for any changes or issues found.");
         AddPropertyLabel(storyTypeSerial, "Short Story", "Is it a short story? False: Normal 9-10 episodes story");
+        
+        AddPropertyLabel(allowWardrodeChangeSerial, "Allow Wardrobe Change", "Allow Wardrobe Change? From v0.5.1 onwards, players can select different amount of clothes");
 
         AddPropertyLabel(storyTitleSerial, "Story Title", "Story Title in Hindi or others (except English)");
         AddPropertyLabel(storyTitleEnglishSerial, "Story Title English", "Story Title in English only");

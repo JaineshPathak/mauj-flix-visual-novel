@@ -12,7 +12,7 @@ public class UITopMenuButton : MonoBehaviourSingleton<UITopMenuButton>
     [SerializeField] private float totalShowDelay = 4f;
 
     [Header("Buttons")]
-    [SerializeField] private Button changeClothesButton;
+    [SerializeField] private Button wardrobeButton;
     [SerializeField] private Button soundsOnOffButton;
 
     [Header("Sounds")]
@@ -20,9 +20,9 @@ public class UITopMenuButton : MonoBehaviourSingleton<UITopMenuButton>
     [SerializeField] private Sprite soundOnSprite;
     [SerializeField] private Sprite soundOffSprite;
 
-    public bool ChangeClothesButtonStatus
+    public bool WardrobeButtonStatus
     {        
-        set { changeClothesButton.gameObject.SetActive(value); }
+        set { wardrobeButton.gameObject.SetActive(value); }
     }
 
     //private LTSeq showUpSeq;
@@ -87,10 +87,10 @@ public class UITopMenuButton : MonoBehaviourSingleton<UITopMenuButton>
         if (FungusManager.Instance != null)
             cameraManager = FungusManager.Instance.CameraManager;
 
-        if (changeClothesButton)
+        if (wardrobeButton)
         {
-            changeClothesButton.onClick.AddListener(OnClothesChangeButton);
-            changeClothesRect = changeClothesButton.GetComponent<RectTransform>();
+            wardrobeButton.onClick.AddListener(OnWardrobeButton);
+            changeClothesRect = wardrobeButton.GetComponent<RectTransform>();
             changeClothesRect.anchoredPosition = new Vector2(-140f, changeClothesRect.anchoredPosition.y);
         }
 
@@ -112,7 +112,7 @@ public class UITopMenuButton : MonoBehaviourSingleton<UITopMenuButton>
 
     private void OnWriterState(Writer writer, WriterState writerState)
     {
-        currentWriter = writer;        
+        currentWriter = writer;
     }
 
     private void Update()
@@ -167,7 +167,7 @@ public class UITopMenuButton : MonoBehaviourSingleton<UITopMenuButton>
         //soundsOnOffRect.anchoredPosition = new Vector2(140f, changeClothesRect.anchoredPosition.y);
 
 #if UNITY_EDITOR
-        Debug.Log("Top Buttons: HIDE!");
+        Debug.Log("Top Buttons: HIDDEN!");
 #endif
 
         //Move Offscreen
@@ -201,7 +201,7 @@ public class UITopMenuButton : MonoBehaviourSingleton<UITopMenuButton>
         LeanTween.moveX(soundsOnOffRect, -140f, 0.4f).setEaseOutQuint();
     }
 
-    private void OnClothesChangeButton()
+    private void OnWardrobeButton()
     {
         if (episodesHandler == null)
             episodesHandler = FindObjectOfType<EpisodesHandler>();
@@ -211,7 +211,7 @@ public class UITopMenuButton : MonoBehaviourSingleton<UITopMenuButton>
 
         if (EpisodesSpawner.instance == null)
             return;
-        else if (EpisodesSpawner.instance != null && EpisodesSpawner.instance.storiesDBItem != null)
+        else if (EpisodesSpawner.instance != null && (EpisodesSpawner.instance.storiesDBItem == null || !EpisodesSpawner.instance.storiesDBItem.allowWardrobeChange))
             return;
     }
 

@@ -97,7 +97,7 @@ namespace Fungus.EditorUtils
                     t._Character.Portraits.Count <= 0 )   // Character has at least one portrait
                 {
                     EditorGUILayout.HelpBox("This character has no portraits. Please add portraits to the character's prefab before using this command.", MessageType.Error);
-                    showOptionalFields = false; 
+                    showOptionalFields = true; 
                 }
                 if (t._Stage == null)            // If default portrait stage selected
                 {
@@ -109,7 +109,7 @@ namespace Fungus.EditorUtils
                 if (s == null)
                 {
                     EditorGUILayout.HelpBox("No portrait stage has been set.", MessageType.Error);
-                    showOptionalFields = false; 
+                    showOptionalFields = true; 
                 }
             }
             if (t.Display != DisplayType.None && t._Character != null && showOptionalFields) 

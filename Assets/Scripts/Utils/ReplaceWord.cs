@@ -29,12 +29,12 @@ public class ReplaceWord : MonoBehaviour
         {
             if(sayCmd != null && sayCmd.enabled)
             {
-                string descOld = sayCmd.Description;
+                string descOld = sayCmd.StoryText;
                 string descNew = descOld;
                 if(descOld.Contains(originalWord))
                 {
                     descNew = descNew.Replace(originalWord, newWord);
-                    sayCmd.Description = descNew;
+                    sayCmd.StoryText = descNew;
                     Debug.Log($"Found and Replaced Old Word '{originalWord}' with New Word '{newWord}'");
                 }
             }
