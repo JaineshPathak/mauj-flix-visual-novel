@@ -124,7 +124,7 @@ public class StoriesDBItemSO : ScriptableObject
         item.isShortStory = isShortStory;
 
         //Clothes Change allowed? v0.5.1 onwards
-        item.allowWardrobeChange = allowWardrodeChange;
+        //item.allowWardrobeChange = allowWardrodeChange;
 
         //Title - Hindi and English
         item.storyTitle = storyTitle;
@@ -183,9 +183,9 @@ public class StoriesDBItemSO : ScriptableObject
         }*/
 
         //item.storyBranchEpisodesKeys = new string[0];
+        Array.Resize(ref item.storyBranchEpisodesKeys, storyEpisodesBranchkeys.Length);
         if (storyEpisodesBranchkeys.Length > 0)
         {
-            Array.Resize(ref item.storyBranchEpisodesKeys, storyEpisodesBranchkeys.Length);
             for (int i = 0; i < storyEpisodesBranchkeys.Length; i++)
             {
                 if(storyEpisodesBranchkeys[i] != null)

@@ -200,11 +200,11 @@ public class UICharacterSelection : MonoBehaviourSingleton<UICharacterSelection>
         if(UITopMenuButton.instance != null && EpisodesSpawner.instance != null)
         {
             //Disable to Wardrobe button if not allowed. (This is used for old Stories)
-            if (EpisodesSpawner.instance.storiesDBItem == null || !EpisodesSpawner.instance.storiesDBItem.allowWardrobeChange)
+            /*if (EpisodesSpawner.instance.storiesDBItem == null || !EpisodesSpawner.instance.storiesDBItem.allowWardrobeChange)
             {
                 UITopMenuButton.instance.WardrobeButtonStatus = false;
                 return;
-            }
+            }*/
 
             if (episodesHandler == null)
                 episodesHandler = FindObjectOfType<EpisodesHandler>();

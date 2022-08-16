@@ -209,10 +209,12 @@ public class UITopMenuButton : MonoBehaviourSingleton<UITopMenuButton>
         if (UICharacterSelection.instance == null)
             return;
 
-        if (EpisodesSpawner.instance == null)
+#if UNITY_EDITOR
+        /*if (EpisodesSpawner.instance == null)
             return;
         else if (EpisodesSpawner.instance != null && (EpisodesSpawner.instance.storiesDBItem == null || !EpisodesSpawner.instance.storiesDBItem.allowWardrobeChange))
-            return;
+            return;*/
+#endif
     }
 
     private void OnSoundsOnOffButton()

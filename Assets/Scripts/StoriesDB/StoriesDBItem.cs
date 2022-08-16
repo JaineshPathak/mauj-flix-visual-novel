@@ -7,7 +7,7 @@ public class StoriesDBItem
     public bool isStoryEnabled = true;
     public bool isShortStory;
 #if UNITY_EDITOR
-    public bool allowWardrobeChange;
+    //public bool allowWardrobeChange;
 #endif
 
     public string storyTitle;

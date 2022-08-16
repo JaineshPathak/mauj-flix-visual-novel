@@ -253,13 +253,13 @@ public class EpisodesHandler : MonoBehaviour
         }
 
 #if UNITY_EDITOR
-        if (UITopMenuButton.instance != null && episodeData != null)
+        /*if (UITopMenuButton.instance != null && episodeData != null)
         {
             if (episodesSpawner.storiesDBItem.allowWardrobeChange)
                 UITopMenuButton.instance.WardrobeButtonStatus = episodeData.allowClothesChange;
             else
                 UITopMenuButton.instance.WardrobeButtonStatus = false;
-        }
+        }*/
 #endif
 
         StartCoroutine("UpdateRoutine");
