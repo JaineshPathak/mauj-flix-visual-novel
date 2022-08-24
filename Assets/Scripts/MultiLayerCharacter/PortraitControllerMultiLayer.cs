@@ -66,36 +66,36 @@ public class PortraitControllerMultiLayer : MonoBehaviour
         }*/
 
         // if no previous position, use default position
-        if (options.characterMultiLayer.State.position == null)
+        if (options.characterMultiLayer.PortraitMultiState.position == null)
         {
-            options.characterMultiLayer.State.position = stageMultiLayer.DefaultPosition.rectTransform;
+            options.characterMultiLayer.PortraitMultiState.position = stageMultiLayer.DefaultPosition.rectTransform;
         }
 
         // Selected "use previous position"
         if (options.toPosition == null)
         {
-            options.toPosition = options.characterMultiLayer.State.position;
+            options.toPosition = options.characterMultiLayer.PortraitMultiState.position;
         }
 
         if (options.replacedCharacterMultiLayer != null)
         {
             // if no previous position, use default position
-            if (options.replacedCharacterMultiLayer.State.position == null)
+            if (options.replacedCharacterMultiLayer.PortraitMultiState.position == null)
             {
-                options.replacedCharacterMultiLayer.State.position = stageMultiLayer.DefaultPosition.rectTransform;
+                options.replacedCharacterMultiLayer.PortraitMultiState.position = stageMultiLayer.DefaultPosition.rectTransform;
             }
         }
 
         // If swapping, use replaced character's position
         if (options.display == DisplayType.Replace)
         {
-            options.toPosition = options.replacedCharacterMultiLayer.State.position;
+            options.toPosition = options.replacedCharacterMultiLayer.PortraitMultiState.position;
         }
 
         // Selected "use previous position"
         if (options.fromPosition == null)
         {
-            options.fromPosition = options.characterMultiLayer.State.position;
+            options.fromPosition = options.characterMultiLayer.PortraitMultiState.position;
         }
 
         // if portrait not moving, use from position is same as to position
@@ -106,22 +106,22 @@ public class PortraitControllerMultiLayer : MonoBehaviour
 
         if (options.display == DisplayType.Hide)
         {
-            options.fromPosition = options.characterMultiLayer.State.position;
+            options.fromPosition = options.characterMultiLayer.PortraitMultiState.position;
         }
 
         // if no previous facing direction, use default facing direction
-        if (options.characterMultiLayer.State.facing == FacingDirection.None)
+        if (options.characterMultiLayer.PortraitMultiState.facing == FacingDirection.None)
         {
-            options.characterMultiLayer.State.facing = options.characterMultiLayer.PortraitsFace;
+            options.characterMultiLayer.PortraitMultiState.facing = options.characterMultiLayer.PortraitsFace;
         }
 
         // Selected "use previous facing direction"
         if (options.facing == FacingDirection.None)
         {
-            options.facing = options.characterMultiLayer.State.facing;
+            options.facing = options.characterMultiLayer.PortraitMultiState.facing;
         }
 
-        if (options.characterMultiLayer.State.portraitBaseBody == null)
+        if (options.characterMultiLayer.PortraitMultiState.portraitBaseBody == null)
         {
             CreatePortraitObject(options.characterMultiLayer, options.fadeDuration);
         }
@@ -131,7 +131,7 @@ public class PortraitControllerMultiLayer : MonoBehaviour
 
     protected virtual void CreatePortraitObject(CharacterMultiLayer character, float fadeDuration)
     {
-        if (character.State.holder == null)
+        if (character.PortraitMultiState.holder == null)
         {
             /*character.State.holder = new GameObject(character.name + " holder",
                                                typeof(RectTransform)
@@ -143,43 +143,43 @@ public class PortraitControllerMultiLayer : MonoBehaviour
             newHolder.transform.name = character.name + "-Multi-Holder";
             newHolder.portraitBaseBodyImage.sprite = character.PortraitBaseBody;
 
-            character.State.mainHolder = newHolder;
-            character.State.holder = newHolder.rectTransform;
-            character.State.portraitBaseBodyImage = newHolder.portraitBaseBodyImage;
+            character.PortraitMultiState.mainHolder = newHolder;
+            character.PortraitMultiState.holder = newHolder.rectTransform;
+            character.PortraitMultiState.portraitBaseBodyImage = newHolder.portraitBaseBodyImage;
 
             // Set it to be a child of the stage
-            character.State.holder.transform.SetParent(stageMultiLayer.PortraitCanvas.transform, false);
+            character.PortraitMultiState.holder.transform.SetParent(stageMultiLayer.PortraitCanvas.transform, false);
 
-            SetRectTransform(character.State.holder, stageMultiLayer.DefaultPosition.GetComponent<RectTransform>());
+            SetRectTransform(character.PortraitMultiState.holder, stageMultiLayer.DefaultPosition.GetComponent<RectTransform>());
         }
 
         //CLOTHES FIRST
-        if(character.State.allPortraitsClothes.Count == 0)
+        if(character.PortraitMultiState.allPortraitsClothes.Count == 0)
         {
             foreach(var clothesItem in character.PortraitClothes)
             {
                 if (clothesItem == null)
                     continue;
 
-                Image clothesImage = character.State.mainHolder.AddNewClothImage(clothesItem);
+                Image clothesImage = character.PortraitMultiState.mainHolder.AddNewClothImage(clothesItem);
                 clothesImage.gameObject.SetActive(false);
 
-                character.State.allPortraitsClothes.Add(clothesImage);
+                character.PortraitMultiState.allPortraitsClothes.Add(clothesImage);
             }
         }
 
         //FACES NEXT
-        if(character.State.allPortraitsFace.Count == 0)
+        if(character.PortraitMultiState.allPortraitsFace.Count == 0)
         {
             foreach (var faceItem in character.PortraitFaces)
             {
                 if (faceItem == null)
                     continue;
 
-                Image faceImage = character.State.mainHolder.AddNewFaceImage(faceItem);
+                Image faceImage = character.PortraitMultiState.mainHolder.AddNewFaceImage(faceItem);
                 faceImage.gameObject.SetActive(false);
 
-                character.State.allPortraitsFace.Add(faceImage);
+                character.PortraitMultiState.allPortraitsFace.Add(faceImage);
             }
         }
 
@@ -232,27 +232,27 @@ public class PortraitControllerMultiLayer : MonoBehaviour
 
     protected virtual void SetupPortrait(PortraitOptionsMultiLayer options)
     {
-        if (options.characterMultiLayer.State.holder == null)
+        if (options.characterMultiLayer.PortraitMultiState.holder == null)
             return;
 
-        SetRectTransform(options.characterMultiLayer.State.holder, options.fromPosition);
+        SetRectTransform(options.characterMultiLayer.PortraitMultiState.holder, options.fromPosition);
 
-        if (options.characterMultiLayer.State.facing != options.characterMultiLayer.PortraitsFace)
+        if (options.characterMultiLayer.PortraitMultiState.facing != options.characterMultiLayer.PortraitsFace)
         {
-            options.characterMultiLayer.State.holder.localScale = new Vector3(-1f, 1f, 1f);
+            options.characterMultiLayer.PortraitMultiState.holder.localScale = new Vector3(-1f, 1f, 1f);
         }
         else
         {
-            options.characterMultiLayer.State.holder.localScale = new Vector3(1f, 1f, 1f);
+            options.characterMultiLayer.PortraitMultiState.holder.localScale = new Vector3(1f, 1f, 1f);
         }
 
         if (options.facing != options.characterMultiLayer.PortraitsFace)
         {
-            options.characterMultiLayer.State.holder.localScale = new Vector3(-1f, 1f, 1f);
+            options.characterMultiLayer.PortraitMultiState.holder.localScale = new Vector3(-1f, 1f, 1f);
         }
         else
         {
-            options.characterMultiLayer.State.holder.localScale = new Vector3(1f, 1f, 1f);
+            options.characterMultiLayer.PortraitMultiState.holder.localScale = new Vector3(1f, 1f, 1f);
         }
     }
 
@@ -260,13 +260,13 @@ public class PortraitControllerMultiLayer : MonoBehaviour
     {
         CleanPortraitOptionsMult(options);
 
-        LeanTween.cancel(options.characterMultiLayer.State.holder.gameObject);
+        LeanTween.cancel(options.characterMultiLayer.PortraitMultiState.holder.gameObject);
 
         // LeanTween doesn't handle 0 duration properly
         float duration = (options.moveDuration > 0f) ? options.moveDuration : float.Epsilon;
 
         // LeanTween.move uses the anchoredPosition, so all position images must have the same anchor position
-        LeanTween.move(options.characterMultiLayer.State.holder.gameObject, options.toPosition.position, duration)
+        LeanTween.move(options.characterMultiLayer.PortraitMultiState.holder.gameObject, options.toPosition.position, duration)
             .setEase(stageMultiLayer.FadeEaseType);
 
         if (options.waitUntilFinished)
@@ -308,7 +308,7 @@ public class PortraitControllerMultiLayer : MonoBehaviour
 
         // Early out if hiding a character that's already hidden
         if (options.display == DisplayType.Hide &&
-            !options.characterMultiLayer.State.onScreen)
+            !options.characterMultiLayer.PortraitMultiState.onScreen)
         {
             onComplete();
             return;
@@ -329,7 +329,7 @@ public class PortraitControllerMultiLayer : MonoBehaviour
 
             case (DisplayType.Replace):
                 Show(options);
-                Hide(options.replacedCharacterMultiLayer, options.replacedCharacterMultiLayer.State.position.name);
+                Hide(options.replacedCharacterMultiLayer, options.replacedCharacterMultiLayer.PortraitMultiState.position.name);
                 break;
 
             case (DisplayType.MoveToFront):
@@ -342,9 +342,9 @@ public class PortraitControllerMultiLayer : MonoBehaviour
     {
         //options.characterMultiLayer.State.portraitFaceImage.transform.SetSiblingIndex(options.characterMultiLayer.State.portraitFaceImage.transform.parent.childCount);
 
-        options.characterMultiLayer.State.mainHolder.SetClothesAsLast(options.characterMultiLayer.State.portraitClothesImage);
-        options.characterMultiLayer.State.mainHolder.SetFaceImageAsLast(options.characterMultiLayer.State.portraitFaceImage);
-        options.characterMultiLayer.State.display = DisplayType.MoveToFront;
+        options.characterMultiLayer.PortraitMultiState.mainHolder.SetClothesAsLast(options.characterMultiLayer.PortraitMultiState.portraitClothesImage);
+        options.characterMultiLayer.PortraitMultiState.mainHolder.SetFaceImageAsLast(options.characterMultiLayer.PortraitMultiState.portraitFaceImage);
+        options.characterMultiLayer.PortraitMultiState.display = DisplayType.MoveToFront;
         FinishCommand(options);
     }
 
@@ -380,22 +380,26 @@ public class PortraitControllerMultiLayer : MonoBehaviour
 
         //var prevPortrait = options.characterMultiLayer.State.portrait;
 
-        /*if (options.characterMultiLayer.State.portraitFace != null && options.characterMultiLayer.State.portraitFace != options.portraitFace)
-        {
-            HidePortrait(options.characterMultiLayer.State.holder, duration);
-        }*/
+        if (options.characterMultiLayer.PortraitMultiState.portraitBaseBodyImage != null && options.characterMultiLayer.PortraitMultiState.portraitBaseBodyImage != options.portraitBaseBody)        
+            HidePortrait(options.characterMultiLayer.PortraitMultiState.holder, duration);
 
-        options.characterMultiLayer.State.portraitBaseBodyImage.gameObject.SetActive(true);
+        if (options.characterMultiLayer.PortraitMultiState.portraitClothesImage != null && options.characterMultiLayer.PortraitMultiState.portraitClothesImage != options.portraitClothes)
+            HidePortrait(options.characterMultiLayer.PortraitMultiState.holder, duration);
 
-        options.characterMultiLayer.State.SetPortraitClothesBySprite(options.portraitClothes);
-        options.characterMultiLayer.State.portraitClothesImage.gameObject.SetActive(true);
+        if (options.characterMultiLayer.PortraitMultiState.portraitFace != null && options.characterMultiLayer.PortraitMultiState.portraitFace != options.portraitFace)
+            HidePortrait(options.characterMultiLayer.PortraitMultiState.holder, duration);
 
-        options.characterMultiLayer.State.SetPortraitFaceBySprite(options.portraitFace);
-        options.characterMultiLayer.State.portraitFaceImage.gameObject.SetActive(true);
+        options.characterMultiLayer.PortraitMultiState.portraitBaseBodyImage.gameObject.SetActive(true);
 
-        LeanTween.alpha(options.characterMultiLayer.State.portraitBaseBodyImage.rectTransform, 1f, duration).setEase(stageMultiLayer.FadeEaseType).setRecursive(false);
-        LeanTween.alpha(options.characterMultiLayer.State.portraitClothesImage.rectTransform, 1f, duration).setEase(stageMultiLayer.FadeEaseType).setRecursive(false);
-        LeanTween.alpha(options.characterMultiLayer.State.portraitFaceImage.rectTransform, 1f, duration).setEase(stageMultiLayer.FadeEaseType).setRecursive(false);
+        options.characterMultiLayer.PortraitMultiState.SetPortraitClothesBySprite(options.portraitClothes);
+        options.characterMultiLayer.PortraitMultiState.portraitClothesImage.gameObject.SetActive(true);
+
+        options.characterMultiLayer.PortraitMultiState.SetPortraitFaceBySprite(options.portraitFace);
+        options.characterMultiLayer.PortraitMultiState.portraitFaceImage.gameObject.SetActive(true);
+
+        LeanTween.alpha(options.characterMultiLayer.PortraitMultiState.portraitBaseBodyImage.rectTransform, 1f, duration).setEase(stageMultiLayer.FadeEaseType).setRecursive(false);
+        LeanTween.alpha(options.characterMultiLayer.PortraitMultiState.portraitClothesImage.rectTransform, 1f, duration).setEase(stageMultiLayer.FadeEaseType).setRecursive(false);
+        LeanTween.alpha(options.characterMultiLayer.PortraitMultiState.portraitFaceImage.rectTransform, 1f, duration).setEase(stageMultiLayer.FadeEaseType).setRecursive(false);
         /*options.characterMultiLayer.State.SetPortraitImageBySprite(options.portrait);
         options.characterMultiLayer.State.portraitImage.rectTransform.gameObject.SetActive(true);
         //LeanTween.color(options.character.State.portraitImage.rectTransform, Color.white, duration).setEase(stage.FadeEaseType).setRecursive(false);
@@ -413,10 +417,10 @@ public class PortraitControllerMultiLayer : MonoBehaviour
         MoveToFront(options);
 
         // Update character state after showing
-        options.characterMultiLayer.State.onScreen = true;
-        options.characterMultiLayer.State.display = DisplayType.Show;
-        options.characterMultiLayer.State.facing = options.facing;
-        options.characterMultiLayer.State.position = options.toPosition;
+        options.characterMultiLayer.PortraitMultiState.onScreen = true;
+        options.characterMultiLayer.PortraitMultiState.display = DisplayType.Show;
+        options.characterMultiLayer.PortraitMultiState.facing = options.facing;
+        options.characterMultiLayer.PortraitMultiState.position = options.toPosition;
     }
 
     protected virtual void HidePortrait(RectTransform rectTransform, float duration)
@@ -434,7 +438,7 @@ public class PortraitControllerMultiLayer : MonoBehaviour
     {
         CleanPortraitOptionsMult(options);
 
-        if (options.characterMultiLayer.State.display == DisplayType.None)
+        if (options.characterMultiLayer.PortraitMultiState.display == DisplayType.None)
         {
             return;
         }
@@ -444,17 +448,17 @@ public class PortraitControllerMultiLayer : MonoBehaviour
         // LeanTween doesn't handle 0 duration properly
         float duration = (options.fadeDuration > 0f) ? options.fadeDuration : float.Epsilon;
 
-        HidePortrait(options.characterMultiLayer.State.portraitBaseBodyImage.rectTransform, duration);
-        HidePortrait(options.characterMultiLayer.State.portraitClothesImage.rectTransform, duration);
-        HidePortrait(options.characterMultiLayer.State.portraitFaceImage.rectTransform, duration);
+        HidePortrait(options.characterMultiLayer.PortraitMultiState.portraitClothesImage.rectTransform, duration);
+        HidePortrait(options.characterMultiLayer.PortraitMultiState.portraitFaceImage.rectTransform, duration);
+        HidePortrait(options.characterMultiLayer.PortraitMultiState.portraitBaseBodyImage.rectTransform, duration);
 
         DoMoveTween(options);
 
         //update character state after hiding
-        options.characterMultiLayer.State.onScreen = false;
-        options.characterMultiLayer.State.facing = options.facing;
-        options.characterMultiLayer.State.position = options.toPosition;
-        options.characterMultiLayer.State.display = DisplayType.Hide;
+        options.characterMultiLayer.PortraitMultiState.onScreen = false;
+        options.characterMultiLayer.PortraitMultiState.facing = options.facing;
+        options.characterMultiLayer.PortraitMultiState.position = options.toPosition;
+        options.characterMultiLayer.PortraitMultiState.display = DisplayType.Hide;
 
         if (stageMultiLayer.CharactersOnStage.Remove(options.characterMultiLayer))
         {
@@ -468,21 +472,21 @@ public class PortraitControllerMultiLayer : MonoBehaviour
     /// </summary>
     public virtual void SetDimmed(CharacterMultiLayer character, bool dimmedState)
     {
-        if (character.State.dimmed == dimmedState)
+        if (character.PortraitMultiState.dimmed == dimmedState)
         {
             return;
         }
 
-        character.State.dimmed = dimmedState;
+        character.PortraitMultiState.dimmed = dimmedState;
 
         Color targetColor = dimmedState ? stageMultiLayer.DimColor : Color.white;
 
         // LeanTween doesn't handle 0 duration properly
         float duration = (stageMultiLayer.FadeDuration > 0f) ? stageMultiLayer.FadeDuration : float.Epsilon;
 
-        LeanTween.color(character.State.portraitBaseBodyImage.rectTransform, targetColor, duration).setEase(stageMultiLayer.FadeEaseType).setRecursive(false);
-        LeanTween.color(character.State.portraitClothesImage.rectTransform, targetColor, duration).setEase(stageMultiLayer.FadeEaseType).setRecursive(false);
-        LeanTween.color(character.State.portraitFaceImage.rectTransform, targetColor, duration).setEase(stageMultiLayer.FadeEaseType).setRecursive(false);
+        LeanTween.color(character.PortraitMultiState.portraitBaseBodyImage.rectTransform, targetColor, duration).setEase(stageMultiLayer.FadeEaseType).setRecursive(false);
+        LeanTween.color(character.PortraitMultiState.portraitClothesImage.rectTransform, targetColor, duration).setEase(stageMultiLayer.FadeEaseType).setRecursive(false);
+        LeanTween.color(character.PortraitMultiState.portraitFaceImage.rectTransform, targetColor, duration).setEase(stageMultiLayer.FadeEaseType).setRecursive(false);
     }
 
     protected virtual IEnumerator WaitUntilFinished(float duration, Action onComplete = null)
@@ -569,13 +573,13 @@ public class PortraitControllerMultiLayer : MonoBehaviour
         options.portraitClothes = character.GetPortraitClothes(portraitClothes);
         options.portraitFace = character.GetPortraitFace(portraitFace);
 
-        if (character.State.position == null)
+        if (character.PortraitMultiState.position == null)
         {
             options.toPosition = options.fromPosition = stageMultiLayer.GetPosition("middle");
         }
         else
         {
-            options.fromPosition = options.toPosition = character.State.position;
+            options.fromPosition = options.toPosition = character.PortraitMultiState.position;
         }
 
         Show(options);

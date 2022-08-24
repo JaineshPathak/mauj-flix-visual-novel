@@ -6,9 +6,9 @@ using UnityEngine;
 using Fungus;
 
 [ExecuteInEditMode]
-public class CharacterMultiLayer : MonoBehaviour, ILocalizable, IComparer<CharacterMultiLayer>
+public class CharacterMultiLayer : Character
 {
-    [Tooltip("Character name as displayed in Say Dialog.")]
+    /*[Tooltip("Character name as displayed in Say Dialog.")]
     [SerializeField] protected string nameText; // We need a separate name as the object name is used for character variations (e.g. "Smurf Happy", "Smurf Sad")
 
     [Tooltip("Color to display the character name in Say Dialog.")]
@@ -23,7 +23,7 @@ public class CharacterMultiLayer : MonoBehaviour, ILocalizable, IComparer<Charac
     [Tooltip("Sound effect to play when this character is speaking.")]
     [SerializeField] protected AudioClip soundEffect;
 
-    [Space(15)]
+    [Space(15)]*/
 
     [Tooltip("Base Body Sprite of this character")]
     [SerializeField] protected Sprite portraitBaseBody;
@@ -34,41 +34,41 @@ public class CharacterMultiLayer : MonoBehaviour, ILocalizable, IComparer<Charac
     [Tooltip("List of portrait images that can be displayed for this character.")]
     [SerializeField] protected List<Sprite> portraitFaces;
 
-    [Tooltip("Direction that portrait sprites face.")]
-    [SerializeField] protected FacingDirection portraitsFace;    
+    /*[Tooltip("Direction that portrait sprites face.")]
+    [SerializeField] protected FacingDirection portraitsFace;*/
 
-    protected PortraitStateMultiLayer portaitState = new PortraitStateMultiLayer();
+    protected PortraitStateMultiLayer portaitMultiState = new PortraitStateMultiLayer();
 
     protected static List<CharacterMultiLayer> activeCharactersMultiLayer = new List<CharacterMultiLayer>();
 
-    protected virtual void OnEnable()
+    protected override void OnEnable()
     {
         if (!activeCharactersMultiLayer.Contains(this))
         {
             activeCharactersMultiLayer.Add(this);
             activeCharactersMultiLayer.Sort(this);
-        }
+        }        
     }
 
-    protected virtual void OnDisable()
+    protected override void OnDisable()
     {
         activeCharactersMultiLayer.Remove(this);
     }
 
     #region Public Members
     public static List<CharacterMultiLayer> ActiveCharactersMultiLayer { get { return activeCharactersMultiLayer; } }
-    public virtual string NameText { get { return nameText; } }
+    /*public virtual string NameText { get { return nameText; } }
     public virtual Color NameColor { get { return nameColor; } }
-    public virtual AudioClip SoundEffect { get { return soundEffect; } }
+    public virtual AudioClip SoundEffect { get { return soundEffect; } }*/
     public virtual Sprite PortraitBaseBody { get { return portraitBaseBody; } set { portraitBaseBody = value; } }
     public virtual List<Sprite> PortraitClothes { get { return portraitClothes; } }
     public virtual List<Sprite> PortraitFaces { get { return portraitFaces; } }
-    public virtual FacingDirection PortraitsFace { get { return portraitsFace; } }
-    public virtual PortraitStateMultiLayer State { get { return portaitState; } }
-    public virtual SayDialog SetSayDialog { get { return setSayDialog; } }
-    public string GetObjectName() { return gameObject.name; }
+    //public virtual FacingDirection PortraitsFace { get { return portraitsFace; } }
+    public virtual PortraitStateMultiLayer PortraitMultiState { get { return portaitMultiState; } }
+    //public virtual SayDialog SetSayDialog { get { return setSayDialog; } }
+    //public string GetObjectName() { return gameObject.name; }
 
-    public virtual bool NameStartsWith(string matchString)
+    public override bool NameStartsWith(string matchString)
     {
 #if NETFX_CORE
             return name.StartsWith(matchString, StringComparison.CurrentCultureIgnoreCase)
@@ -80,7 +80,7 @@ public class CharacterMultiLayer : MonoBehaviour, ILocalizable, IComparer<Charac
     }
     #endregion
 
-    public virtual bool NameMatch(string matchString)
+    public override bool NameMatch(string matchString)
     {
         return string.Compare(name, matchString, true, CultureInfo.CurrentCulture) == 0
             || string.Compare(nameText, matchString, true, CultureInfo.CurrentCulture) == 0;
@@ -133,7 +133,7 @@ public class CharacterMultiLayer : MonoBehaviour, ILocalizable, IComparer<Charac
     }
 
     #region ILocalizable implementation
-    public string GetDescription()
+    /*public string GetDescription()
     {
         return description;
     }
@@ -151,6 +151,6 @@ public class CharacterMultiLayer : MonoBehaviour, ILocalizable, IComparer<Charac
     public void SetStandardText(string standardText)
     {
         nameText = standardText;
-    }
+    }*/
     #endregion
 }
