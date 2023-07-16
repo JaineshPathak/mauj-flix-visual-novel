@@ -34,7 +34,8 @@ public class MFlixUtils : MonoBehaviour
         ReplacePlaySound,
         ReplaceSayCommands,
         UpdateCallCommands,
-        SayCommandDialogueReplace
+        SayCommandDialogueReplace,
+        UpdateSayCommandMflixCharacter
     };
 
     public WhatToReplace whatToReplace;
@@ -109,6 +110,9 @@ public class MFlixUtils : MonoBehaviour
 
     //Say Command Dialogue Replace
     public SayDialog sayDialogueReplace;
+
+    //Update Say Command MFlix
+    public SayMflix.SayDialogStyle newDialogStyle;
 
     private void OnValidate()
     {
@@ -1002,6 +1006,36 @@ public class MFlixUtils : MonoBehaviour
 
         PrefabUtility.RecordPrefabInstancePropertyModifications(episodeFlowchart);
         PrefabUtility.RecordPrefabInstancePropertyModifications(transform);
+    }
+
+    public void UpdateSayMflixCommand()
+    {
+        if (PrefabStageUtility.GetCurrentPrefabStage() == null)
+        {
+            Debug.LogError("MFlix Replacer: You need to be in Prefab Mode");
+            return;
+        }
+
+        if (episodeFlowchart == null)
+            return;
+
+        foreach(SayMflix sayMflixCmd in episodeFlowchart.GetComponentsInChildren<SayMflix>())
+        {
+            if (sayMflixCmd != null && sayMflixCmd.enabled && sayMflixCmd._Character != null && 
+                (sayMflixCmd.GetType() == typeof(SayMflix) && sayMflixCmd.GetType() != typeof(Say)) &&
+                sayMflixCmd.ShowAlways &&
+                sayMflixCmd.FadeWhenDone &&
+                sayMflixCmd.WaitForClick &&
+                sayMflixCmd.StopVoiceOver)
+            {
+                sayMflixCmd.sayDialogStyle = newDialogStyle;
+
+                PrefabUtility.RecordPrefabInstancePropertyModifications(sayMflixCmd);
+                PrefabUtility.RecordPrefabInstancePropertyModifications(sayMflixCmd.ParentBlock);
+
+                PrefabUtility.RecordPrefabInstancePropertyModifications(episodeFlowchart);
+            }
+        }
     }
 }
 #endif

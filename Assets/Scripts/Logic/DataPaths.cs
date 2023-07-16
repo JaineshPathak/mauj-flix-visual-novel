@@ -4,6 +4,9 @@
     public static string loadProgressPath;
     public static readonly string loadProgressFileExtension = ".json";
 
+    public static readonly string OngoingPath = loadProgressPath + "OnGoing.json";
+    public static readonly string OngoingFilename = "OnGoing.json";
+
     public static readonly string storyDatabaseFileName = "StoriesDB.json";
     public static readonly string storyDatabaseFileNameTest = "StoriesDBTest.json";
     public static readonly string storyImagesLoadDatabaseName = "StoriesLoadImagesDB.json";

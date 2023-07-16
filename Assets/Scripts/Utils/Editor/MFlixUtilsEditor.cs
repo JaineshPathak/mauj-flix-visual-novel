@@ -82,6 +82,9 @@ public class MFlixUtilsEditor : Editor
     //Say Commands Say Dialogue
     private SerializedProperty sayDialogueReplaceSerialized;
 
+    //Say Commands MFlix Update
+    private SerializedProperty newDialogStyleSerialized;
+
     private MFlixUtils flixReplacer;
 
     private void OnEnable()
@@ -144,6 +147,8 @@ public class MFlixUtilsEditor : Editor
         callModeNewSerialized = serializedObject.FindProperty("callModeNew");
 
         sayDialogueReplaceSerialized = serializedObject.FindProperty("sayDialogueReplace");
+
+        newDialogStyleSerialized = serializedObject.FindProperty("newDialogStyle");
     }
 
     public override void OnInspectorGUI()
@@ -605,6 +610,29 @@ public class MFlixUtilsEditor : Editor
                         //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
                         Undo.RegisterCompleteObjectUndo(target, "FlixReplacer Say Replace Update");
                         flixReplacer.ReplaceSayCommandsSayDialogue();
+                    }
+                }
+
+                break;
+
+            case MFlixUtils.WhatToReplace.UpdateSayCommandMflixCharacter:
+
+                if (flixReplacer.episodeFlowchart != null)
+                {
+                    EditorGUILayout.HelpBox("This will set all the 'SayMFlix' commands SayMode to desired SayMode given below.", MessageType.Warning);
+
+                    EditorGUILayout.Space(10f);
+
+                    GUIContent sayModeContent = new GUIContent("Dialogue Mode (New) Character", "New Say Mode to all 'SayMFlix' (Cyan) Commands");
+                    EditorGUILayout.PropertyField(newDialogStyleSerialized, sayModeContent, GUILayout.ExpandHeight(false));
+
+                    EditorGUILayout.Space(10f);
+
+                    if (DrawButtonColored("Update SayMFlix Commands".ToUpper(), "#FF0000", Color.white))
+                    {
+                        //Undo.RecordObject(target, "FlixReplacer Narrative Replace");
+                        Undo.RegisterCompleteObjectUndo(target, "FlixReplacer SayMflix Update");
+                        flixReplacer.UpdateSayMflixCommand();
                     }
                 }
 

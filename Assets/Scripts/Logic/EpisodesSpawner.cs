@@ -104,6 +104,8 @@ public class EpisodesSpawner : MonoBehaviourSingletonPersistent<EpisodesSpawner>
     private GameObject currentSoundBucketPrefab;
     private GameObject currentAtlasDBPrefab;
 
+    private OngoingData ongoingData;
+
     public override void Awake()
     {
         /*if (instance == null)
@@ -208,6 +210,44 @@ public class EpisodesSpawner : MonoBehaviourSingletonPersistent<EpisodesSpawner>
 
         if (hideTopPanelAtStart && topPanel)
             topPanel.HideTopPanel();
+
+        Invoke("OnGoingCheck", 1f);
+    }
+
+    private void OnGoingCheck()
+    {
+        if (!SerializationManager.FileExists(DataPaths.loadProgressPath + DataPaths.OngoingFilename) || ThumbnailsBucket.instance == null)
+            return;
+
+        string onGoingString = SerializationManager.LoadFromTextFile(DataPaths.loadProgressPath + DataPaths.OngoingFilename);
+        if (onGoingString != null)
+            ongoingData = JsonUtility.FromJson<OngoingData>(onGoingString);
+
+        if (ongoingData != null)
+        {
+            //print("ON GOING DETECTED: " + DataPaths.loadProgressPath + DataPaths.OngoingFilename);
+            if (!string.IsNullOrEmpty(ongoingData.fileName))
+                storyDataKey = ongoingData.fileName;
+
+            if (!string.IsNullOrEmpty(ongoingData.storyTitle))
+                storyTitle = ongoingData.storyTitle;
+
+            if (!string.IsNullOrEmpty(ongoingData.storyTitleEnglish))
+                storyTitleEnglish = ongoingData.storyTitleEnglish;
+
+            if (!string.IsNullOrEmpty(ongoingData.storyDescription))
+                storyDescription = ongoingData.storyDescription;
+
+            storyData = GetStoryData();
+            storiesDBItem = GetStoriesDBItemFromTitle(ongoingData.storyTitleEnglish);
+
+            storyloadingThumbnailImage.sprite = ThumbnailsBucket.instance.GetThumbnailSprite(storiesDBItem.storyThumbnailLoadingName, ThumbnailType.Loading);
+            storyThumbnailSmallSprite = ThumbnailsBucket.instance.GetThumbnailSprite(storiesDBItem.storyThumbnailSmallName, ThumbnailType.Small);
+            storyThumbnailBigSprite = ThumbnailsBucket.instance.GetThumbnailSprite(storiesDBItem.storyThumbnailBigName, ThumbnailType.Big);
+            storyloadingTitleImage.sprite = ThumbnailsBucket.instance.GetThumbnailSprite(storiesDBItem.storyThumbnailTitleName, ThumbnailType.Title);
+
+            StartLoadingStoryScene();
+        }
     }
 
     public void FadeOutBlackScreen()
@@ -219,7 +259,7 @@ public class EpisodesSpawner : MonoBehaviourSingletonPersistent<EpisodesSpawner>
         LeanTween.alphaCanvas(blackScreenCanvasGroup, 0, 1f).setOnComplete(() =>
         {
             blackScreenCanvasGroup.interactable = false;
-            blackScreenCanvasGroup.blocksRaycasts = false;
+            blackScreenCanvasGroup.blocksRaycasts = false;            
         });
     }
 
@@ -245,6 +285,29 @@ public class EpisodesSpawner : MonoBehaviourSingletonPersistent<EpisodesSpawner>
 
     public void StartLoadingStoryScene()
     {
+        if (ongoingData != null && SerializationManager.FileExists(DataPaths.OngoingPath))
+        {
+            ongoingData.fileName = storyDataKey;
+            ongoingData.storyTitle = storyTitle;
+            ongoingData.storyTitleEnglish = storyTitleEnglish;
+            ongoingData.storyDescription = storyDescription;            
+
+            string saveString = JsonUtility.ToJson(ongoingData, true);
+            SerializationManager.SaveAsTextFile(DataPaths.loadProgressPath, DataPaths.OngoingFilename, saveString);
+        }
+        else
+        {
+            ongoingData = new OngoingData();
+
+            ongoingData.fileName = storyDataKey;
+            ongoingData.storyTitle = storyTitle;
+            ongoingData.storyTitleEnglish = storyTitleEnglish;
+            ongoingData.storyDescription = storyDescription;
+
+            string saveString = JsonUtility.ToJson(ongoingData, true);
+            SerializationManager.SaveAsTextFile(DataPaths.loadProgressPath, DataPaths.OngoingFilename, saveString);
+        }
+
         percentCanvasGroup.interactable = true;
         percentCanvasGroup.blocksRaycasts = true;
 
